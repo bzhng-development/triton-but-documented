@@ -8,7 +8,9 @@ A documented version of Triton. See screenshots below for examples. Mostly chang
 # After
 
 <img width="1054" height="1590" alt="CleanShot 2026-03-01 at 20 13 03@2x" src="https://github.com/user-attachments/assets/4a5ef207-36e2-4d12-8f28-27d8f5f03509" />
+
 ```python
+
 import torch
 import triton
 import triton.language as tl
