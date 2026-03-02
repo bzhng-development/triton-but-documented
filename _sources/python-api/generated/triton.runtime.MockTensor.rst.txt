@@ -1,0 +1,65 @@
+class triton.runtime.MockTensor
+===============================
+
+Mock tensor object for kernel warmup without allocating real GPU memory.
+
+This class provides a lightweight tensor-like interface that can be used in
+place of actual tensors when calling :meth:`JITFunction.warmup`. It mimics
+the tensor API (dtype, shape, stride, data_ptr) without requiring actual
+memory allocation.
+
+Parameters
+----------
+dtype : dtype
+    Data type of the mock tensor (e.g., ``torch.float32``, ``torch.int32``).
+shape : list of int, optional
+    Shape dimensions of the tensor. Default is ``[1]``.
+
+Attributes
+----------
+dtype : dtype
+    The data type of the mock tensor.
+shape : list of int
+    The shape dimensions of the mock tensor.
+
+Methods
+-------
+__init__(dtype, shape=None)
+    Initialize the mock tensor.
+stride()
+    Return stride tuple for the tensor shape.
+data_ptr()
+    Return mock data pointer (always returns 0).
+ptr_range()
+    Return mock pointer range (always returns 0).
+
+Notes
+-----
+- ``data_ptr()`` returns 0, optimistically assuming 16-byte alignment.
+- ``ptr_range()`` returns 0, optimistically assuming 32-bit pointer range.
+- This class is primarily used for kernel compilation warmup and testing.
+- The static method :meth:`wrap_dtype` automatically converts torch dtype
+  objects to MockTensor instances.
+
+Examples
+--------
+.. code-block:: python
+
+    import torch
+    import triton
+    import triton.runtime as tr
+
+    # Create a mock tensor for warmup
+    mock_tensor = tr.MockTensor(torch.float32, shape=[1024, 512])
+
+    # Use in kernel warmup
+    @triton.jit
+    def kernel(x_ptr, n):
+        # kernel implementation
+        pass
+
+    kernel.warmup(tr.MockTensor(torch.float32), 1024, grid=(1,))
+
+    # Automatically wrap torch dtype
+    wrapped = tr.MockTensor.wrap_dtype(torch.float32)
+    # Returns MockTensor(torch.float32)

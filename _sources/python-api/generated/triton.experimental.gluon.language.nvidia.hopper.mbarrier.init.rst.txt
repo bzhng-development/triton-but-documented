@@ -1,0 +1,37 @@
+init
+====
+
+.. py:function:: init(mbarrier, count)
+
+   Initialize a shared memory barrier with a specified transaction count.
+
+   Parameters
+   ----------
+   mbarrier : shared_memory_descriptor
+       The shared memory barrier object to initialize.
+   count : int
+       The initial transaction count for the barrier.
+
+   Returns
+   -------
+   None
+       This function operates in-place and does not return a value.
+
+   Notes
+   -----
+   This API is specific to NVIDIA Hopper architecture. It configures the mbarrier for tracking asynchronous memory transactions, such as those performed by the Tensor Memory Accelerator (TMA). The ``count`` typically represents the number of bytes or cache lines expected in the transaction.
+
+   Examples
+   --------
+   Initialize an mbarrier for a 128-byte transaction within a Gluon kernel:
+
+   .. code-block:: python
+
+      import triton.experimental.gluon as gluon
+      import triton.experimental.gluon.language as ttgl
+
+      @gluon.jit
+      def kernel(...):
+          mbarrier = ttgl.nvidia.hopper.mbarrier.alloc(...)
+          ttgl.nvidia.hopper.mbarrier.init(mbarrier, count=128)
+          # Proceed with TMA operations using the initialized mbarrier

@@ -1,51 +1,28 @@
 triton.language.float8e4b8
 =========================
 
-8-bit floating point type with 4 exponent bits and 8 mantissa bits (bias 8).
-
-This dtype represents a custom 8-bit floating point format following the
-``E4M8`` specification, typically used for mixed-precision training and
-inference to reduce memory bandwidth and increase compute throughput.
-
-Parameters
-----------
-None
-    This is a dtype instance and does not accept runtime arguments.
-
-Returns
--------
-dtype
-    A Triton data type object representing the ``float8e4b8`` format.
+8-bit floating point data type with 4 exponent bits and 3 mantissa bits.
 
 Notes
 -----
-The ``float8e4b8`` format consists of:
-- 1 sign bit
-- 4 exponent bits (bias = 8)
-- 3 mantissa bits (explicitly stored, implicit leading bit)
-
-This format supports a dynamic range similar to FP16 but with reduced
-precision. It is particularly effective for activation gradients and
-weights in deep learning models. Not all GPU architectures support native
-``float8`` operations; on unsupported hardware, Triton may emulate the
-behavior or raise a compilation error depending on the target backend.
+This data type represents the FP8 E4M3 format (1 sign bit, 4 exponent bits, 3 mantissa bits).
+It is designed for deep learning workloads on NVIDIA Hopper and Ampere architectures.
+Using this type reduces memory bandwidth usage and increases tensor core throughput
+compared to 16-bit floating point types, at the cost of reduced dynamic range and precision.
 
 Examples
 --------
+Use the dtype for explicit type casting or pointer type annotation within a Triton kernel:
+
 .. code-block:: python
 
     import triton
     import triton.language as tl
 
     @triton.jit
-    def kernel(x_ptr, y_ptr, N: tl.constexpr):
-        pid = tl.program_id(0)
-        # Load data as float8e4b8
-        x = tl.load(x_ptr + pid, mask=pid < N, dtype=tl.float8e4b8)
-        # Perform computation
-        y = x * 2.0
-        # Store result
-        tl.store(y_ptr + pid, y, mask=pid < N)
-
-    # Usage requires specifying the dtype in pointer operations or casts
-    # where supported by the backend.
+    def quantize_kernel(x_ptr, out_ptr, n_elements):
+        pid = tl.program_id(axis=0)
+        x = tl.load(x_ptr + pid)
+        # Cast 32-bit float to float8e4b8
+        x_fp8 = x.to(tl.float8e4b8)
+        tl.store(out_ptr + pid, x_fp8)

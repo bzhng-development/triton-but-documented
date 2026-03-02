@@ -1,62 +1,138 @@
 JITFunction
 ===========
 
-.. class:: triton.JITFunction(fn, version=None, do_not_specialize=None, do_not_specialize_on_alignment=None, debug=None, noinline=None, repr=None, launch_metadata=None)
+.. currentmodule:: triton
 
-   Represents a JIT-compiled Triton kernel function.
+.. class:: JITFunction(fn, version=None, do_not_specialize=None, do_not_specialize_on_alignment=None, debug=None, noinline=None, repr=None, launch_metadata=None)
 
-   This class is typically instantiated via the :func:`triton.jit` decorator. It handles argument specialization, caching of compiled kernels, and launching the kernel on the GPU with a specified grid.
+   Just-in-time compiled Triton kernel function.
+
+   This class represents a function decorated with :func:`triton.jit` that is
+   compiled on-demand for GPU execution. It handles kernel specialization,
+   caching, compilation, and launching. Instances are created automatically
+   when using the :func:`triton.jit` decorator.
 
    Parameters
    ----------
    fn : callable
-      The Python function to be JIT-compiled.
+      The Python function to be JIT-compiled as a Triton kernel.
    version : int, optional
       Version number for the kernel (default: None).
-   do_not_specialize : list of int or str, optional
-      Indices or names of arguments that should not be specialized. Specialization generates distinct kernels for different argument types; disabling it forces generic handling.
-   do_not_specialize_on_alignment : list of int or str, optional
-      Indices or names of arguments for which alignment should not be specialized.
+   do_not_specialize : iterable of int or str, optional
+      Parameter indices or names that should not be specialized during
+      compilation (default: None).
+   do_not_specialize_on_alignment : iterable of int or str, optional
+      Parameter indices or names that should not be specialized based on
+      alignment (default: None).
    debug : bool, optional
-      Enable debug mode for the kernel (default: None).
+      Enable debug mode for kernel compilation and execution (default: None).
    noinline : bool, optional
-      Prevent inlining of this function when called by other kernels (default: None).
+      Prevent inlining of this function when called from other kernels
+      (default: None).
    repr : callable, optional
-      Custom function to generate string representation of the kernel.
+      Custom function to control string representation of the kernel
+      (default: None).
    launch_metadata : callable, optional
-      Function to generate metadata passed to the GPU launcher.
+      Function to provide custom metadata during kernel launch (default: None).
 
-   Returns
+   Attributes
+   ----------
+   fn : callable
+      The original Python function.
+   module : str
+      Module name where the function is defined.
+   version : int or None
+      Kernel version number.
+   debug : bool
+      Debug mode flag.
+   noinline : bool
+      Inlining prevention flag.
+   params : list
+      List of :class:`KernelParam` objects representing function parameters.
+   arg_names : list of str
+      Names of all kernel arguments.
+   constexprs : list of int
+      Indices of constexpr parameters.
+
+   Methods
    -------
-   JITFunction
-      A callable object that compiles the function on first invocation and caches the result for subsequent calls with the same argument signatures.
+   run(*args, grid, warmup, **kwargs)
+      Execute the kernel with the given grid and arguments.
+   warmup(*args, grid, **kwargs)
+      Perform kernel warmup compilation without execution.
+   add_pre_run_hook(hook)
+      Register a hook to be called before kernel execution.
+   preload(specialization_data)
+      Load a pre-compiled kernel specialization from serialized data.
 
    Notes
    -----
-   - Instances of ``JITFunction`` cannot be called directly (``fn(*args)``); they must be launched with a grid configuration using the syntax ``fn[grid](*args)``.
-   - Arguments are implicitly converted to pointers if they possess a ``data_ptr()`` method and a ``dtype`` attribute.
-   - The kernel has access only to Python primitives, Triton builtins, its own arguments, and other JIT-compiled functions.
-   - Global variables accessed during compilation are tracked; if their values change between compilation and launch, a ``RuntimeError`` is raised.
+   JITFunction instances should not be instantiated directly. Use the
+   :func:`triton.jit` decorator instead:
+
+   .. code-block:: python
+
+      @triton.jit
+      def kernel_fn(...):
+          ...
+
+   The kernel is compiled lazily on first invocation with a specific set of
+   argument types. Subsequent calls with the same types reuse the cached
+   compilation.
+
+   Kernels are launched using the grid syntax:
+
+   .. code-block:: python
+
+      kernel_fn[grid](arg1, arg2, ...)
+
+   where ``grid`` can be a tuple of integers or a callable that returns a tuple.
+
+   Global variables captured at compile time are checked at runtime to ensure
+   they haven't changed since compilation.
 
    Examples
    --------
+   Create a JIT-compiled kernel using the decorator:
+
    .. code-block:: python
 
       import triton
       import triton.language as tl
 
       @triton.jit
-      def add_kernel(x_ptr, y_ptr, output_ptr, n):
+      def add_kernel(x_ptr, y_ptr, output_ptr, n,
+                     BLOCK_SIZE: tl.constexpr = 1024):
           pid = tl.program_id(axis=0)
-          if pid < n:
-              x = tl.load(x_ptr + pid)
-              y = tl.load(y_ptr + pid)
-              tl.store(output_ptr + pid, x + y)
+          block_start = pid * BLOCK_SIZE
+          offsets = block_start + tl.arange(0, BLOCK_SIZE)
+          mask = offsets < n
+          x = tl.load(x_ptr + offsets, mask=mask)
+          y = tl.load(y_ptr + offsets, mask=mask)
+          output = x + y
+          tl.store(output_ptr + offsets, output, mask=mask)
 
-      # Launch the kernel with a 1D grid
-      n = 1024
-      grid = (n,)
-      add_kernel[grid](x_ptr, y_ptr, output_ptr, n)
+      # Launch the kernel
+      add_kernel[(grid_size,)](x, y, output, n)
 
-      # Access kernel metadata
-      print(add_kernel)  # Outputs: JITFunction(__main__:add_kernel)
+   Access kernel metadata:
+
+   .. code-block:: python
+
+      kernel = add_kernel
+      print(kernel.arg_names)      # ['x_ptr', 'y_ptr', 'output_ptr', 'n', 'BLOCK_SIZE']
+      print(kernel.constexprs)     # [4] (index of BLOCK_SIZE)
+
+   Register a pre-run hook:
+
+   .. code-block:: python
+
+      def my_hook(*args, **kwargs):
+          print("About to run kernel")
+
+      add_kernel.add_pre_run_hook(my_hook)
+
+   See Also
+   --------
+   jit : Decorator to create JITFunction instances
+   KernelParam : Represents a kernel parameter with specialization metadata

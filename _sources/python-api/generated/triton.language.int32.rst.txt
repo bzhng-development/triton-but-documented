@@ -1,43 +1,30 @@
-triton.language.int32
-=====================
+int32
+=====
 
-32-bit signed integer data type.
+.. py:data:: triton.language.int32
 
-This dtype instance represents a 32-bit signed integer scalar or tensor element in Triton kernels. It corresponds to the ``i32`` type in MLIR and maps to standard 32-bit integer registers on GPU hardware.
+    32-bit signed integer data type.
 
-Parameters
-----------
+    Specifies the signed 32-bit integer element type for tensors and pointers
+    in Triton kernels. This dtype is compatible with standard integer arithmetic
+    operations provided by :mod:`triton.language`.
 
-None (dtype instance).
+    Notes
+    -----
+    Maps to ``i32`` in MLIR. For unsigned 32-bit integers, use
+    :data:`triton.language.uint32`.
 
-Returns
--------
+    Examples
+    --------
+    Initialize a tensor with 32-bit integer precision:
 
-dtype
-    A data type object representing 32-bit signed integers.
+    .. code-block:: python
 
-Notes
------
+        import triton.language as tl
 
-*   Range: -2,147,483,648 to 2,147,483,647.
-*   Use this type for general-purpose integer arithmetic where 64-bit precision is not required.
-*   Mixing ``int32`` with ``int64`` or floating-point types in operations may trigger implicit casting depending on the operator.
-
-Examples
---------
-
-.. code-block:: python
-
-    import triton
-    import triton.language as tl
-
-    @triton.jit
-    def add_kernel(x_ptr, y_ptr, out_ptr, n: tl.constexpr):
-        pid = tl.program_id(0)
-        # Load 32-bit integers
-        x = tl.load(x_ptr + pid).to(tl.int32)
-        y = tl.load(y_ptr + pid).to(tl.int32)
-        # Perform 32-bit integer addition
-        out = x + y
-        # Store result
-        tl.store(out_ptr + pid, out)
+        @triton.jit
+        def kernel(ptr, SIZE: tl.constexpr):
+            offsets = tl.arange(0, SIZE)
+            mask = offsets < SIZE
+            vals = tl.full((SIZE,), 1, dtype=tl.int32)
+            tl.store(ptr + offsets, vals, mask=mask)

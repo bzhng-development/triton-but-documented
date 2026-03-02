@@ -1,0 +1,41 @@
+to_linear_layout
+================
+
+.. py:function:: to_linear_layout(layout, shape, _semantic=None)
+
+    Convert a distributed layout to a linear layout representation.
+
+    Parameters
+    ----------
+    layout : DistributedLayout
+        The source layout to convert.
+    shape : Sequence[int]
+        The tensor shape associated with the layout.
+    _semantic : GluonSemantic, optional
+        Internal semantic handler. Do not provide this argument directly.
+
+    Returns
+    -------
+    LinearLayout
+        The linear layout representation of the input layout.
+
+    Notes
+    -----
+    This function is typically used internally by Gluon operations for low-level
+    layout manipulation. Users should generally work with high-level layout
+    objects rather than linear layouts directly.
+
+    The linear layout representation provides explicit control over memory
+    access patterns and is useful for advanced optimization scenarios.
+
+    Examples
+    --------
+    >>> import triton.experimental.gluon as gluon
+    >>> import triton.experimental.gluon.language as ttgl
+    >>> @gluon.jit
+    ... def kernel():
+    ...     layout = ttgl.AutoLayout()
+    ...     shape = [128, 64]
+    ...     linear = ttgl.to_linear_layout(layout, shape)
+    ...     # Use linear layout for low-level operations
+    ...     pass

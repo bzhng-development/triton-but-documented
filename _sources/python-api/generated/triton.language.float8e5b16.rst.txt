@@ -1,41 +1,29 @@
-triton.language.float8e5b16
-==========================
+float8e5b16
+===========
 
-.. currentmodule:: triton.language
+.. py:data:: triton.language.float8e5b16
 
-.. py:data:: float8e5b16
+   8-bit floating point type with 5 exponent bits and exponent bias of 16.
 
-   8-bit floating point type with 5 exponent bits and 16 bias (E5M16).
+   Notes
+   -----
+   This data type represents a specific FP8 format consisting of 1 sign bit,
+   5 exponent bits, and 2 mantissa bits (E5M2). The exponent bias is 16,
+   distinguishing it from the standard E5M2 format (bias 15). It is primarily
+   supported on NVIDIA Hopper (sm_90) architectures for mixed-precision
+   workloads.
 
-   This data type corresponds to the ``E5M16`` format, featuring an exponent
-   width of 5 bits and a bias of 16. It is designed for high-dynamic-range
-   workloads where preserving exponent range is prioritized over mantissa
-   precision.
-
-   .. note::
-
-      This type is hardware-dependent and may only be available on specific
-      GPU architectures (e.g., NVIDIA Hopper or later). Attempting to use
-      this type on unsupported hardware will result in a compilation error.
-
-   Example
-   -------
-
+   Examples
+   --------
    .. code-block:: python
 
-      import triton
-      import triton.language as tl
+       import triton
+       import triton.language as tl
 
-      @triton.jit
-      def kernel(X_ptr, Y_ptr, BLOCK_SIZE: tl.constexpr):
-          pid = tl.program_id(0)
-          offs = pid * BLOCK_SIZE + tl.arange(0, BLOCK_SIZE)
+       @triton.jit
+       def fp8_kernel(ptr, SIZE: tl.constexpr):
+           # Allocate a tensor using float8e5b16
+           buffer = tl.zeros([SIZE], dtype=tl.float8e5b16)
 
-          # Load data as float8e5b16
-          x = tl.load(X_ptr + offs).to(tl.float8e5b16)
-
-          # Perform computation
-          y = x * 2.0
-
-          # Store result
-          tl.store(Y_ptr + offs, y)
+           # Perform operations...
+           # tl.store(ptr, buffer)

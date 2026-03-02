@@ -1,0 +1,45 @@
+ffs
+===
+
+Find the position of the first set bit.
+
+.. currentmodule:: triton.language.extra.cuda.libdevice
+
+.. function:: ffs(arg0, _semantic=None)
+
+   Returns the position of the first (least significant) bit set to 1 in the input.
+
+   Parameters
+   ----------
+   arg0 : tl.tensor
+       Input tensor of integer type (int32 or int64).
+
+   Returns
+   -------
+   ret : tl.tensor
+       Tensor of int32 containing the bit position. Returns 0 if the input is 0,
+       otherwise returns a value in the range [1, bitwidth].
+
+   Notes
+   -----
+   This function wraps the CUDA libdevice functions ``__nv_ffs`` for int32 and
+   ``__nv_ffsll`` for int64. The result is 1-indexed (the least significant bit
+   is position 1, not 0).
+
+   The function is pure and has no side effects.
+
+   Examples
+   --------
+   .. code-block:: python
+
+       import triton
+       import triton.language as tl
+
+       @triton.jit
+       def kernel(x_ptr, out_ptr, BLOCK_SIZE: tl.constexpr):
+           pid = tl.program_id(0)
+           offsets = pid * BLOCK_SIZE + tl.arange(0, BLOCK_SIZE)
+           x = tl.load(x_ptr + offsets)
+           # Find first set bit position
+           ffs_result = tl.extra.cuda.libdevice.ffs(x)
+           tl.store(out_ptr + offsets, ffs_result)

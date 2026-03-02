@@ -1,0 +1,88 @@
+associative_scan
+================
+
+.. currentmodule:: triton.experimental.gluon.language
+
+.. autofunction:: associative_scan
+
+Apply an associative scan operation along a specified axis of input tensors.
+
+This function applies a combining function cumulatively to elements along an axis,
+propagating a carry value through the sequence. It supports both forward and reverse
+scan directions, and can operate on single tensors or tuples of tensors.
+
+Parameters
+----------
+input : tensor or tuple of tensors
+    The input tensor(s) to scan. When a tuple is provided, the scan is applied
+    element-wise across all tensors simultaneously.
+axis : int
+    The dimension along which to perform the scan operation.
+combine_fn : callable
+    A JIT-compiled function (decorated with ``@gluon.jit``) that combines two
+    scalar tensor values. Must accept two arguments and return the combined result.
+reverse : bool, optional
+    If ``True``, perform the scan in reverse order along the axis (default: ``False``).
+
+Returns
+-------
+tensor or tuple of tensors
+    The scanned output tensor(s) with the same shape as the input. Each position
+    contains the cumulative combination of all elements up to that position along
+    the specified axis.
+
+Notes
+-----
+The ``combine_fn`` must be associative for the scan to produce correct results.
+Common operations include addition, multiplication, or custom reduction operations.
+
+This function can also be called as a member method on tensor objects:
+``x.associative_scan(axis, combine_fn, reverse=False)`` instead of
+``associative_scan(x, axis, combine_fn, reverse=False)``.
+
+The scan operation is parallelized across warps and is optimized for GPU execution.
+
+Examples
+--------
+.. code-block:: python
+
+    import triton.experimental.gluon as gluon
+    import triton.experimental.gluon.language as ttgl
+
+    @gluon.jit
+    def add_fn(a, b):
+        return a + b
+
+    @gluon.jit
+    def kernel(x_ptr, stride):
+        # Load input tensor
+        x = ttgl.load(x_ptr)
+        
+        # Perform cumulative sum along axis 0
+        result = ttgl.associative_scan(x, axis=0, combine_fn=add_fn)
+        
+        # Store result
+        ttgl.store(x_ptr, result)
+
+    # Using as a member function
+    @gluon.jit
+    def kernel_member(x_ptr, stride):
+        x = ttgl.load(x_ptr)
+        result = x.associative_scan(axis=0, combine_fn=add_fn)
+        ttgl.store(x_ptr, result)
+
+    # Reverse scan
+    @gluon.jit
+    def kernel_reverse(x_ptr, stride):
+        x = ttgl.load(x_ptr)
+        result = ttgl.associative_scan(x, axis=0, combine_fn=add_fn, reverse=True)
+        ttgl.store(x_ptr, result)
+
+    # Scan on tuple of tensors
+    @gluon.jit
+    def kernel_tuple(x_ptr, y_ptr, stride):
+        x = ttgl.load(x_ptr)
+        y = ttgl.load(y_ptr)
+        result = ttgl.associative_scan((x, y), axis=0, combine_fn=add_fn)
+        ttgl.store(x_ptr, result[0])
+        ttgl.store(y_ptr, result[1])

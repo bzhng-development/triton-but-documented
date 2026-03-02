@@ -1,0 +1,30 @@
+arrive
+======
+
+Signals that the cluster has arrived at a cluster barrier.
+
+Synchronizes execution of CTAs within the same cluster on AMD GFX1250 hardware. This primitive is used in conjunction with cluster wait operations to ensure coordination across CTAs.
+
+Returns
+-------
+None
+
+Notes
+-----
+This API is specific to AMD GFX1250 architectures. It requires the kernel to be configured with cluster support. All CTAs in the cluster must eventually signal arrival to avoid deadlock.
+
+Examples
+--------
+.. code-block:: python
+
+    import triton.experimental.gluon as gluon
+    from triton.experimental.gluon.language.amd.gfx1250 import cluster
+
+    @gluon.jit
+    def my_kernel(...):
+        # Do work
+        ...
+        # Signal arrival at the cluster barrier
+        cluster.arrive()
+        # Wait for synchronization
+        ...

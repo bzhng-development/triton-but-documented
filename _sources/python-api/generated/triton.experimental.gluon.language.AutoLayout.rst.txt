@@ -1,0 +1,34 @@
+AutoLayout
+==========
+
+.. py:class:: AutoLayout()
+
+   Represents a distributed memory layout where the compiler automatically infers the distribution strategy.
+
+   Notes
+   -----
+   Inherits from :class:`DistributedLayout`. Unlike explicit layouts such as :class:`BlockedLayout`,
+   ``AutoLayout`` does not require specifying tiling parameters. It signals the backend to choose
+   an optimal layout based on the target hardware and operation.
+
+   The ``rank`` property is undefined for ``AutoLayout``. Accessing it raises a :class:`ValueError`.
+   The mangled representation is ``"AL"``.
+
+   Examples
+   --------
+   .. code-block:: python
+
+      import triton.experimental.gluon as gluon
+      import triton.experimental.gluon.language as ttgl
+
+      # Instantiate an automatic layout
+      layout = ttgl.AutoLayout()
+
+      # Query mangle string
+      assert layout.mangle() == "AL"
+
+      # Accessing rank raises an error
+      try:
+          _ = layout.rank
+      except ValueError:
+          pass

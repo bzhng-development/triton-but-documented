@@ -1,0 +1,42 @@
+uint2double_rn
+==============
+
+.. currentmodule:: triton.language.extra.cuda.libdevice
+
+.. autofunction:: uint2double_rn
+
+Convert unsigned 32-bit integer to double-precision float with round-to-nearest.
+
+Parameters
+----------
+arg0 : tensor
+    Input tensor of unsigned 32-bit integers (``uint32``).
+_semantic : optional
+    Internal semantic parameter (automatically set by Triton compiler).
+
+Returns
+-------
+tensor
+    Tensor of double-precision floating-point values (``fp64``).
+
+Notes
+-----
+This function invokes the NVIDIA libdevice intrinsic ``__nv_uint2double_rn``,
+which performs conversion with round-to-nearest-even rounding mode.
+
+The operation is pure (no side effects) and element-wise.
+
+Examples
+--------
+.. code-block:: python
+
+    import triton
+    import triton.language as tl
+
+    @triton.jit
+    def convert_kernel(input_ptr, output_ptr, n):
+        pid = tl.program_id(0)
+        offsets = tl.arange(0, n)
+        uint_vals = tl.load(input_ptr + offsets)
+        double_vals = tl.extra.cuda.libdevice.uint2double_rn(uint_vals)
+        tl.store(output_ptr + offsets, double_vals)

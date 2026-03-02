@@ -1,0 +1,49 @@
+tensor_descriptor
+=================
+
+.. py:class:: tensor_descriptor(handle, shape, strides, block_type, layout)
+
+   Represents a tiled tensor descriptor for Tensor Memory Accelerator (TMA) operations.
+
+   This class encapsulates the global memory address, dimensions, strides, and shared memory layout required for hardware-accelerated async copies on NVIDIA Hopper and Blackwell GPUs. Instances are typically created via :func:`make_tensor_descriptor` rather than direct instantiation.
+
+   Parameters
+   ----------
+   handle : ir.value
+       Internal IR handle representing the descriptor base pointer.
+   shape : List[ttgl.tensor]
+       List of tensors defining the global dimensions of the tensor.
+   strides : List[ttgl.tensor]
+       List of tensors defining the strides (in elements) for each dimension.
+   block_type : ttgl.block_type
+       Specifies the element dtype and the static block shape to be transferred.
+   layout : NVMMASharedLayout
+       The shared memory layout configuration (e.g., swizzle, CGA) for the destination block.
+
+   Notes
+   -----
+   This descriptor is used with TMA async copy operations such as :func:`async_copy_global_to_shared`.
+   Direct instantiation is reserved for low-level IR manipulation; users should prefer :func:`make_tensor_descriptor`.
+
+   Examples
+   --------
+   Typically created via the helper function:
+
+   .. code-block:: python
+
+       import triton.experimental.gluon as gluon
+       import triton.experimental.gluon.language as ttgl
+       from triton.experimental.gluon.language.nvidia.blackwell import tma
+
+       @gluon.jit
+       def kernel(...):
+           # Create a tensor descriptor for a 2D tensor
+           desc = tma.make_tensor_descriptor(
+               base=global_ptr,
+               shape=[height, width],
+               strides=[stride_h, stride_w],
+               block_shape=[block_h, block_w],
+               layout=tma.NVMMASharedLayout(...)
+           )
+           # Use in async copy
+           tma.async_copy_global_to_shared(desc, coord, barrier, shared_ptr)

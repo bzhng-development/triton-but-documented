@@ -1,0 +1,39 @@
+triton.language.extra.cuda.libdevice.atan
+==========================================
+
+Compute the element-wise arctangent of a tensor.
+
+Parameters
+----------
+arg0 : tl.tensor
+    Input tensor. Must be of floating-point type (``fp32`` or ``fp64``).
+
+Returns
+-------
+result : tl.tensor
+    Output tensor of the same type as ``arg0``. Contains the arctangent
+    values in radians, in the range ``[-pi/2, pi/2]``.
+
+Notes
+-----
+This function dispatches to CUDA libdevice intrinsics: ``__nv_atanf`` for
+``fp32`` inputs and ``__nv_atan`` for ``fp64`` inputs. The operation is
+pure (no side effects) and supports both scalar and block tensor inputs.
+
+The arctangent function computes the inverse tangent of each element,
+returning angles in radians.
+
+Examples
+--------
+.. code-block:: python
+
+    import triton
+    import triton.language as tl
+    from triton.language.extra.cuda import libdevice
+
+    @triton.jit
+    def atan_kernel(X_ptr, Y_ptr, BLOCK: tl.constexpr):
+        offsets = tl.arange(0, BLOCK)
+        x = tl.load(X_ptr + offsets)
+        y = libdevice.atan(x)
+        tl.store(Y_ptr + offsets, y)

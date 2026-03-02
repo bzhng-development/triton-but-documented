@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>&lt;no title&gt; &mdash; Triton  documentation</title>
+  <title>triton.language.range &mdash; Triton  documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=03e43079" />
       <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="../../_static/css/custom.css" />
@@ -18,7 +18,7 @@
     <script src="../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
-    <link rel="next" title="Parameters" href="triton.language.static_range.html" />
+    <link rel="next" title="static_range" href="triton.language.static_range.html" />
     <link rel="prev" title="uint_to_uniform_float" href="triton.language.uint_to_uniform_float.html" /> 
 </head>
 
@@ -62,8 +62,11 @@
 <li class="toctree-l2"><a class="reference internal" href="../triton.language.html#atomic-ops">Atomic Ops</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../triton.language.html#random-number-generation">Random Number Generation</a></li>
 <li class="toctree-l2 current"><a class="reference internal" href="../triton.language.html#iterators">Iterators</a><ul class="current">
-<li class="toctree-l3 current"><a class="current reference internal" href="#"><code class="docutils literal notranslate"><span class="pre">triton.language.range</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="triton.language.static_range.html"><code class="docutils literal notranslate"><span class="pre">triton.language.static_range</span></code></a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">triton.language.range</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#triton.language.range"><code class="docutils literal notranslate"><span class="pre">range</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="triton.language.static_range.html">static_range</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../triton.language.html#inline-assembly">Inline Assembly</a></li>
@@ -74,6 +77,35 @@
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../triton.testing.html">triton.testing</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../triton-semantics.html">Triton Semantics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.language.extra.cuda.html">triton.language.extra.cuda</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.language.extra.cuda.libdevice.html">triton.language.extra.cuda.libdevice</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.runtime.html">triton.runtime</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.tools.html">triton.tools</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Gluon (Experimental) API</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.html">triton.experimental.gluon</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.html">triton.experimental.gluon.language</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.nvidia.ampere.html">triton.experimental.gluon.language.nvidia.ampere</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.nvidia.ampere.async_copy.html">triton.experimental.gluon.language.nvidia.ampere.async_copy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.nvidia.ampere.mbarrier.html">triton.experimental.gluon.language.nvidia.ampere.mbarrier</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.nvidia.hopper.html">triton.experimental.gluon.language.nvidia.hopper</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.nvidia.hopper.tma.html">triton.experimental.gluon.language.nvidia.hopper.tma</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.nvidia.hopper.mbarrier.html">triton.experimental.gluon.language.nvidia.hopper.mbarrier</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.nvidia.hopper.cluster.html">triton.experimental.gluon.language.nvidia.hopper.cluster</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.nvidia.blackwell.html">triton.experimental.gluon.language.nvidia.blackwell</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.nvidia.blackwell.tma.html">triton.experimental.gluon.language.nvidia.blackwell.tma</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.nvidia.blackwell.clc.html">triton.experimental.gluon.language.nvidia.blackwell.clc</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.amd.html">triton.experimental.gluon.language.amd</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.amd.gfx1250.html">triton.experimental.gluon.language.amd.gfx1250</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.amd.gfx1250.async_copy.html">triton.experimental.gluon.language.amd.gfx1250.async_copy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.amd.gfx1250.mbarrier.html">triton.experimental.gluon.language.amd.gfx1250.mbarrier</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.amd.gfx1250.cluster.html">triton.experimental.gluon.language.amd.gfx1250.cluster</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.amd.gfx1250.tdm.html">triton.experimental.gluon.language.amd.gfx1250.tdm</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.amd.cdna3.html">triton.experimental.gluon.language.amd.cdna3</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.amd.cdna4.html">triton.experimental.gluon.language.amd.cdna4</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.amd.rdna3.html">triton.experimental.gluon.language.amd.rdna3</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.amd.rdna4.html">triton.experimental.gluon.language.amd.rdna4</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Triton MLIR Dialects</span></p>
 <ul>
@@ -101,7 +133,7 @@
   <ul class="wy-breadcrumbs">
       <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
           <li class="breadcrumb-item"><a href="../triton.language.html">triton.language</a></li>
-      <li class="breadcrumb-item active">&lt;no title&gt;</li>
+      <li class="breadcrumb-item active">triton.language.range</li>
       <li class="wy-breadcrumbs-aside">
             <a href="../../_sources/python-api/generated/triton.language.range.rst.txt" rel="nofollow"> View page source</a>
       </li>
@@ -111,95 +143,90 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <dl class="py class">
+  <section id="triton-language-range">
+<h1>triton.language.range<a class="headerlink" href="#triton-language-range" title="Link to this heading">¶</a></h1>
+<dl class="py class">
 <dt class="sig sig-object py" id="triton.language.range">
-<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">triton.language.</span></span><span class="sig-name descname"><span class="pre">range</span></span><a class="headerlink" href="#triton.language.range" title="Link to this definition">¶</a></dt>
-<dd><p>Special iterator for defining loops in <code class="code docutils literal notranslate"><span class="pre">&#64;triton.jit</span></code> functions with
-compiler optimization hints.</p>
-<p>Mimics Python’s <code class="code docutils literal notranslate"><span class="pre">range</span></code> semantics while exposing loop scheduling
-parameters to the Triton compiler, such as software pipelining stages,
-unrolling factors, and warp specialization.</p>
-<p class="rubric">Parameters</p>
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">triton.language.</span></span><span class="sig-name descname"><span class="pre">range</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">arg1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">arg2</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">step</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_stages</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">loop_unroll_factor</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">disallow_acc_multi_buffer</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">flatten</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">warp_specialize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">disable_licm</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#triton.language.range" title="Link to this definition">¶</a></dt>
+<dd><p>Special iterator for creating loops in <code class="code docutils literal notranslate"><span class="pre">&#64;triton.jit</span></code> functions with compiler optimization hints.</p>
+<p>This class provides similar semantics to Python’s built-in <code class="code docutils literal notranslate"><span class="pre">range</span></code> but allows users to pass additional attributes to guide compiler optimizations such as pipelining, unrolling, and warp specialization.</p>
+<section id="parameters">
+<h2>Parameters<a class="headerlink" href="#parameters" title="Link to this heading">¶</a></h2>
 <dl class="simple">
-<dt>arg1<span class="classifier">int or constexpr</span></dt><dd><p>If <code class="code docutils literal notranslate"><span class="pre">arg2</span></code> is None, this is the end value (start defaults to 0).
-Otherwise, this is the start value.</p>
+<dt>arg1<span class="classifier">int or constexpr</span></dt><dd><p>If <code class="code docutils literal notranslate"><span class="pre">arg2</span></code> is None, this is the end value (start defaults to 0). Otherwise, this is the start value.</p>
 </dd>
-<dt>arg2<span class="classifier">int or constexpr, optional</span></dt><dd><p>The end value (exclusive). Defaults to None.</p>
+<dt>arg2<span class="classifier">int or constexpr, optional</span></dt><dd><p>The end value of the range. If None, <code class="code docutils literal notranslate"><span class="pre">arg1</span></code> is treated as the end value.</p>
 </dd>
-<dt>step<span class="classifier">int or constexpr, optional</span></dt><dd><p>The step value. Defaults to 1.</p>
+<dt>step<span class="classifier">int or constexpr, optional</span></dt><dd><p>The step value between iterations. Defaults to 1.</p>
 </dd>
-<dt>num_stages<span class="classifier">int, optional</span></dt><dd><p>Number of stages for software pipelining. Enables overlapping loop
-iterations to hide memory latency. Distinct from kernel-level
-<code class="code docutils literal notranslate"><span class="pre">num_stages</span></code> as this targets loads within the specific loop.</p>
+<dt>num_stages<span class="classifier">int, optional</span></dt><dd><p>Pipeline the loop into this many stages, allowing <code class="code docutils literal notranslate"><span class="pre">num_stages</span></code> iterations to be in flight simultaneously. This differs from passing <code class="code docutils literal notranslate"><span class="pre">num_stages</span></code> as a kernel argument, which only pipelines loads feeding into <code class="code docutils literal notranslate"><span class="pre">dot</span></code> operations.</p>
 </dd>
-<dt>loop_unroll_factor<span class="classifier">int, optional</span></dt><dd><p>Factor by which to unroll the loop. Values less than 2 disable unrolling.</p>
+<dt>loop_unroll_factor<span class="classifier">int, optional</span></dt><dd><p>Tells the Triton IR loop unroller how many times to unroll the loop. Values less than 2 imply no unrolling.</p>
 </dd>
-<dt>disallow_acc_multi_buffer<span class="classifier">bool, optional</span></dt><dd><p>If True, prevents multi-buffering of the dot accumulator in the loop.
-Defaults to False.</p>
+<dt>disallow_acc_multi_buffer<span class="classifier">bool, optional</span></dt><dd><p>If True, prevent the accumulator of dot operations in the loop from being multi-buffered. Default is False.</p>
 </dd>
-<dt>flatten<span class="classifier">bool, optional</span></dt><dd><p>If True, flattens nested loops starting at this loop into a single loop
-to facilitate pipelining and avoid stage stalling. Defaults to False.</p>
+<dt>flatten<span class="classifier">bool, optional</span></dt><dd><p>Automatically flatten the loop nest starting at this loop to create a single flattened loop. The compiler will attempt to pipeline the flattened loop to avoid stage stalling. Default is False.</p>
 </dd>
-<dt>warp_specialize<span class="classifier">bool, optional</span></dt><dd><p>If True, enables automatic warp specialization, partitioning memory, MMA,
-and vector operations into separate async partitions. Increases total
-warp count. Supported on Blackwell GPUs for simple matmul loops.
-Defaults to False.</p>
+<dt>warp_specialize<span class="classifier">bool, optional</span></dt><dd><p>Enable automatic warp specialization on the loop. The compiler will partition memory, MMA, and vector operations into separate async partitions, increasing the total number of warps required. Only supported on Blackwell GPUs for simple matmul loops. Default is False.</p>
 </dd>
-<dt>disable_licm<span class="classifier">bool, optional</span></dt><dd><p>If True, disables Loop Invariant Code Motion (LICM). Useful to prevent
-long live ranges within the loop. Defaults to False.</p>
+<dt>disable_licm<span class="classifier">bool, optional</span></dt><dd><p>Prevent the compiler from hoisting loop invariant code outside the loop. Useful to avoid creating long liveranges within a loop. Default is False.</p>
 </dd>
 </dl>
-<p class="rubric">Notes</p>
-<p>This class is intended solely for use within the body of functions decorated
-with <code class="code docutils literal notranslate"><span class="pre">&#64;triton.jit</span></code>. Instantiating or iterating over this object in
-standard Python code will raise a RuntimeError.</p>
-<p>Warp specialization (<code class="code docutils literal notranslate"><span class="pre">warp_specialize=True</span></code>) is currently experimental
-and hardware-specific (Blackwell architecture).</p>
-<p class="rubric">Examples</p>
+</section>
+<section id="returns">
+<h2>Returns<a class="headerlink" href="#returns" title="Link to this heading">¶</a></h2>
+<dl class="simple">
+<dt>range</dt><dd><p>An iterator object for use in <code class="code docutils literal notranslate"><span class="pre">for</span></code> loops within JIT-compiled functions.</p>
+</dd>
+</dl>
+</section>
+<section id="raises">
+<h2>Raises<a class="headerlink" href="#raises" title="Link to this heading">¶</a></h2>
+<dl class="simple">
+<dt>RuntimeError</dt><dd><p>If <code class="code docutils literal notranslate"><span class="pre">__iter__</span></code> or <code class="code docutils literal notranslate"><span class="pre">__next__</span></code> is called outside of a <code class="code docutils literal notranslate"><span class="pre">&#64;triton.jit</span></code> decorated function.</p>
+</dd>
+</dl>
+</section>
+<section id="notes">
+<h2>Notes<a class="headerlink" href="#notes" title="Link to this heading">¶</a></h2>
+<p>This iterator can only be used within functions decorated with <code class="code docutils literal notranslate"><span class="pre">&#64;triton.jit</span></code>. Attempting to iterate over it in regular Python code will raise a RuntimeError.</p>
+<p>Warp specialization is currently only supported on Blackwell GPUs and works best with simple matmul loops. Support for arbitrary loops may be expanded in future versions.</p>
+</section>
+<section id="examples">
+<h2>Examples<a class="headerlink" href="#examples" title="Link to this heading">¶</a></h2>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">triton</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">triton.language</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">tl</span>
 
 <span class="nd">@triton</span><span class="o">.</span><span class="n">jit</span>
-<span class="k">def</span><span class="w"> </span><span class="nf">vector_add_kernel</span><span class="p">(</span>
-    <span class="n">X_ptr</span><span class="p">,</span> <span class="n">Y_ptr</span><span class="p">,</span> <span class="n">Z_ptr</span><span class="p">,</span>
-    <span class="n">N</span><span class="p">:</span> <span class="n">tl</span><span class="o">.</span><span class="n">constexpr</span><span class="p">,</span>
-    <span class="n">BLOCK_SIZE</span><span class="p">:</span> <span class="n">tl</span><span class="o">.</span><span class="n">constexpr</span><span class="p">,</span>
-<span class="p">):</span>
-    <span class="n">pid</span> <span class="o">=</span> <span class="n">tl</span><span class="o">.</span><span class="n">program_id</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
-    <span class="n">block_start</span> <span class="o">=</span> <span class="n">pid</span> <span class="o">*</span> <span class="n">BLOCK_SIZE</span>
-    <span class="n">offsets</span> <span class="o">=</span> <span class="n">block_start</span> <span class="o">+</span> <span class="n">tl</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">BLOCK_SIZE</span><span class="p">)</span>
-    <span class="n">mask</span> <span class="o">=</span> <span class="n">offsets</span> <span class="o">&lt;</span> <span class="n">N</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">kernel</span><span class="p">(</span><span class="o">...</span><span class="p">):</span>
+    <span class="c1"># Basic usage similar to Python range</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">tl</span><span class="o">.</span><span class="n">range</span><span class="p">(</span><span class="mi">10</span><span class="p">):</span>
+        <span class="o">...</span>
 
-    <span class="c1"># Loop with 3-stage software pipelining</span>
-    <span class="n">acc</span> <span class="o">=</span> <span class="n">tl</span><span class="o">.</span><span class="n">zeros</span><span class="p">([</span><span class="n">BLOCK_SIZE</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">tl</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span>
-    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">tl</span><span class="o">.</span><span class="n">range</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="n">num_stages</span><span class="o">=</span><span class="mi">3</span><span class="p">):</span>
-        <span class="n">x</span> <span class="o">=</span> <span class="n">tl</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">X_ptr</span> <span class="o">+</span> <span class="n">offsets</span> <span class="o">+</span> <span class="n">i</span> <span class="o">*</span> <span class="n">BLOCK_SIZE</span><span class="p">,</span> <span class="n">mask</span><span class="o">=</span><span class="n">mask</span><span class="p">,</span> <span class="n">padding_option</span><span class="o">=</span><span class="s2">&quot;zero&quot;</span><span class="p">)</span>
-        <span class="n">y</span> <span class="o">=</span> <span class="n">tl</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">Y_ptr</span> <span class="o">+</span> <span class="n">offsets</span> <span class="o">+</span> <span class="n">i</span> <span class="o">*</span> <span class="n">BLOCK_SIZE</span><span class="p">,</span> <span class="n">mask</span><span class="o">=</span><span class="n">mask</span><span class="p">,</span> <span class="n">padding_option</span><span class="o">=</span><span class="s2">&quot;zero&quot;</span><span class="p">)</span>
-        <span class="n">acc</span> <span class="o">+=</span> <span class="n">x</span> <span class="o">+</span> <span class="n">y</span>
+    <span class="c1"># With pipelining</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">tl</span><span class="o">.</span><span class="n">range</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="n">num_stages</span><span class="o">=</span><span class="mi">3</span><span class="p">):</span>
+        <span class="o">...</span>
 
-    <span class="n">tl</span><span class="o">.</span><span class="n">store</span><span class="p">(</span><span class="n">Z_ptr</span> <span class="o">+</span> <span class="n">offsets</span><span class="p">,</span> <span class="n">acc</span><span class="p">,</span> <span class="n">mask</span><span class="o">=</span><span class="n">mask</span><span class="p">)</span>
+    <span class="c1"># With loop unrolling</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">tl</span><span class="o">.</span><span class="n">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="n">step</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">loop_unroll_factor</span><span class="o">=</span><span class="mi">4</span><span class="p">):</span>
+        <span class="o">...</span>
 
-<span class="nd">@triton</span><span class="o">.</span><span class="n">jit</span>
-<span class="k">def</span><span class="w"> </span><span class="nf">matmul_kernel_warp_spec</span><span class="p">(</span>
-    <span class="n">A_ptr</span><span class="p">,</span> <span class="n">B_ptr</span><span class="p">,</span> <span class="n">C_ptr</span><span class="p">,</span>
-    <span class="n">M</span><span class="p">,</span> <span class="n">N</span><span class="p">,</span> <span class="n">K</span><span class="p">,</span>
-    <span class="n">BLOCK_M</span><span class="p">:</span> <span class="n">tl</span><span class="o">.</span><span class="n">constexpr</span><span class="p">,</span> <span class="n">BLOCK_N</span><span class="p">:</span> <span class="n">tl</span><span class="o">.</span><span class="n">constexpr</span><span class="p">,</span> <span class="n">BLOCK_K</span><span class="p">:</span> <span class="n">tl</span><span class="o">.</span><span class="n">constexpr</span><span class="p">,</span>
-<span class="p">):</span>
-    <span class="c1"># Enable warp specialization for the inner loop</span>
-    <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">tl</span><span class="o">.</span><span class="n">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">K</span><span class="p">,</span> <span class="n">BLOCK_K</span><span class="p">,</span> <span class="n">warp_specialize</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
-        <span class="c1"># ... matrix multiplication logic ...</span>
-        <span class="k">pass</span>
+    <span class="c1"># Multiple optimization hints</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">tl</span><span class="o">.</span><span class="n">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">N</span><span class="p">,</span> <span class="n">num_stages</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">loop_unroll_factor</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">flatten</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+        <span class="o">...</span>
 </pre></div>
 </div>
+</section>
 </dd></dl>
 
+</section>
 
 
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
         <a href="triton.language.uint_to_uniform_float.html" class="btn btn-neutral float-left" title="uint_to_uniform_float" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="triton.language.static_range.html" class="btn btn-neutral float-right" title="Parameters" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="triton.language.static_range.html" class="btn btn-neutral float-right" title="static_range" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>

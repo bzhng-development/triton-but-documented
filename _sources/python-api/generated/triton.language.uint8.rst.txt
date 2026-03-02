@@ -1,54 +1,35 @@
-triton.language.uint8
-=====================
+uint8
+=====
 
-8-bit unsigned integer data type.
+.. py:data:: triton.language.uint8
 
-This dtype represents an unsigned integer stored in 8 bits (1 byte), with a
-value range of [0, 255]. It is used in Triton kernels to define the type of
-pointers, tensors, or scalar values requiring compact storage and arithmetic
-modulo 256.
+   8-bit unsigned integer data type.
 
-Parameters
-----------
+   Instance representing the unsigned 8-bit integer type in Triton. Used to
+   specify data types for pointers, tensors, and scalars in JIT-compiled
+   kernels.
 
-None
-    This is a dtype instance and does not accept arguments.
+   Notes
+   -----
+   This type maps to ``uint8_t`` in CUDA. It is distinct from
+   :py:data:`triton.language.int8` (signed) and :py:data:`triton.language.float8`
+   (floating point).
 
-Returns
--------
+   Examples
+   --------
+   Define a pointer to uint8 data and perform load/store operations.
 
-dtype
-    The ``uint8`` data type object, usable in ``tl.full``, ``tl.zeros``,
-    pointer casting, and tensor type annotations.
+   .. code-block:: python
 
-Notes
------
+      import triton
+      import triton.language as tl
 
-*   Arithmetic operations on ``uint8`` values wrap around modulo 256.
-*   When mixed with larger integer types (e.g., ``int32``), standard promotion
-    rules apply, typically promoting to the wider type.
-*   Useful for memory-efficient storage of indices, masks, or quantized data.
+      @triton.jit
+      def uint8_kernel(ptr):
+          # Load single uint8 value
+          val = tl.load(ptr)
+          # Store single uint8 value
+          tl.store(ptr, val + 1)
 
-Examples
---------
-
-.. code-block:: python
-
-    import triton
-    import triton.language as tl
-
-    @triton.jit
-    def kernel(ptr, N):
-        # Create a uint8 constant
-        val: tl.uint8 = tl.constexpr(255)
-
-        # Allocate a uint8 tensor
-        buffer = tl.zeros([N], dtype=tl.uint8)
-
-        # Perform wrapping arithmetic
-        x: tl.uint8 = 200
-        y: tl.uint8 = 100
-        z = x + y  # Result is 44 (300 % 256)
-
-        # Store result
-        tl.store(ptr + tl.arange(0, N), z)
+      # Pointer type construction
+      uint8_ptr = tl.pointer_type(tl.uint8)

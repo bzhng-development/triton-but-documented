@@ -1,43 +1,51 @@
 must_use_result
-================
+===============
 
 .. currentmodule:: triton.language
 
-.. autofunction:: must_use_result
+.. function:: must_use_result(x, s=True)
 
-Mark a function or value such that ignoring its return result triggers a compile-time error.
+   Mark a function or value as requiring its result to be used.
 
-When applied to a string, returns a decorator that marks the decorated function. When applied to a tensor or other value, marks the value directly. This prevents accidental omission of results from operations that have no side effects (e.g., :py:func:`advance`).
+   If the result of a function or operation marked with this decorator is unused, an error will be raised.
 
-Parameters
-----------
-x : str or tensor
-    If a string, used as an error message for a decorator. If a tensor or value, the object to mark as must-use.
-s : bool, optional
-    Flag to enable the must-use check (default ``True``).
+   Parameters
+   ----------
+   x : function or str
+       The function to decorate, or a string message describing why the result must be used.
+   s : bool, optional
+       Whether the result must be used (default True).
 
-Returns
--------
-function or tensor
-    If ``x`` is a string, returns a decorator function. Otherwise, returns the marked ``x``.
+   Returns
+   -------
+   function or object
+       The decorated function or the original object with the ``_must_use_result`` attribute set.
 
-Notes
------
-This is commonly used to ensure programmers do not discard results of pure operations. For example, :py:func:`advance` returns a new pointer; failing to assign it leaves the original pointer unchanged.
+   Notes
+   -----
+   This is typically used as a decorator on Triton JIT functions or operations that have no side effects. When called with a string as the first argument, it returns a decorator factory that can be applied to functions.
 
-Examples
---------
-.. code-block:: python
+   This helps prevent bugs where the result of a pure operation is accidentally discarded.
 
-    import triton
-    import triton.language as tl
+   Examples
+   --------
+   .. code-block:: python
 
-    @triton.jit
-    def kernel(ptr, BLOCK: tl.constexpr):
-        # Correct usage: assign the result
-        new_ptr = tl.advance(ptr, [BLOCK])
-        val = tl.load(new_ptr)
-        tl.store(ptr, val)
+       import triton
+       import triton.language as tl
 
-    # Incorrect usage (will raise compile error if must_use_result is applied):
-    # tl.advance(ptr, [BLOCK])  # Result ignored
+       @triton.jit
+       @tl.must_use_result("Result must be assigned")
+       def my_kernel(...):
+           ...
+
+       # Using as a decorator on operations
+       @tl.must_use_result(
+           "Note that tl.advance does not have any side effects. To move the block pointer, you need to assign the result of tl.advance to a variable."
+       )
+       @triton.jit
+       def advance(base, offsets):
+           ...
+
+       # The result must be assigned to a variable
+       ptr = tl.advance(ptr, offsets)

@@ -1,0 +1,77 @@
+class triton.experimental.gluon.language.DotOperandLayout
+===============================================
+
+Represents a layout for a dot operand in matrix multiplication operations.
+
+This layout wraps a parent distributed layout (typically an MMA layout) and specifies
+which operand (LHS or RHS) of the dot operation it represents, along with the
+packing width for elements.
+
+Parameters
+----------
+operand_index : int
+    Index identifying the dot operand: 0 for the left-hand side (LHS) matrix,
+    1 for the right-hand side (RHS) matrix.
+parent : DistributedLayout
+    The parent distributed layout representing the underlying MMA operation.
+    Typically an instance of ``NVMMADistributedLayout``.
+k_width : int
+    Number of elements packed per 32 bits. Controls the element packing density
+    for the operand.
+
+Attributes
+----------
+operand_index : int
+    The operand index (0 for LHS, 1 for RHS).
+parent : DistributedLayout
+    The parent MMA layout.
+k_width : int
+    Elements per 32-bit word.
+
+Notes
+-----
+``DotOperandLayout`` is used to describe how tensor operands are distributed
+across threads and warps for tensor core operations. The ``operand_index``
+determines which dimension of the parent layout corresponds to the reduction
+(K) dimension:
+
+- For operand 0 (LHS), the K dimension is the last dimension (rank - 1)
+- For operand 1 (RHS), the K dimension is the second-to-last dimension (rank - 2)
+
+The ``cga_layout`` property derives from the parent's CGA layout by zeroing
+out the K dimension basis vectors.
+
+Examples
+--------
+Create a dot operand layout for the LHS matrix with an MMA parent:
+
+.. code-block:: python
+
+    import triton.experimental.gluon as gluon
+    import triton.experimental.gluon.language as ttgl
+
+    # Create parent MMA layout
+    mma_layout = ttgl.NVMMADistributedLayout(
+        version=[1, 0],
+        warps_per_cta=[4, 1],
+        instr_shape=[16, 8, 16],
+    )
+
+    # Create LHS operand layout (operand_index=0)
+    lhs_layout = ttgl.DotOperandLayout(
+        operand_index=0,
+        parent=mma_layout,
+        k_width=8,
+    )
+
+    # Create RHS operand layout (operand_index=1)
+    rhs_layout = ttgl.DotOperandLayout(
+        operand_index=1,
+        parent=mma_layout,
+        k_width=8,
+    )
+
+    # Access layout properties
+    print(lhs_layout.rank)        # Inherits rank from parent
+    print(lhs_layout.operand_index)  # 0
+    print(rhs_layout.operand_index)  # 1

@@ -1,37 +1,51 @@
-Decorator for specifying how the values of certain meta-parameters may be computed.
+triton.heuristics
+=================
 
-This is useful for cases where auto-tuning is prohibitively expensive, or just not applicable. Unlike `triton.autotune`, which benchmarks multiple configurations at runtime, `heuristics` deterministically computes parameter values based on input arguments before kernel launch.
+.. currentmodule:: triton
 
-Parameters
-----------
-values : dict[str, Callable[[dict[str, Any]], Any]]
-    A dictionary mapping meta-parameter names to functions that compute their values.
-    Each function accepts a single dictionary containing all positional and keyword
-    arguments passed to the kernel and returns the computed value for the meta-parameter.
+.. function:: heuristics(values)
 
-Returns
--------
-decorator : callable
-    A decorator that wraps a JIT-compiled kernel function, injecting the computed
-    heuristic values into the kernel's meta-parameters at runtime.
+   Decorator for specifying how the values of certain meta-parameters may be computed.
 
-Notes
------
-The heuristic function receives a dictionary of all kernel arguments (both positional
-and keyword). This allows dynamic computation of constexpr values based on runtime
-input shapes or strides.
+   This is useful for cases where auto-tuning is prohibitively expensive, or just not applicable.
 
-Examples
---------
->>> import triton
->>> import triton.language as tl
->>>
->>> # Compute BLOCK_SIZE as the smallest power-of-two >= x_size
->>> @triton.heuristics(values={'BLOCK_SIZE': lambda args: triton.next_power_of_2(args['x_size'])})
->>> @triton.jit
->>> def kernel(x_ptr, x_size, BLOCK_SIZE: tl.constexpr):
->>>     # BLOCK_SIZE is automatically set based on x_size
->>>     pid = tl.program_id(0)
->>>     offset = pid * BLOCK_SIZE + tl.arange(0, BLOCK_SIZE)
->>>     mask = offset < x_size
->>>     tl.store(x_ptr + offset, tl.load(x_ptr + offset), mask=mask)
+   Parameters
+   ----------
+   values : dict[str, Callable[[dict[str, Any]], Any]]
+       A dictionary of meta-parameter names and functions that compute the value of the meta-parameter. Each function takes a dictionary of kernel arguments as input and returns the computed value.
+
+   Returns
+   -------
+   decorator : Callable
+       A decorator function that wraps the kernel function with heuristic value computation.
+
+   Notes
+   -----
+   The heuristic functions are called at kernel launch time with a dictionary containing all kernel arguments (both positional and keyword). The returned values are passed as meta-parameters to the kernel.
+
+   Examples
+   --------
+   >>> import triton
+   >>> import triton.language as tl
+
+   Compute the smallest power-of-two greater than or equal to x_size:
+
+   .. code-block:: python
+
+      @triton.heuristics(values={'BLOCK_SIZE': lambda args: triton.next_power_of_2(args['x_size'])})
+      @triton.jit
+      def kernel(x_ptr, x_size, BLOCK_SIZE: tl.constexpr):
+          # BLOCK_SIZE is automatically computed based on x_size
+          ...
+
+   Multiple heuristics can be specified:
+
+   .. code-block:: python
+
+      @triton.heuristics(values={
+          'BLOCK_SIZE': lambda args: triton.next_power_of_2(args['x_size']),
+          'NUM_WARPS': lambda args: 4 if args['x_size'] < 1024 else 8
+      })
+      @triton.jit
+      def kernel(x_ptr, x_size, BLOCK_SIZE: tl.constexpr, NUM_WARPS: tl.constexpr):
+          ...

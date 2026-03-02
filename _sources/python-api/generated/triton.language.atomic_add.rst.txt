@@ -5,47 +5,50 @@ atomic_add
 
 .. function:: atomic_add(pointer, val, mask=None, sem=None, scope=None)
 
-   Performs an atomic add at the memory location specified by :code:`pointer`.
+   Performs an atomic add at the memory location specified by ``pointer``.
 
-   Returns the data stored at :code:`pointer` before the atomic operation.
-
-   This function can also be called as a member function on :py:class:`tensor`,
-   as :code:`x.atomic_add(...)` instead of :code:`atomic_add(x, ...)`.
+   Return the data stored at ``pointer`` before the atomic operation.
 
    Parameters
    ----------
-   pointer : triton.PointerType, or block of dtype=triton.PointerType
+   pointer : tensor of ``triton.PointerDType``
        The memory locations to operate on.
-   val : Block
+   val : tensor
        The values with which to perform the atomic operation. Must have
-       dtype equal to :code:`pointer.dtype.element_ty`.
-   mask : Block of triton.int1, optional
-       If :code:`mask[idx]` is false, do not perform the atomic operation
-       at :code:`pointer[idx]`.
+       ``dtype=pointer.dtype.element_ty``.
+   mask : tensor of ``triton.int1``, optional
+       If ``mask[idx]`` is false, do not perform the atomic operation at
+       ``pointer[idx]``.
    sem : str, optional
-       Specifies the memory semantics for the operation. Acceptable values
-       are "acquire", "release", "acq_rel" (ACQUIRE_RELEASE), and "relaxed".
-       Defaults to "acq_rel".
+       Specifies the memory semantics for the operation. Acceptable values are
+       ``"acquire"``, ``"release"``, ``"acq_rel"`` (stands for
+       "ACQUIRE_RELEASE"), and ``"relaxed"``. If not provided, the function
+       defaults to using ``"acq_rel"`` semantics.
    scope : str, optional
-       Defines the scope of threads that observe the synchronizing effect
-       of the atomic operation. Acceptable values are "gpu" (default),
-       "cta" (cooperative thread array), or "sys" (SYSTEM).
+       Defines the scope of threads that observe the synchronizing effect of
+       the atomic operation. Acceptable values are ``"gpu"`` (default),
+       ``"cta"`` (cooperative thread array, thread block), or ``"sys"``
+       (stands for "SYSTEM").
 
    Returns
    -------
-   Block
-       A tensor containing the values at :code:`pointer` before the atomic
-       operation was performed. The shape and dtype match :code:`val`.
+   tensor
+       The data stored at ``pointer`` before the atomic operation.
 
-   Example
-   -------
+   Notes
+   -----
+   This function can also be called as a member function on ``tensor``,
+   as ``x.atomic_add(...)`` instead of ``atomic_add(x, ...)``.
+
+   Examples
+   --------
    .. code-block:: python
 
-       @triton.jit
-       def atomic_add_kernel(x_ptr, y_ptr, BLOCK_SIZE: tl.constexpr):
-           pid = tl.program_id(0)
-           offsets = pid * BLOCK_SIZE + tl.arange(0, BLOCK_SIZE)
-           x = tl.load(x_ptr + offsets)
-           # Atomically add x to y, returning the old value in y_old
-           y_old = tl.atomic_add(y_ptr + offsets, x)
-           tl.store(x_ptr + offsets, y_old)
+      @triton.jit
+      def atomic_add_kernel(x_ptr, y_ptr, BLOCK_SIZE: tl.constexpr):
+          pid = tl.program_id(0)
+          offset = pid * BLOCK_SIZE + tl.arange(0, BLOCK_SIZE)
+          x = tl.load(x_ptr + offset)
+          # Atomically add x to y_ptr, returns old value
+          old_val = tl.atomic_add(y_ptr + offset, x)
+          tl.store(x_ptr + offset, old_val)

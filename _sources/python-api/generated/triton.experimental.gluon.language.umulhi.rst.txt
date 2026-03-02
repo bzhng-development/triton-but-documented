@@ -1,0 +1,43 @@
+umulhi
+======
+
+.. currentmodule:: triton.experimental.gluon.language
+
+.. function:: umulhi(x, y, _semantic=None)
+
+   Computes the element-wise most significant N bits of the 2N-bit product of ``x`` and ``y``.
+
+   For integer types with N bits, this returns the upper N bits of the full 2N-bit multiplication result. This is useful for high-precision multiplication where the full product exceeds the operand width.
+
+   Parameters
+   ----------
+   x : Block
+       The first input tensor. Must be int32, int64, uint32, or uint64.
+   y : Block
+       The second input tensor. Must have the same dtype as ``x``.
+   _semantic : GluonSemantic, optional
+       Internal semantic context (automatically provided by JIT compiler).
+
+   Returns
+   -------
+   tensor
+       A tensor containing the most significant N bits of the 2N-bit product. Has the same dtype and shape as the inputs.
+
+   Notes
+   -----
+   Supported dtypes: int32, int64, uint32, uint64. Both inputs must have matching dtypes.
+
+   For unsigned 32-bit inputs, this computes bits [32:63] of the 64-bit product. For signed inputs, the result preserves the sign extension behavior of the full multiplication.
+
+   Examples
+   --------
+   >>> import triton.experimental.gluon as gluon
+   >>> import triton.experimental.gluon.language as ttgl
+   >>> @gluon.jit
+   ... def kernel(x_ptr, y_ptr, out_ptr, BLOCK_SIZE: tl.constexpr):
+   ...     pid = ttgl.program_id(0)
+   ...     offs = pid * BLOCK_SIZE + ttgl.arange(0, BLOCK_SIZE)
+   ...     x = ttgl.load(x_ptr + offs)
+   ...     y = ttgl.load(y_ptr + offs)
+   ...     hi = ttgl.umulhi(x, y)
+   ...     ttgl.store(out_ptr + offs, hi)

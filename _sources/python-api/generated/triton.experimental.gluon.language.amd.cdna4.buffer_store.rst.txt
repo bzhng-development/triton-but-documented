@@ -1,0 +1,53 @@
+buffer_store
+============
+
+.. function:: buffer_store(stored_value, ptr, offsets, mask=None, cache=None)
+
+   Store a tensor directly to global memory via a scalar base pointer and tensor of offsets.
+
+   AMD CDNA4 buffer store operation that writes tensor data to global memory using a base
+   pointer and offset tensor rather than a pointer tensor.
+
+   Parameters
+   ----------
+   stored_value : tensor
+       The tensor data to be stored to global memory.
+   ptr : pointer
+       Scalar base pointer to global memory location.
+   offsets : tensor
+       Tensor of offsets relative to the base pointer.
+   mask : tensor, optional
+       Boolean mask tensor for predicated store operations. Elements are only stored
+       where mask is True. Defaults to None (unconditional store).
+   cache : str, optional
+       Cache modifier specifier for memory consistency semantics. Defaults to None.
+
+   Returns
+   -------
+   None
+
+   Notes
+   -----
+   This operation is specific to AMD CDNA4 architecture. The offsets tensor determines
+   which memory locations relative to the base pointer receive data from stored_value.
+
+   When mask is provided, only elements where mask evaluates to True are written to
+   memory. This enables conditional/predicated memory operations.
+
+   The stored_value, ptr, offsets, and mask tensors are broadcast to compatible shapes
+   before the store operation executes.
+
+   Examples
+   --------
+   .. code-block:: python
+
+      import triton.experimental.gluon as gluon
+      import triton.experimental.gluon.language as ttgl
+
+      @gluon.jit
+      def kernel(ptr, offsets, value):
+          ttgl.amd.cdna4.buffer_store(value, ptr, offsets)
+
+      @gluon.jit
+      def kernel_masked(ptr, offsets, value, mask):
+          ttgl.amd.cdna4.buffer_store(value, ptr, offsets, mask=mask)

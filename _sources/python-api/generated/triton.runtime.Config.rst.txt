@@ -1,0 +1,90 @@
+class Config
+==============
+
+.. currentmodule:: triton.runtime
+
+.. autoclass:: Config
+
+   Represents a possible kernel configuration for the auto-tuner to try.
+
+   Parameters
+   ----------
+   kwargs : dict
+      Dictionary of meta-parameters to pass to the kernel as keyword arguments.
+   num_warps : int, optional
+      Number of warps to use for the kernel when compiled for GPUs. Default is 4.
+      Each warp contains 32 threads, so ``num_warps=8`` yields 256 threads.
+   num_stages : int, optional
+      Number of stages for software-pipelining loops. Default is 3. Mostly useful
+      for matrix multiplication workloads on SM80+ GPUs.
+   num_ctas : int, optional
+      Number of blocks in a block cluster. Default is 1. SM90+ only.
+   maxnreg : int, optional
+      Maximum number of registers one thread can use. Corresponds to PTX
+      ``.maxnreg`` directive. Not supported on all platforms.
+   pre_hook : callable, optional
+      Function called before the kernel is executed. Receives kernel arguments
+      as parameters.
+   ir_override : str, optional
+      Filename of a user-defined IR file (``.ttgir``, ``.llir``, ``.ptx``, or
+      ``.amdgcn``).
+
+   Attributes
+   ----------
+   kwargs : dict
+      Dictionary of meta-parameters passed to the kernel.
+   num_warps : int
+      Number of warps for kernel parallelization.
+   num_stages : int
+      Number of software-pipelining stages.
+   num_ctas : int
+      Number of blocks in a block cluster.
+   maxnreg : int or None
+      Maximum register count per thread.
+   pre_hook : callable or None
+      Pre-execution hook function.
+   ir_override : str or None
+      Path to user-defined IR file.
+
+   Notes
+   -----
+   ``Config`` objects are typically used with :func:`triton.autotune` to specify
+   different kernel configurations for performance tuning. The auto-tuner will
+   benchmark each configuration and select the best one.
+
+   When multiple configurations are tested, kernel side-effects may occur multiple
+   times. Use ``reset_to_zero`` and ``restore_value`` parameters in
+   :func:`triton.autotune` to manage tensor state.
+
+   Examples
+   --------
+   .. code-block:: python
+
+      import triton
+      import triton.language as tl
+
+      @triton.autotune(
+          configs=[
+              triton.Config(kwargs={'BLOCK_SIZE': 128}, num_warps=4),
+              triton.Config(kwargs={'BLOCK_SIZE': 1024}, num_warps=8),
+              triton.Config(kwargs={'BLOCK_SIZE': 256}, num_warps=4, num_stages=3),
+          ],
+          key=['x_size']
+      )
+      @triton.jit
+      def kernel(x_ptr, x_size, BLOCK_SIZE: tl.constexpr):
+          # kernel implementation
+          pass
+
+   .. code-block:: python
+
+      # Create a config with custom pre_hook
+      def my_pre_hook(args):
+          print(f"Running with args: {args}")
+
+      config = triton.Config(
+          kwargs={'BLOCK_SIZE': 512},
+          num_warps=8,
+          num_stages=2,
+          pre_hook=my_pre_hook
+      )

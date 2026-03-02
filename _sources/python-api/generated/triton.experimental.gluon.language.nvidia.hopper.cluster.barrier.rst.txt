@@ -1,0 +1,49 @@
+barrier
+=======
+
+.. currentmodule:: triton.experimental.gluon.language.nvidia.hopper.cluster
+
+.. function:: barrier(relaxed=False, _semantic=None)
+
+   Insert a barrier to synchronize all CTAs within a CTA cluster on NVIDIA Hopper GPUs.
+
+   Parameters
+   ----------
+   relaxed : bool, optional
+       Whether to use relaxed arrival semantics. When True, CTAs may arrive
+       at the barrier without strict ordering guarantees. Defaults to False.
+   _semantic : GluonSemantic, optional
+       Internal semantic context. Do not set manually.
+
+   Returns
+   -------
+   None
+
+   Notes
+   -----
+   This barrier synchronizes across all CTAs in the cluster, enabling
+   coordination for multi-CTA kernels. All CTAs in the cluster must reach
+   this barrier before any can proceed.
+
+   Relaxed semantics may improve performance but provide weaker memory
+   ordering guarantees. Use default (False) for strong consistency.
+
+   Requires multi-CTA kernel configuration. Has no effect when num_ctas == 1.
+
+   Examples
+   --------
+   .. code-block:: python
+
+      import triton.experimental.gluon as gluon
+      import triton.experimental.gluon.language as ttgl
+
+      @gluon.jit
+      def multi_cta_kernel(...):
+          # Perform work
+          ...
+          
+          # Synchronize all CTAs in the cluster
+          ttgl.nvidia.hopper.cluster.barrier()
+          
+          # Continue with coordinated work
+          ...

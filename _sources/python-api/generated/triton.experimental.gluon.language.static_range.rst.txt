@@ -1,0 +1,55 @@
+static_range
+============
+
+.. class:: static_range(arg1, arg2=None, step=None)
+
+   Compile-time range iterator for loop unrolling in JIT-compiled kernels.
+
+   ``static_range`` provides Python :code:`range`-like semantics for use within
+   :code:`@gluon.jit` functions. All arguments must be compile-time constants
+   (:code:`constexpr`). The compiler uses this iterator to aggressively unroll
+   loops, enabling better optimization opportunities.
+
+   Parameters
+   ----------
+   arg1 : constexpr
+      If :code:`arg2` is None, this is the end value (start defaults to 0).
+      If :code:`arg2` is provided, this is the start value.
+   arg2 : constexpr, optional
+      The end value of the range (exclusive). Defaults to None.
+   step : constexpr, optional
+      The step value between iterations. Defaults to 1.
+
+   Returns
+   -------
+   static_range
+      An iterator object for use in for-loops within JIT-compiled functions.
+
+   Notes
+   -----
+   All arguments must be :code:`constexpr` values (compile-time constants).
+   Runtime values will cause an assertion error.
+
+   The iterator cannot be used outside of :code:`@gluon.jit` decorated functions.
+   Calling :code:`__iter__` or :code:`__next__` at runtime raises a RuntimeError.
+
+   Examples
+   --------
+   .. code-block:: python
+
+      import triton.experimental.gluon as gluon
+      import triton.experimental.gluon.language as ttgl
+
+      @gluon.jit
+      def kernel(...):
+          # Iterate from 0 to 9
+          for i in ttgl.static_range(10):
+              ...
+
+          # Iterate from 2 to 8
+          for i in ttgl.static_range(2, 8):
+              ...
+
+          # Iterate from 0 to 10 with step 2
+          for i in ttgl.static_range(0, 10, 2):
+              ...

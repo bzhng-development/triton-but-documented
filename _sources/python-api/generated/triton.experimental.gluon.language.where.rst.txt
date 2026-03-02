@@ -1,0 +1,50 @@
+ttgl.where
+==========
+
+.. currentmodule:: triton.experimental.gluon.language
+
+.. function:: where(condition, x, y, _semantic=None)
+
+   Select elements from ``x`` or ``y`` based on ``condition``.
+
+   Parameters
+   ----------
+   condition : tensor
+       Boolean tensor. When True (nonzero), yield ``x``, otherwise yield ``y``.
+   x : tensor
+       Values selected at indices where ``condition`` is True.
+   y : tensor
+       Values selected at indices where ``condition`` is False.
+
+   Returns
+   -------
+   tensor
+       A tensor with elements from ``x`` or ``y`` selected by ``condition``.
+
+   Notes
+   -----
+   Both ``x`` and ``y`` are always evaluated regardless of the value of
+   ``condition``. If you want to avoid unintended memory operations, use the
+   ``mask`` arguments in :func:`ttgl.load` and :func:`ttgl.store` instead.
+
+   The shapes of ``x`` and ``y`` are both broadcast to the shape of
+   ``condition``. ``x`` and ``y`` must have the same data type.
+
+   Examples
+   --------
+   .. code-block:: python
+
+      import triton.experimental.gluon as gluon
+      import triton.experimental.gluon.language as ttgl
+
+      @gluon.jit
+      def kernel(x_ptr, y_ptr, out_ptr, BLOCK_SIZE: tl.constexpr):
+          pid = ttgl.program_id(0)
+          offs = ttgl.arange(0, BLOCK_SIZE)
+          mask = offs < BLOCK_SIZE
+          x = ttgl.load(x_ptr + offs, mask=mask)
+          y = ttgl.load(y_ptr + offs, mask=mask)
+          # Select x where offs is even, y where offs is odd
+          condition = (offs % 2) == 0
+          result = ttgl.where(condition, x, y)
+          ttgl.store(out_ptr + offs, result, mask=mask)

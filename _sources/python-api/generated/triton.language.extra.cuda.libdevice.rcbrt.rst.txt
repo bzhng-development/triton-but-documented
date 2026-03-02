@@ -1,0 +1,43 @@
+rcbrt
+=====
+
+.. currentmodule:: triton.language.extra.cuda.libdevice
+
+.. function:: rcbrt(arg0, _semantic=None)
+
+    Compute the reciprocal cube root of the input element-wise.
+
+    Parameters
+    ----------
+    arg0 : tensor
+        Input tensor of floating-point values (``fp32`` or ``fp64``).
+    _semantic : optional
+        Internal parameter for Triton semantics. Do not set manually.
+
+    Returns
+    -------
+    result : tensor
+        Tensor of the same shape and dtype as ``arg0``, containing
+        :math:`1 / \sqrt[3]{x}` for each element.
+
+    Notes
+    -----
+    This function dispatches to CUDA libdevice functions:
+
+    - ``__nv_rcbrtf`` for ``fp32`` inputs
+    - ``__nv_rcbrt`` for ``fp64`` inputs
+
+    The operation is pure (no side effects).
+
+    Examples
+    --------
+    .. code-block:: python
+
+        import triton
+        import triton.language as tl
+
+        @triton.jit
+        def kernel(x_ptr, y_ptr, BLOCK_SIZE: tl.constexpr):
+            x = tl.load(x_ptr + tl.arange(0, BLOCK_SIZE))
+            y = tl.extra.cuda.libdevice.rcbrt(x)
+            tl.store(y_ptr + tl.arange(0, BLOCK_SIZE), y)

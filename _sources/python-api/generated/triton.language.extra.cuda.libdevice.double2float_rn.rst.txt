@@ -1,0 +1,40 @@
+double2float_rn
+===============
+
+.. currentmodule:: triton.language.extra.cuda.libdevice
+
+.. function:: double2float_rn(arg0, _semantic=None)
+
+    Convert double-precision floating-point value to single-precision with round-to-nearest-even rounding.
+
+    Parameters
+    ----------
+    arg0 : tl.tensor
+        Input tensor of double-precision floating-point values (``fp64``).
+
+    Returns
+    -------
+    tl.tensor
+        Tensor of single-precision floating-point values (``fp32``).
+
+    Notes
+    -----
+    This function wraps the CUDA libdevice function ``__nv_double2float_rn``.
+    The rounding mode is round-to-nearest, ties-to-even (RN).
+    This function is pure (no side effects).
+
+    Only available on CUDA targets.
+
+    Examples
+    --------
+    .. code-block:: python
+
+        import triton
+        import triton.language as tl
+
+        @triton.jit
+        def kernel(x_ptr, y_ptr, BLOCK_SIZE: tl.constexpr):
+            offset = tl.arange(0, BLOCK_SIZE)
+            x = tl.load(x_ptr + offset)  # fp64 tensor
+            y = tl.extra.cuda.libdevice.double2float_rn(x)  # fp32 tensor
+            tl.store(y_ptr + offset, y)

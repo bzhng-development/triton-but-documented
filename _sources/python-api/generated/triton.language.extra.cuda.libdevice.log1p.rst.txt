@@ -1,0 +1,46 @@
+log1p
+=====
+
+.. currentmodule:: triton.language.extra.cuda.libdevice
+
+.. function:: log1p(arg0, _semantic=None)
+
+   Compute the natural logarithm of one plus the input.
+
+   Computes :math:`\log(1 + x)` accurately for small values of :math:`x`, avoiding
+   loss of precision that would occur from computing :math:`\log(1 + x)` directly.
+
+   Parameters
+   ----------
+   arg0 : tensor
+       Input tensor. Must be of floating-point type (fp32 or fp64).
+   _semantic : optional
+       Internal semantic argument, do not provide manually.
+
+   Returns
+   -------
+   tensor
+       Tensor of the same dtype as ``arg0`` containing :math:`\log(1 + arg0)`.
+
+   Notes
+   -----
+   This function is an extern operation that maps to CUDA libdevice functions:
+
+   - ``__nv_log1pf`` for fp32 inputs
+   - ``__nv_log1p`` for fp64 inputs
+
+   The operation is pure (no side effects).
+
+   Examples
+   --------
+   .. code-block:: python
+
+       import triton
+       import triton.language as tl
+
+       @triton.jit
+       def kernel(x_ptr, y_ptr, BLOCK_SIZE: tl.constexpr):
+           offs = tl.arange(0, BLOCK_SIZE)
+           x = tl.load(x_ptr + offs)
+           y = tl.extra.cuda.libdevice.log1p(x)
+           tl.store(y_ptr + offs, y)

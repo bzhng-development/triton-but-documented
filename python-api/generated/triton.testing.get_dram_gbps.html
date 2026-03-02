@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>get_dram_gbps &mdash; Triton  documentation</title>
+  <title>triton.testing.get_dram_gbps &mdash; Triton  documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=03e43079" />
       <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="../../_static/css/custom.css" />
@@ -53,34 +53,55 @@
 <li class="toctree-l1"><a class="reference internal" href="../triton.language.html">triton.language</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="../triton.testing.html">triton.testing</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="triton.testing.Benchmark.html">class triton.testing.Benchmark</a></li>
-<li class="toctree-l2"><a class="reference internal" href="triton.testing.do_bench.html"><code class="docutils literal notranslate"><span class="pre">triton.testing.do_bench()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="triton.testing.do_bench_cudagraph.html"><code class="docutils literal notranslate"><span class="pre">triton.testing.do_bench_cudagraph()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="triton.testing.do_bench.html">do_bench</a></li>
+<li class="toctree-l2"><a class="reference internal" href="triton.testing.do_bench_cudagraph.html">triton.testing.do_bench_cudagraph</a></li>
 <li class="toctree-l2"><a class="reference internal" href="triton.testing.perf_report.html">perf_report</a></li>
-<li class="toctree-l2"><a class="reference internal" href="triton.testing.assert_close.html">assert_close</a></li>
+<li class="toctree-l2"><a class="reference internal" href="triton.testing.assert_close.html">triton.testing.assert_close</a></li>
 <li class="toctree-l2 current"><a class="reference internal" href="../triton.testing.html#utilities">Utilities</a><ul class="current">
-<li class="toctree-l3"><a class="reference internal" href="triton.testing.Mark.html">class Mark</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.testing.Mark.html">class triton.testing.Mark</a></li>
 <li class="toctree-l3"><a class="reference internal" href="triton.testing.cuda_memcheck.html">cuda_memcheck</a></li>
-<li class="toctree-l3 current"><a class="current reference internal" href="#">get_dram_gbps</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="#triton.testing.get_dram_gbps"><code class="docutils literal notranslate"><span class="pre">get_dram_gbps()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#parameters">Parameters</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#returns">Returns</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#notes">Notes</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#examples">Examples</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">triton.testing.get_dram_gbps</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#get_dram_gbps"><code class="docutils literal notranslate"><span class="pre">get_dram_gbps()</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="triton.testing.get_max_simd_tflops.html">get_max_simd_tflops</a></li>
 <li class="toctree-l3"><a class="reference internal" href="triton.testing.get_max_tensorcore_tflops.html">get_max_tensorcore_tflops</a></li>
 <li class="toctree-l3"><a class="reference internal" href="triton.testing.nvsmi.html">nvsmi</a></li>
-<li class="toctree-l3"><a class="reference internal" href="triton.testing.set_gpu_clock.html">Parameters</a></li>
-<li class="toctree-l3"><a class="reference internal" href="triton.testing.set_gpu_clock.html#yields">Yields</a></li>
-<li class="toctree-l3"><a class="reference internal" href="triton.testing.set_gpu_clock.html#raises">Raises</a></li>
-<li class="toctree-l3"><a class="reference internal" href="triton.testing.set_gpu_clock.html#notes">Notes</a></li>
-<li class="toctree-l3"><a class="reference internal" href="triton.testing.set_gpu_clock.html#examples">Examples</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.testing.set_gpu_clock.html">triton.testing.set_gpu_clock</a></li>
 </ul>
 </li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../triton-semantics.html">Triton Semantics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.language.extra.cuda.html">triton.language.extra.cuda</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.language.extra.cuda.libdevice.html">triton.language.extra.cuda.libdevice</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.runtime.html">triton.runtime</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.tools.html">triton.tools</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Gluon (Experimental) API</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.html">triton.experimental.gluon</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.html">triton.experimental.gluon.language</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.nvidia.ampere.html">triton.experimental.gluon.language.nvidia.ampere</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.nvidia.ampere.async_copy.html">triton.experimental.gluon.language.nvidia.ampere.async_copy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.nvidia.ampere.mbarrier.html">triton.experimental.gluon.language.nvidia.ampere.mbarrier</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.nvidia.hopper.html">triton.experimental.gluon.language.nvidia.hopper</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.nvidia.hopper.tma.html">triton.experimental.gluon.language.nvidia.hopper.tma</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.nvidia.hopper.mbarrier.html">triton.experimental.gluon.language.nvidia.hopper.mbarrier</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.nvidia.hopper.cluster.html">triton.experimental.gluon.language.nvidia.hopper.cluster</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.nvidia.blackwell.html">triton.experimental.gluon.language.nvidia.blackwell</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.nvidia.blackwell.tma.html">triton.experimental.gluon.language.nvidia.blackwell.tma</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.nvidia.blackwell.clc.html">triton.experimental.gluon.language.nvidia.blackwell.clc</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.amd.html">triton.experimental.gluon.language.amd</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.amd.gfx1250.html">triton.experimental.gluon.language.amd.gfx1250</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.amd.gfx1250.async_copy.html">triton.experimental.gluon.language.amd.gfx1250.async_copy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.amd.gfx1250.mbarrier.html">triton.experimental.gluon.language.amd.gfx1250.mbarrier</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.amd.gfx1250.cluster.html">triton.experimental.gluon.language.amd.gfx1250.cluster</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.amd.gfx1250.tdm.html">triton.experimental.gluon.language.amd.gfx1250.tdm</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.amd.cdna3.html">triton.experimental.gluon.language.amd.cdna3</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.amd.cdna4.html">triton.experimental.gluon.language.amd.cdna4</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.amd.rdna3.html">triton.experimental.gluon.language.amd.rdna3</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.amd.rdna4.html">triton.experimental.gluon.language.amd.rdna4</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Triton MLIR Dialects</span></p>
 <ul>
@@ -108,7 +129,7 @@
   <ul class="wy-breadcrumbs">
       <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
           <li class="breadcrumb-item"><a href="../triton.testing.html">triton.testing</a></li>
-      <li class="breadcrumb-item active">get_dram_gbps</li>
+      <li class="breadcrumb-item active">triton.testing.get_dram_gbps</li>
       <li class="wy-breadcrumbs-aside">
             <a href="../../_sources/python-api/generated/triton.testing.get_dram_gbps.rst.txt" rel="nofollow"> View page source</a>
       </li>
@@ -118,52 +139,48 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <section id="get-dram-gbps">
-<h1>get_dram_gbps<a class="headerlink" href="#get-dram-gbps" title="Link to this heading">¶</a></h1>
+  <section id="triton-testing-get-dram-gbps">
+<h1>triton.testing.get_dram_gbps<a class="headerlink" href="#triton-testing-get-dram-gbps" title="Link to this heading">¶</a></h1>
 <dl class="py function">
-<dt class="sig sig-object py" id="triton.testing.get_dram_gbps">
-<span class="sig-prename descclassname"><span class="pre">triton.testing.</span></span><span class="sig-name descname"><span class="pre">get_dram_gbps</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">device</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#triton.testing.get_dram_gbps" title="Link to this definition">¶</a></dt>
-<dd><p>return DRAM bandwidth in GB/s</p>
-</dd></dl>
-
-<p>Return the theoretical DRAM bandwidth of the active GPU device in gigabytes per second (GB/s).</p>
-<p>The bandwidth is calculated using the device’s memory clock rate and memory bus width, assuming a double data rate (DDR) interface.</p>
+<dt class="sig sig-object py" id="get_dram_gbps">
+<span class="sig-name descname"><span class="pre">get_dram_gbps</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">device</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#get_dram_gbps" title="Link to this definition">¶</a></dt>
+<dd><p>Return the DRAM bandwidth in GB/s for a GPU device.</p>
 <section id="parameters">
 <h2>Parameters<a class="headerlink" href="#parameters" title="Link to this heading">¶</a></h2>
 <dl class="simple">
-<dt>device<span class="classifier">int, optional</span></dt><dd><p>The CUDA device ID to query. If <code class="docutils literal notranslate"><span class="pre">None</span></code>, the currently active device is used.</p>
+<dt>device<span class="classifier">int, optional</span></dt><dd><p>Device index to query. If <code class="docutils literal notranslate"><span class="pre">None</span></code>, uses the currently active device.</p>
 </dd>
 </dl>
 </section>
 <section id="returns">
 <h2>Returns<a class="headerlink" href="#returns" title="Link to this heading">¶</a></h2>
 <dl class="simple">
-<dt>bw_gbps<span class="classifier">float</span></dt><dd><p>The peak DRAM bandwidth in GB/s.</p>
+<dt>bw_gbps<span class="classifier">float</span></dt><dd><p>DRAM bandwidth in gigabytes per second (GB/s).</p>
 </dd>
 </dl>
 </section>
 <section id="notes">
 <h2>Notes<a class="headerlink" href="#notes" title="Link to this heading">¶</a></h2>
-<p>The calculation follows the formula:</p>
+<p>The bandwidth is calculated from device properties using the formula:</p>
 <div class="math notranslate nohighlight">
-\[\text{Bandwidth (GB/s)} = \frac{\text{Memory Clock (kHz)} \times \text{Bus Width} \times 2}{10^6 \times 8}\]</div>
-<p>where the factor of 2 accounts for double data rate (DDR) signaling, and division by 8 converts bits to bytes.</p>
+\[\text{BW} = \frac{\text{mem\_clock\_khz} \times \text{bus\_width} \times 2}{10^6 \times 8}\]</div>
+<p>where <code class="docutils literal notranslate"><span class="pre">mem_clock_rate</span></code> is in kHz and <code class="docutils literal notranslate"><span class="pre">mem_bus_width</span></code> is in bits.</p>
 </section>
 <section id="examples">
 <h2>Examples<a class="headerlink" href="#examples" title="Link to this heading">¶</a></h2>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">triton</span>
-<span class="kn">import</span><span class="w"> </span><span class="nn">triton.testing</span>
-
-<span class="c1"># Get DRAM bandwidth for the current active device</span>
-<span class="n">bandwidth</span> <span class="o">=</span> <span class="n">triton</span><span class="o">.</span><span class="n">testing</span><span class="o">.</span><span class="n">get_dram_gbps</span><span class="p">()</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Peak DRAM Bandwidth: </span><span class="si">{</span><span class="n">bandwidth</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2"> GB/s&quot;</span><span class="p">)</span>
-
-<span class="c1"># Get DRAM bandwidth for a specific device (e.g., device 1)</span>
-<span class="n">bandwidth_dev1</span> <span class="o">=</span> <span class="n">triton</span><span class="o">.</span><span class="n">testing</span><span class="o">.</span><span class="n">get_dram_gbps</span><span class="p">(</span><span class="n">device</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Device 1 Bandwidth: </span><span class="si">{</span><span class="n">bandwidth_dev1</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2"> GB/s&quot;</span><span class="p">)</span>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span><span class="w"> </span><span class="nn">triton.testing</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">tt</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">bw</span> <span class="o">=</span> <span class="n">tt</span><span class="o">.</span><span class="n">get_dram_gbps</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;DRAM bandwidth: </span><span class="si">{</span><span class="n">bw</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2"> GB/s&quot;</span><span class="p">)</span>
+<span class="go">DRAM bandwidth: 1935.00 GB/s</span>
+</pre></div>
+</div>
+<p>Specify a device index:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">bw</span> <span class="o">=</span> <span class="n">tt</span><span class="o">.</span><span class="n">get_dram_gbps</span><span class="p">(</span><span class="n">device</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
 </pre></div>
 </div>
 </section>
+</dd></dl>
+
 </section>
 
 

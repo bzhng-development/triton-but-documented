@@ -1,0 +1,42 @@
+reduce_or
+=========
+
+Compute the bitwise OR reduction of all elements in the input tensor along the
+provided axis.
+
+Parameters
+----------
+input : tensor
+    The input tensor containing integer values.
+axis : int
+    The dimension along which the reduction should be performed. If None,
+    reduce all dimensions.
+keep_dims : bool, optional
+    If True, keep the reduced dimensions with length 1. Default is False.
+
+Returns
+-------
+tensor
+    The tensor containing the bitwise OR reduction result.
+
+Notes
+-----
+The reduction operation is associative and commutative. This function only
+supports integer types.
+
+This function can also be called as a member function on tensor,
+as ``x.reduce_or(...)`` instead of ``reduce_or(x, ...)``.
+
+Examples
+--------
+.. code-block:: python
+
+    import triton.experimental.gluon as gluon
+    import triton.experimental.gluon.language as ttgl
+
+    @gluon.jit
+    def kernel(x_ptr, y_ptr, BLOCK_SIZE: ttgl.constexpr):
+        pid = ttgl.program_id(0)
+        x = ttgl.load(x_ptr + pid * BLOCK_SIZE)
+        result = ttgl.reduce_or(x, axis=0)
+        ttgl.store(y_ptr + pid, result)

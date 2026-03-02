@@ -1,0 +1,44 @@
+prefetch
+========
+
+Prefetches a block of tensor from global memory into L2 cache using AMD GFX1250 TDM.
+
+Parameters
+----------
+src : tensor_descriptor
+    The source tensor descriptor specifying the memory region to prefetch.
+offsets : List[ttgl.constexpr | ttgl.tensor]
+    The offsets from the base pointer in the tensor descriptor.
+pred : bool, optional
+    Predicate to enable or disable the prefetch. Defaults to ``True``.
+speculative : bool, optional
+    Whether the prefetch is speculative. Defaults to ``False``.
+
+Returns
+-------
+None
+
+Notes
+-----
+Speculative prefetches can generate more efficient assembly because they do not
+require out-of-bounds checks. However, they are dropped by the hardware if their
+virtual address translation is not cached. Therefore, ``speculative`` should only
+be set to ``True`` if previous iterations have accessed the same virtual page
+(e.g., column-major access patterns).
+
+Examples
+--------
+.. code-block:: python
+
+    import triton.experimental.gluon as gluon
+    import triton.experimental.gluon.language as ttgl
+
+    @gluon.jit
+    def kernel(src_desc, offsets):
+        # Prefetch tensor block into L2 cache
+        ttgl.amd.gfx1250.tdm.prefetch(src_desc, offsets)
+
+    @gluon.jit
+    def kernel_speculative(src_desc, offsets):
+        # Use speculative prefetch for known access patterns
+        ttgl.amd.gfx1250.tdm.prefetch(src_desc, offsets, speculative=True)

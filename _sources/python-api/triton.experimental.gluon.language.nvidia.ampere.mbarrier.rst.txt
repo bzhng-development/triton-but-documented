@@ -1,0 +1,18 @@
+triton.experimental.gluon.language.nvidia.ampere.mbarrier
+=========================================================
+
+.. currentmodule:: triton.experimental.gluon.language.nvidia.ampere.mbarrier
+
+Memory Barriers
+---------------
+
+.. autosummary::
+    :toctree: generated
+    :nosignatures:
+
+    MBarrierLayout
+    allocate_mbarrier
+    arrive
+    init
+    invalidate
+    wait

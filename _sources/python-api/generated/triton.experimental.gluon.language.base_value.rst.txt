@@ -1,0 +1,70 @@
+base_value
+==========
+
+base_value
+----------
+
+.. class:: base_value()
+
+   Base class for values that exist in the Triton IR (i.e., not constexprs).
+
+   This abstract base class represents runtime values that are lowered to MLIR
+   operations. All tensor-like objects in Triton inherit from this class.
+
+   Attributes
+   ----------
+   type : base_type
+       The type descriptor of the value in the Triton type system.
+
+   Methods
+   -------
+   _set_name(builder, name)
+       Assigns a debug name to the IR value.
+       
+       Parameters
+       ----------
+       builder : ir.builder
+           The MLIR builder instance.
+       name : str
+           The debug name to assign.
+   
+   _flatten_ir(handles)
+       Flattens the frontend value into a sequence of MLIR handles.
+       
+       Parameters
+       ----------
+       handles : list of ir.value
+           Output list to append MLIR handles to.
+
+   Notes
+   -----
+   This is an abstract base class and should not be instantiated directly.
+   Common subclasses include:
+
+   - :py:class:`tensor`: N-dimensional arrays of values or pointers
+   - :py:class:`tuple`: Heterogeneous collections of values  
+   - :py:class:`tensor_descriptor_base`: Tensor descriptors for global memory
+   - :py:class:`constexpr`: Compile-time constant values
+
+   Subclasses must implement ``_set_name`` and ``_flatten_ir`` to support
+   proper IR lowering.
+
+   Examples
+   --------
+   Users typically interact with subclasses rather than ``base_value`` directly:
+
+   .. code-block:: python
+
+      import triton.experimental.gluon as gluon
+      import triton.experimental.gluon.language as ttgl
+
+      @gluon.jit
+      def kernel(x_ptr, y_ptr, BLOCK: ttgl.constexpr):
+          pid = ttgl.program_id(0)
+          offset = pid * BLOCK
+          x = ttgl.load(x_ptr + offset)  # x is a tensor (base_value subclass)
+          ttgl.store(y_ptr + offset, x)
+
+   See Also
+   --------
+   tensor, constexpr, tuple, tensor_descriptor_base

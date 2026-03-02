@@ -1,0 +1,44 @@
+rsqrt
+=====
+
+.. currentmodule:: triton.experimental.gluon.language
+
+.. function:: rsqrt(x, _semantic=None)
+
+   Computes the element-wise inverse square root of the input tensor.
+
+   Parameters
+   ----------
+   x : tensor
+       The input tensor. Must have floating point dtype (``fp32`` or ``fp64``).
+   _semantic : GluonSemantic, optional
+       Internal semantic argument. Do not set manually.
+
+   Returns
+   -------
+   tensor
+       A tensor containing the inverse square root of each element in ``x``.
+       Equivalent to ``1 / sqrt(x)``.
+
+   Notes
+   -----
+   This function is only supported for ``fp32`` and ``fp64`` data types.
+   Calling with other dtypes will raise an error.
+
+   The function can be called as a module function or as a tensor method:
+   ``ttgl.rsqrt(x)`` or ``x.rsqrt()``.
+
+   Examples
+   --------
+   .. code-block:: python
+
+      import triton.experimental.gluon as gluon
+      import triton.experimental.gluon.language as ttgl
+
+      @gluon.jit
+      def kernel(x_ptr, y_ptr, BLOCK_SIZE: ttgl.constexpr):
+          pid = ttgl.program_id(0)
+          offs = pid * BLOCK_SIZE + ttgl.arange(0, BLOCK_SIZE)
+          x = ttgl.load(x_ptr + offs)
+          y = ttgl.rsqrt(x)
+          ttgl.store(y_ptr + offs, y)

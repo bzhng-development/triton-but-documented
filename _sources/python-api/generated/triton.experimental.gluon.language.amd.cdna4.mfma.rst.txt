@@ -1,0 +1,51 @@
+mfma
+====
+
+.. currentmodule:: triton.experimental.gluon.language.amd.cdna4
+
+.. function:: mfma(a, b, acc, _semantic=None)
+
+    Compute matrix multiplication using AMD CDNA4 Matrix Fused Multiply-Add (MFMA) units.
+
+    Performs the operation ``a @ b + acc`` using AMD's native matrix core instructions
+    on CDNA4 architecture GPUs.
+
+    Parameters
+    ----------
+    a : tensor
+        First operand of the matrix multiplication. Must have a ``DotOperandLayout``
+        with ``operand_index=0``.
+    b : tensor
+        Second operand of the matrix multiplication. Must have a ``DotOperandLayout``
+        with ``operand_index=1``.
+    acc : tensor
+        Accumulator tensor. Must have a ``BlockedLayout`` that is the parent layout
+        of both ``a`` and ``b``. The output type matches ``acc.dtype``.
+    _semantic : GluonSemantic, optional
+        Internal semantic handler. Do not pass explicitly; this is set automatically
+        when using ``@gluon.jit`` decorated functions.
+
+    Returns
+    -------
+    tensor
+        Result of ``a @ b + acc`` with the same type as ``acc``.
+
+    Notes
+    -----
+    This operation is specific to AMD CDNA4 architecture and utilizes the MFMA
+    instruction for accelerated matrix operations. Input tensors must have
+    compatible layouts for matrix multiplication. The accumulator tensor is
+    required and cannot be ``None``.
+
+    Examples
+    --------
+    .. code-block:: python
+
+        import triton.experimental.gluon as gluon
+        import triton.experimental.gluon.language as ttgl
+        from triton.experimental.gluon.language.amd import cdna4
+
+        @gluon.jit
+        def matmul_kernel(...):
+            # Perform matrix multiplication with accumulation
+            result = cdna4.mfma(a, b, acc)

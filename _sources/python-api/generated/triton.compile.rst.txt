@@ -1,67 +1,91 @@
-Compile a Triton kernel source into an executable GPU kernel.
+compile
+=======
 
-This function takes a Triton kernel definition (either as a Python function or a path to an IR file) and runs the full compilation pipeline, including parsing, optimization, code generation, and caching. It returns a ``CompiledKernel`` object that can be launched on the GPU.
+Compile a Triton kernel from source code or IR representation.
 
-Parameters
-----------
-src : str or ASTSource
-    The source to compile. This can be:
-    - A file path (string) to a Triton IR file (e.g., ``.ttir``, ``.ttgir``, ``.ptx``).
-    - An ``ASTSource`` object, typically created internally when decorating a function with ``@triton.jit``.
-target : GPUTarget, optional
-    The target GPU architecture to compile for. If ``None``, defaults to the currently active device target.
-options : dict, optional
-    A dictionary of compilation options. Common keys include ``num_warps``, ``num_ctas``, and ``num_stages``.
-    If ``None``, default options are used.
-_env_vars : dict, optional
-    Environment variables used to invalidate the cache. If ``None``, automatically detected invalidating
-    environment variables are used.
+.. function:: triton.compile(src, target=None, options=None, _env_vars=None)
 
-Returns
--------
-CompiledKernel
-    An object containing the compiled binary, intermediate representations (IR), and metadata.
-    The kernel can be executed by calling the returned object with a grid configuration and arguments.
+   Compiles Triton kernel source into executable GPU code with caching support.
 
-Notes
------
-The compilation process is cached based on a hash of the source, target, options, and environment variables.
-Subsequent calls with identical inputs will return a cached result unless ``TRITON_ALWAYS_COMPILE=1`` is set.
+   Parameters
+   ----------
+   src : ASTSource or str
+       Source to compile. Either an ``ASTSource`` object (from a ``@triton.jit``
+       decorated function) or a file path string to an IR file (e.g., ``.ttir``,
+       ``.ttgir``, ``.ptx``).
 
-Intermediate representations (IR) and binaries are stored in the cache directory (controlled by ``TRITON_CACHE_DIR``).
-Advanced users can override specific compilation stages by placing files in the override directory (controlled by
-``TRITON_KERNEL_OVERRIDE``).
+   target : GPUTarget, optional
+       GPU target architecture to compile for. If ``None``, uses the currently
+       active target from the driver. Must be a ``GPUTarget`` instance.
 
-Examples
---------
-.. code-block:: python
+   options : dict, optional
+       Compilation options as a dictionary. Common options include ``num_warps``,
+       ``num_ctas``, and backend-specific flags. If ``None``, uses defaults.
 
-    import triton
-    import triton.language as tl
+   _env_vars : dict, optional
+       Environment variables that invalidate the compilation cache. If ``None``,
+       automatically detected from the environment. Primarily for internal use.
 
-    @triton.jit
-    def add_kernel(
-        x_ptr, y_ptr, output_ptr, n,
-        BLOCK_SIZE: tl.constexpr,
-    ):
-        pid = tl.program_id(axis=0)
-        block_start = pid * BLOCK_SIZE
-        offsets = block_start + tl.arange(0, BLOCK_SIZE)
-        mask = offsets < n
-        x = tl.load(x_ptr + offsets, mask=mask)
-        y = tl.load(y_ptr + offsets, mask=mask)
-        output = x + y
-        tl.store(output_ptr + offsets, output, mask=mask)
+   Returns
+   -------
+   CompiledKernel
+       A compiled kernel object containing the binary code, metadata, and launch
+       interface. The kernel can be executed via ``kernel[grid](*args)``.
 
-    # Compile the kernel explicitly (usually done implicitly via @triton.jit)
-    compiled_kernel = triton.compile(
-        src=add_kernel,
-        options={"num_warps": 4, "BLOCK_SIZE": 1024}
-    )
+   Notes
+   -----
+   This function implements a multi-stage compilation pipeline:
 
-    # Access compiled metadata
-    print(f"Compiled for: {compiled_kernel.metadata.target}")
-    print(f"Shared memory usage: {compiled_kernel.metadata.shared} bytes")
+   1. Parses source into MLIR intermediate representation
+   2. Applies optimization passes per backend
+   3. Generates target-specific binary (e.g., ``cubin`` for NVIDIA, ``hsaco`` for AMD)
+   4. Caches results using a hash of source, options, and environment
 
-    # The result is typically executed via the kernel runner, not directly:
-    # compiled_kernel[grid](args...)
+   Compilation results are cached to avoid redundant compilation. Cache hits return
+   immediately without recompiling. Use ``knobs.compilation.always_compile`` to force
+   recompilation.
+
+   The returned ``CompiledKernel`` provides:
+
+   - ``metadata``: compilation metadata (hash, target, options, etc.)
+   - ``asm``: dictionary of IR representations at each compilation stage
+   - ``run``: low-level launch function
+   - ``__getitem__``: grid-based kernel launcher
+
+   Examples
+   --------
+   Compile a JIT-decorated function:
+
+   .. code-block:: python
+
+      import triton
+      import triton.language as tl
+
+      @triton.jit
+      def kernel(x_ptr, n, BLOCK_SIZE: tl.constexpr):
+          pid = tl.program_id(0)
+          offset = pid * BLOCK_SIZE + tl.arange(0, BLOCK_SIZE)
+          mask = offset < n
+          tl.store(x_ptr + offset, tl.load(x_ptr + offset), mask=mask)
+
+      compiled = triton.compile(kernel, options={"num_warps": 4})
+      compiled[grid](x_ptr, n, BLOCK_SIZE=1024)
+
+   Compile from an IR file:
+
+   .. code-block:: python
+
+      compiled = triton.compile("kernel.ttir", target=my_target)
+      print(compiled.metadata.hash)  # Access compilation metadata
+      print(compiled.asm.keys())     # View available IR representations
+
+   Check cache behavior:
+
+   .. code-block:: python
+
+      # First call compiles
+      kernel1 = triton.compile(src)
+
+      # Second call returns cached result
+      kernel2 = triton.compile(src)
+      assert kernel1.hash == kernel2.hash

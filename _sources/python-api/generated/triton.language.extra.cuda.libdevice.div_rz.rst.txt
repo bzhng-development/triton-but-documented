@@ -1,0 +1,50 @@
+triton.language.extra.cuda.libdevice.div_rz
+===========================================
+
+.. currentmodule:: triton.language.extra.cuda.libdevice
+
+.. function:: div_rz(arg0, arg1, _semantic=None)
+
+    Divide ``arg0`` by ``arg1`` with round-towards-zero rounding mode.
+
+    Parameters
+    ----------
+    arg0 : tensor
+        The dividend. Must be floating-point type (``fp32`` or ``fp64``).
+    arg1 : tensor
+        The divisor. Must be floating-point type (``fp32`` or ``fp64``).
+    _semantic : optional
+        Internal parameter for semantic propagation. Do not set manually.
+
+    Returns
+    -------
+    result : tensor
+        The quotient ``arg0 / arg1`` rounded towards zero. Has the same dtype
+        as the inputs.
+
+    Notes
+    -----
+    This function calls NVIDIA libdevice functions:
+
+    - ``__nv_fdiv_rz`` for ``fp32`` inputs
+    - ``__nv_ddiv_rz`` for ``fp64`` inputs
+
+    Round-towards-zero (rz) truncates the result toward zero, equivalent to
+    C-style integer division behavior for floating-point values.
+
+    Both inputs must have the same dtype. Mixed precision is not supported.
+
+    Examples
+    --------
+    .. code-block:: python
+
+        import triton
+        import triton.language as tl
+
+        @triton.jit
+        def kernel(x_ptr, y_ptr, out_ptr, BLOCK_SIZE: tl.constexpr):
+            x = tl.load(x_ptr + tl.arange(0, BLOCK_SIZE))
+            y = tl.load(y_ptr + tl.arange(0, BLOCK_SIZE))
+            # Division with round-towards-zero
+            result = tl.extra.cuda.libdevice.div_rz(x, y)
+            tl.store(out_ptr + tl.arange(0, BLOCK_SIZE), result)

@@ -1,0 +1,46 @@
+triton.language.extra.cuda.libdevice.exp10
+==========================================
+
+.. currentmodule:: triton.language.extra.cuda.libdevice
+
+.. function:: exp10(arg0, _semantic=None)
+
+    Compute the base-10 exponential :math:`10^x` element-wise.
+
+    Parameters
+    ----------
+    arg0 : tensor
+        Input tensor of floating-point type (fp32 or fp64).
+    _semantic : optional
+        Internal parameter for semantic propagation. Do not set manually.
+
+    Returns
+    -------
+    tensor
+        Tensor of the same dtype as ``arg0`` containing :math:`10^{arg0}`.
+
+    Notes
+    -----
+    This function calls CUDA libdevice routines:
+
+    - ``__nv_exp10f`` for 32-bit floating-point (fp32)
+    - ``__nv_exp10`` for 64-bit floating-point (fp64)
+
+    Only available on CUDA devices with libdevice support. The operation is
+    pure (no side effects).
+
+    Examples
+    --------
+    .. code-block:: python
+
+        import triton
+        import triton.language as tl
+
+        @triton.jit
+        def exp10_kernel(x_ptr, out_ptr, n):
+            pid = tl.program_id(0)
+            offset = pid * 256 + tl.arange(0, 256)
+            mask = offset < n
+            x = tl.load(x_ptr + offset, mask=mask)
+            out = tl.extra.cuda.libdevice.exp10(x)
+            tl.store(out_ptr + offset, out, mask=mask)

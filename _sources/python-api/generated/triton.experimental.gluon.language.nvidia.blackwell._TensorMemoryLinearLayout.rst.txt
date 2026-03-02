@@ -1,0 +1,48 @@
+class _TensorMemoryLinearLayout
+===============================
+
+Print-only linear layout for Tensor Memory (TMEM) on Blackwell architecture.
+
+This layout class is intended for debugging and inspection purposes only. It
+cannot be materialized to IR and will raise an error if used in kernel
+execution.
+
+Parameters
+----------
+rows : List[List[int]]
+    Row basis vectors mapping logical rows to physical dimensions.
+cols : List[List[int]]
+    Column basis vectors mapping logical columns to physical dimensions.
+shape : List[int]
+    The logical shape of the tensor memory region.
+
+Notes
+-----
+This layout is **print-only** and does not support IR materialization.
+Calling ``_to_ir()`` will raise a ``RuntimeError``. Use
+:class:`TensorMemoryLayout` or :class:`TensorMemoryScalesLayout` for
+executable kernels.
+
+The layout maps row/column indices to dimension 0/dimension 1 of the tensor
+memory address space.
+
+Examples
+--------
+
+.. code-block:: python
+
+    import triton.experimental.gluon as gluon
+    import triton.experimental.gluon.language as ttgl
+
+    # Create a print-only layout for inspection
+    layout = gluon.language.nvidia.blackwell._TensorMemoryLinearLayout(
+        rows=[[0, 1]],
+        cols=[[1, 0]],
+        shape=[128, 256]
+    )
+
+    # This will print layout information
+    print(layout)
+
+    # This will raise an error - cannot be used in kernels
+    # layout._to_ir(builder)  # RuntimeError

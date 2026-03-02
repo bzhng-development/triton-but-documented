@@ -1,0 +1,40 @@
+buffer_store
+============
+
+.. py:function:: triton.experimental.gluon.language.amd.cdna3.buffer_store(stored_value, ptr, offsets, mask=None, cache=None)
+
+    Store a tensor to global memory via a scalar base pointer and offsets tensor on AMD CDNA3 GPUs.
+
+    Performs a buffer store operation using a scalar pointer and a tensor of offsets, rather than a tensor of pointers. This is specific to AMD CDNA3 architecture and enables efficient memory access patterns.
+
+    Parameters
+    ----------
+    stored_value : tensor
+        The tensor data to be stored to global memory.
+    ptr : pointer
+        Scalar base pointer to global memory.
+    offsets : tensor
+        Tensor of offsets added to ``ptr`` for address calculation.
+    mask : tensor, optional
+        Predication mask. Elements are stored only where ``mask`` is true.
+    cache : str, optional
+        Cache modifier specifier (e.g., ``.cg``, ``.cs``).
+
+    Notes
+    -----
+    This operation is specific to AMD CDNA3 hardware. It uses buffer store instructions which differ from standard pointer-based stores. The ``offsets`` tensor determines the address for each element relative to ``ptr``.
+
+    Examples
+    --------
+    .. code-block:: python
+
+        import triton.experimental.gluon as gluon
+        import triton.experimental.gluon.language as ttgl
+
+        @gluon.jit
+        def kernel(x_ptr, offsets, value, BLOCK_SIZE: ttgl.constexpr):
+            pid = ttgl.program_id(0)
+            offs = ttgl.arange(0, BLOCK_SIZE)
+            mask = offs < BLOCK_SIZE
+            val = value + offs
+            ttgl.amd.cdna3.buffer_store(val, x_ptr, offs, mask=mask, cache=".cg")

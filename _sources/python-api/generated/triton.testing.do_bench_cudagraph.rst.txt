@@ -1,48 +1,53 @@
-.. function:: triton.testing.do_bench_cudagraph(fn, rep=20, grad_to_none=None, quantiles=None, return_mode='mean')
+triton.testing.do_bench_cudagraph
+=================================
 
-   Benchmark the runtime of a CUDA function using CUDA graphs to minimize host overhead.
+.. function:: do_bench_cudagraph(fn, rep=20, grad_to_none=None, quantiles=None, return_mode='mean')
 
-   This function estimates the kernel execution time, constructs a CUDA graph with
-   unrolled repetitions to reduce launch latency, and measures the graph replay time.
-   It is suitable for benchmarking small kernels where host overhead significantly
-   impacts measurement accuracy.
+   Benchmark the runtime of the provided function using CUDA graphs.
+
+   This function measures kernel execution time by constructing a CUDA graph
+   with unrolled function calls to minimize host overhead. It is more accurate
+   than :func:`do_bench` for measuring kernel performance without CPU launch
+   overhead.
 
    Parameters
    ----------
    fn : callable
-      The function to benchmark. Must contain CUDA operations compatible with
-      ``torch.cuda.CUDAGraph``.
+      Function to benchmark. Should contain CUDA kernel launches.
    rep : int, optional
-      Target repetition time in milliseconds. The function determines the number
-      of iterations within the graph to approximate this duration (default is 20).
+      Total repetition time in milliseconds. Default is 20.
    grad_to_none : list of torch.Tensor, optional
-      List of tensors whose gradients should be reset to ``None`` before each
-      iteration. Useful when benchmarking functions involving autograd.
+      List of tensors whose gradients should be reset to None before each run.
+      Useful when benchmarking functions with backward passes.
    quantiles : list of float, optional
-      Performance percentiles to compute (e.g., ``[0.2, 0.8]``). If provided,
-      overrides ``return_mode`` and returns the quantile values.
+      Quantiles to compute (e.g., [0.2, 0.8] for 20th and 80th percentiles).
+      If provided, overrides return_mode.
    return_mode : str, optional
-      Statistical measure to return. Options are ``"min"``, ``"max"``, ``"mean"``,
-      ``"median"``, or ``"all"``. Default is ``"mean"``. Ignored if ``quantiles``
-      is specified.
+      Statistical measure to return. Options are "min", "max", "mean",
+      "median", or "all". Default is "mean".
 
    Returns
    -------
    float or list of float
-      Benchmark result in milliseconds. Type depends on ``return_mode`` and
-      ``quantiles``:
-      - ``"min"``, ``"max"``, ``"mean"``, ``"median"``: single float.
-      - ``"all"``: list of all measured times.
-      - ``quantiles``: list of quantile values (or single float if one quantile).
+      Runtime measurement in milliseconds. Type depends on return_mode:
+      - "min", "max", "mean", "median": single float value
+      - "all": list of all measured times
+      - With quantiles: list of quantile values or single value if one quantile
 
    Notes
    -----
-   - Uses CUDA graphs to amortize kernel launch overhead, providing more accurate
-     measurements for fast kernels compared to ``do_bench``.
-   - Performs 5 warmup iterations before graph construction and 10 measurement
-     retries for statistical stability.
-   - Graph construction overhead is not included in the reported time.
-   - Requires PyTorch with CUDA graph support.
+   This function differs from :func:`do_bench` in that it uses CUDA graphs to
+   eliminate host launch overhead, providing more accurate kernel-only timing.
+   The benchmarking process:
+
+   1. Warmup: Runs the function once to initialize CUDA context.
+   2. Estimation: Runs 5 iterations to estimate kernel runtime.
+   3. Graph construction: Builds a CUDA graph with unrolled calls based on
+      estimated runtime and target repetition time.
+   4. Measurement: Replays the graph 10 times and reports statistics.
+
+   CUDA graph creation has ~300ms overhead on A100, so this function is best
+   suited for benchmarks where accuracy matters more than setup time.
 
    Examples
    --------
@@ -52,27 +57,27 @@
       import triton
       import triton.testing as tt
 
-      # Define a simple CUDA kernel wrapper
-      def my_kernel_fn():
-          # ... CUDA operations ...
+      @triton.jit
+      def kernel_fn(x_ptr, y_ptr, n):
+          # Kernel implementation
           pass
 
-      # Benchmark with default settings (mean time)
-      mean_time = tt.do_bench_cudagraph(my_kernel_fn)
+      def run_kernel():
+          x = torch.randn(1024, device='cuda')
+          y = torch.empty_like(x)
+          kernel_fn[(1,)](x, y, 1024)
+          return y
 
-      # Benchmark returning min and max times
-      min_time = tt.do_bench_cudagraph(my_kernel_fn, return_mode="min")
-      max_time = tt.do_bench_cudagraph(my_kernel_fn, return_mode="max")
+      # Basic benchmark
+      ms = tt.do_bench_cudagraph(run_kernel, rep=100)
+      print(f"Kernel runtime: {ms} ms")
 
-      # Benchmark with gradient reset for training kernels
-      tensor = torch.randn(1024, device='cuda', requires_grad=True)
-      time = tt.do_bench_cudagraph(
-          lambda: my_kernel_fn(),
-          grad_to_none=[tensor]
-      )
+      # Get min and max times
+      min_ms = tt.do_bench_cudagraph(run_kernel, return_mode='min')
+      max_ms = tt.do_bench_cudagraph(run_kernel, return_mode='max')
 
-      # Benchmark with custom quantiles (20th and 80th percentile)
-      q20, q80 = tt.do_bench_cudagraph(
-          my_kernel_fn,
-          quantiles=[0.2, 0.8]
-      )
+      # Get all measurements
+      all_times = tt.do_bench_cudagraph(run_kernel, return_mode='all')
+
+      # With quantiles (20th, 50th, 80th percentiles)
+      percentiles = tt.do_bench_cudagraph(run_kernel, quantiles=[0.2, 0.5, 0.8])

@@ -1,0 +1,62 @@
+triton.experimental.gluon.language.amd.rdna3.wmma
+================================================
+
+.. currentmodule:: triton.experimental.gluon.language.amd.rdna3
+
+.. function:: wmma(a, b, acc, _semantic=None)
+
+    Computes matrix-multiplication of ``a * b + acc`` using AMD WMMA instruction on RDNA3 GPUs.
+
+    Parameters
+    ----------
+    a : tensor
+        The first operand tensor to be multiplied. Must have a ``DotOperandLayout`` with operand index 0.
+    b : tensor
+        The second operand tensor to be multiplied. Must have a ``DotOperandLayout`` with operand index 1.
+    acc : tensor
+        The accumulator tensor. Must have a ``BlockedLayout`` compatible with the output of the matrix multiplication.
+    _semantic : GluonSemantic, optional
+        Internal semantic handler. Do not pass explicitly; this is set automatically by the ``@gluon.jit`` decorator.
+
+    Returns
+    -------
+    tensor
+        A tensor containing the result of ``a @ b + acc``.
+
+    Notes
+    -----
+    This operation uses AMD's Wave Matrix Multiply Accumulate (WMMA) instruction available on RDNA3 architecture GPUs.
+    The input tensors must have layouts compatible with WMMA operations. Typically, ``a`` and ``b`` should be loaded
+    from shared memory with appropriate ``DotOperandLayout`` configurations, and ``acc`` should have a matching
+    ``BlockedLayout``.
+
+    This function is only available when targeting AMD RDNA3 GPUs. Attempting to use it on other hardware will result
+    in compilation errors.
+
+    Examples
+    --------
+    >>> import triton.experimental.gluon as gluon
+    >>> import triton.experimental.gluon.language as ttgl
+    >>> from triton.experimental.gluon.language.amd import rdna3
+    >>>
+    >>> @gluon.jit
+    ... def kernel(
+    ...     a_ptr, b_ptr, c_ptr,
+    ...     BLOCK_M: tl.constexpr, BLOCK_N: tl.constexpr, BLOCK_K: tl.constexpr,
+    ... ):
+    ...     # Allocate shared memory
+    ...     a_shared = ttgl.allocate_shared_memory(
+    ...         ttgl.float16, (BLOCK_M, BLOCK_K),
+    ...         ttgl.SharedLayout.make_blocked([1, 0], [BLOCK_M, BLOCK_K])
+    ...     )
+    ...     b_shared = ttgl.allocate_shared_memory(
+    ...         ttgl.float16, (BLOCK_K, BLOCK_N),
+    ...         ttgl.SharedLayout.make_blocked([0, 1], [BLOCK_K, BLOCK_N])
+    ...     )
+    ...     acc = ttgl.full((BLOCK_M, BLOCK_N), 0.0, ttgl.float16)
+    ...     # Load from global to shared
+    ...     # ... (loading code)
+    ...     # Perform WMMA operation
+    ...     result = rdna3.wmma(a, b, acc)
+    ...     # Store result
+    ...     # ... (storing code)

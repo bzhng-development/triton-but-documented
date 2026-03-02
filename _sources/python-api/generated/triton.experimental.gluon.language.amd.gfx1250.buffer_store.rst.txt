@@ -1,0 +1,67 @@
+buffer_store
+============
+
+.. currentmodule:: triton.experimental.gluon.language.amd.gfx1250
+
+.. function:: buffer_store(stored_value, ptr, offsets, mask=None, cache=None, _semantic=None)
+
+   Store a tensor to global memory using a scalar base pointer and offset tensor on AMD GFX1250.
+
+   This operation writes ``stored_value`` to global memory addresses computed as ``ptr + offsets``,
+   using AMD buffer store instructions. Unlike regular :func:`triton.experimental.gluon.language.store`,
+   this uses a scalar pointer with a tensor of offsets rather than a tensor of pointers.
+
+   Parameters
+   ----------
+   stored_value : tensor
+       The tensor data to store to global memory.
+   ptr : pointer
+       Scalar base pointer to global memory.
+   offsets : tensor
+       Tensor of offsets added to ``ptr`` to compute store addresses.
+   mask : tensor, optional
+       Predicate mask tensor for conditional stores. Elements where mask is False
+       will not be stored. Defaults to None (unconditional store).
+   cache : str, optional
+       Cache modifier specifier for the store operation (e.g., ``"ca"``, ``"cg"``).
+       Defaults to None (default cache behavior).
+   _semantic : GluonSemantic, optional
+       Internal semantic handler. Must be provided by the JIT compiler.
+
+   Returns
+   -------
+   None
+
+   Notes
+   -----
+   This function is specific to AMD GFX1250 (RDNA4) architecture and requires
+   the kernel to be decorated with :func:`@gluon.jit <triton.experimental.gluon.jit>`.
+
+   All tensor arguments (``stored_value``, ``offsets``, ``mask``) are broadcasted
+   to a common shape before the store operation. If shapes mismatch after broadcasting,
+   a ValueError is raised.
+
+   The buffer store instruction provides more efficient memory access patterns
+   compared to pointer-based stores for certain access patterns on AMD hardware.
+
+   Examples
+   --------
+   .. code-block:: python
+
+      import triton.experimental.gluon as gluon
+      import triton.experimental.gluon.language as ttgl
+
+      @gluon.jit
+      def kernel(ptr, offsets, value):
+          # Store value to global memory at ptr + offsets
+          ttgl.amd.gfx1250.buffer_store(value, ptr, offsets)
+
+      @gluon.jit
+      def kernel_masked(ptr, offsets, value, mask):
+          # Predicated store - only stores where mask is True
+          ttgl.amd.gfx1250.buffer_store(value, ptr, offsets, mask=mask)
+
+      @gluon.jit
+      def kernel_cached(ptr, offsets, value):
+          # Store with cache modifier
+          ttgl.amd.gfx1250.buffer_store(value, ptr, offsets, cache="ca")

@@ -1,0 +1,48 @@
+triton.language.extra.cuda.libdevice.mul_rz
+============================================
+
+.. currentmodule:: triton.language.extra.cuda.libdevice
+
+.. autofunction:: mul_rz
+
+Multiply two floating-point values with round-to-zero rounding mode.
+
+Parameters
+----------
+arg0 : tensor
+    First input tensor. Must be floating-point type (``fp32`` or ``fp64``).
+arg1 : tensor
+    Second input tensor. Must be floating-point type (``fp32`` or ``fp64``).
+    Must have the same dtype as ``arg0``.
+
+Returns
+-------
+result : tensor
+    Element-wise product of ``arg0`` and ``arg1`` with round-to-zero rounding.
+    The dtype matches the input dtype.
+
+Notes
+-----
+This function calls CUDA libdevice functions ``__nv_fmul_rz`` for ``fp32`` and
+``__nv_dmul_rz`` for ``fp64``. Round-to-zero rounding mode truncates the result
+towards zero, which can be useful for controlling floating-point precision
+in numerical algorithms.
+
+The operation is element-wise for tensor inputs. Both inputs must have
+the same dtype.
+
+Examples
+--------
+.. code-block:: python
+
+    import triton
+    import triton.language as tl
+
+    @triton.jit
+    def kernel(x_ptr, y_ptr, out_ptr, n, BLOCK: tl.constexpr):
+        pid = tl.program_id(0)
+        offs = pid * BLOCK + tl.arange(0, BLOCK)
+        x = tl.load(x_ptr + offs)
+        y = tl.load(y_ptr + offs)
+        result = tl.extra.cuda.libdevice.mul_rz(x, y)
+        tl.store(out_ptr + offs, result)

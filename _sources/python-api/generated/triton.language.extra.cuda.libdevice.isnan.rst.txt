@@ -1,0 +1,48 @@
+isnan
+=====
+
+Test element-wise for NaN and return result as a boolean tensor.
+
+Parameters
+----------
+arg0 : tensor
+    Input tensor of floating-point type (``fp32`` or ``fp64``).
+
+Returns
+-------
+out : tensor
+    Boolean tensor (``int1`` dtype) with the same shape as ``arg0``.
+    Element is ``True`` if the corresponding input element is NaN,
+    ``False`` otherwise.
+
+Notes
+-----
+This function maps to CUDA libdevice functions:
+- ``__nv_isnanf`` for ``fp32`` inputs
+- ``__nv_isnand`` for ``fp64`` inputs
+
+The operation is pure (no side effects) and supports element-wise
+broadcasting.
+
+Examples
+--------
+.. code-block:: python
+
+    import torch
+    import triton
+    import triton.language as tl
+
+    @triton.jit
+    def check_nan_kernel(x_ptr, out_ptr, n, BLOCK: tl.constexpr):
+        pid = tl.program_id(0)
+        offsets = pid * BLOCK + tl.arange(0, BLOCK)
+        mask = offsets < n
+        x = tl.load(x_ptr + offsets, mask=mask)
+        out = tl.isnan(x)
+        tl.store(out_ptr + offsets, out, mask=mask)
+
+    # Test with NaN values
+    x = torch.tensor([1.0, float('nan'), 2.0, float('nan')], device='cuda')
+    out = torch.empty_like(x, dtype=torch.int32)
+    check_nan_kernel[(1,)](x, out, 4, BLOCK=4)
+    # out will be [0, 1, 0, 1]

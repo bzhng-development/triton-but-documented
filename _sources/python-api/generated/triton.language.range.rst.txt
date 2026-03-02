@@ -1,85 +1,72 @@
-.. py:class:: triton.language.range
+triton.language.range
+=====================
 
-   Special iterator for defining loops in :code:`@triton.jit` functions with
-   compiler optimization hints.
+.. currentmodule:: triton.language
 
-   Mimics Python's :code:`range` semantics while exposing loop scheduling
-   parameters to the Triton compiler, such as software pipelining stages,
-   unrolling factors, and warp specialization.
+.. class:: range(arg1, arg2=None, step=None, num_stages=None, loop_unroll_factor=None, disallow_acc_multi_buffer=False, flatten=False, warp_specialize=False, disable_licm=False)
 
-   .. rubric:: Parameters
+   Special iterator for creating loops in :code:`@triton.jit` functions with compiler optimization hints.
 
+   This class provides similar semantics to Python's built-in :code:`range` but allows users to pass additional attributes to guide compiler optimizations such as pipelining, unrolling, and warp specialization.
+
+   Parameters
+   ----------
    arg1 : int or constexpr
-      If :code:`arg2` is None, this is the end value (start defaults to 0).
-      Otherwise, this is the start value.
+       If :code:`arg2` is None, this is the end value (start defaults to 0). Otherwise, this is the start value.
    arg2 : int or constexpr, optional
-      The end value (exclusive). Defaults to None.
+       The end value of the range. If None, :code:`arg1` is treated as the end value.
    step : int or constexpr, optional
-      The step value. Defaults to 1.
+       The step value between iterations. Defaults to 1.
    num_stages : int, optional
-      Number of stages for software pipelining. Enables overlapping loop
-      iterations to hide memory latency. Distinct from kernel-level
-      :code:`num_stages` as this targets loads within the specific loop.
+       Pipeline the loop into this many stages, allowing :code:`num_stages` iterations to be in flight simultaneously. This differs from passing :code:`num_stages` as a kernel argument, which only pipelines loads feeding into :code:`dot` operations.
    loop_unroll_factor : int, optional
-      Factor by which to unroll the loop. Values less than 2 disable unrolling.
+       Tells the Triton IR loop unroller how many times to unroll the loop. Values less than 2 imply no unrolling.
    disallow_acc_multi_buffer : bool, optional
-      If True, prevents multi-buffering of the dot accumulator in the loop.
-      Defaults to False.
+       If True, prevent the accumulator of dot operations in the loop from being multi-buffered. Default is False.
    flatten : bool, optional
-      If True, flattens nested loops starting at this loop into a single loop
-      to facilitate pipelining and avoid stage stalling. Defaults to False.
+       Automatically flatten the loop nest starting at this loop to create a single flattened loop. The compiler will attempt to pipeline the flattened loop to avoid stage stalling. Default is False.
    warp_specialize : bool, optional
-      If True, enables automatic warp specialization, partitioning memory, MMA,
-      and vector operations into separate async partitions. Increases total
-      warp count. Supported on Blackwell GPUs for simple matmul loops.
-      Defaults to False.
+       Enable automatic warp specialization on the loop. The compiler will partition memory, MMA, and vector operations into separate async partitions, increasing the total number of warps required. Only supported on Blackwell GPUs for simple matmul loops. Default is False.
    disable_licm : bool, optional
-      If True, disables Loop Invariant Code Motion (LICM). Useful to prevent
-      long live ranges within the loop. Defaults to False.
+       Prevent the compiler from hoisting loop invariant code outside the loop. Useful to avoid creating long liveranges within a loop. Default is False.
 
-   .. rubric:: Notes
+   Returns
+   -------
+   range
+       An iterator object for use in :code:`for` loops within JIT-compiled functions.
 
-   This class is intended solely for use within the body of functions decorated
-   with :code:`@triton.jit`. Instantiating or iterating over this object in
-   standard Python code will raise a RuntimeError.
+   Raises
+   ------
+   RuntimeError
+       If :code:`__iter__` or :code:`__next__` is called outside of a :code:`@triton.jit` decorated function.
 
-   Warp specialization (:code:`warp_specialize=True`) is currently experimental
-   and hardware-specific (Blackwell architecture).
+   Notes
+   -----
+   This iterator can only be used within functions decorated with :code:`@triton.jit`. Attempting to iterate over it in regular Python code will raise a RuntimeError.
 
-   .. rubric:: Examples
+   Warp specialization is currently only supported on Blackwell GPUs and works best with simple matmul loops. Support for arbitrary loops may be expanded in future versions.
 
+   Examples
+   --------
    .. code-block:: python
 
-      import triton
-      import triton.language as tl
+       import triton
+       import triton.language as tl
 
-      @triton.jit
-      def vector_add_kernel(
-          X_ptr, Y_ptr, Z_ptr,
-          N: tl.constexpr,
-          BLOCK_SIZE: tl.constexpr,
-      ):
-          pid = tl.program_id(0)
-          block_start = pid * BLOCK_SIZE
-          offsets = block_start + tl.arange(0, BLOCK_SIZE)
-          mask = offsets < N
+       @triton.jit
+       def kernel(...):
+           # Basic usage similar to Python range
+           for i in tl.range(10):
+               ...
 
-          # Loop with 3-stage software pipelining
-          acc = tl.zeros([BLOCK_SIZE], dtype=tl.float32)
-          for i in tl.range(4, num_stages=3):
-              x = tl.load(X_ptr + offsets + i * BLOCK_SIZE, mask=mask, padding_option="zero")
-              y = tl.load(Y_ptr + offsets + i * BLOCK_SIZE, mask=mask, padding_option="zero")
-              acc += x + y
+           # With pipelining
+           for i in tl.range(10, num_stages=3):
+               ...
 
-          tl.store(Z_ptr + offsets, acc, mask=mask)
+           # With loop unrolling
+           for i in tl.range(0, 100, step=1, loop_unroll_factor=4):
+               ...
 
-      @triton.jit
-      def matmul_kernel_warp_spec(
-          A_ptr, B_ptr, C_ptr,
-          M, N, K,
-          BLOCK_M: tl.constexpr, BLOCK_N: tl.constexpr, BLOCK_K: tl.constexpr,
-      ):
-          # Enable warp specialization for the inner loop
-          for k in tl.range(0, K, BLOCK_K, warp_specialize=True):
-              # ... matrix multiplication logic ...
-              pass
+           # Multiple optimization hints
+           for i in tl.range(0, N, num_stages=2, loop_unroll_factor=2, flatten=True):
+               ...

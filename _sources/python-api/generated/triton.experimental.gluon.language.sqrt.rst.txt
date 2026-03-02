@@ -1,0 +1,35 @@
+sqrt
+====
+
+Computes the element-wise fast square root of a tensor.
+
+Parameters
+----------
+x : Block
+    The input tensor values. Must be floating point (fp32 or fp64).
+
+Returns
+-------
+tensor
+    A tensor containing the element-wise square root of :code:`x`.
+
+Notes
+-----
+This operation uses a fast square root approximation. Only floating point
+dtypes (fp32, fp64) are supported. The result has the same dtype and shape
+as the input.
+
+Examples
+--------
+.. code-block:: python
+
+    import triton.experimental.gluon as gluon
+    import triton.experimental.gluon.language as ttgl
+
+    @gluon.jit
+    def kernel(x_ptr, y_ptr, BLOCK_SIZE: ttgl.constexpr):
+        pid = ttgl.program_id(0)
+        offs = pid * BLOCK_SIZE + ttgl.arange(0, BLOCK_SIZE)
+        x = ttgl.load(x_ptr + offs)
+        y = ttgl.sqrt(x)
+        ttgl.store(y_ptr + offs, y)

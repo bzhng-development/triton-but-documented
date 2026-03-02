@@ -1,0 +1,50 @@
+triton.language.extra.cuda.libdevice.asinh
+==========================================
+
+.. currentmodule:: triton.language.extra.cuda.libdevice
+
+.. function:: asinh(arg0, _semantic=None)
+
+   Compute the inverse hyperbolic sine of the input element-wise.
+
+   Parameters
+   ----------
+   arg0 : tl.tensor
+       Input tensor. Must have floating-point dtype (``fp32`` or ``fp64``).
+   _semantic : optional
+       Internal parameter for semantic propagation. Do not set manually.
+
+   Returns
+   -------
+   result : tl.tensor
+       Tensor containing the inverse hyperbolic sine of each element in ``arg0``.
+       Has the same dtype and shape as the input.
+
+   Notes
+   -----
+   This function is an external wrapper around CUDA libdevice functions:
+   ``__nv_asinhf`` for ``fp32`` and ``__nv_asinh`` for ``fp64``.
+
+   This function can also be called as a member function on :py:class:`tensor`,
+   as ``x.asinh()`` instead of ``asinh(x)``.
+
+   The inverse hyperbolic sine is defined as:
+
+   .. math::
+
+      \text{asinh}(x) = \ln(x + \sqrt{x^2 + 1})
+
+   Examples
+   --------
+   .. code-block:: python
+
+      import triton
+      import triton.language as tl
+
+      @triton.jit
+      def asinh_kernel(input_ptr, output_ptr, n_elements, BLOCK_SIZE: tl.constexpr):
+          offsets = tl.arange(0, BLOCK_SIZE)
+          mask = offsets < n_elements
+          input = tl.load(input_ptr + offsets, mask=mask)
+          output = tl.extra.cuda.libdevice.asinh(input)
+          tl.store(output_ptr + offsets, output, mask=mask)

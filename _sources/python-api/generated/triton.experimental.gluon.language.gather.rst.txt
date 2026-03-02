@@ -1,0 +1,45 @@
+gather
+======
+
+gather(src, index, axis, _semantic=None)
+
+Gather elements from a tensor along a specified axis using an index tensor.
+
+For each output position, the operation selects elements from ``src`` where the
+coordinate at the gather axis is replaced by the corresponding value in ``index``.
+
+Parameters
+----------
+src : tensor
+    The source tensor from which to gather elements.
+index : tensor
+    Tensor specifying which indices to gather along the axis. The output shape
+    matches ``index`` shape, with the gather axis dimension from ``src`` replaced.
+axis : int
+    The axis along which to gather values.
+_semantic : GluonSemantic, optional
+    Internal parameter for semantic operations. Do not set manually.
+
+Returns
+-------
+tensor
+    A Gluon tensor containing the gathered elements.
+
+Notes
+-----
+This function can also be called as a member function on :py:class:`tensor`,
+as ``x.gather(...)`` instead of ``gather(x, ...)``.
+
+Examples
+--------
+.. code-block:: python
+
+    import triton.experimental.gluon as gluon
+    import triton.experimental.gluon.language as ttgl
+
+    @gluon.jit
+    def kernel(...):
+        src = ...  # tensor of shape [M, N]
+        index = ...  # tensor of shape [M, K]
+        # Gather along axis 1: result[i, j] = src[i, index[i, j]]
+        result = ttgl.gather(src, index, axis=1)  # shape [M, K]

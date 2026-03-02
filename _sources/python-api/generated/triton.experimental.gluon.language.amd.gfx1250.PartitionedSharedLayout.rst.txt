@@ -1,0 +1,36 @@
+PartitionedSharedLayout
+=======================
+
+Represents a partitioned shared memory layout that splits a tensor across multiple physical shared memory partitions.
+
+This reduces shared memory partition conflicts by placing different pieces of a tensor in separate physical memory slots.
+
+Parameters
+----------
+num_partitions : int
+    Number of physical memory partitions. Must be a power of two.
+num_groups : int
+    Number of groups. Each group has ``num_partitions`` pieces. Must be a power of two.
+partition_dim : int
+    Dimension along which to partition. Must be non-negative.
+partition_layout : SharedLayout
+    Inner layout for each piece (e.g., :class:`SwizzledSharedLayout` or :class:`PaddedSharedLayout`).
+
+Notes
+-----
+Both ``num_partitions`` and ``num_groups`` must be powers of two. ``partition_dim`` must be non-negative.
+
+Examples
+--------
+.. code-block:: python
+
+    import triton.experimental.gluon.language as ttgl
+    from triton.experimental.gluon.language.amd.gfx1250 import PartitionedSharedLayout
+
+    # Create a layout with 4 partitions and 2 groups along dimension 0
+    layout = PartitionedSharedLayout(
+        num_partitions=4,
+        num_groups=2,
+        partition_dim=0,
+        partition_layout=ttgl.SwizzledSharedLayout(...)
+    )

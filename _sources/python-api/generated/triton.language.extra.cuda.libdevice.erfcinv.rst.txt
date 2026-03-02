@@ -1,0 +1,46 @@
+erfcinv
+=======
+
+Compute the inverse complementary error function element-wise.
+
+Parameters
+----------
+arg0 : tensor
+    Input tensor of floating-point type (fp32 or fp64).
+_semantic : optional
+    Internal semantic argument used by the Triton compiler. Do not set manually.
+
+Returns
+-------
+tensor
+    Tensor of the same dtype as ``arg0`` containing the inverse complementary
+    error function values.
+
+Notes
+-----
+The inverse complementary error function ``erfcinv(x)`` computes the value
+``y`` such that ``erfc(y) = x``, where ``erfc`` is the complementary error
+function defined as ``erfc(x) = 1 - erf(x)``.
+
+Valid input range is (0, 2). For ``x`` outside this range, the result is
+undefined.
+
+This function is implemented using CUDA libdevice intrinsics:
+- ``__nv_erfcinvf`` for 32-bit floating-point (fp32)
+- ``__nv_erfcinv`` for 64-bit floating-point (fp64)
+
+The operation is pure (no side effects) and supports automatic broadcasting.
+
+Examples
+--------
+.. code-block:: python
+
+    import triton
+    import triton.language as tl
+
+    @triton.jit
+    def kernel(x_ptr, y_ptr, BLOCK_SIZE: tl.constexpr):
+        offsets = tl.arange(0, BLOCK_SIZE)
+        x = tl.load(x_ptr + offsets)
+        y = tl.extra.cuda.libdevice.erfcinv(x)
+        tl.store(y_ptr + offsets, y)

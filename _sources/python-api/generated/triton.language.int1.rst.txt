@@ -1,52 +1,21 @@
-triton.language.int1
-====================
+int1
+====
 
-1-bit signed integer data type.
+.. py:data:: triton.language.int1
 
-This dtype represents a signed integer stored in a single bit. It is primarily
-used for boolean logic operations where storage efficiency is critical, though
-arithmetic operations may promote to wider integer types depending on the
-target architecture.
+   1-bit signed integer data type.
 
-Parameters
-----------
-None
-    This is a data type instance, not a function. It accepts no parameters.
+   Notes
+   -----
+   This instance represents the 1-bit signed integer element type in Triton.
+   It is used to specify the ``dtype`` argument in tensor creation and memory
+   operations, such as :func:`triton.language.zeros` or :func:`triton.language.store`.
+   Corresponds to ``i1`` in LLVM IR.
 
-Returns
--------
-dtype
-    The ``int1`` data type object.
-
-Notes
------
-*   ``int1`` is equivalent to a signed 1-bit integer.
-*   In many GPU backends, 1-bit values are packed into larger words (e.g.,
-    int8 or int32) for computation.
-*   Use ``tl.make_block_ptr`` or explicit casting to ensure correct memory
-    layout when working with ``int1`` tensors.
-*   This type is distinct from ``tl.int8`` (8-bit) and ``tl.bool`` (which may
-    map to ``int1`` or ``int8`` depending on context).
-
-Examples
---------
-.. code-block:: python
-
-    import triton
-    import triton.language as tl
-
-    @triton.jit
-    def kernel(x_ptr, y_ptr, n: tl.constexpr):
-        # Load 1-bit integers
-        mask = tl.arange(0, n) < n
-        x = tl.load(x_ptr + mask, mask=mask).to(tl.int1)
-
-        # Perform bitwise logic
-        y = x ^ 1  # Flip bits
-
-        # Store result
-        tl.store(y_ptr + mask, y, mask=mask)
-
-    # Launch kernel (host code)
-    # Note: Actual memory allocation for int1 requires careful packing
-    # usually handled by the compiler or custom CUDA/HIP wrappers.
+   Examples
+   --------
+   >>> import triton.language as tl
+   >>> @triton.jit
+   ... def kernel(ptr):
+   ...     x = tl.zeros([1], dtype=tl.int1)
+   ...     tl.store(ptr, x)

@@ -1,0 +1,50 @@
+triton.language.extra.cuda.libdevice.pow
+========================================
+
+.. currentmodule:: triton.language.extra.cuda.libdevice
+
+.. function:: pow(arg0, arg1, _semantic=None)
+
+    Compute :code:`arg0` raised to the power of :code:`arg1`.
+
+    Parameters
+    ----------
+    arg0 : tl.tensor
+        The base value. Must be floating-point (fp32 or fp64).
+    arg1 : tl.tensor
+        The exponent. Can be floating-point (fp32 or fp64) or integer (int32).
+    _semantic : optional
+        Internal semantic argument. Do not set manually.
+
+    Returns
+    -------
+    result : tl.tensor
+        The result of :code:`arg0 ** arg1`. Has the same dtype as :code:`arg0`
+        (fp32 or fp64).
+
+    Notes
+    -----
+    This function dispatches to CUDA libdevice intrinsics based on input dtypes:
+
+    - (fp32, int32) -> ``__nv_powif`` -> fp32
+    - (fp64, int32) -> ``__nv_powi`` -> fp64
+    - (fp32, fp32) -> ``__nv_powf`` -> fp32
+    - (fp64, fp64) -> ``__nv_pow`` -> fp64
+
+    The operation is pure (no side effects).
+
+    Examples
+    --------
+    .. code-block:: python
+
+        import triton
+        import triton.language as tl
+
+        @triton.jit
+        def kernel(x_ptr, y_ptr, out_ptr, n):
+            pid = tl.program_id(0)
+            offset = pid * tl.constexpr(128)
+            x = tl.load(x_ptr + offset)
+            y = tl.load(y_ptr + offset)
+            result = tl.extra.cuda.libdevice.pow(x, y)
+            tl.store(out_ptr + offset, result)

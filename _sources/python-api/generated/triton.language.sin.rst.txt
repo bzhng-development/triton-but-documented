@@ -1,15 +1,20 @@
-.. py:function:: sin(x, _semantic=None)
+triton.language.sin
+===================
+
+.. currentmodule:: triton.language
+
+.. function:: sin(x, _semantic=None)
 
    Computes the element-wise sine of :code:`x`.
 
    Parameters
    ----------
-   x : tl.tensor
+   x : Block
        The input tensor. Must be of floating-point type (:code:`fp32` or :code:`fp64`).
 
    Returns
    -------
-   tl.tensor
+   Block
        A tensor containing the sine of each element in :code:`x`.
 
    Notes
@@ -17,8 +22,8 @@
    This function can also be called as a member function on :py:class:`tensor`,
    as :code:`x.sin()` instead of :code:`tl.sin(x)`.
 
-   The operation is only supported for floating-point dtypes. Passing integer
-   types will result in a compilation error.
+   The sine function is computed in radians. Input values are expected to be
+   in the range where sine is defined for floating-point types.
 
    Examples
    --------
@@ -28,9 +33,18 @@
       import triton.language as tl
 
       @triton.jit
-      def kernel(x_ptr, y_ptr, BLOCK_SIZE: tl.constexpr):
-          pid = tl.program_id(axis=0)
-          offs = pid * BLOCK_SIZE + tl.arange(0, BLOCK_SIZE)
-          x = tl.load(x_ptr + offs)
+      def kernel(X_ptr, Y_ptr, BLOCK_SIZE: tl.constexpr):
+          pid = tl.program_id(0)
+          offsets = pid * BLOCK_SIZE + tl.arange(0, BLOCK_SIZE)
+          x = tl.load(X_ptr + offsets)
           y = tl.sin(x)
-          tl.store(y_ptr + offs, y)
+          tl.store(Y_ptr + offsets, y)
+
+      # Or using the member function syntax:
+      @triton.jit
+      def kernel_member(X_ptr, Y_ptr, BLOCK_SIZE: tl.constexpr):
+          pid = tl.program_id(0)
+          offsets = pid * BLOCK_SIZE + tl.arange(0, BLOCK_SIZE)
+          x = tl.load(X_ptr + offsets)
+          y = x.sin()
+          tl.store(Y_ptr + offsets, y)

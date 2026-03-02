@@ -1,0 +1,64 @@
+class tensor_descriptor_type
+====================
+
+.. currentmodule:: triton.experimental.gluon.language.amd.gfx1250.tdm
+
+.. class:: tensor_descriptor_type(block_type, shape_type, strides_type, layout)
+
+   The type for a tensor descriptor in AMD GFX1250 TDM operations.
+
+   Represents the static type information for a tensor descriptor, including the
+   block type, shape and stride types, and shared memory layout. This type is
+   used to define tensor descriptors for asynchronous tensor memory operations
+   on AMD GFX1250 hardware.
+
+   Parameters
+   ----------
+   block_type : ttgl.block_type
+       The block type defining the element type and block shape of the tensor.
+   shape_type : ttgl.tuple_type
+       The type for the tensor shape tuple (i32 values).
+   strides_type : ttgl.tuple_type
+       The type for the tensor strides tuple (i64 values).
+   layout : PaddedSharedLayout | SwizzledSharedLayout
+       The shared memory layout for the tensor block. Must be either
+       ``PaddedSharedLayout`` or ``SwizzledSharedLayout``.
+
+   Returns
+   -------
+   tensor_descriptor_type
+       A type object representing the tensor descriptor structure.
+
+   Notes
+   -----
+   This is a type definition class, not a runtime value. Instances are used
+   to construct ``tensor_descriptor`` values via ``make_tensor_descriptor``.
+
+   The tensor descriptor type encodes all static information needed for TDM
+   operations, including element type, block dimensions, and memory layout.
+   For GFX1250, ``SwizzledSharedLayout`` requires ``max_phase == 1``.
+
+   Tensor descriptors support 1 to 5 dimensions. Shape values are i32, while
+   stride values are i64.
+
+   Examples
+   --------
+   >>> import triton.experimental.gluon as gluon
+   >>> import triton.experimental.gluon.language as ttgl
+   >>> from triton.experimental.gluon.language._layouts import PaddedSharedLayout
+   >>>
+   >>> # Define block type for 128x64 f16 tensor
+   >>> block_ty = ttgl.block_type(ttgl.float16, [128, 64])
+   >>>
+   >>> # Define shape and stride types (2D tensor)
+   >>> shape_ty = ttgl.tuple_type([ttgl.int32, ttgl.int32])
+   >>> strides_ty = ttgl.tuple_type([ttgl.int64, ttgl.int64])
+   >>>
+   >>> # Create tensor descriptor type with padded layout
+   >>> layout = PaddedSharedLayout()
+   >>> desc_ty = gluon.language.amd.gfx1250.tdm.tensor_descriptor_type(
+   ...     block_ty, shape_ty, strides_ty, layout
+   ... )
+   >>>
+   >>> print(desc_ty)
+   tensor_descriptor<block<f16, [128, 64]>, PaddedSharedLayout()>

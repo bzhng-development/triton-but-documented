@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Parameters &mdash; Triton  documentation</title>
+  <title>device_print &mdash; Triton  documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=03e43079" />
       <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="../../_static/css/custom.css" />
@@ -18,7 +18,7 @@
     <script src="../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
-    <link rel="next" title="Parameters" href="triton.language.device_assert.html" />
+    <link rel="next" title="triton.language.device_assert" href="triton.language.device_assert.html" />
     <link rel="prev" title="static_assert" href="triton.language.static_assert.html" /> 
 </head>
 
@@ -67,14 +67,16 @@
 <li class="toctree-l2 current"><a class="reference internal" href="../triton.language.html#debug-ops">Debug Ops</a><ul class="current">
 <li class="toctree-l3"><a class="reference internal" href="triton.language.static_print.html">static_print</a></li>
 <li class="toctree-l3"><a class="reference internal" href="triton.language.static_assert.html">static_assert</a></li>
-<li class="toctree-l3 current"><a class="current reference internal" href="#">Parameters</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#returns">Returns</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#notes">Notes</a></li>
-<li class="toctree-l3"><a class="reference internal" href="triton.language.device_assert.html">Parameters</a></li>
-<li class="toctree-l3"><a class="reference internal" href="triton.language.device_assert.html#notes">Notes</a></li>
-<li class="toctree-l3"><a class="reference internal" href="triton.language.device_assert.html#examples">Examples</a></li>
-<li class="toctree-l3"><a class="reference internal" href="triton.language.PropagateNan.html">triton.language.PropagateNan</a></li>
-<li class="toctree-l3"><a class="reference internal" href="triton.language.TRITON_MAX_TENSOR_NUMEL.html">triton.language.TRITON_MAX_TENSOR_NUMEL</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">device_print</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#parameters">Parameters</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#returns">Returns</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#notes">Notes</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#examples">Examples</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="triton.language.device_assert.html">triton.language.device_assert</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.language.PropagateNan.html">PropagateNan</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.language.TRITON_MAX_TENSOR_NUMEL.html">TRITON_MAX_TENSOR_NUMEL</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../triton.language.html#data-types">Data Types</a></li>
@@ -82,6 +84,35 @@
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../triton.testing.html">triton.testing</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../triton-semantics.html">Triton Semantics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.language.extra.cuda.html">triton.language.extra.cuda</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.language.extra.cuda.libdevice.html">triton.language.extra.cuda.libdevice</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.runtime.html">triton.runtime</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.tools.html">triton.tools</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Gluon (Experimental) API</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.html">triton.experimental.gluon</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.html">triton.experimental.gluon.language</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.nvidia.ampere.html">triton.experimental.gluon.language.nvidia.ampere</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.nvidia.ampere.async_copy.html">triton.experimental.gluon.language.nvidia.ampere.async_copy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.nvidia.ampere.mbarrier.html">triton.experimental.gluon.language.nvidia.ampere.mbarrier</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.nvidia.hopper.html">triton.experimental.gluon.language.nvidia.hopper</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.nvidia.hopper.tma.html">triton.experimental.gluon.language.nvidia.hopper.tma</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.nvidia.hopper.mbarrier.html">triton.experimental.gluon.language.nvidia.hopper.mbarrier</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.nvidia.hopper.cluster.html">triton.experimental.gluon.language.nvidia.hopper.cluster</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.nvidia.blackwell.html">triton.experimental.gluon.language.nvidia.blackwell</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.nvidia.blackwell.tma.html">triton.experimental.gluon.language.nvidia.blackwell.tma</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.nvidia.blackwell.clc.html">triton.experimental.gluon.language.nvidia.blackwell.clc</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.amd.html">triton.experimental.gluon.language.amd</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.amd.gfx1250.html">triton.experimental.gluon.language.amd.gfx1250</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.amd.gfx1250.async_copy.html">triton.experimental.gluon.language.amd.gfx1250.async_copy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.amd.gfx1250.mbarrier.html">triton.experimental.gluon.language.amd.gfx1250.mbarrier</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.amd.gfx1250.cluster.html">triton.experimental.gluon.language.amd.gfx1250.cluster</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.amd.gfx1250.tdm.html">triton.experimental.gluon.language.amd.gfx1250.tdm</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.amd.cdna3.html">triton.experimental.gluon.language.amd.cdna3</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.amd.cdna4.html">triton.experimental.gluon.language.amd.cdna4</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.amd.rdna3.html">triton.experimental.gluon.language.amd.rdna3</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.amd.rdna4.html">triton.experimental.gluon.language.amd.rdna4</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Triton MLIR Dialects</span></p>
 <ul>
@@ -109,7 +140,7 @@
   <ul class="wy-breadcrumbs">
       <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
           <li class="breadcrumb-item"><a href="../triton.language.html">triton.language</a></li>
-      <li class="breadcrumb-item active">Parameters</li>
+      <li class="breadcrumb-item active">device_print</li>
       <li class="wy-breadcrumbs-aside">
             <a href="../../_sources/python-api/generated/triton.language.device_print.rst.txt" rel="nofollow"> View page source</a>
       </li>
@@ -119,36 +150,68 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <p>Print runtime values from the device.</p>
-<p>The first argument must be a string literal prefix; all following arguments must be scalars or tensors. String formatting (e.g., f-strings) is not supported for runtime values. Inside a <code class="docutils literal notranslate"><span class="pre">&#64;triton.jit</span></code> function, the Python builtin <code class="code docutils literal notranslate"><span class="pre">print</span></code> is mapped to this function.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">tl</span><span class="o">.</span><span class="n">device_print</span><span class="p">(</span><span class="s2">&quot;pid&quot;</span><span class="p">,</span> <span class="n">pid</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;pid&quot;</span><span class="p">,</span> <span class="n">pid</span><span class="p">)</span>  <span class="c1"># Equivalent inside JIT kernels</span>
-</pre></div>
-</div>
-<p>On CUDA, device prints are streamed through a fixed-size buffer (default ~6912 KiB, varying by GPU/driver). If output is dropped, increase the buffer size before kernel launch:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">triton</span><span class="o">.</span><span class="n">runtime</span><span class="o">.</span><span class="n">driver</span><span class="o">.</span><span class="n">active</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">set_printf_fifo_size</span><span class="p">(</span><span class="n">size_bytes</span><span class="p">)</span>
-</pre></div>
-</div>
-<p>Changing this value after running a kernel that uses prints may raise an error. The setting applies per device.</p>
+  <section id="device-print">
+<h1>device_print<a class="headerlink" href="#device-print" title="Link to this heading">¶</a></h1>
+<p>Print values at runtime from the GPU device.</p>
 <section id="parameters">
-<h1>Parameters<a class="headerlink" href="#parameters" title="Link to this heading">¶</a></h1>
+<h2>Parameters<a class="headerlink" href="#parameters" title="Link to this heading">¶</a></h2>
 <dl class="simple">
-<dt>prefix<span class="classifier">str</span></dt><dd><p>A string literal prefix printed before the values. Must be ASCII.</p>
+<dt>prefix<span class="classifier">str</span></dt><dd><p>A prefix to print before the values. Must be a string literal (compile-time
+constant). Must contain only ASCII printable characters.</p>
 </dd>
-<dt><a href="#id1"><span class="problematic" id="id2">*</span></a>args<span class="classifier">tensor or scalar</span></dt><dd><p>The runtime values to print.</p>
+<dt><a href="#id1"><span class="problematic" id="id2">*</span></a>args<span class="classifier">tensor or scalar</span></dt><dd><p>The values to print. Can be any tensor or scalar. All non-string arguments
+are converted to tensors.</p>
 </dd>
-<dt>hex<span class="classifier">bool, optional</span></dt><dd><p>If True, print integer values in hexadecimal format instead of decimal.</p>
+<dt>hex<span class="classifier">bool, optional</span></dt><dd><p>If True, print all values in hexadecimal format instead of decimal.
+Default is False.</p>
 </dd>
 </dl>
 </section>
 <section id="returns">
-<h1>Returns<a class="headerlink" href="#returns" title="Link to this heading">¶</a></h1>
-<p>None</p>
+<h2>Returns<a class="headerlink" href="#returns" title="Link to this heading">¶</a></h2>
+<dl class="simple">
+<dt>None</dt><dd><p>This function prints values as a side effect and does not return a
+meaningful value.</p>
+</dd>
+</dl>
 </section>
 <section id="notes">
-<h1>Notes<a class="headerlink" href="#notes" title="Link to this heading">¶</a></h1>
-<p>This function is intended for debugging. Excessive use may impact performance.
-The <code class="docutils literal notranslate"><span class="pre">prefix</span></code> argument is compile-time constant; dynamic strings are not supported.</p>
+<h2>Notes<a class="headerlink" href="#notes" title="Link to this heading">¶</a></h2>
+<p>String formatting does not work for runtime values. Provide the values you want
+to print as separate arguments after the prefix string.</p>
+<p>Calling the Python builtin <code class="docutils literal notranslate"><span class="pre">print</span></code> inside a <code class="docutils literal notranslate"><span class="pre">&#64;triton.jit</span></code> function is
+equivalent to calling <code class="docutils literal notranslate"><span class="pre">device_print</span></code>, and the argument requirements match
+this function (not the normal requirements for Python’s <code class="docutils literal notranslate"><span class="pre">print</span></code>).</p>
+<p>On CUDA, printf output is streamed through a buffer of limited size (default
+approximately 6912 KiB, but may vary across GPUs and CUDA versions). If printf
+output is being dropped, increase the buffer size by calling:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">triton</span><span class="o">.</span><span class="n">runtime</span><span class="o">.</span><span class="n">driver</span><span class="o">.</span><span class="n">active</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">set_printf_fifo_size</span><span class="p">(</span><span class="n">size_bytes</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>CUDA may raise an error if you attempt to change this value after running a
+kernel that uses printfs. The value set may only affect the current device.</p>
+</section>
+<section id="examples">
+<h2>Examples<a class="headerlink" href="#examples" title="Link to this heading">¶</a></h2>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">triton</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">triton.language</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">tl</span>
+
+<span class="nd">@triton</span><span class="o">.</span><span class="n">jit</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">kernel</span><span class="p">(</span><span class="n">pid</span><span class="p">):</span>
+    <span class="c1"># Print program ID with prefix</span>
+    <span class="n">tl</span><span class="o">.</span><span class="n">device_print</span><span class="p">(</span><span class="s2">&quot;pid&quot;</span><span class="p">,</span> <span class="n">pid</span><span class="p">)</span>
+
+    <span class="c1"># Print multiple values</span>
+    <span class="n">tl</span><span class="o">.</span><span class="n">device_print</span><span class="p">(</span><span class="s2">&quot;values&quot;</span><span class="p">,</span> <span class="n">pid</span><span class="p">,</span> <span class="n">pid</span> <span class="o">*</span> <span class="mi">2</span><span class="p">)</span>
+
+    <span class="c1"># Print in hexadecimal format</span>
+    <span class="n">tl</span><span class="o">.</span><span class="n">device_print</span><span class="p">(</span><span class="s2">&quot;hex&quot;</span><span class="p">,</span> <span class="n">pid</span><span class="p">,</span> <span class="nb">hex</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+    <span class="c1"># Using Python print is equivalent</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;pid&quot;</span><span class="p">,</span> <span class="n">pid</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
 </section>
 
 
@@ -156,7 +219,7 @@ The <code class="docutils literal notranslate"><span class="pre">prefix</span></
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
         <a href="triton.language.static_assert.html" class="btn btn-neutral float-left" title="static_assert" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="triton.language.device_assert.html" class="btn btn-neutral float-right" title="Parameters" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="triton.language.device_assert.html" class="btn btn-neutral float-right" title="triton.language.device_assert" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>

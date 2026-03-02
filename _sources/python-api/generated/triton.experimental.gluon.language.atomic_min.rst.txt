@@ -1,0 +1,65 @@
+atomic_min
+==========
+
+.. currentmodule:: triton.experimental.gluon.language
+
+.. function:: atomic_min(pointer, val, mask=None, sem=None, scope=None, _semantic=None)
+
+    Performs an atomic minimum operation at the specified memory location.
+
+    Atomically compares the value at ``pointer`` with ``val`` and stores the
+    minimum of the two. Returns the original value stored at ``pointer`` before
+    the operation.
+
+    Parameters
+    ----------
+    pointer : tensor
+        Pointer to the memory location(s) to operate on. Must be a block of
+        ``triton.PointerDType``.
+    val : tensor
+        The value(s) to compare against. Must be a block with dtype matching
+        ``pointer.dtype.element_ty``.
+    mask : tensor, optional
+        Boolean mask to control which elements participate in the atomic
+        operation. If ``None``, all elements are processed.
+    sem : str, optional
+        Memory semantics for the operation. Acceptable values are ``"acquire"``,
+        ``"release"``, ``"acq_rel"``, and ``"relaxed"``. Defaults to ``"acq_rel"``.
+    scope : str, optional
+        Scope of threads that observe the synchronizing effect. Acceptable values
+        are ``"gpu"`` (default), ``"cta"``, or ``"sys"``.
+
+    Returns
+    -------
+    tensor
+        The data stored at ``pointer`` before the atomic operation.
+
+    Notes
+    -----
+    This function can also be called as a member function on :py:class:`tensor`,
+    as ``x.atomic_min(...)`` instead of ``atomic_min(x, ...)``.
+
+    The operation is performed element-wise for block tensors. Each thread
+    operates on its corresponding element in the block.
+
+    Examples
+    --------
+    .. code-block:: python
+
+        import triton.experimental.gluon as gluon
+        import triton.experimental.gluon.language as ttgl
+
+        @gluon.jit
+        def kernel(x_ptr, y_ptr, n: tl.constexpr):
+            pid = ttgl.program_id(0)
+            x = ttgl.load(x_ptr + pid)
+            val = 5.0
+            old_val = ttgl.atomic_min(x_ptr + pid, val)
+            ttgl.store(y_ptr + pid, old_val)
+
+        # Using member function syntax
+        @gluon.jit
+        def kernel_member(x_ptr, n: tl.constexpr):
+            pid = ttgl.program_id(0)
+            ptr = x_ptr + pid
+            old_val = ptr.atomic_min(5.0)

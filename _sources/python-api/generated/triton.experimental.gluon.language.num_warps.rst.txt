@@ -1,0 +1,33 @@
+num_warps
+=========
+
+.. py:function:: num_warps()
+
+    Returns the number of warps that execute the current context.
+
+    Returns
+    -------
+    int
+        The number of warps allocated for the current kernel context. This value
+        includes warps in warp-specialized regions.
+
+    Notes
+    -----
+    This function queries the warp count configured for the current execution
+    context. When called inside a :py:func:`warp_specialize` region, it returns
+    the number of warps assigned to that specific partition rather than the
+    total kernel warp count.
+
+    Examples
+    --------
+    Query the number of warps within a Gluon kernel:
+
+    .. code-block:: python
+
+        import triton.experimental.gluon as gluon
+        import triton.experimental.gluon.language as ttgl
+
+        @gluon.jit
+        def kernel(...):
+            num_w = ttgl.num_warps()
+            # Use num_w for compile-time or runtime logic

@@ -1,0 +1,40 @@
+static_assert
+=============
+
+Assert a condition at compile time.
+
+Parameters
+----------
+cond : constexpr
+    The condition to assert. Must be a compile-time constant expression.
+msg : str, optional
+    Error message to display if the assertion fails. Default is empty string.
+
+Returns
+-------
+None
+
+Notes
+-----
+This assertion is evaluated at compile time during kernel compilation, not at
+runtime. It does not require the :code:`TRITON_DEBUG` environment variable to
+be set, unlike :func:`device_assert` which performs runtime assertions that
+can be conditionally enabled.
+
+Use :func:`static_assert` to validate compile-time constants such as block
+sizes, tile dimensions, or other kernel configuration parameters. If the
+condition evaluates to false, compilation will fail with an error message.
+
+Examples
+--------
+.. code-block:: python
+
+    import triton.experimental.gluon as gluon
+    import triton.experimental.gluon.language as ttgl
+
+    BLOCK_SIZE: tl.constexpr = 1024
+
+    @gluon.jit
+    def kernel(...):
+        ttgl.static_assert(BLOCK_SIZE == 1024)
+        ttgl.static_assert(BLOCK_SIZE % 32 == 0, "BLOCK_SIZE must be multiple of 32")

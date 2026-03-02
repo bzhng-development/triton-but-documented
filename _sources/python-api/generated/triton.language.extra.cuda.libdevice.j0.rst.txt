@@ -1,0 +1,49 @@
+triton.language.extra.cuda.libdevice.j0
+========================================
+
+.. currentmodule:: triton.language.extra.cuda.libdevice
+
+.. autofunction:: j0
+
+Compute the Bessel function of the first kind of order 0.
+
+Parameters
+----------
+arg0 : tensor
+    Input tensor of floating-point values. Must be ``fp32`` or ``fp64``.
+
+Returns
+-------
+tensor
+    Tensor of the same dtype as ``arg0`` containing the Bessel function J0(x)
+    for each element.
+
+Notes
+-----
+This function is an extern wrapper around CUDA libdevice functions:
+
+- ``__nv_j0f`` for ``fp32`` inputs
+- ``__nv_j0`` for ``fp64`` inputs
+
+The Bessel function of the first kind of order 0 is defined as the solution to
+Bessel's differential equation. It oscillates with decaying amplitude as x
+increases.
+
+This operation is pure (no side effects) and supports elementwise computation
+on tensors.
+
+Examples
+--------
+.. code-block:: python
+
+    import triton
+    import triton.language as tl
+
+    @triton.jit
+    def bessel_kernel(x_ptr, y_ptr, n_elements, BLOCK_SIZE: tl.constexpr):
+        pid = tl.program_id(axis=0)
+        offsets = pid * BLOCK_SIZE + tl.arange(0, BLOCK_SIZE)
+        mask = offsets < n_elements
+        x = tl.load(x_ptr + offsets, mask=mask)
+        y = tl.extra.cuda.libdevice.j0(x)
+        tl.store(y_ptr + offsets, y, mask=mask)

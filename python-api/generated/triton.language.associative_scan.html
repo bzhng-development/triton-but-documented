@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Parameters &mdash; Triton  documentation</title>
+  <title>triton.language.associative_scan &mdash; Triton  documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=03e43079" />
       <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="../../_static/css/custom.css" />
@@ -15,7 +15,6 @@
       <script src="../../_static/documentation_options.js?v=5929fcd5"></script>
       <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
       <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
-      <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-mml-chtml.js"></script>
     <script src="../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
@@ -60,16 +59,16 @@
 <li class="toctree-l2"><a class="reference internal" href="../triton.language.html#math-ops">Math Ops</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../triton.language.html#reduction-ops">Reduction Ops</a></li>
 <li class="toctree-l2 current"><a class="reference internal" href="../triton.language.html#scan-sort-ops">Scan/Sort Ops</a><ul class="current">
-<li class="toctree-l3 current"><a class="current reference internal" href="#"><code class="docutils literal notranslate"><span class="pre">triton.language.associative_scan()</span></code></a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">triton.language.associative_scan</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#triton.language.associative_scan"><code class="docutils literal notranslate"><span class="pre">triton.language.associative_scan()</span></code></a></li>
+</ul>
+</li>
 <li class="toctree-l3"><a class="reference internal" href="triton.language.cumprod.html">cumprod</a></li>
 <li class="toctree-l3"><a class="reference internal" href="triton.language.cumsum.html">cumsum</a></li>
-<li class="toctree-l3"><a class="reference internal" href="triton.language.histogram.html">Parameters</a></li>
-<li class="toctree-l3"><a class="reference internal" href="triton.language.histogram.html#returns">Returns</a></li>
-<li class="toctree-l3"><a class="reference internal" href="triton.language.histogram.html#notes">Notes</a></li>
-<li class="toctree-l3"><a class="reference internal" href="triton.language.histogram.html#examples">Examples</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.language.histogram.html">histogram</a></li>
 <li class="toctree-l3"><a class="reference internal" href="triton.language.sort.html">sort</a></li>
-<li class="toctree-l3"><a class="reference internal" href="triton.language.topk.html">topk</a></li>
-<li class="toctree-l3"><a class="reference internal" href="triton.language.gather.html"><code class="docutils literal notranslate"><span class="pre">triton.language.gather()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.language.topk.html">triton.language.topk</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.language.gather.html">gather</a></li>
 <li class="toctree-l3"><a class="reference internal" href="triton.language.bitonic_merge.html">bitonic_merge</a></li>
 </ul>
 </li>
@@ -84,6 +83,35 @@
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../triton.testing.html">triton.testing</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../triton-semantics.html">Triton Semantics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.language.extra.cuda.html">triton.language.extra.cuda</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.language.extra.cuda.libdevice.html">triton.language.extra.cuda.libdevice</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.runtime.html">triton.runtime</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.tools.html">triton.tools</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Gluon (Experimental) API</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.html">triton.experimental.gluon</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.html">triton.experimental.gluon.language</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.nvidia.ampere.html">triton.experimental.gluon.language.nvidia.ampere</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.nvidia.ampere.async_copy.html">triton.experimental.gluon.language.nvidia.ampere.async_copy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.nvidia.ampere.mbarrier.html">triton.experimental.gluon.language.nvidia.ampere.mbarrier</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.nvidia.hopper.html">triton.experimental.gluon.language.nvidia.hopper</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.nvidia.hopper.tma.html">triton.experimental.gluon.language.nvidia.hopper.tma</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.nvidia.hopper.mbarrier.html">triton.experimental.gluon.language.nvidia.hopper.mbarrier</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.nvidia.hopper.cluster.html">triton.experimental.gluon.language.nvidia.hopper.cluster</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.nvidia.blackwell.html">triton.experimental.gluon.language.nvidia.blackwell</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.nvidia.blackwell.tma.html">triton.experimental.gluon.language.nvidia.blackwell.tma</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.nvidia.blackwell.clc.html">triton.experimental.gluon.language.nvidia.blackwell.clc</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.amd.html">triton.experimental.gluon.language.amd</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.amd.gfx1250.html">triton.experimental.gluon.language.amd.gfx1250</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.amd.gfx1250.async_copy.html">triton.experimental.gluon.language.amd.gfx1250.async_copy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.amd.gfx1250.mbarrier.html">triton.experimental.gluon.language.amd.gfx1250.mbarrier</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.amd.gfx1250.cluster.html">triton.experimental.gluon.language.amd.gfx1250.cluster</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.amd.gfx1250.tdm.html">triton.experimental.gluon.language.amd.gfx1250.tdm</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.amd.cdna3.html">triton.experimental.gluon.language.amd.cdna3</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.amd.cdna4.html">triton.experimental.gluon.language.amd.cdna4</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.amd.rdna3.html">triton.experimental.gluon.language.amd.rdna3</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.amd.rdna4.html">triton.experimental.gluon.language.amd.rdna4</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Triton MLIR Dialects</span></p>
 <ul>
@@ -111,7 +139,7 @@
   <ul class="wy-breadcrumbs">
       <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
           <li class="breadcrumb-item"><a href="../triton.language.html">triton.language</a></li>
-      <li class="breadcrumb-item active">Parameters</li>
+      <li class="breadcrumb-item active">triton.language.associative_scan</li>
       <li class="wy-breadcrumbs-aside">
             <a href="../../_sources/python-api/generated/triton.language.associative_scan.rst.txt" rel="nofollow"> View page source</a>
       </li>
@@ -121,62 +149,84 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <dl class="py function">
+  <section id="triton-language-associative-scan">
+<h1>triton.language.associative_scan<a class="headerlink" href="#triton-language-associative-scan" title="Link to this heading">¶</a></h1>
+<dl class="py function">
 <dt class="sig sig-object py" id="triton.language.associative_scan">
 <span class="sig-prename descclassname"><span class="pre">triton.language.</span></span><span class="sig-name descname"><span class="pre">associative_scan</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">axis</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">combine_fn</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reverse</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#triton.language.associative_scan" title="Link to this definition">¶</a></dt>
-<dd><p>Applies an associative scan (parallel prefix sum) along the specified axis of the input tensor(s).</p>
-<p>For each position <span class="math notranslate nohighlight">\(i\)</span> along <code class="docutils literal notranslate"><span class="pre">axis</span></code>, the output is the reduction of all elements from index <code class="docutils literal notranslate"><span class="pre">0</span></code> to <code class="docutils literal notranslate"><span class="pre">i</span></code> using the provided <code class="docutils literal notranslate"><span class="pre">combine_fn</span></code>. The operation requires that <code class="docutils literal notranslate"><span class="pre">combine_fn</span></code> be associative.</p>
+<dd><p>Applies an associative scan operation along the specified axis using a custom
+combine function.</p>
 <section id="parameters">
-<h1>Parameters<a class="headerlink" href="#parameters" title="Link to this heading">¶</a></h1>
+<h2>Parameters<a class="headerlink" href="#parameters" title="Link to this heading">¶</a></h2>
 <dl class="simple">
-<dt>input<span class="classifier">tensor or tuple of tensors</span></dt><dd><p>The input tensor(s) to scan. If a tuple is provided, the scan is applied element-wise across all tensors.</p>
+<dt>input<span class="classifier">tensor or tuple of tensors</span></dt><dd><p>The input tensor(s) to perform the scan over.</p>
 </dd>
-<dt>axis<span class="classifier">int</span></dt><dd><p>The dimension along which to perform the scan. Negative values are supported and wrap around.</p>
+<dt>axis<span class="classifier">int</span></dt><dd><p>The dimension along which to perform the scan.</p>
 </dd>
-<dt>combine_fn<span class="classifier">callable</span></dt><dd><p>A JIT-compiled function (decorated with <code class="docutils literal notranslate"><span class="pre">&#64;triton.jit</span></code>) that takes two scalars (or tuples of scalars if input is a tuple) and returns their combined value. The function must be associative.</p>
+<dt>combine_fn<span class="classifier">callable</span></dt><dd><p>A JIT-compiled function that combines two scalar tensors. Must be
+decorated with <code class="docutils literal notranslate"><span class="pre">&#64;triton.jit</span></code>. The function should take two arguments
+(representing pairs of elements) and return their combined result.</p>
 </dd>
-<dt>reverse<span class="classifier">bool, optional</span></dt><dd><p>If <code class="docutils literal notranslate"><span class="pre">True</span></code>, the scan is performed in reverse order (from the last element to the first). Default is <code class="docutils literal notranslate"><span class="pre">False</span></code>.</p>
+<dt>reverse<span class="classifier">bool, optional</span></dt><dd><p>If True, perform the scan in reverse order along the axis (default: False).</p>
 </dd>
 </dl>
 </section>
 <section id="returns">
-<h1>Returns<a class="headerlink" href="#returns" title="Link to this heading">¶</a></h1>
+<h2>Returns<a class="headerlink" href="#returns" title="Link to this heading">¶</a></h2>
 <dl class="simple">
-<dt>tensor or tuple of tensors</dt><dd><p>The result of the associative scan. Has the same shape and dtype as <code class="docutils literal notranslate"><span class="pre">input</span></code>.</p>
+<dt>tensor or tuple of tensors</dt><dd><p>The scanned output tensor(s) with the same shape as the input. Each
+position contains the cumulative combination of all elements up to that
+position along the specified axis.</p>
 </dd>
 </dl>
 </section>
 <section id="notes">
-<h1>Notes<a class="headerlink" href="#notes" title="Link to this heading">¶</a></h1>
-<p>This function can also be called as a member function on <a class="reference internal" href="triton.language.tensor.html#triton.language.tensor" title="triton.language.tensor"><code class="xref py py-class docutils literal notranslate"><span class="pre">tensor</span></code></a>, as <code class="docutils literal notranslate"><span class="pre">x.associative_scan(...)</span></code> instead of <code class="docutils literal notranslate"><span class="pre">associative_scan(x,</span> <span class="pre">...)</span></code>.</p>
-<p>The <code class="docutils literal notranslate"><span class="pre">combine_fn</span></code> must be marked with <code class="docutils literal notranslate"><span class="pre">&#64;triton.jit</span></code> and should accept arguments corresponding to the scalar types of the input tensors. For example, if scanning a single <code class="docutils literal notranslate"><span class="pre">float32</span></code> tensor, the combine function should accept two <code class="docutils literal notranslate"><span class="pre">float32</span></code> scalars.</p>
-<p>Common use cases include cumulative sum (using addition), cumulative product (using multiplication), or custom associative operations like max/min with index tracking.</p>
+<h2>Notes<a class="headerlink" href="#notes" title="Link to this heading">¶</a></h2>
+<p>The <code class="docutils literal notranslate"><span class="pre">combine_fn</span></code> must implement an associative operation (i.e.,
+<code class="docutils literal notranslate"><span class="pre">combine_fn(a,</span> <span class="pre">combine_fn(b,</span> <span class="pre">c))</span> <span class="pre">==</span> <span class="pre">combine_fn(combine_fn(a,</span> <span class="pre">b),</span> <span class="pre">c)</span></code>).
+Common examples include addition, multiplication, or min/max operations.</p>
+<p>This function can also be called as a member function on <code class="xref py py-class docutils literal notranslate"><span class="pre">tensor</span></code>,
+as <code class="docutils literal notranslate"><span class="pre">x.associative_scan(...)</span></code> instead of
+<code class="docutils literal notranslate"><span class="pre">associative_scan(x,</span> <span class="pre">...)</span></code>.</p>
+<p>For cumulative sum operations, consider using <code class="xref py py-func docutils literal notranslate"><span class="pre">tl.cumsum()</span></code> which is
+optimized for addition scans.</p>
 </section>
 <section id="examples">
-<h1>Examples<a class="headerlink" href="#examples" title="Link to this heading">¶</a></h1>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span><span class="w"> </span><span class="nn">triton</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span><span class="w"> </span><span class="nn">triton.language</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">tl</span>
-<span class="gp">&gt;&gt;&gt;</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="nd">@triton</span><span class="o">.</span><span class="n">jit</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="k">def</span><span class="w"> </span><span class="nf">add_fn</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">):</span>
-<span class="gp">... </span>    <span class="k">return</span> <span class="n">a</span> <span class="o">+</span> <span class="n">b</span>
-<span class="gp">&gt;&gt;&gt;</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="nd">@triton</span><span class="o">.</span><span class="n">jit</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="k">def</span><span class="w"> </span><span class="nf">kernel</span><span class="p">(</span><span class="n">output_ptr</span><span class="p">,</span> <span class="n">input_ptr</span><span class="p">,</span> <span class="n">BLOCK_SIZE</span><span class="p">:</span> <span class="n">tl</span><span class="o">.</span><span class="n">constexpr</span><span class="p">):</span>
-<span class="gp">... </span>    <span class="n">pid</span> <span class="o">=</span> <span class="n">tl</span><span class="o">.</span><span class="n">program_id</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
-<span class="gp">... </span>    <span class="n">offsets</span> <span class="o">=</span> <span class="n">tl</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">BLOCK_SIZE</span><span class="p">)</span>
-<span class="gp">... </span>    <span class="n">mask</span> <span class="o">=</span> <span class="n">offsets</span> <span class="o">&lt;</span> <span class="n">BLOCK_SIZE</span>
-<span class="gp">... </span>    <span class="nb">input</span> <span class="o">=</span> <span class="n">tl</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">input_ptr</span> <span class="o">+</span> <span class="n">pid</span> <span class="o">*</span> <span class="n">BLOCK_SIZE</span> <span class="o">+</span> <span class="n">offsets</span><span class="p">,</span> <span class="n">mask</span><span class="o">=</span><span class="n">mask</span><span class="p">)</span>
-<span class="gp">... </span>    <span class="n">output</span> <span class="o">=</span> <span class="n">tl</span><span class="o">.</span><span class="n">associative_scan</span><span class="p">(</span><span class="nb">input</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">add_fn</span><span class="p">)</span>
-<span class="gp">... </span>    <span class="n">tl</span><span class="o">.</span><span class="n">store</span><span class="p">(</span><span class="n">output_ptr</span> <span class="o">+</span> <span class="n">pid</span> <span class="o">*</span> <span class="n">BLOCK_SIZE</span> <span class="o">+</span> <span class="n">offsets</span><span class="p">,</span> <span class="n">output</span><span class="p">,</span> <span class="n">mask</span><span class="o">=</span><span class="n">mask</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt;</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="c1"># Example usage: computes cumulative sum for each block</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="c1"># input = [1, 2, 3, 4] -&gt; output = [1, 3, 6, 10]</span>
+<h2>Examples<a class="headerlink" href="#examples" title="Link to this heading">¶</a></h2>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">triton</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">triton.language</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">tl</span>
+
+<span class="nd">@triton</span><span class="o">.</span><span class="n">jit</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">add_fn</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">a</span> <span class="o">+</span> <span class="n">b</span>
+
+<span class="nd">@triton</span><span class="o">.</span><span class="n">jit</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">kernel</span><span class="p">(</span><span class="n">input_ptr</span><span class="p">,</span> <span class="n">output_ptr</span><span class="p">,</span> <span class="n">N</span><span class="p">:</span> <span class="n">tl</span><span class="o">.</span><span class="n">constexpr</span><span class="p">):</span>
+    <span class="n">pid</span> <span class="o">=</span> <span class="n">tl</span><span class="o">.</span><span class="n">program_id</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+    <span class="n">offsets</span> <span class="o">=</span> <span class="n">tl</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">N</span><span class="p">)</span>
+    <span class="nb">input</span> <span class="o">=</span> <span class="n">tl</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">input_ptr</span> <span class="o">+</span> <span class="n">offsets</span><span class="p">)</span>
+    <span class="c1"># Perform cumulative sum scan</span>
+    <span class="n">output</span> <span class="o">=</span> <span class="n">tl</span><span class="o">.</span><span class="n">associative_scan</span><span class="p">(</span><span class="nb">input</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">add_fn</span><span class="p">)</span>
+    <span class="n">tl</span><span class="o">.</span><span class="n">store</span><span class="p">(</span><span class="n">output_ptr</span> <span class="o">+</span> <span class="n">offsets</span><span class="p">,</span> <span class="n">output</span><span class="p">)</span>
+
+<span class="c1"># Example with multiplication scan (cumulative product)</span>
+<span class="nd">@triton</span><span class="o">.</span><span class="n">jit</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">mul_fn</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">a</span> <span class="o">*</span> <span class="n">b</span>
+
+<span class="nd">@triton</span><span class="o">.</span><span class="n">jit</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">cumprod_kernel</span><span class="p">(</span><span class="n">input_ptr</span><span class="p">,</span> <span class="n">output_ptr</span><span class="p">,</span> <span class="n">N</span><span class="p">:</span> <span class="n">tl</span><span class="o">.</span><span class="n">constexpr</span><span class="p">):</span>
+    <span class="n">pid</span> <span class="o">=</span> <span class="n">tl</span><span class="o">.</span><span class="n">program_id</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+    <span class="n">offsets</span> <span class="o">=</span> <span class="n">tl</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">N</span><span class="p">)</span>
+    <span class="nb">input</span> <span class="o">=</span> <span class="n">tl</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">input_ptr</span> <span class="o">+</span> <span class="n">offsets</span><span class="p">)</span>
+    <span class="n">output</span> <span class="o">=</span> <span class="n">tl</span><span class="o">.</span><span class="n">associative_scan</span><span class="p">(</span><span class="nb">input</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">mul_fn</span><span class="p">)</span>
+    <span class="n">tl</span><span class="o">.</span><span class="n">store</span><span class="p">(</span><span class="n">output_ptr</span> <span class="o">+</span> <span class="n">offsets</span><span class="p">,</span> <span class="n">output</span><span class="p">)</span>
 </pre></div>
 </div>
 </section>
 </dd></dl>
 
+</section>
 
 
            </div>

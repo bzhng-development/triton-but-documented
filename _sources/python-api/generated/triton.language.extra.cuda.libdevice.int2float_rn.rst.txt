@@ -1,0 +1,36 @@
+triton.language.extra.cuda.libdevice.int2float_rn
+==================================================
+
+.. function:: int2float_rn(arg0)
+
+    Convert 32-bit signed integer to single-precision float with round-to-nearest.
+
+    Parameters
+    ----------
+    arg0 : tl.tensor
+        Input tensor of int32 values to convert.
+
+    Returns
+    -------
+    tl.tensor
+        Tensor of fp32 values resulting from the conversion.
+
+    Notes
+    -----
+    Calls the CUDA libdevice intrinsic ``__nv_int2float_rn``. The conversion uses
+    round-to-nearest-even rounding mode. Only int32 input type is supported.
+    The operation is pure (no side effects) and applies element-wise.
+
+    Example
+    -------
+    .. code-block:: python
+
+        import triton
+        import triton.language as tl
+
+        @triton.jit
+        def kernel(int_ptr, float_ptr, BLOCK_SIZE: tl.constexpr):
+            offsets = tl.arange(0, BLOCK_SIZE)
+            int_vals = tl.load(int_ptr + offsets)
+            float_vals = tl.extra.cuda.libdevice.int2float_rn(int_vals)
+            tl.store(float_ptr + offsets, float_vals)

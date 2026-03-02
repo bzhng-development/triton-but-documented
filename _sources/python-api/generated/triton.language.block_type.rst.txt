@@ -1,64 +1,60 @@
 block_type
 ==========
 
-.. currentmodule:: triton.language
+.. py:class:: triton.language.block_type
 
-.. class:: block_type(element_ty, shape)
+   Represents a block (tensor) type with a specific element type and shape.
 
-   Represents a contiguous block of scalar elements in GPU memory.
-
-   ``block_type`` is the underlying type for :py:class:`tensor` objects when
-   the tensor has a known, static shape. It defines the element data type and
-   the multidimensional shape of the block.
+   ``block_type`` is a subtype of :py:class:`dtype` that describes multi-dimensional
+   tensor types in Triton. It is used internally to represent the type of tensors
+   and can be queried to obtain shape and element type information.
 
    Parameters
    ----------
    element_ty : dtype
-       The scalar data type of the elements (e.g., ``tl.float16``, ``tl.int32``).
-   shape : list or tuple of ints
-       The dimensions of the block. Must be a non-empty sequence of integers.
-       A 0-dimensional shape is forbidden.
+       The scalar element data type (e.g., :py:data:`tl.float32`, :py:data:`tl.int16`).
+   shape : list of int
+       The shape of the block as a list of integers. Empty lists are forbidden
+       (0D block types are not allowed).
 
    Attributes
    ----------
    element_ty : dtype
-       The scalar data type of the elements.
+       The scalar element type of the block.
    shape : tuple of int
-       The dimensions of the block.
+       The shape of the block as a tuple of integers.
    numel : int
        The total number of elements in the block (product of shape dimensions).
    nbytes : int
-       The total size in bytes of the block.
+       The total size in bytes of the block (numel × element size).
    scalar : dtype
-       Alias for ``element_ty``.
+       Alias for :py:attr:`element_ty`.
 
    Methods
    -------
-   get_block_shapes()
-       Returns the shape of the block as a tuple of integers.
-   with_element_ty(scalar_ty)
-       Returns a new ``block_type`` with the same shape but a different element type.
    to_ir(builder)
-       Converts the type to the corresponding MLIR IR type.
+       Converts the block type to an MLIR block type using the given builder.
    is_block()
-       Returns ``True`` (identifies this type as a block type).
+       Returns ``True`` (distinguishes from scalar dtypes).
+   get_block_shapes()
+       Returns the shape tuple of the block.
+   with_element_ty(scalar_ty)
+       Returns a new block_type with the same shape but different element type.
    mangle()
-       Returns a mangled string representation for name mangling.
+       Returns a mangled string representation for type identification.
 
    Notes
    -----
-   ``block_type`` is typically not instantiated directly by users. Instead,
-   tensors with specific shapes are created using operations like
-   :py:func:`tl.full`, :py:func:`tl.arange`, or :py:func:`tl.make_block_ptr`,
-   which infer the ``block_type`` automatically.
-
-   The ``shape`` argument for ``block_type`` uses Python ``int`` values,
-   whereas the ``shape`` attribute of a :py:class:`tensor` object contains
-   :py:class:`constexpr` values.
+   - ``block_type`` is typically used internally by Triton's type system.
+   - Users typically interact with :py:class:`tensor` objects rather than
+     directly constructing ``block_type`` instances.
+   - The shape must be non-empty; 0D block types raise a ``TypeError``.
+   - ``block_type`` inherits from :py:class:`dtype` and implements the dtype
+     interface for type checking and code generation.
 
    Examples
    --------
-   ``block_type`` is implicitly used when creating typed tensors:
+   Querying block type information from a tensor:
 
    .. code-block:: python
 
@@ -66,15 +62,30 @@ block_type
       import triton.language as tl
 
       @triton.jit
-      def kernel(
-          BLOCK_M: tl.constexpr, BLOCK_N: tl.constexpr
-      ):
-          # Create a 2D tensor of float16.
-          # The underlying type is block_type(element_ty=fp16, shape=[BLOCK_M, BLOCK_N])
-          block = tl.full([BLOCK_M, BLOCK_N], 0.0, dtype=tl.float16)
+      def kernel(x_ptr, BLOCK_SIZE: tl.constexpr):
+          x = tl.load(x_ptr + tl.arange(0, BLOCK_SIZE))
+          # Access type information
+          dtype = x.dtype          # scalar element type (e.g., float32)
+          shape = x.shape          # block shape (e.g., (BLOCK_SIZE,))
+          is_block = x.type.is_block()  # True for tensor types
 
-          # Accessing the type properties (mostly internal/advanced usage)
-          # In a JIT context, direct inspection of types is limited,
-          # but conceptually:
-          # block.type == tl.block_type(tl.float16, [BLOCK_M, BLOCK_N])
-          pass
+   Creating a block type directly (advanced usage):
+
+   .. code-block:: python
+
+      import triton.language as tl
+
+      # Create a 1D block type with 32 float32 elements
+      block_ty = tl.block_type(tl.float32, [32])
+      print(block_ty)      # Output: <(32,), float32>
+      print(block_ty.nbytes)  # Output: 128 (32 × 4 bytes)
+      print(block_ty.shape)   # Output: (32,)
+
+   Using ``with_element_ty`` to create a variant with different element type:
+
+   .. code-block:: python
+
+      # Create int16 variant with same shape
+      int16_block = block_ty.with_element_ty(tl.int16)
+      print(int16_block)    # Output: <(32,), int16>
+      print(int16_block.nbytes)  # Output: 64 (32 × 2 bytes)

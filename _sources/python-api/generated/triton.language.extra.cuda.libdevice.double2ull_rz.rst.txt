@@ -1,0 +1,41 @@
+triton.language.extra.cuda.libdevice.double2ull_rz
+===================================================
+
+.. currentmodule:: triton.language.extra.cuda.libdevice
+
+.. function:: double2ull_rz(arg0, _semantic=None)
+
+   Convert double-precision floating-point values to unsigned 64-bit integers with round-towards-zero.
+
+   Parameters
+   ----------
+   arg0 : tensor of fp64
+       Input tensor containing double-precision floating-point values to convert.
+   _semantic : optional
+       Internal semantic argument for Triton compiler. Do not set manually.
+
+   Returns
+   -------
+   tensor of int64
+       Tensor of unsigned 64-bit integers resulting from the conversion.
+
+   Notes
+   -----
+   This function wraps the CUDA libdevice intrinsic ``__nv_double2ull_rz``. The conversion uses round-towards-zero (truncate) rounding mode, equivalent to C-style casting from double to unsigned long long.
+
+   The function is pure (no side effects) and operates element-wise on the input tensor.
+
+   Examples
+   --------
+   .. code-block:: python
+
+      import triton
+      import triton.language as tl
+
+      @triton.jit
+      def kernel(x_ptr, y_ptr, BLOCK_SIZE: tl.constexpr):
+          offsets = tl.arange(0, BLOCK_SIZE)
+          x = tl.load(x_ptr + offsets)
+          # Convert fp64 to int64 with round-towards-zero
+          y = tl.extra.cuda.libdevice.double2ull_rz(x)
+          tl.store(y_ptr + offsets, y)

@@ -1,0 +1,42 @@
+load_result
+===========
+
+Load the CLC (Cluster Launch Coordinator) response from shared memory into registers.
+
+Parameters
+----------
+src : shared_memory_descriptor
+    The int64x2 CLC response buffer in shared memory.
+
+Returns
+-------
+CLCResult
+    Object with ``is_canceled()`` and ``get_first_ctaid(dim)`` methods for
+    querying the CLC response status and CTA ID information.
+
+Notes
+-----
+This function is specific to NVIDIA Blackwell architecture and requires
+a valid CLC response buffer allocated in shared memory. The returned
+``CLCResult`` object provides methods to inspect whether the cluster
+launch was canceled and to retrieve the first CTA ID for a given
+dimension.
+
+Examples
+--------
+.. code-block:: python
+
+    import triton.experimental.gluon as gluon
+    import triton.experimental.gluon.language as ttgl
+
+    @gluon.jit
+    def kernel(clc_buf):
+        # Load CLC response from shared memory
+        result = ttgl.nvidia.blackwell.clc.load_result(clc_buf)
+        
+        # Check if launch was canceled
+        if result.is_canceled():
+            return
+        
+        # Get first CTA ID for dimension 0
+        first_ctaid = result.get_first_ctaid(0)

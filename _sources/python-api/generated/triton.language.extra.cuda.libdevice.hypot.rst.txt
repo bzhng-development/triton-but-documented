@@ -1,0 +1,51 @@
+hypot
+=====
+
+.. currentmodule:: triton.language.extra.cuda.libdevice
+
+.. autofunction:: hypot
+
+Compute the hypotenuse of two values element-wise.
+
+Calculates :math:`\sqrt{arg0^2 + arg1^2}` without unnecessary overflow or underflow.
+
+Parameters
+----------
+arg0 : tensor
+    First input tensor. Must be floating-point type (fp32 or fp64).
+arg1 : tensor
+    Second input tensor. Must be floating-point type (fp32 or fp64).
+    Will be broadcast to match the shape of ``arg0`` if shapes differ.
+_semantic : optional
+    Internal parameter. Do not set manually.
+
+Returns
+-------
+tensor
+    Tensor of the same shape as inputs containing the hypotenuse values.
+    dtype is fp32 if inputs are fp32, fp64 if inputs are fp64.
+
+Notes
+-----
+This function maps to CUDA libdevice functions:
+- ``__nv_hypotf`` for fp32 inputs
+- ``__nv_hypot`` for fp64 inputs
+
+The computation is numerically stable and avoids intermediate overflow
+when squaring large values.
+
+Examples
+--------
+.. code-block:: python
+
+    import triton
+    import triton.language as tl
+
+    @triton.jit
+    def kernel(x_ptr, y_ptr, out_ptr, BLOCK_SIZE: tl.constexpr):
+        pid = tl.program_id(0)
+        offsets = pid * BLOCK_SIZE + tl.arange(0, BLOCK_SIZE)
+        x = tl.load(x_ptr + offsets)
+        y = tl.load(y_ptr + offsets)
+        h = tl.extra.cuda.libdevice.hypot(x, y)
+        tl.store(out_ptr + offsets, h)

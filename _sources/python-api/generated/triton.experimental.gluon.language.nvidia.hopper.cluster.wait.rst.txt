@@ -1,0 +1,51 @@
+gluon.language.nvidia.hopper.cluster.wait
+==========================================
+
+.. currentmodule:: triton.experimental.gluon.language.nvidia.hopper.cluster
+
+.. function:: wait(_semantic=None)
+
+   Wait for all CTAs in the cluster to arrive at the cluster barrier.
+
+   Synchronizes all cooperative thread arrays (CTAs) within a cluster on
+   NVIDIA Hopper GPUs. All CTAs must call this function to ensure
+   cluster-wide synchronization before proceeding.
+
+   Parameters
+   ----------
+   _semantic : GluonSemantic, optional
+       Internal semantic argument injected by the Gluon JIT compiler.
+       Do not pass this argument when calling from user code.
+
+   Returns
+   -------
+   None
+
+   Notes
+   -----
+   This function is only available on NVIDIA Hopper architecture (H100, H200,
+   etc.) and requires the kernel to be launched with multiple CTAs in a
+   cluster. All CTAs in the cluster must reach this barrier before any can
+   proceed.
+
+   This is a hardware-level cluster synchronization primitive. For CTA-local
+   synchronization, use :func:`gluon.language.barrier` with ``cluster=False``.
+
+   Examples
+   --------
+   .. code-block:: python
+
+      import triton.experimental.gluon as gluon
+      import triton.experimental.gluon.language as ttgl
+      from triton.experimental.gluon.language.nvidia.hopper import cluster
+
+      @gluon.jit
+      def kernel(...):
+          # Perform work before cluster synchronization
+          ...
+
+          # Wait for all CTAs in the cluster to arrive
+          cluster.wait()
+
+          # All CTAs continue together after barrier
+          ...

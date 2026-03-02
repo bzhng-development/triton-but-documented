@@ -1,0 +1,33 @@
+driver
+======
+
+.. py:class:: triton.runtime.driver
+
+    Configures and manages the active GPU driver backend.
+
+    Provides abstraction for device management, memory operations, and kernel
+    launching across supported hardware backends (e.g., CUDA, HIP).
+
+    Notes
+    -----
+    The driver instance is initialized lazily upon first access. It handles
+    context creation, stream management, and low-level kernel dispatch.
+    Direct instantiation is discouraged; use the global runtime instance.
+
+    Examples
+    --------
+    Query device information via the driver interface:
+
+    .. code-block:: python
+
+        import triton.runtime
+
+        driver = triton.runtime.driver
+        device_count = driver.get_device_count()
+        print(f"Detected devices: {device_count}")
+
+    Access the default stream for kernel execution:
+
+    .. code-block:: python
+
+        stream = driver.get_stream(0)

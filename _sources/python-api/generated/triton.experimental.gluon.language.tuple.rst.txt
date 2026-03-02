@@ -1,0 +1,113 @@
+tuple
+=====
+
+.. class:: tuple(args, type=None)
+
+   Container for multiple IR values in Triton Gluon kernels.
+
+   Represents a heterogeneous collection of values that exist in the Triton IR,
+   allowing kernels to return or manipulate multiple values as a single unit.
+   Unlike Python tuples, Gluon tuples are first-class IR values with explicit
+   typing.
+
+   Parameters
+   ----------
+   args : Sequence
+       Sequence of values to pack into the tuple. Each element must be a
+       Triton IR value (e.g., :class:`tensor`, :class:`constexpr`, or another
+       :class:`tuple`).
+   type : tuple_type, optional
+       Explicit tuple type specification. If provided, must be a
+       :class:`tuple_type` instance. If ``None``, the type is inferred from
+       ``args``.
+
+   Attributes
+   ----------
+   values : list
+       The underlying IR values stored in the tuple.
+   type : tuple_type
+       The static type of the tuple, including element types and optional
+       field names.
+
+   Methods
+   -------
+   __getitem__(idx)
+       Access elements by integer index or slice. Returns a single value for
+       integer indices, or a new ``tuple`` for slices.
+   __getattr__(name)
+       Access elements by field name if the tuple was created with named
+       fields. Raises :exc:`AttributeError` if the field does not exist.
+   __len__()
+       Return the number of elements in the tuple.
+   __iter__()
+       Iterate over the tuple elements.
+
+   Notes
+   -----
+   Gluon tuples differ from Python tuples in several ways:
+
+   - Elements are Triton IR values, not Python objects.
+   - Tuples can have named fields for structured access.
+   - Tuple operations (concatenation, multiplication) are available but
+     operate on IR values.
+   - Tuples are flattened into IR handles during code generation.
+
+   Named field access requires the tuple to be constructed with a
+   :class:`tuple_type` that specifies field names.
+
+   Examples
+   --------
+   Create a tuple from multiple tensor values:
+
+   .. code-block:: python
+
+      import triton.experimental.gluon as gluon
+      import triton.experimental.gluon.language as ttgl
+
+      @gluon.jit
+      def kernel(...):
+          a = ttgl.load(ptr1)
+          b = ttgl.load(ptr2)
+          t = ttgl.tuple([a, b])
+          # Access by index
+          first = t[0]
+          second = t[1]
+
+   Create a tuple with named fields:
+
+   .. code-block:: python
+
+      @gluon.jit
+      def kernel(...):
+          from triton.language import tuple_type
+          ty = tuple_type([ttl.float32, ttl.float32], fields=["x", "y"])
+          t = ttgl.tuple([val_x, val_y], type=ty)
+          # Access by field name
+          x = t.x
+          y = t.y
+
+   Return multiple values from a kernel helper function:
+
+   .. code-block:: python
+
+      @gluon.jit
+      def compute_pair(a, b):
+          sum_val = a + b
+          prod_val = a * b
+          return ttgl.tuple([sum_val, prod_val])
+
+      @gluon.jit
+      def kernel(...):
+          result = compute_pair(x, y)
+          s = result[0]
+          p = result[1]
+
+   Concatenate tuples:
+
+   .. code-block:: python
+
+      @gluon.jit
+      def kernel(...):
+          t1 = ttgl.tuple([a, b])
+          t2 = ttgl.tuple([c, d])
+          t3 = t1 + t2  # Four elements: a, b, c, d

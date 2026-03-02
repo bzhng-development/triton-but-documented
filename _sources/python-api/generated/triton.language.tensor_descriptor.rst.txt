@@ -1,118 +1,59 @@
 tensor_descriptor
 =================
 
-.. currentmodule:: triton.language
-
 .. class:: tensor_descriptor(handle, shape, strides, block_type)
 
-   A descriptor representing a tensor in global memory, enabling efficient
-   memory operations via hardware acceleration (e.g., TMA on NVIDIA GPUs).
+    A descriptor representing a tensor in global memory.
 
-   This class encapsulates the base pointer, global shape, strides, and block
-   type required to perform load, store, and atomic operations on rectangular
-   tiles of a tensor. It is typically constructed using
-   :func:`triton.language.make_tensor_descriptor`.
+    Parameters
+    ----------
+    handle : ir.value
+        IR handle for the descriptor.
+    shape : list[tensor]
+        List of tensors representing the global shape of the tensor.
+    strides : list[tensor]
+        List of tensors representing the strides of the tensor.
+    block_type : block_type
+        The block type for load/store operations.
 
-   .. note::
-      This class is not instantiated directly by user code. Use
-      :func:`make_tensor_descriptor` to create instances.
+    Notes
+    -----
+    This class is typically not instantiated directly by user code. Instead, use
+    :py:func:`triton.language.make_tensor_descriptor` to create tensor descriptors.
 
-   Parameters
-   ----------
-   handle : ir.value
-      Internal IR handle representing the descriptor object.
-   shape : list[tensor]
-      List of 1D tensors representing the global dimensions of the tensor.
-   strides : list[tensor]
-      List of 1D tensors representing the stride (in elements) for each dimension.
-   block_type : block_type
-      The type of the data block to be loaded or stored (defines element dtype and tile shape).
+    Tensor descriptors enable efficient memory access patterns on GPUs with TMA
+    (Tensor Memory Accelerator) support, such as NVIDIA Hopper architecture.
+    They allow loading and storing blocks of data with hardware-accelerated
+    memory operations.
 
-   Attributes
-   ----------
-   shape : tuple[tensor]
-      The global shape of the tensor.
-   strides : tuple[tensor]
-      The strides of the tensor.
-   dtype : dtype
-      The scalar data type of the tensor elements (derived from ``block_type``).
-   block_shape : tuple[int]
-      The shape of the tile to be transferred (derived from ``block_type``).
+    Currently only 2-5 dimensional tensors are supported.
 
-   Methods
-   -------
-   load(offsets)
-      Load a block of data from the descriptor at the specified offsets.
-   store(offsets, value)
-      Store a block of data to the descriptor at the specified offsets.
-   atomic_add(offsets, value)
-      Perform an atomic add on the descriptor.
-   atomic_max(offsets, value)
-      Perform an atomic max on the descriptor.
-   atomic_min(offsets, value)
-      Perform an atomic min on the descriptor.
-   atomic_and(offsets, value)
-      Perform an atomic and on the descriptor.
-   atomic_or(offsets, value)
-      Perform an atomic or on the descriptor.
-   atomic_xor(offsets, value)
-      Perform an atomic xor on the descriptor.
-   gather(x_offsets, y_offset)
-      Gather data from the descriptor using 2D indexing.
-   scatter(value, x_offsets, y_offset)
-      Scatter data to the descriptor using 2D indexing.
+    Examples
+    --------
+    .. code-block:: python
 
-   Notes
-   -----
-   Tensor descriptors are optimized for transferring rectangular blocks of data
-   between global memory and shared memory. On architectures supporting TMA
-   (Tensor Memory Accelerator), such as NVIDIA Hopper, operations using
-   ``tensor_descriptor`` utilize specialized hardware units for improved
-   throughput and reduced instruction overhead.
+        import triton
+        import triton.language as tl
+        import torch
 
-   Constraints:
-   - Base pointers must be 16-byte aligned.
-   - Strides for leading dimensions must be multiples of 16 bytes.
-   - The last dimension must be contiguous in memory.
-   - Currently supports tensors with 2 to 5 dimensions.
+        @triton.jit
+        def kernel(in_ptr, M, N, BLOCK_M: tl.constexpr, BLOCK_N: tl.constexpr):
+            desc = tl.make_tensor_descriptor(
+                in_ptr,
+                shape=[M, N],
+                strides=[N, 1],
+                block_shape=[BLOCK_M, BLOCK_N],
+            )
 
-   Examples
-   --------
-   Creating a descriptor and performing an in-place absolute value operation:
+            m_offset = tl.program_id(0) * BLOCK_M
+            n_offset = tl.program_id(1) * BLOCK_N
 
-   .. code-block:: python
+            data = desc.load([m_offset, n_offset])
+            # ... process data ...
+            desc.store([m_offset, n_offset], data)
 
-      import torch
-      import triton
-      import triton.language as tl
-
-      @triton.jit
-      def inplace_abs_kernel(in_out_ptr, M, N, M_BLOCK: tl.constexpr, N_BLOCK: tl.constexpr):
-          # Create the tensor descriptor
-          desc = tl.make_tensor_descriptor(
-              in_out_ptr,
-              shape=[M, N],
-              strides=[N, 1],
-              block_shape=[M_BLOCK, N_BLOCK],
-          )
-
-          # Calculate offsets for the current program instance
-          moffset = tl.program_id(0) * M_BLOCK
-          noffset = tl.program_id(1) * N_BLOCK
-
-          # Load a block, compute abs, and store back
-          value = desc.load([moffset, noffset])
-          desc.store([moffset, noffset], tl.abs(value))
-
-      # Host code setup
-      def alloc_fn(size: int, alignment: int, stream: int | None):
-          return torch.empty(size, device="cuda", dtype=torch.int8)
-
-      triton.set_allocator(alloc_fn)
-
-      M, N = 256, 256
-      x = torch.randn(M, N, device="cuda")
-      M_BLOCK, N_BLOCK = 32, 32
-      grid = (M // M_BLOCK, N // N_BLOCK)
-
-      inplace_abs_kernel[grid](x, M, N, M_BLOCK, N_BLOCK)
+        # Usage
+        M, N = 256, 256
+        x = torch.randn(M, N, device="cuda")
+        BLOCK_M, BLOCK_N = 32, 32
+        kernel[(M // BLOCK_M, N // BLOCK_N)](x, M, N, BLOCK_M, BLOCK_N)

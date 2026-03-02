@@ -1,0 +1,65 @@
+triton.runtime.KernelInterface
+==============================
+
+.. class:: triton.runtime.KernelInterface()
+
+   Abstract base class defining the interface for JIT-compiled Triton kernels.
+
+   This class provides the core execution interface for kernels decorated with
+   ``@triton.jit``. It enables kernel launching with grid specification via
+   the ``__getitem__`` syntax and supports warmup runs for performance
+   benchmarking.
+
+   Parameters
+   ----------
+   None
+
+   Attributes
+   ----------
+   run : T
+       Abstract method that executes the kernel. Must be implemented by
+       subclasses.
+
+   Methods
+   -------
+   warmup(*args, grid, **kwargs)
+       Run the kernel in warmup mode to initialize internal state without
+       executing the full kernel launch.
+
+   run(*args, grid, warmup, **kwargs)
+       Execute the kernel with the specified grid configuration.
+
+   __getitem__(grid)
+       Return a callable proxy that memorizes the grid configuration for
+       kernel launch.
+
+   Notes
+   -----
+   This is an abstract base class. Concrete implementations (e.g.,
+   :class:`triton.runtime.JITFunction`) must implement the ``run`` method.
+
+   The typical usage pattern for launching a kernel is::
+
+       kernel[grid](arg1, arg2, ...)
+
+   where ``grid`` specifies the CUDA/synaptic grid dimensions. The
+   ``__getitem__`` method returns a lambda that captures the grid and
+   forwards arguments to ``run``.
+
+   Warmup runs skip actual kernel execution and are used for initialization
+   and benchmarking purposes.
+
+   Examples
+   --------
+   >>> import triton
+   >>> import triton.language as tl
+   >>> @triton.jit
+   ... def my_kernel(x_ptr, y_ptr, n):
+   ...     pid = tl.program_id(0)
+   ...     if pid < n:
+   ...         tl.store(y_ptr + pid, tl.load(x_ptr + pid) * 2.0)
+   >>> grid = (1024,)
+   >>> # Launch kernel with grid specification
+   >>> my_kernel[grid](x, y, n)
+   >>> # Warmup run for benchmarking
+   >>> my_kernel.warmup(x, y, n, grid=grid)

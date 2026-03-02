@@ -1,62 +1,80 @@
-class KernelInterface
-=================
+triton.KernelInterface
+======================
 
-.. currentmodule:: triton
+.. class:: triton.KernelInterface
 
-.. class:: KernelInterface()
+   Abstract base class for Triton kernel callable interface.
 
-   Abstract base class for generic Triton kernel types.
-
-   This class defines the interface for JIT-compiled kernel functions. It
-   provides the mechanism to bind a launch grid to a kernel via the
-   ``__getitem__`` method, enabling the standard launch syntax
-   ``kernel[grid](*args, **kwargs)``.
+   This class provides the interface for JIT-compiled Triton kernels, enabling
+   kernel launch with grid specification via the ``fn[grid](*args)`` syntax.
+   It is typically not instantiated directly but inherited by ``JITFunction``
+   objects returned from ``@triton.jit`` decorated functions.
 
    Parameters
    ----------
    None
-      This is an abstract base class and is not instantiated directly.
+      This is an abstract base class and should not be instantiated directly.
 
    Attributes
    ----------
    run : T
-      Abstract method representing the underlying execution logic. Must be
-      implemented by subclasses (e.g., :class:`triton.JITFunction`).
+      Abstract method that executes the kernel. Must be implemented by subclasses.
 
    Methods
    -------
    warmup(*args, grid, **kwargs)
-      Runs the kernel in warmup mode to trigger compilation without
-      executing the full launch logic. Converts arguments to mock tensors
-      if necessary.
+      Warmup the kernel by running it once with the given grid and arguments.
+      Useful for profiling or initialization.
+
+   run(*args, grid, warmup, **kwargs)
+      Execute the kernel with the specified grid configuration.
+      Abstract method that must be implemented by subclasses.
+
    __getitem__(grid)
-      Returns a callable proxy that memorizes the specified ``grid``.
-      Calling this proxy executes the kernel with the bound grid.
+      Return a callable proxy that memorizes the grid configuration.
+      Enables the ``kernel[grid](*args)`` launch syntax.
 
    Notes
    -----
-   Users typically interact with instances of :class:`triton.JITFunction`,
-   which inherits from ``KernelInterface``. Direct instantiation of
-   ``KernelInterface`` is not supported.
+   The ``KernelInterface`` is designed to work with Python's generic type system.
+   On Python 3.12+, generic classes can declare type parameters directly in the
+   class definition. On older versions, explicit inheritance from ``Generic`` is
+   required.
 
-   The launch workflow involves two steps:
-   1. Bind the grid: ``proxy = kernel[grid]``
-   2. Execute: ``proxy(*args, **kwargs)``
+   The ``__getitem__`` method returns a lambda that captures the grid and calls
+   ``run`` with ``warmup=False``, enabling the convenient kernel launch pattern::
+
+       kernel[grid](arg1, arg2, ...)
+
+   This class is abstract - the ``run`` method raises ``NotImplementedError`` and
+   must be overridden by concrete implementations like ``JITFunction``.
 
    Examples
    --------
-   >>> import triton
-   >>> import triton.language as tl
-   >>>
-   >>> @triton.jit
-   >>> def add_kernel(x_ptr, y_ptr, output_ptr, n):
-   >>>     pid = tl.program_id(axis=0)
-   >>>     if pid < n:
-   >>>         tl.store(output_ptr + pid, tl.load(x_ptr + pid) + tl.load(y_ptr + pid))
-   >>>
-   >>> # Define the grid (e.g., 1D grid of size 1024)
-   >>> grid = (1024,)
-   >>>
-   >>> # Launch the kernel using the KernelInterface syntax
-   >>> # kernel[grid] returns a callable that executes the kernel
-   >>> add_kernel[grid](x_ptr, y_ptr, output_ptr, n=1024)
+   Typical usage through ``@triton.jit`` decorator:
+
+   .. code-block:: python
+
+      import triton
+      import triton.language as tl
+
+      @triton.jit
+      def add_kernel(x_ptr, y_ptr, output_ptr, n):
+          pid = tl.program_id(0)
+          if pid < n:
+              tl.store(output_ptr + pid, tl.load(x_ptr + pid) + tl.load(y_ptr + pid))
+
+      # Launch kernel with grid specification
+      grid = (triton.cdiv(n, 256),)
+      add_kernel[grid](x, y, output, n)
+
+   Direct interaction with the interface (advanced usage):
+
+   .. code-block:: python
+
+      # Access the run method directly
+      kernel = add_kernel
+      kernel.run(*args, grid=grid, warmup=False)
+
+      # Warmup the kernel for profiling
+      kernel.warmup(*args, grid=grid)

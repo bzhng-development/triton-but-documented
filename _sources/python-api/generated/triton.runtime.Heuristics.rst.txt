@@ -1,0 +1,54 @@
+class triton.runtime.Heuristics
+===============================
+
+Decorator wrapper that computes meta-parameter values dynamically before kernel execution.
+
+Parameters
+----------
+fn : JITFunction
+    The underlying JIT-compiled kernel function.
+arg_names : list[str]
+    List of argument names from the kernel function signature.
+values : dict[str, Callable[[dict[str, Any]], Any]]
+    Dictionary mapping meta-parameter names to functions that compute their values.
+    Each function receives a dictionary of kernel arguments and returns the computed value.
+
+Attributes
+----------
+fn : JITFunction
+    The wrapped kernel function.
+values : dict[str, Callable]
+    The heuristic value computation functions.
+arg_names : list[str]
+    The kernel argument names.
+
+Notes
+-----
+This class is typically instantiated via the :func:`triton.heuristics` decorator rather
+than directly. It allows dynamic computation of meta-parameter values based on kernel
+input arguments, providing an alternative to auto-tuning when performance tuning is
+prohibitively expensive or not applicable.
+
+The heuristic functions are called before kernel execution with a dictionary containing
+all positional and keyword arguments. The returned values are injected as keyword
+arguments to the kernel.
+
+Examples
+--------
+.. code-block:: python
+
+    # Compute BLOCK_SIZE as the smallest power-of-2 >= x_size
+    @triton.heuristics(values={'BLOCK_SIZE': lambda args: triton.next_power_of_2(args['x_size'])})
+    @triton.jit
+    def kernel(x_ptr, x_size, BLOCK_SIZE: tl.constexpr):
+        # BLOCK_SIZE is automatically computed based on x_size
+        ...
+
+    # Multiple heuristics can be combined
+    @triton.heuristics(values={
+        'BLOCK_SIZE': lambda args: triton.next_power_of_2(args['n']),
+        'NUM_WARPS': lambda args: 4 if args['n'] < 1024 else 8
+    })
+    @triton.jit
+    def kernel(x_ptr, n, BLOCK_SIZE: tl.constexpr, NUM_WARPS: tl.constexpr):
+        ...

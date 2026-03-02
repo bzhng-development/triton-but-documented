@@ -1,0 +1,41 @@
+float2ull_ru
+============
+
+Convert a floating-point value to an unsigned 64-bit integer with round-up rounding.
+
+Parameters
+----------
+arg0 : tl.tensor
+    Input tensor of float32 values.
+_semantic : optional
+    Internal semantic argument, should not be provided by users.
+
+Returns
+-------
+tl.tensor
+    Tensor of int64 values, converted from float32 with round-up (toward positive
+    infinity) rounding mode.
+
+Notes
+-----
+This function uses the CUDA libdevice intrinsic ``__nv_float2ull_ru`` which converts
+float32 to unsigned 64-bit integer with round toward positive infinity rounding mode.
+The function is marked as pure, meaning it has no side effects.
+
+This is an external function that compiles down to GPU machine code. It must be called
+from within a ``@triton.jit`` decorated kernel function.
+
+Examples
+--------
+.. code-block:: python
+
+    import triton
+    import triton.language as tl
+
+    @triton.jit
+    def kernel(ptr, BLOCK_SIZE: tl.constexpr):
+        offsets = tl.arange(0, BLOCK_SIZE)
+        x = tl.load(ptr + offsets).to(tl.float32)
+        # Convert float32 to uint64 with round-up rounding
+        y = tl.extra.cuda.libdevice.float2ull_ru(x)
+        tl.store(ptr + offsets, y)

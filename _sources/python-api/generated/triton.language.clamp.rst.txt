@@ -1,41 +1,50 @@
-Clamp the input tensor element-wise within the range ``[min, max]``.
+triton.language.clamp
+=====================
 
-Parameters
-----------
-x : Block
-    The input tensor to clamp.
-min : Block
-    The lower bound for clamping.
-max : Block
-    The upper bound for clamping.
-propagate_nan : tl.PropagateNan, optional
-    Whether to propagate NaN values from ``x``. Defaults to ``tl.PropagateNan.NONE``.
-    This parameter only affects NaNs in ``x``; if ``min`` or ``max`` is NaN, the
-    result is undefined.
+.. currentmodule:: triton.language
 
-Returns
--------
-Block
-    A tensor with values clamped to the range ``[min, max]``.
+.. function:: clamp(x, min, max, propagate_nan=PropagateNan.NONE)
 
-Notes
------
-Behavior is undefined when ``min`` > ``max``. If either ``min`` or ``max`` contains
-NaN values, the result is undefined regardless of ``propagate_nan``.
+    Clamps the input tensor ``x`` within the range ``[min, max]``.
 
-bf16 inputs are automatically promoted to fp32 before the operation.
+    Parameters
+    ----------
+    x : Block
+        The input tensor to clamp.
+    min : Block
+        The lower bound for clamping.
+    max : Block
+        The upper bound for clamping.
+    propagate_nan : tl.PropagateNan, optional
+        Whether to propagate NaN values. Applies only to the ``x`` tensor.
+        If either ``min`` or ``max`` is NaN, the result is undefined.
+        Default is ``PropagateNan.NONE``.
 
-See Also
---------
-tl.minimum, tl.maximum, tl.PropagateNan
+    Returns
+    -------
+    Block
+        A tensor with values clamped to the range ``[min, max]``.
 
-Examples
---------
-.. code-block:: python
+    Notes
+    -----
+    Behavior when ``min > max`` is undefined.
 
-    @triton.jit
-    def kernel(x_ptr, out_ptr, BLOCK_SIZE: tl.constexpr):
-        x = tl.load(x_ptr + tl.arange(0, BLOCK_SIZE))
-        # Clamp values to [0.0, 1.0]
-        clipped = tl.clamp(x, 0.0, 1.0)
-        tl.store(out_ptr + tl.arange(0, BLOCK_SIZE), clipped)
+    bfloat16 inputs are automatically promoted to float32 before the operation.
+
+    See Also
+    --------
+    tl.PropagateNan : Enum controlling NaN propagation behavior.
+    tl.minimum : Element-wise minimum operation.
+    tl.maximum : Element-wise maximum operation.
+
+    Examples
+    --------
+    .. code-block:: python
+
+        @triton.jit
+        def clamp_kernel(x_ptr, min_val, max_val, BLOCK_SIZE: tl.constexpr):
+            pid = tl.program_id(0)
+            offsets = pid * BLOCK_SIZE + tl.arange(0, BLOCK_SIZE)
+            x = tl.load(x_ptr + offsets)
+            clamped = tl.clamp(x, min_val, max_val)
+            tl.store(x_ptr + offsets, clamped)

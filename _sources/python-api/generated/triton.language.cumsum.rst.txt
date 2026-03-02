@@ -1,44 +1,43 @@
 cumsum
 ======
 
-.. currentmodule:: triton.language
+cumsum
+------
 
-.. function:: cumsum(input, axis=0, reverse=False, dtype=None)
+Compute the cumulative sum of the elements along a given axis.
 
-   Returns the cumulative sum of all elements in the :code:`input` tensor along the provided :code:`axis`.
+Parameters
+----------
+input : tensor
+    The input tensor.
+axis : int, optional
+    The axis along which the cumulative sum is computed. Default is 0.
+reverse : bool, optional
+    If ``True``, the scan is performed in the reverse direction. Default is ``False``.
+dtype : dtype, optional
+    The desired data type of the returned tensor. If specified, the input tensor is cast to ``dtype`` before the operation. If not specified, small integer types (< 32 bits) are upcasted to prevent overflow. ``tl.bfloat16`` inputs are automatically promoted to ``tl.float32``.
 
-   Parameters
-   ----------
-   input : tensor
-       The input values.
-   axis : int, optional
-       The dimension along which the scan should be done. Default is 0.
-   reverse : bool, optional
-       If True, the scan is performed in the reverse direction. Default is False.
-   dtype : dtype, optional
-       The desired data type of the returned tensor. If specified, the input tensor is cast to :code:`dtype` before the operation is performed. If not specified, small integer types (< 32 bits) are upcasted to prevent overflow. Note that :code:`tl.bfloat16` inputs are automatically promoted to :code:`tl.float32`.
+Returns
+-------
+tensor
+    A tensor of the same shape as ``input`` containing the cumulative sums.
 
-   Returns
-   -------
-   tensor
-       A tensor containing the cumulative sums.
+Notes
+-----
+This function can also be called as a member function on ``tensor``, as ``x.cumsum(...)`` instead of ``cumsum(x, ...)``.
 
-   Notes
-   -----
-   This function can also be called as a member function on :py:class:`tensor`,
-   as :code:`x.cumsum(...)` instead of :code:`cumsum(x, ...)`.
+Examples
+--------
+.. code-block:: python
 
-   Examples
-   --------
-   .. code-block:: python
+    import triton.language as tl
 
-      import triton
-      import triton.language as tl
+    # Basic usage
+    x = tl.arange(0, 8)
+    y = tl.cumsum(x)  # [0, 1, 3, 6, 10, 15, 21, 28]
 
-      @triton.jit
-      def kernel(X, Y, BLOCK_SIZE: tl.constexpr):
-          pid = tl.program_id(0)
-          offset = pid * BLOCK_SIZE
-          x = tl.load(X + offset + tl.arange(0, BLOCK_SIZE))
-          y = tl.cumsum(x, axis=0)
-          tl.store(Y + offset + tl.arange(0, BLOCK_SIZE), y)
+    # Member function usage
+    z = x.cumsum()
+
+    # Reverse cumulative sum
+    r = tl.cumsum(x, reverse=True)

@@ -1,47 +1,24 @@
-triton.language.int16
-=====================
+int16
+=====
 
 16-bit signed integer data type.
 
-Parameters
-----------
-
-None
-
-Returns
--------
-
-dtype
-    A ``triton.language.dtype`` instance representing 16-bit signed integers.
-
-Notes
------
-
-*   Corresponds to ``int16`` in NumPy and ``i16`` in LLVM IR.
-*   Values range from -32,768 to 32,767.
-*   Use this type in pointer type constructors (e.g., ``tl.pointer_type(tl.int16, 1)``) or tensor type definitions to specify memory layout and computation precision.
+This dtype represents a signed integer with a width of 16 bits. It is
+suitable for operations where memory bandwidth is critical and the
+dynamic range of values fits within ``[-32768, 32767]``.
 
 Examples
 --------
+Use ``tl.int16`` to specify data types in kernel operations:
 
 .. code-block:: python
 
-    import triton
     import triton.language as tl
 
     @triton.jit
-    def kernel(ptr, n: tl.constexpr):
-        # Define a pointer to 16-bit signed integers in global memory (address space 1)
-        int16_ptr = tl.make_block_ptr(
-            base=ptr,
-            shape=(n,),
-            strides=(1,),
-            offsets=(0,),
-            block_shape=(n,),
-            order=(0,),
-        )
-        # Load data as int16
-        data = tl.load(int16_ptr).to(tl.int16)
-        # Perform arithmetic in 16-bit precision
-        result = data + 1
-        tl.store(int16_ptr, result)
+    def kernel(ptr, n):
+        pid = tl.program_id(0)
+        # Create a 16-bit integer constant
+        value = tl.full((1,), 100, dtype=tl.int16)
+        # Store as int16
+        tl.store(ptr + pid, value)

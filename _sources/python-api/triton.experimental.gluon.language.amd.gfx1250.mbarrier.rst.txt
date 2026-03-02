@@ -1,0 +1,16 @@
+triton.experimental.gluon.language.amd.gfx1250.mbarrier
+=======================================================
+
+.. currentmodule:: triton.experimental.gluon.language.amd.gfx1250.mbarrier
+
+Memory Barriers
+---------------
+
+.. autosummary::
+    :toctree: generated
+    :nosignatures:
+
+    MBarrierLayout
+    arrive
+    init
+    wait

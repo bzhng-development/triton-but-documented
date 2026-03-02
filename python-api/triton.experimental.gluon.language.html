@@ -1,0 +1,659 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>triton.experimental.gluon.language &mdash; Triton  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/custom.css" />
+
+  
+      <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="AutoLayout" href="generated/triton.experimental.gluon.language.AutoLayout.html" />
+    <link rel="prev" title="must_use_result" href="generated/triton.experimental.gluon.must_use_result.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            Triton
+              <img src="https://cdn.openai.com/triton/assets/triton-logo.png" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../getting-started/installation.html">Installation</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Python API</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="triton.html">triton</a></li>
+<li class="toctree-l1"><a class="reference internal" href="triton.language.html">triton.language</a></li>
+<li class="toctree-l1"><a class="reference internal" href="triton.testing.html">triton.testing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="triton-semantics.html">Triton Semantics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="triton.language.extra.cuda.html">triton.language.extra.cuda</a></li>
+<li class="toctree-l1"><a class="reference internal" href="triton.language.extra.cuda.libdevice.html">triton.language.extra.cuda.libdevice</a></li>
+<li class="toctree-l1"><a class="reference internal" href="triton.runtime.html">triton.runtime</a></li>
+<li class="toctree-l1"><a class="reference internal" href="triton.tools.html">triton.tools</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Gluon (Experimental) API</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="triton.experimental.gluon.html">triton.experimental.gluon</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">triton.experimental.gluon.language</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#language-primitives">Language Primitives</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="generated/triton.experimental.gluon.language.AutoLayout.html">AutoLayout</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/triton.experimental.gluon.language.BlockedLayout.html">BlockedLayout</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/triton.experimental.gluon.language.CoalescedLayout.html">class triton.experimental.gluon.language.CoalescedLayout</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/triton.experimental.gluon.language.DistributedLinearLayout.html">DistributedLinearLayout</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/triton.experimental.gluon.language.DotOperandLayout.html">class triton.experimental.gluon.language.DotOperandLayout</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/triton.experimental.gluon.language.NVMMADistributedLayout.html">class triton.experimental.gluon.language.NVMMADistributedLayout</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/triton.experimental.gluon.language.NVMMASharedLayout.html">class triton.experimental.gluon.language.NVMMASharedLayout</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/triton.experimental.gluon.language.PaddedSharedLayout.html">class PaddedSharedLayout</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/triton.experimental.gluon.language.SharedLinearLayout.html">SharedLinearLayout</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/triton.experimental.gluon.language.SliceLayout.html">class triton.experimental.gluon.language.SliceLayout</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/triton.experimental.gluon.language.SwizzledSharedLayout.html">class triton.experimental.gluon.language.SwizzledSharedLayout</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/triton.experimental.gluon.language.abs.html">abs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/triton.experimental.gluon.language.add.html">add</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/triton.experimental.gluon.language.allocate_shared_memory.html">allocate_shared_memory</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/triton.experimental.gluon.language.arange.html">arange</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/triton.experimental.gluon.language.associative_scan.html">associative_scan</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/triton.experimental.gluon.language.assume.html">assume</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/triton.experimental.gluon.language.atomic_add.html">atomic_add</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/triton.experimental.gluon.language.atomic_and.html">atomic_and</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/triton.experimental.gluon.language.atomic_cas.html">atomic_cas</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/triton.experimental.gluon.language.atomic_max.html">atomic_max</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/triton.experimental.gluon.language.atomic_min.html">atomic_min</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/triton.experimental.gluon.language.atomic_or.html">atomic_or</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/triton.experimental.gluon.language.atomic_xchg.html">atomic_xchg</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/triton.experimental.gluon.language.atomic_xor.html">atomic_xor</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/triton.experimental.gluon.language.bank_conflicts.html">bank_conflicts</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/triton.experimental.gluon.language.barrier.html">gluon.language.barrier</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/triton.experimental.gluon.language.base_type.html">base_type</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/triton.experimental.gluon.language.base_value.html">base_value</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/triton.experimental.gluon.language.bfloat16.html">bfloat16</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/triton.experimental.gluon.language.block_type.html">block_type</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/triton.experimental.gluon.language.broadcast.html">broadcast</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/triton.experimental.gluon.language.cast.html">cast</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/triton.experimental.gluon.language.cdiv.html">cdiv</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/triton.experimental.gluon.language.ceil.html">ceil</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/triton.experimental.gluon.language.constexpr.html">constexpr</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/triton.experimental.gluon.language.convert_layout.html">convert_layout</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/triton.experimental.gluon.language.cos.html">cos</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/triton.experimental.gluon.language.device_assert.html">device_assert</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/triton.experimental.gluon.language.device_print.html">device_print</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/triton.experimental.gluon.language.distributed_type.html">distributed_type</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/triton.experimental.gluon.language.div_rn.html">div_rn</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/triton.experimental.gluon.language.dot_fma.html">dot_fma</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/triton.experimental.gluon.language.dtype.html">dtype</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/triton.experimental.gluon.language.erf.html">erf</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/triton.experimental.gluon.language.exp.html">exp</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/triton.experimental.gluon.language.exp2.html">exp2</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/triton.experimental.gluon.language.expand_dims.html">expand_dims</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/triton.experimental.gluon.language.fdiv.html">fdiv</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/triton.experimental.gluon.language.float16.html">float16</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/triton.experimental.gluon.language.float32.html">float32</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/triton.experimental.gluon.language.float64.html">float64</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/triton.experimental.gluon.language.float8e4b15.html">float8e4b15</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/triton.experimental.gluon.language.float8e4b8.html">float8e4b8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/triton.experimental.gluon.language.float8e4nv.html">float8e4nv</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/triton.experimental.gluon.language.float8e5.html">float8e5</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/triton.experimental.gluon.language.float8e5b16.html">float8e5b16</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/triton.experimental.gluon.language.floor.html">floor</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/triton.experimental.gluon.language.fma.html">fma</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/triton.experimental.gluon.language.fp4_to_fp.html">fp4_to_fp</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/triton.experimental.gluon.language.full.html">full</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/triton.experimental.gluon.language.full_like.html">full_like</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/triton.experimental.gluon.language.gather.html">gather</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/triton.experimental.gluon.language.histogram.html">histogram</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/triton.experimental.gluon.language.inline_asm_elementwise.html">inline_asm_elementwise</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/triton.experimental.gluon.language.int1.html">int1</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/triton.experimental.gluon.language.int16.html">int16</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/triton.experimental.gluon.language.int32.html">int32</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/triton.experimental.gluon.language.int64.html">int64</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/triton.experimental.gluon.language.int8.html">int8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/triton.experimental.gluon.language.join.html">join</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/triton.experimental.gluon.language.load.html">load</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/triton.experimental.gluon.language.log.html">log</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/triton.experimental.gluon.language.log2.html">log2</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/triton.experimental.gluon.language.map_elementwise.html">map_elementwise</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/triton.experimental.gluon.language.max.html">ttgl.max</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/triton.experimental.gluon.language.max_constancy.html">max_constancy</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/triton.experimental.gluon.language.max_contiguous.html">max_contiguous</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/triton.experimental.gluon.language.maximum.html">maximum</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/triton.experimental.gluon.language.min.html">min</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/triton.experimental.gluon.language.minimum.html">minimum</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/triton.experimental.gluon.language.mul.html">mul</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/triton.experimental.gluon.language.multiple_of.html">multiple_of</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/triton.experimental.gluon.language.num_ctas.html">num_ctas</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/triton.experimental.gluon.language.num_programs.html">num_programs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/triton.experimental.gluon.language.num_warps.html">num_warps</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/triton.experimental.gluon.language.permute.html">permute</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/triton.experimental.gluon.language.pointer_type.html">pointer_type</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/triton.experimental.gluon.language.program_id.html">program_id</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/triton.experimental.gluon.language.ravel.html">ravel</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/triton.experimental.gluon.language.reduce.html">reduce</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/triton.experimental.gluon.language.reduce_or.html">reduce_or</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/triton.experimental.gluon.language.reshape.html">reshape</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/triton.experimental.gluon.language.rsqrt.html">rsqrt</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/triton.experimental.gluon.language.set_auto_layout.html">set_auto_layout</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/triton.experimental.gluon.language.shared_memory_descriptor.html">shared_memory_descriptor</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/triton.experimental.gluon.language.shared_memory_descriptor_type.html">shared_memory_descriptor_type</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/triton.experimental.gluon.language.sin.html">sin</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/triton.experimental.gluon.language.split.html">split</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/triton.experimental.gluon.language.sqrt.html">sqrt</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/triton.experimental.gluon.language.sqrt_rn.html">sqrt_rn</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/triton.experimental.gluon.language.static_assert.html">static_assert</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/triton.experimental.gluon.language.static_print.html">static_print</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/triton.experimental.gluon.language.static_range.html">static_range</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/triton.experimental.gluon.language.store.html">store</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/triton.experimental.gluon.language.sub.html">sub</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/triton.experimental.gluon.language.sum.html">sum</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/triton.experimental.gluon.language.tensor.html">class tensor</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/triton.experimental.gluon.language.to_linear_layout.html">to_linear_layout</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/triton.experimental.gluon.language.to_tensor.html">to_tensor</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/triton.experimental.gluon.language.tuple.html">tuple</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/triton.experimental.gluon.language.tuple_type.html">tuple_type</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/triton.experimental.gluon.language.uint16.html">uint16</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/triton.experimental.gluon.language.uint32.html">uint32</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/triton.experimental.gluon.language.uint64.html">uint64</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/triton.experimental.gluon.language.uint8.html">uint8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/triton.experimental.gluon.language.umulhi.html">umulhi</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/triton.experimental.gluon.language.void.html">void</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/triton.experimental.gluon.language.warp_specialize.html">warp_specialize</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/triton.experimental.gluon.language.where.html">ttgl.where</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/triton.experimental.gluon.language.xor_sum.html">xor_sum</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/triton.experimental.gluon.language.zeros.html">zeros</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/triton.experimental.gluon.language.zeros_like.html">zeros_like</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="triton.experimental.gluon.language.nvidia.ampere.html">triton.experimental.gluon.language.nvidia.ampere</a></li>
+<li class="toctree-l1"><a class="reference internal" href="triton.experimental.gluon.language.nvidia.ampere.async_copy.html">triton.experimental.gluon.language.nvidia.ampere.async_copy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="triton.experimental.gluon.language.nvidia.ampere.mbarrier.html">triton.experimental.gluon.language.nvidia.ampere.mbarrier</a></li>
+<li class="toctree-l1"><a class="reference internal" href="triton.experimental.gluon.language.nvidia.hopper.html">triton.experimental.gluon.language.nvidia.hopper</a></li>
+<li class="toctree-l1"><a class="reference internal" href="triton.experimental.gluon.language.nvidia.hopper.tma.html">triton.experimental.gluon.language.nvidia.hopper.tma</a></li>
+<li class="toctree-l1"><a class="reference internal" href="triton.experimental.gluon.language.nvidia.hopper.mbarrier.html">triton.experimental.gluon.language.nvidia.hopper.mbarrier</a></li>
+<li class="toctree-l1"><a class="reference internal" href="triton.experimental.gluon.language.nvidia.hopper.cluster.html">triton.experimental.gluon.language.nvidia.hopper.cluster</a></li>
+<li class="toctree-l1"><a class="reference internal" href="triton.experimental.gluon.language.nvidia.blackwell.html">triton.experimental.gluon.language.nvidia.blackwell</a></li>
+<li class="toctree-l1"><a class="reference internal" href="triton.experimental.gluon.language.nvidia.blackwell.tma.html">triton.experimental.gluon.language.nvidia.blackwell.tma</a></li>
+<li class="toctree-l1"><a class="reference internal" href="triton.experimental.gluon.language.nvidia.blackwell.clc.html">triton.experimental.gluon.language.nvidia.blackwell.clc</a></li>
+<li class="toctree-l1"><a class="reference internal" href="triton.experimental.gluon.language.amd.html">triton.experimental.gluon.language.amd</a></li>
+<li class="toctree-l1"><a class="reference internal" href="triton.experimental.gluon.language.amd.gfx1250.html">triton.experimental.gluon.language.amd.gfx1250</a></li>
+<li class="toctree-l1"><a class="reference internal" href="triton.experimental.gluon.language.amd.gfx1250.async_copy.html">triton.experimental.gluon.language.amd.gfx1250.async_copy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="triton.experimental.gluon.language.amd.gfx1250.mbarrier.html">triton.experimental.gluon.language.amd.gfx1250.mbarrier</a></li>
+<li class="toctree-l1"><a class="reference internal" href="triton.experimental.gluon.language.amd.gfx1250.cluster.html">triton.experimental.gluon.language.amd.gfx1250.cluster</a></li>
+<li class="toctree-l1"><a class="reference internal" href="triton.experimental.gluon.language.amd.gfx1250.tdm.html">triton.experimental.gluon.language.amd.gfx1250.tdm</a></li>
+<li class="toctree-l1"><a class="reference internal" href="triton.experimental.gluon.language.amd.cdna3.html">triton.experimental.gluon.language.amd.cdna3</a></li>
+<li class="toctree-l1"><a class="reference internal" href="triton.experimental.gluon.language.amd.cdna4.html">triton.experimental.gluon.language.amd.cdna4</a></li>
+<li class="toctree-l1"><a class="reference internal" href="triton.experimental.gluon.language.amd.rdna3.html">triton.experimental.gluon.language.amd.rdna3</a></li>
+<li class="toctree-l1"><a class="reference internal" href="triton.experimental.gluon.language.amd.rdna4.html">triton.experimental.gluon.language.amd.rdna4</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Triton MLIR Dialects</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../dialects/dialects.html">Triton MLIR Dialects and Ops</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Programming Guide</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../programming-guide/chapter-1/introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../programming-guide/chapter-2/related-work.html">Related Work</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../programming-guide/chapter-3/debugging.html">Debugging Triton</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Triton</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">triton.experimental.gluon.language</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/python-api/triton.experimental.gluon.language.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="triton-experimental-gluon-language">
+<h1>triton.experimental.gluon.language<a class="headerlink" href="#triton-experimental-gluon-language" title="Link to this heading">¶</a></h1>
+<section id="language-primitives">
+<h2>Language Primitives<a class="headerlink" href="#language-primitives" title="Link to this heading">¶</a></h2>
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">AutoLayout</span></code></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">BlockedLayout</span></code></p></td>
+<td><p>Represents a blocked layout, partitioning a tensor across threads, warps, and CTAs.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">CoalescedLayout</span></code></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/triton.experimental.gluon.language.DistributedLinearLayout.html#triton.experimental.gluon.language.DistributedLinearLayout" title="triton.experimental.gluon.language.DistributedLinearLayout"><code class="xref py py-obj docutils literal notranslate"><span class="pre">DistributedLinearLayout</span></code></a></p></td>
+<td><p>Represents a linear distributed layout with explicit bases at register, lane, warp, and block levels.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">DotOperandLayout</span></code></p></td>
+<td><p>Represents a layout for a dot operand.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">NVMMADistributedLayout</span></code></p></td>
+<td><p>Represents a layout for NVIDIA MMA (tensor core) operations.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">NVMMASharedLayout</span></code></p></td>
+<td><p>Represents a layout for shared memory suitable for NVIDIA MMA operations.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/triton.experimental.gluon.language.PaddedSharedLayout.html#triton.experimental.gluon.language.PaddedSharedLayout" title="triton.experimental.gluon.language.PaddedSharedLayout"><code class="xref py py-obj docutils literal notranslate"><span class="pre">PaddedSharedLayout</span></code></a></p></td>
+<td><p>Represents a layout for the access to shared memory.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">SharedLinearLayout</span></code></p></td>
+<td><p>Represents a shared memory layout defined via an explicit LinearLayout.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">SliceLayout</span></code></p></td>
+<td><p>Represents a layout corresponding to slicing a distributed tensor along one dimension.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">SwizzledSharedLayout</span></code></p></td>
+<td><p>Represents a generic swizzled shared memory layout.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">abs</span></code></p></td>
+<td><p>Computes the element-wise absolute value of <code class="code docutils literal notranslate"><span class="pre">x</span></code>.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">add</span></code></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">allocate_shared_memory</span></code></p></td>
+<td><p>Allocate shared memory for a tensor with the given element type, shape, and layout.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/triton.experimental.gluon.language.arange.html#triton.experimental.gluon.language.arange" title="triton.experimental.gluon.language.arange"><code class="xref py py-obj docutils literal notranslate"><span class="pre">arange</span></code></a></p></td>
+<td><p>Generate a sequence tensor with values in [start, end) using a specified layout.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/triton.experimental.gluon.language.associative_scan.html#triton.experimental.gluon.language.associative_scan" title="triton.experimental.gluon.language.associative_scan"><code class="xref py py-obj docutils literal notranslate"><span class="pre">associative_scan</span></code></a></p></td>
+<td><p>Applies the combine_fn to each elements with a carry in <code class="code docutils literal notranslate"><span class="pre">input</span></code> tensors along the provided <code class="code docutils literal notranslate"><span class="pre">axis</span></code> and update the carry</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">assume</span></code></p></td>
+<td><p>Allow compiler to assume the <code class="code docutils literal notranslate"><span class="pre">cond</span></code> is True.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/triton.experimental.gluon.language.atomic_add.html#triton.experimental.gluon.language.atomic_add" title="triton.experimental.gluon.language.atomic_add"><code class="xref py py-obj docutils literal notranslate"><span class="pre">atomic_add</span></code></a></p></td>
+<td><p>Performs an atomic add at the memory location specified by <code class="code docutils literal notranslate"><span class="pre">pointer</span></code>.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/triton.experimental.gluon.language.atomic_and.html#triton.experimental.gluon.language.atomic_and" title="triton.experimental.gluon.language.atomic_and"><code class="xref py py-obj docutils literal notranslate"><span class="pre">atomic_and</span></code></a></p></td>
+<td><p>Performs an atomic logical and at the memory location specified by <code class="code docutils literal notranslate"><span class="pre">pointer</span></code>.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">atomic_cas</span></code></p></td>
+<td><p>Performs an atomic compare-and-swap at the memory location specified by <code class="code docutils literal notranslate"><span class="pre">pointer</span></code>.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/triton.experimental.gluon.language.atomic_max.html#triton.experimental.gluon.language.atomic_max" title="triton.experimental.gluon.language.atomic_max"><code class="xref py py-obj docutils literal notranslate"><span class="pre">atomic_max</span></code></a></p></td>
+<td><p>Performs an atomic max at the memory location specified by <code class="code docutils literal notranslate"><span class="pre">pointer</span></code>.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/triton.experimental.gluon.language.atomic_min.html#triton.experimental.gluon.language.atomic_min" title="triton.experimental.gluon.language.atomic_min"><code class="xref py py-obj docutils literal notranslate"><span class="pre">atomic_min</span></code></a></p></td>
+<td><p>Performs an atomic min at the memory location specified by <code class="code docutils literal notranslate"><span class="pre">pointer</span></code>.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/triton.experimental.gluon.language.atomic_or.html#triton.experimental.gluon.language.atomic_or" title="triton.experimental.gluon.language.atomic_or"><code class="xref py py-obj docutils literal notranslate"><span class="pre">atomic_or</span></code></a></p></td>
+<td><p>Performs an atomic logical or at the memory location specified by <code class="code docutils literal notranslate"><span class="pre">pointer</span></code>.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/triton.experimental.gluon.language.atomic_xchg.html#triton.experimental.gluon.language.atomic_xchg" title="triton.experimental.gluon.language.atomic_xchg"><code class="xref py py-obj docutils literal notranslate"><span class="pre">atomic_xchg</span></code></a></p></td>
+<td><p>Performs an atomic exchange at the memory location specified by <code class="code docutils literal notranslate"><span class="pre">pointer</span></code>.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/triton.experimental.gluon.language.atomic_xor.html#triton.experimental.gluon.language.atomic_xor" title="triton.experimental.gluon.language.atomic_xor"><code class="xref py py-obj docutils literal notranslate"><span class="pre">atomic_xor</span></code></a></p></td>
+<td><p>Performs an atomic logical xor at the memory location specified by <code class="code docutils literal notranslate"><span class="pre">pointer</span></code>.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">bank_conflicts</span></code></p></td>
+<td><p>Count the bank conflicts per wavefront of each instruction generated when reading/writing the distributed tensor from/to the shared memory descriptor using ld.shared/st.shared instructions.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/triton.experimental.gluon.language.barrier.html#triton.experimental.gluon.language.barrier" title="triton.experimental.gluon.language.barrier"><code class="xref py py-obj docutils literal notranslate"><span class="pre">barrier</span></code></a></p></td>
+<td><p>Insert a barrier to synchronize threads within a CTA, or across a cluster.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/triton.experimental.gluon.language.base_type.html#triton.experimental.gluon.language.base_type" title="triton.experimental.gluon.language.base_type"><code class="xref py py-obj docutils literal notranslate"><span class="pre">base_type</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">base_value</span></code></p></td>
+<td><p>Base class of values that exist in the triton IR (i.e. not constexprs).</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/triton.experimental.gluon.language.bfloat16.html#triton.experimental.gluon.language.bfloat16" title="triton.experimental.gluon.language.bfloat16"><code class="xref py py-obj docutils literal notranslate"><span class="pre">bfloat16</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">block_type</span></code></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">broadcast</span></code></p></td>
+<td><p>Tries to broadcast the two given blocks to a common compatible shape.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">cast</span></code></p></td>
+<td><p>Casts a tensor to the given <code class="code docutils literal notranslate"><span class="pre">dtype</span></code>.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">cdiv</span></code></p></td>
+<td><p>Computes the ceiling division of <code class="code docutils literal notranslate"><span class="pre">x</span></code> by <code class="code docutils literal notranslate"><span class="pre">div</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/triton.experimental.gluon.language.ceil.html#triton.experimental.gluon.language.ceil" title="triton.experimental.gluon.language.ceil"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ceil</span></code></a></p></td>
+<td><p>Computes the element-wise ceil of <code class="code docutils literal notranslate"><span class="pre">x</span></code>.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">constexpr</span></code></p></td>
+<td><p>This class is used to store a value that is known at compile-time.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">convert_layout</span></code></p></td>
+<td><p>Convert a tensor to a different distributed layout.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/triton.experimental.gluon.language.cos.html#triton.experimental.gluon.language.cos" title="triton.experimental.gluon.language.cos"><code class="xref py py-obj docutils literal notranslate"><span class="pre">cos</span></code></a></p></td>
+<td><p>Computes the element-wise cosine of <code class="code docutils literal notranslate"><span class="pre">x</span></code>.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/triton.experimental.gluon.language.device_assert.html#triton.experimental.gluon.language.device_assert" title="triton.experimental.gluon.language.device_assert"><code class="xref py py-obj docutils literal notranslate"><span class="pre">device_assert</span></code></a></p></td>
+<td><p>Assert the condition at runtime from the device.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">device_print</span></code></p></td>
+<td><p>Print the values at runtime from the device.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">distributed_type</span></code></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/triton.experimental.gluon.language.div_rn.html#triton.experimental.gluon.language.div_rn" title="triton.experimental.gluon.language.div_rn"><code class="xref py py-obj docutils literal notranslate"><span class="pre">div_rn</span></code></a></p></td>
+<td><p>Computes the element-wise precise division (rounding to nearest wrt the IEEE standard) of <code class="code docutils literal notranslate"><span class="pre">x</span></code> and <code class="code docutils literal notranslate"><span class="pre">y</span></code>.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/triton.experimental.gluon.language.dot_fma.html#triton.experimental.gluon.language.dot_fma" title="triton.experimental.gluon.language.dot_fma"><code class="xref py py-obj docutils literal notranslate"><span class="pre">dot_fma</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">dtype</span></code></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/triton.experimental.gluon.language.erf.html#triton.experimental.gluon.language.erf" title="triton.experimental.gluon.language.erf"><code class="xref py py-obj docutils literal notranslate"><span class="pre">erf</span></code></a></p></td>
+<td><p>Computes the element-wise error function of <code class="code docutils literal notranslate"><span class="pre">x</span></code>.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">exp</span></code></p></td>
+<td><p>Computes the element-wise exponential of <code class="code docutils literal notranslate"><span class="pre">x</span></code>.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/triton.experimental.gluon.language.exp2.html#triton.experimental.gluon.language.exp2" title="triton.experimental.gluon.language.exp2"><code class="xref py py-obj docutils literal notranslate"><span class="pre">exp2</span></code></a></p></td>
+<td><p>Computes the element-wise exponential (base 2) of <code class="code docutils literal notranslate"><span class="pre">x</span></code>.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/triton.experimental.gluon.language.expand_dims.html#triton.experimental.gluon.language.expand_dims" title="triton.experimental.gluon.language.expand_dims"><code class="xref py py-obj docutils literal notranslate"><span class="pre">expand_dims</span></code></a></p></td>
+<td><p>Expand the shape of a tensor, by inserting new length-1 dimensions.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/triton.experimental.gluon.language.fdiv.html#triton.experimental.gluon.language.fdiv" title="triton.experimental.gluon.language.fdiv"><code class="xref py py-obj docutils literal notranslate"><span class="pre">fdiv</span></code></a></p></td>
+<td><p>Computes the element-wise fast division of <code class="code docutils literal notranslate"><span class="pre">x</span></code> and <code class="code docutils literal notranslate"><span class="pre">y</span></code>.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/triton.experimental.gluon.language.float16.html#triton.experimental.gluon.language.float16" title="triton.experimental.gluon.language.float16"><code class="xref py py-obj docutils literal notranslate"><span class="pre">float16</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">float32</span></code></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/triton.experimental.gluon.language.float64.html#triton.experimental.gluon.language.float64" title="triton.experimental.gluon.language.float64"><code class="xref py py-obj docutils literal notranslate"><span class="pre">float64</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">float8e4b15</span></code></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">float8e4b8</span></code></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/triton.experimental.gluon.language.float8e4nv.html#triton.experimental.gluon.language.float8e4nv" title="triton.experimental.gluon.language.float8e4nv"><code class="xref py py-obj docutils literal notranslate"><span class="pre">float8e4nv</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">float8e5</span></code></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/triton.experimental.gluon.language.float8e5b16.html#triton.experimental.gluon.language.float8e5b16" title="triton.experimental.gluon.language.float8e5b16"><code class="xref py py-obj docutils literal notranslate"><span class="pre">float8e5b16</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">floor</span></code></p></td>
+<td><p>Computes the element-wise floor of <code class="code docutils literal notranslate"><span class="pre">x</span></code>.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/triton.experimental.gluon.language.fma.html#triton.experimental.gluon.language.fma" title="triton.experimental.gluon.language.fma"><code class="xref py py-obj docutils literal notranslate"><span class="pre">fma</span></code></a></p></td>
+<td><p>Computes the element-wise fused multiply-add of <code class="code docutils literal notranslate"><span class="pre">x</span></code>, <code class="code docutils literal notranslate"><span class="pre">y</span></code>, and <code class="code docutils literal notranslate"><span class="pre">z</span></code>.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/triton.experimental.gluon.language.fp4_to_fp.html#triton.experimental.gluon.language.fp4_to_fp" title="triton.experimental.gluon.language.fp4_to_fp"><code class="xref py py-obj docutils literal notranslate"><span class="pre">fp4_to_fp</span></code></a></p></td>
+<td><p>Upcast a tensor from fp4 (e2m1) to another floating point type.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/triton.experimental.gluon.language.full.html#triton.experimental.gluon.language.full" title="triton.experimental.gluon.language.full"><code class="xref py py-obj docutils literal notranslate"><span class="pre">full</span></code></a></p></td>
+<td><p>Create a tensor filled with a scalar value, with specified shape, dtype, and layout.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">full_like</span></code></p></td>
+<td><p>Create a tensor with the same properties as a given tensor, filled with a specified value.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">gather</span></code></p></td>
+<td><p>Gather from a tensor along a given dimension.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">histogram</span></code></p></td>
+<td><p>Compute a histogram of a 1D integer tensor.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/triton.experimental.gluon.language.inline_asm_elementwise.html#triton.experimental.gluon.language.inline_asm_elementwise" title="triton.experimental.gluon.language.inline_asm_elementwise"><code class="xref py py-obj docutils literal notranslate"><span class="pre">inline_asm_elementwise</span></code></a></p></td>
+<td><p>Execute inline assembly over a tensor.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/triton.experimental.gluon.language.int1.html#triton.experimental.gluon.language.int1" title="triton.experimental.gluon.language.int1"><code class="xref py py-obj docutils literal notranslate"><span class="pre">int1</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/triton.experimental.gluon.language.int16.html#triton.experimental.gluon.language.int16" title="triton.experimental.gluon.language.int16"><code class="xref py py-obj docutils literal notranslate"><span class="pre">int16</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">int32</span></code></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/triton.experimental.gluon.language.int64.html#triton.experimental.gluon.language.int64" title="triton.experimental.gluon.language.int64"><code class="xref py py-obj docutils literal notranslate"><span class="pre">int64</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">int8</span></code></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">join</span></code></p></td>
+<td><p>Join the given tensors in a new, minor dimension.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/triton.experimental.gluon.language.load.html#triton.experimental.gluon.language.load" title="triton.experimental.gluon.language.load"><code class="xref py py-obj docutils literal notranslate"><span class="pre">load</span></code></a></p></td>
+<td><p>Return a tensor of data whose values are loaded from memory at location defined by <cite>pointer</cite>:</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/triton.experimental.gluon.language.log.html#triton.experimental.gluon.language.log" title="triton.experimental.gluon.language.log"><code class="xref py py-obj docutils literal notranslate"><span class="pre">log</span></code></a></p></td>
+<td><p>Computes the element-wise natural logarithm of <code class="code docutils literal notranslate"><span class="pre">x</span></code>.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">log2</span></code></p></td>
+<td><p>Computes the element-wise logarithm (base 2) of <code class="code docutils literal notranslate"><span class="pre">x</span></code>.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/triton.experimental.gluon.language.map_elementwise.html#triton.experimental.gluon.language.map_elementwise" title="triton.experimental.gluon.language.map_elementwise"><code class="xref py py-obj docutils literal notranslate"><span class="pre">map_elementwise</span></code></a></p></td>
+<td><p>Map a scalar function over a tensor.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/triton.experimental.gluon.language.max.html#triton.experimental.gluon.language.max" title="triton.experimental.gluon.language.max"><code class="xref py py-obj docutils literal notranslate"><span class="pre">max</span></code></a></p></td>
+<td><p>Returns the maximum of all elements in the <code class="code docutils literal notranslate"><span class="pre">input</span></code> tensor along the provided <code class="code docutils literal notranslate"><span class="pre">axis</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/triton.experimental.gluon.language.max_constancy.html#triton.experimental.gluon.language.max_constancy" title="triton.experimental.gluon.language.max_constancy"><code class="xref py py-obj docutils literal notranslate"><span class="pre">max_constancy</span></code></a></p></td>
+<td><p>Let the compiler know that the <cite>value</cite> first values in <code class="code docutils literal notranslate"><span class="pre">input</span></code> are constant.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">max_contiguous</span></code></p></td>
+<td><p>Let the compiler know that the <cite>value</cite> first values in <code class="code docutils literal notranslate"><span class="pre">input</span></code> are contiguous.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/triton.experimental.gluon.language.maximum.html#triton.experimental.gluon.language.maximum" title="triton.experimental.gluon.language.maximum"><code class="xref py py-obj docutils literal notranslate"><span class="pre">maximum</span></code></a></p></td>
+<td><p>Computes the element-wise maximum of <code class="code docutils literal notranslate"><span class="pre">x</span></code> and <code class="code docutils literal notranslate"><span class="pre">y</span></code>.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/triton.experimental.gluon.language.min.html#triton.experimental.gluon.language.min" title="triton.experimental.gluon.language.min"><code class="xref py py-obj docutils literal notranslate"><span class="pre">min</span></code></a></p></td>
+<td><p>Returns the minimum of all elements in the <code class="code docutils literal notranslate"><span class="pre">input</span></code> tensor along the provided <code class="code docutils literal notranslate"><span class="pre">axis</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/triton.experimental.gluon.language.minimum.html#triton.experimental.gluon.language.minimum" title="triton.experimental.gluon.language.minimum"><code class="xref py py-obj docutils literal notranslate"><span class="pre">minimum</span></code></a></p></td>
+<td><p>Computes the element-wise minimum of <code class="code docutils literal notranslate"><span class="pre">x</span></code> and <code class="code docutils literal notranslate"><span class="pre">y</span></code>.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">mul</span></code></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">multiple_of</span></code></p></td>
+<td><p>Let the compiler know that the values in <code class="code docutils literal notranslate"><span class="pre">input</span></code> are all multiples of <code class="code docutils literal notranslate"><span class="pre">value</span></code>.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">num_ctas</span></code></p></td>
+<td><p>Returns the number of CTAs in the current kernel</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/triton.experimental.gluon.language.num_programs.html#triton.experimental.gluon.language.num_programs" title="triton.experimental.gluon.language.num_programs"><code class="xref py py-obj docutils literal notranslate"><span class="pre">num_programs</span></code></a></p></td>
+<td><p>Returns the number of program instances launched along the given <code class="code docutils literal notranslate"><span class="pre">axis</span></code>.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">num_warps</span></code></p></td>
+<td><p>Returns the number of warps that execute the current context, including in warp-specialized regions.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/triton.experimental.gluon.language.permute.html#triton.experimental.gluon.language.permute" title="triton.experimental.gluon.language.permute"><code class="xref py py-obj docutils literal notranslate"><span class="pre">permute</span></code></a></p></td>
+<td><p>Permutes the dimensions of a tensor.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/triton.experimental.gluon.language.pointer_type.html#triton.experimental.gluon.language.pointer_type" title="triton.experimental.gluon.language.pointer_type"><code class="xref py py-obj docutils literal notranslate"><span class="pre">pointer_type</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/triton.experimental.gluon.language.program_id.html#triton.experimental.gluon.language.program_id" title="triton.experimental.gluon.language.program_id"><code class="xref py py-obj docutils literal notranslate"><span class="pre">program_id</span></code></a></p></td>
+<td><p>Returns the id of the current program instance along the given <code class="code docutils literal notranslate"><span class="pre">axis</span></code>.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">ravel</span></code></p></td>
+<td><p>Returns a contiguous flattened view of <code class="code docutils literal notranslate"><span class="pre">x</span></code>.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/triton.experimental.gluon.language.reduce.html#triton.experimental.gluon.language.reduce" title="triton.experimental.gluon.language.reduce"><code class="xref py py-obj docutils literal notranslate"><span class="pre">reduce</span></code></a></p></td>
+<td><p>Applies the combine_fn to all elements in <code class="code docutils literal notranslate"><span class="pre">input</span></code> tensors along the provided <code class="code docutils literal notranslate"><span class="pre">axis</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">reduce_or</span></code></p></td>
+<td><p>Returns the reduce_or of all elements in the <code class="code docutils literal notranslate"><span class="pre">input</span></code> tensor along the provided <code class="code docutils literal notranslate"><span class="pre">axis</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/triton.experimental.gluon.language.reshape.html#triton.experimental.gluon.language.reshape" title="triton.experimental.gluon.language.reshape"><code class="xref py py-obj docutils literal notranslate"><span class="pre">reshape</span></code></a></p></td>
+<td><p>Returns a tensor with the same number of elements as input but with the provided shape.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/triton.experimental.gluon.language.rsqrt.html#triton.experimental.gluon.language.rsqrt" title="triton.experimental.gluon.language.rsqrt"><code class="xref py py-obj docutils literal notranslate"><span class="pre">rsqrt</span></code></a></p></td>
+<td><p>Computes the element-wise inverse square root of <code class="code docutils literal notranslate"><span class="pre">x</span></code>.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/triton.experimental.gluon.language.set_auto_layout.html#triton.experimental.gluon.language.set_auto_layout" title="triton.experimental.gluon.language.set_auto_layout"><code class="xref py py-obj docutils literal notranslate"><span class="pre">set_auto_layout</span></code></a></p></td>
+<td><p>Set a tensor with AutoLayout to a concrete layout</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/triton.experimental.gluon.language.shared_memory_descriptor.html#triton.experimental.gluon.language.shared_memory_descriptor" title="triton.experimental.gluon.language.shared_memory_descriptor"><code class="xref py py-obj docutils literal notranslate"><span class="pre">shared_memory_descriptor</span></code></a></p></td>
+<td><p>Represents a handle to a shared memory allocation in Gluon IR.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/triton.experimental.gluon.language.shared_memory_descriptor_type.html#triton.experimental.gluon.language.shared_memory_descriptor_type" title="triton.experimental.gluon.language.shared_memory_descriptor_type"><code class="xref py py-obj docutils literal notranslate"><span class="pre">shared_memory_descriptor_type</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/triton.experimental.gluon.language.sin.html#triton.experimental.gluon.language.sin" title="triton.experimental.gluon.language.sin"><code class="xref py py-obj docutils literal notranslate"><span class="pre">sin</span></code></a></p></td>
+<td><p>Computes the element-wise sine of <code class="code docutils literal notranslate"><span class="pre">x</span></code>.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">split</span></code></p></td>
+<td><p>Split a tensor in two along its last dim, which must have size 2.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">sqrt</span></code></p></td>
+<td><p>Computes the element-wise fast square root of <code class="code docutils literal notranslate"><span class="pre">x</span></code>.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/triton.experimental.gluon.language.sqrt_rn.html#triton.experimental.gluon.language.sqrt_rn" title="triton.experimental.gluon.language.sqrt_rn"><code class="xref py py-obj docutils literal notranslate"><span class="pre">sqrt_rn</span></code></a></p></td>
+<td><p>Computes the element-wise precise square root (rounding to nearest wrt the IEEE standard) of <code class="code docutils literal notranslate"><span class="pre">x</span></code>.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">static_assert</span></code></p></td>
+<td><p>Assert the condition at compile time.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">static_print</span></code></p></td>
+<td><p>Print the values at compile time.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">static_range</span></code></p></td>
+<td><p>Iterator that counts upward forever.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/triton.experimental.gluon.language.store.html#triton.experimental.gluon.language.store" title="triton.experimental.gluon.language.store"><code class="xref py py-obj docutils literal notranslate"><span class="pre">store</span></code></a></p></td>
+<td><p>Store a tensor of data into memory locations defined by <cite>pointer</cite>.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">sub</span></code></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/triton.experimental.gluon.language.sum.html#triton.experimental.gluon.language.sum" title="triton.experimental.gluon.language.sum"><code class="xref py py-obj docutils literal notranslate"><span class="pre">sum</span></code></a></p></td>
+<td><p>Returns the sum of all elements in the <code class="code docutils literal notranslate"><span class="pre">input</span></code> tensor along the provided <code class="code docutils literal notranslate"><span class="pre">axis</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/triton.experimental.gluon.language.tensor.html#triton.experimental.gluon.language.tensor" title="triton.experimental.gluon.language.tensor"><code class="xref py py-obj docutils literal notranslate"><span class="pre">tensor</span></code></a></p></td>
+<td><p>Represents an N-dimensional array of values or pointers.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">to_linear_layout</span></code></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/triton.experimental.gluon.language.to_tensor.html#triton.experimental.gluon.language.to_tensor" title="triton.experimental.gluon.language.to_tensor"><code class="xref py py-obj docutils literal notranslate"><span class="pre">to_tensor</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">tuple</span></code></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/triton.experimental.gluon.language.tuple_type.html#triton.experimental.gluon.language.tuple_type" title="triton.experimental.gluon.language.tuple_type"><code class="xref py py-obj docutils literal notranslate"><span class="pre">tuple_type</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">uint16</span></code></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/triton.experimental.gluon.language.uint32.html#triton.experimental.gluon.language.uint32" title="triton.experimental.gluon.language.uint32"><code class="xref py py-obj docutils literal notranslate"><span class="pre">uint32</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/triton.experimental.gluon.language.uint64.html#triton.experimental.gluon.language.uint64" title="triton.experimental.gluon.language.uint64"><code class="xref py py-obj docutils literal notranslate"><span class="pre">uint64</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/triton.experimental.gluon.language.uint8.html#triton.experimental.gluon.language.uint8" title="triton.experimental.gluon.language.uint8"><code class="xref py py-obj docutils literal notranslate"><span class="pre">uint8</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/triton.experimental.gluon.language.umulhi.html#triton.experimental.gluon.language.umulhi" title="triton.experimental.gluon.language.umulhi"><code class="xref py py-obj docutils literal notranslate"><span class="pre">umulhi</span></code></a></p></td>
+<td><p>Computes the element-wise most significant N bits of the 2N-bit product of <code class="code docutils literal notranslate"><span class="pre">x</span></code> and <code class="code docutils literal notranslate"><span class="pre">y</span></code>.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/triton.experimental.gluon.language.void.html#triton.experimental.gluon.language.void" title="triton.experimental.gluon.language.void"><code class="xref py py-obj docutils literal notranslate"><span class="pre">void</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">warp_specialize</span></code></p></td>
+<td><p>Create a warp-specialized execution region, partitioning work across warps.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/triton.experimental.gluon.language.where.html#triton.experimental.gluon.language.where" title="triton.experimental.gluon.language.where"><code class="xref py py-obj docutils literal notranslate"><span class="pre">where</span></code></a></p></td>
+<td><p>Returns a tensor of elements from either <code class="code docutils literal notranslate"><span class="pre">x</span></code> or <code class="code docutils literal notranslate"><span class="pre">y</span></code>, depending on <code class="code docutils literal notranslate"><span class="pre">condition</span></code>.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">xor_sum</span></code></p></td>
+<td><p>Returns the xor sum of all elements in the <code class="code docutils literal notranslate"><span class="pre">input</span></code> tensor along the provided <code class="code docutils literal notranslate"><span class="pre">axis</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/triton.experimental.gluon.language.zeros.html#triton.experimental.gluon.language.zeros" title="triton.experimental.gluon.language.zeros"><code class="xref py py-obj docutils literal notranslate"><span class="pre">zeros</span></code></a></p></td>
+<td><p>Create a tensor filled with zeros.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">zeros_like</span></code></p></td>
+<td><p>Create a tensor with the same properties as a given tensor, filled with zeros.</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="generated/triton.experimental.gluon.must_use_result.html" class="btn btn-neutral float-left" title="must_use_result" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="generated/triton.experimental.gluon.language.AutoLayout.html" class="btn btn-neutral float-right" title="AutoLayout" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2020, Philippe Tillet.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

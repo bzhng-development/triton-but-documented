@@ -1,31 +1,47 @@
-Computes the element-wise absolute value of :code:`x`.
+triton.language.abs
+===================
 
-Parameters
-----------
-x : Block
-    The input tensor.
+.. currentmodule:: triton.language
 
-Returns
--------
-Block
-    A tensor containing the absolute values of :code:`x`. The output dtype
-    matches the input dtype.
+.. function:: abs(x, _semantic=None)
 
-Notes
------
-This function supports floating-point, signed integer, and unsigned integer
-types. For unsigned integers, this operation is a no-op. For :code:`fp8e4b15`
-types, the absolute value is computed via a bitwise AND with a mask.
+   Computes the element-wise absolute value of :code:`x`.
 
-This function can also be called as a member function on :py:class:`tensor`,
-as :code:`x.abs()` instead of :code:`abs(x)`.
+   Parameters
+   ----------
+   x : tl.tensor
+       The input tensor. Can be floating-point, signed integer, or unsigned
+       integer dtype.
 
-Examples
---------
-.. code-block:: python
+   Returns
+   -------
+   tl.tensor
+       A tensor containing the absolute value of each element in :code:`x`.
+       The output has the same shape and dtype as the input.
 
-    @triton.jit
-    def kernel(in_ptr, out_ptr, BLOCK_SIZE: tl.constexpr):
-        x = tl.load(in_ptr + tl.arange(0, BLOCK_SIZE))
-        y = tl.abs(x)
-        tl.store(out_ptr + tl.arange(0, BLOCK_SIZE), y)
+   Notes
+   -----
+   This function can also be called as a member function on :py:class:`tensor`,
+   as :code:`x.abs()` instead of :code:`abs(x)`.
+
+   Behavior varies by dtype:
+
+   - **Floating-point**: Uses GPU fabs instruction
+   - **Signed integer**: Uses GPU iabs instruction
+   - **Unsigned integer**: No-op (returns input unchanged)
+   - **fp8e4b15**: Masks sign bit with 0x7F
+
+   Examples
+   --------
+   .. code-block:: python
+
+      import triton
+      import triton.language as tl
+
+      @triton.jit
+      def abs_kernel(x_ptr, y_ptr, BLOCK_SIZE: tl.constexpr):
+          pid = tl.program_id(0)
+          offsets = pid * BLOCK_SIZE + tl.arange(0, BLOCK_SIZE)
+          x = tl.load(x_ptr + offsets)
+          y = tl.abs(x)  # or x.abs()
+          tl.store(y_ptr + offsets, y)

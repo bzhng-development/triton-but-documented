@@ -1,0 +1,44 @@
+smid
+====
+
+.. currentmodule:: triton.language.extra.cuda
+
+.. function:: smid()
+
+   Returns the Streaming Multiprocessor (SM) identifier for the current GPU thread block.
+
+   Parameters
+   ----------
+   None
+
+   Returns
+   -------
+   smid : tl.tensor
+      A scalar tensor containing the SM ID as a 32-bit integer (``int32``).
+
+   Notes
+   -----
+   This function uses PTX inline assembly to read the ``%smid`` special register.
+   The SM ID identifies which Streaming Multiprocessor is executing the current
+   thread block. This can be useful for debugging or for SM-aware optimizations.
+
+   The function is pure and has no side effects. It must be called within a
+   :py:func:`@triton.jit <triton.jit>` decorated kernel function.
+
+   Examples
+   --------
+   .. code-block:: python
+
+      import triton
+      import triton.language as tl
+
+      @triton.jit
+      def kernel(ptr, BLOCK_SIZE: tl.constexpr):
+          sm_id = tl.extra.cuda.smid()
+          # Use sm_id for debugging or optimization
+          tl.store(ptr, sm_id)
+
+      # Launch kernel
+      block_size = 128
+      grid = (1,)
+      kernel[grid](output_ptr, block_size)

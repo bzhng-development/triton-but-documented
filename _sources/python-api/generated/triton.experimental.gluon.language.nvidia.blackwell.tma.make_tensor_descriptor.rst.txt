@@ -1,0 +1,77 @@
+make_tensor_descriptor
+======================
+
+.. currentmodule:: triton.experimental.gluon.language.nvidia.blackwell.tma
+
+.. function:: make_tensor_descriptor(base, shape, strides, block_shape, layout, padding_option='zero')
+
+   Create a tensor descriptor for TMA (Tensor Memory Accelerator) operations on NVIDIA Blackwell GPUs.
+
+   Parameters
+   ----------
+   base : tensor
+      Base pointer to the tensor data in global memory. Must be a pointer type.
+   shape : List[tensor]
+      List of tensors specifying the logical shape of the tensor (one per dimension).
+   strides : List[tensor]
+      List of tensors specifying the strides for each dimension. The last stride must be 1.
+   block_shape : List[constexpr]
+      List of compile-time constants specifying the block shape for TMA operations (one per dimension).
+   layout : NVMMASharedLayout
+      The shared memory layout for the tensor descriptor.
+   padding_option : str, optional
+      Padding option for out-of-bounds access. Either ``'zero'`` (default) or ``'nan'``.
+      Note: ``'nan'`` is not supported for integer blocks.
+
+   Returns
+   -------
+   tensor_descriptor
+      A tensor descriptor object that can be used with TMA load/store operations.
+
+   Raises
+   ------
+   ValueError
+      If the number of dimensions is not between 1 and 5, if strides/block_shape lengths
+      don't match the shape, if the last dimension block size is less than 16 bytes,
+      if the last stride is not 1, or if ``'nan'`` padding is used with integer blocks.
+
+   Notes
+   -----
+   The tensor descriptor enables efficient async memory operations via TMA on Blackwell
+   GPUs. Key constraints:
+
+   * Number of dimensions must be 1-5
+   * The last dimension block size must be at least 16 bytes (e.g., 16 elements for int8,
+     8 for int16, 4 for int32, etc.)
+   * The last stride must be 1 (contiguous in the last dimension)
+   * Block shape must be statically known at compile time
+
+   Examples
+   --------
+   .. code-block:: python
+
+      import triton.experimental.gluon as gluon
+      import triton.experimental.gluon.language as ttgl
+      from triton.experimental.gluon.language.nvidia.blackwell.tma import make_tensor_descriptor
+      from triton.experimental.gluon.language._layouts import NVMMASharedLayout
+
+      @gluon.jit
+      def kernel(...):
+         # Create a 2D tensor descriptor for TMA operations
+         base = ttgl.make_tensor_ptr(...)
+         shape = [ttgl.full((), 1024, ttgl.int32), ttgl.full((), 512, ttgl.int32)]
+         strides = [ttgl.full((), 512, ttgl.int64), ttgl.full((), 1, ttgl.int64)]
+         block_shape = [ttgl.constexpr(64), ttgl.constexpr(64)]
+         layout = NVMMASharedLayout(...)
+
+         desc = make_tensor_descriptor(
+            base=base,
+            shape=shape,
+            strides=strides,
+            block_shape=block_shape,
+            layout=layout,
+            padding_option='zero'
+         )
+
+         # Use desc with TMA load/store operations
+         ...

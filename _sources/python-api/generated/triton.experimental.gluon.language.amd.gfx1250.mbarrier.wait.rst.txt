@@ -1,0 +1,45 @@
+wait
+====
+
+Wait until the mbarrier's phase differs from the provided phase value.
+
+Parameters
+----------
+mbarrier : shared_memory_descriptor
+    The barrier object to wait on.
+phase : int
+    The phase value to compare against. The wait completes when the barrier's
+    phase becomes different from this value.
+_semantic : GluonSemantic, optional
+    Internal semantic context. Do not set manually.
+
+Notes
+-----
+This is an AMD GFX1250-specific barrier wait operation for thread
+synchronization. The function blocks execution until the specified phase has
+completed, which is indicated by the barrier's phase value changing from the
+provided ``phase`` argument.
+
+This operation is typically used in conjunction with mbarrier arrive operations
+to coordinate work between thread groups in shared memory.
+
+Examples
+--------
+.. code-block:: python
+
+    import triton.experimental.gluon as gluon
+    import triton.experimental.gluon.language as ttgl
+
+    @gluon.jit
+    def kernel(...):
+        # Allocate shared memory with mbarrier
+        mbarrier = ttgl.allocate_shared_memory(...)
+
+        # Signal arrival at phase 0
+        ttgl.amd.gfx1250.mbarrier.arrive(mbarrier, 0)
+
+        # Wait for phase 0 to complete before proceeding
+        ttgl.amd.gfx1250.mbarrier.wait(mbarrier, 0)
+
+        # Continue with synchronized work
+        ...

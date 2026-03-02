@@ -1,0 +1,20 @@
+triton.experimental.gluon.language.nvidia.blackwell
+===================================================
+
+.. currentmodule:: triton.experimental.gluon.language.nvidia.blackwell
+
+NVIDIA Blackwell
+----------------
+
+.. autosummary::
+    :toctree: generated
+    :nosignatures:
+
+    TensorMemoryLayout
+    TensorMemoryScalesLayout
+    _TensorMemoryLinearLayout
+    allocate_tensor_memory
+    fence_async_shared
+    mma_v2
+    tensor_memory_descriptor
+    tensor_memory_descriptor_type

@@ -1,0 +1,49 @@
+DistributedLinearLayout
+=======================
+
+.. class:: triton.experimental.gluon.language.DistributedLinearLayout(reg_bases: List[List[int]], lane_bases: List[List[int]], warp_bases: List[List[int]], block_bases: List[List[int]], shape: List[int]) -> None
+
+   Represents a linear distributed layout with explicit bases at register, lane, warp, and block levels.
+
+   Parameters
+   ----------
+   reg_bases : list[list[int]]
+       Bases for register-level distribution.
+   lane_bases : list[list[int]]
+       Bases for lane-level distribution.
+   warp_bases : list[list[int]]
+       Bases for warp-level distribution.
+   block_bases : list[list[int]]
+       Bases for block-level distribution.
+   shape : list[int]
+       The tensor global shape.
+
+   Notes
+   -----
+   Inherits from :class:`DistributedLayout`. This layout allows fine-grained control
+   over data distribution across the hardware hierarchy. All basis lists must match
+   the rank of ``shape``. Validation ensures that each basis vector length equals
+   the tensor rank.
+
+   For theoretical background, refer to: https://arxiv.org/abs/2505.23819
+
+   Examples
+   --------
+   .. code-block:: python
+
+      import triton.experimental.gluon as gluon
+      import triton.experimental.gluon.language as ttgl
+
+      # Define bases for a rank-2 tensor
+      reg_bases = [[1, 0], [0, 1]]
+      lane_bases = [[2, 0], [0, 2]]
+      warp_bases = [[4, 0], [0, 4]]
+      block_bases = [[8, 0], [0, 8]]
+      shape = [16, 16]
+
+      layout = ttgl.DistributedLinearLayout(
+          reg_bases, lane_bases, warp_bases, block_bases, shape
+      )
+
+      # Access the rank
+      print(layout.rank)  # Output: 2

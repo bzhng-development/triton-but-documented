@@ -1,43 +1,31 @@
 OutOfResources
 ==============
 
-Exception raised when a kernel requests more hardware resources than available.
+Exception raised when kernel resource requirements exceed hardware limits.
 
 Parameters
 ----------
 required : int
-    The amount of the resource required by the kernel.
+    The quantity of the resource required by the kernel.
 limit : int
-    The maximum amount of the resource available on the hardware.
+    The hardware limit available for the resource.
 name : str
-    The name of the resource type (e.g., "shared memory", "registers").
+    The identifier of the resource (e.g., ``"registers"``, ``"shared memory"``).
 
 Notes
 -----
-This error typically occurs during kernel compilation or launch configuration.
-Resolving it often requires reducing block sizes (``BLOCK_SIZE``), decreasing
-the number of pipeline stages (``num_stages``), or lowering register pressure.
+This error indicates that the kernel configuration requests more resources
+than the GPU supports. Mitigation strategies include reducing block sizes
+or decreasing the ``num_stages`` parameter.
 
 Examples
 --------
 .. code-block:: python
 
     import triton
-    import triton.language as tl
 
-    @triton.jit
-    def kernel(X, BLOCK_SIZE: tl.constexpr):
-        # Logic that may exceed shared memory limits
-        pass
-
-    # Triggering the exception manually for demonstration
     try:
-        raise triton.OutOfResources(
-            required=65536,
-            limit=49152,
-            name="shared memory"
-        )
+        kernel.run(...)
     except triton.OutOfResources as e:
         print(e)
-        # Output: out of resource: shared memory, Required: 65536, Hardware limit: 49152.
-        # Reducing block sizes or `num_stages` may help.
+        # out of resource: shared memory, Required: 65536, Hardware limit: 49152. ...

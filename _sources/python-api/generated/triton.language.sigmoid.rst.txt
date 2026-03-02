@@ -1,33 +1,44 @@
-Computes the element-wise sigmoid of the input.
+triton.language.sigmoid
+======================
 
-The sigmoid function is defined as :math:`\frac{1}{1 + e^{-x}}`. This operation is fused and compiled directly to GPU machine code.
+.. currentmodule:: triton.language
 
-Parameters
-----------
-x : Block
-    The input tensor or scalar values.
+.. function:: sigmoid(x)
 
-Returns
--------
-Block
-    A tensor containing the sigmoid of each element in ``x``, with the same shape and dtype as the input.
+   Computes the element-wise sigmoid of :code:`x`.
 
-Notes
------
-This function can also be called as a member function on a :py:class:`tensor` object using the syntax ``x.sigmoid()``.
+   The sigmoid function is defined as :code:`1 / (1 + exp(-x))`.
 
-Examples
---------
-.. code-block:: python
+   Parameters
+   ----------
+   x : Block
+       The input tensor or scalar values.
 
-    import triton
-    import triton.language as tl
+   Returns
+   -------
+   Block
+       A tensor containing the sigmoid of each element in :code:`x`.
 
-    @triton.jit
-    def kernel(X_ptr, Y_ptr, BLOCK_SIZE: tl.constexpr):
-        pid = tl.program_id(axis=0)
-        offsets = pid * BLOCK_SIZE + tl.arange(0, BLOCK_SIZE)
-        x = tl.load(X_ptr + offsets)
-        # Compute sigmoid element-wise
-        y = tl.sigmoid(x)
-        tl.store(Y_ptr + offsets, y)
+   Notes
+   -----
+   This function can also be called as a member function on :py:class:`tensor`,
+   as :code:`x.sigmoid()` instead of :code:`sigmoid(x)`.
+
+   The sigmoid function maps input values to the range (0, 1) and is commonly
+   used as an activation function in neural networks.
+
+   Examples
+   --------
+   .. code-block:: python
+
+      import triton
+      import triton.language as tl
+
+      @triton.jit
+      def kernel(x_ptr, output_ptr, n_elements, BLOCK_SIZE: tl.constexpr):
+          pid = tl.program_id(axis=0)
+          offsets = pid * BLOCK_SIZE + tl.arange(0, BLOCK_SIZE)
+          mask = offsets < n_elements
+          x = tl.load(x_ptr + offsets, mask=mask)
+          output = tl.sigmoid(x)
+          tl.store(output_ptr + offsets, output, mask=mask)

@@ -1,0 +1,57 @@
+fp4_to_fp
+=========
+
+.. currentmodule:: triton.experimental.gluon.language
+
+.. function:: fp4_to_fp(src, elem_type, axis, _semantic=None)
+
+   Upcast a tensor from fp4 (e2m1) to another floating point type.
+
+   Parameters
+   ----------
+   src : tensor
+       Input tensor with fp4 (e2m1) elements to upcast.
+   elem_type : dtype
+       Target floating point data type (e.g., ``float16``, ``float32``, ``bfloat16``).
+   axis : int
+       The axis along which the fp4 elements are packed. This determines how the
+       upcast operation interprets the tensor layout.
+   _semantic : GluonSemantic, optional
+       Internal semantic handler. Do not pass explicitly; this is provided
+       automatically when called from a ``@gluon.jit`` decorated function.
+
+   Returns
+   -------
+   tensor
+       A tensor with elements upcasted to the specified ``elem_type``.
+
+   Notes
+   -----
+   The fp4 format (e2m1) is a 4-bit floating point format with 1 sign bit,
+   2 exponent bits, and 1 mantissa bit. This format is supported on NVIDIA
+   Hopper and Blackwell architectures for efficient tensor core operations.
+
+   The ``axis`` parameter is critical for correct interpretation of packed fp4
+   values. Typically, fp4 values are packed in pairs along the specified axis,
+   with two 4-bit values stored in each 8-bit byte.
+
+   This operation is only valid when called from within a ``@gluon.jit``
+   decorated kernel function.
+
+   Examples
+   --------
+   .. code-block:: python
+
+      import triton.experimental.gluon as gluon
+      import triton.experimental.gluon.language as ttgl
+
+      @gluon.jit
+      def upcast_kernel(src_ptr, dst_ptr, BLOCK_SIZE: tl.constexpr):
+          # Load fp4 tensor from global memory
+          src = ttgl.load(src_ptr + tl.arange(0, BLOCK_SIZE))
+          
+          # Upcast fp4 to float16 along axis 0
+          fp16_tensor = ttgl.fp4_to_fp(src, ttgl.float16, axis=0)
+          
+          # Store upcasted results
+          ttgl.store(dst_ptr + tl.arange(0, BLOCK_SIZE), fp16_tensor)

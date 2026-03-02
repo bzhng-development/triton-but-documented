@@ -1,0 +1,53 @@
+triton.language.extra.cuda.libdevice.fast_dividef
+==================================================
+
+.. currentmodule:: triton.language.extra.cuda.libdevice
+
+.. function:: fast_dividef(arg0, arg1, _semantic=None)
+
+    Fast floating-point division for 32-bit floats.
+
+    Performs division ``arg0 / arg1`` using CUDA's fast math approximation
+    (``__nv_fast_fdividef``). This is faster than standard division but may
+    have reduced precision.
+
+    Parameters
+    ----------
+    arg0 : tl.tensor
+        Numerator. Must be 32-bit floating point (``tl.float32``).
+    arg1 : tl.tensor
+        Denominator. Must be 32-bit floating point (``tl.float32``).
+    _semantic : optional
+        Internal parameter for Triton semantics. Do not set manually.
+
+    Returns
+    -------
+    result : tl.tensor
+        The quotient ``arg0 / arg1`` as 32-bit floating point.
+
+    Notes
+    -----
+    This function is CUDA-specific and uses the libdevice intrinsic
+    ``__nv_fast_fdividef``. The fast division approximation provides
+    improved performance at the cost of numerical precision compared
+    to standard floating-point division.
+
+    Both inputs must be ``tl.float32`` dtype. Behavior for special
+    values (NaN, Inf, zero) follows IEEE-754 fast math semantics.
+
+    Examples
+    --------
+    .. code-block:: python
+
+        import triton
+        import triton.language as tl
+
+        @triton.jit
+        def fast_div_kernel(x_ptr, y_ptr, out_ptr, BLOCK_SIZE: tl.constexpr):
+            pid = tl.program_id(0)
+            offsets = pid * BLOCK_SIZE + tl.arange(0, BLOCK_SIZE)
+            x = tl.load(x_ptr + offsets)
+            y = tl.load(y_ptr + offsets)
+            # Fast division (less precise than x / y)
+            result = tl.extra.cuda.libdevice.fast_dividef(x, y)
+            tl.store(out_ptr + offsets, result)

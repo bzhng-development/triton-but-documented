@@ -1,30 +1,37 @@
-.. py:function:: triton.language.fma(x, y, z, _semantic=None)
+triton.language.fma
+===================
 
-   Computes the element-wise fused multiply-add of :code:`x`, :code:`y`, and :code:`z`.
+.. currentmodule:: triton.language
 
-   The operation calculates :code:`x * y + z` with a single rounding step, providing
-   higher precision than separate multiplication and addition operations.
+.. function:: fma(x, y, z, _semantic=None)
+
+   Computes the element-wise fused multiply-add of three tensors: :code:`x * y + z`.
 
    Parameters
    ----------
-   x : tl.tensor
-      The first input tensor (multiplicand).
-   y : tl.tensor
-      The second input tensor (multiplicand).
-   z : tl.tensor
-      The third input tensor (addend).
+   x : Block
+       The first input tensor (multiplicand).
+   y : Block
+       The second input tensor (multiplier).
+   z : Block
+       The third input tensor (addend).
 
    Returns
    -------
-   tl.tensor
-      A tensor containing the result of :code:`x * y + z`.
+   Block
+       A tensor containing the element-wise result of :code:`x * y + z`.
 
    Notes
    -----
-   This function requires all inputs to have compatible shapes and types.
-   Type legalization is performed automatically to ensure operands match.
-   FMA operations are typically mapped to hardware instructions (e.g., FFMA on NVIDIA GPUs)
-   when supported by the target architecture.
+   Fused multiply-add (FMA) performs the multiplication and addition in a single
+   operation with one rounding, which can provide better numerical accuracy and
+   performance compared to separate multiply and add operations.
+
+   All inputs are broadcast to a common compatible shape if necessary. The inputs
+   must have compatible types for the operation.
+
+   This function is only available inside :code:`@triton.jit` decorated kernel
+   functions.
 
    Examples
    --------
@@ -34,11 +41,11 @@
       import triton.language as tl
 
       @triton.jit
-      def kernel(x_ptr, y_ptr, z_ptr, out_ptr, BLOCK_SIZE: tl.constexpr):
+      def fma_kernel(x_ptr, y_ptr, z_ptr, out_ptr, BLOCK_SIZE: tl.constexpr):
           pid = tl.program_id(0)
-          offs = pid * BLOCK_SIZE + tl.arange(0, BLOCK_SIZE)
-          x = tl.load(x_ptr + offs)
-          y = tl.load(y_ptr + offs)
-          z = tl.load(z_ptr + offs)
+          offsets = pid * BLOCK_SIZE + tl.arange(0, BLOCK_SIZE)
+          x = tl.load(x_ptr + offsets)
+          y = tl.load(y_ptr + offsets)
+          z = tl.load(z_ptr + offsets)
           result = tl.fma(x, y, z)
-          tl.store(out_ptr + offs, result)
+          tl.store(out_ptr + offsets, result)

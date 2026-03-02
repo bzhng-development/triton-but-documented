@@ -1,0 +1,36 @@
+ull2float_rz
+============
+
+Convert unsigned 64-bit integer to 32-bit float with round-towards-zero rounding.
+
+Parameters
+----------
+arg0 : tl.tensor
+    Input tensor of unsigned 64-bit integers (``tl.uint64``).
+_semantic : optional
+    Internal parameter, do not set manually.
+
+Returns
+-------
+tl.tensor
+    Tensor of 32-bit floating-point values (``tl.float32``).
+
+Notes
+-----
+Calls the CUDA libdevice function ``__nv_ull2float_rz``. Uses round-towards-zero
+(rz) rounding mode for the conversion, which truncates the value toward zero.
+This is equivalent to the C cast ``(float)(unsigned long long)`` with rz rounding.
+
+Examples
+--------
+.. code-block:: python
+
+    import triton
+    import triton.language as tl
+
+    @triton.jit
+    def kernel(in_ptr, out_ptr, BLOCK: tl.constexpr):
+        offsets = tl.arange(0, BLOCK)
+        x = tl.load(in_ptr + offsets).to(tl.uint64)
+        y = tl.extra.cuda.libdevice.ull2float_rz(x)
+        tl.store(out_ptr + offsets, y)

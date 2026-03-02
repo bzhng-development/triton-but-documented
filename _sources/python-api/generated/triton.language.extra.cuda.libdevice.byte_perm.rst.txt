@@ -1,0 +1,60 @@
+triton.language.extra.cuda.libdevice.byte_perm
+===============================================
+
+.. currentmodule:: triton.language.extra.cuda.libdevice
+
+.. function:: byte_perm(arg0, arg1, arg2, _semantic=None)
+
+    Perform byte permutation on a 32-bit integer.
+
+    Rearranges the bytes of ``arg0`` according to the selection pattern
+    encoded in ``arg1`` and ``arg2``. Each nibble (4 bits) in the selector
+    arguments specifies which byte position (0-3) to select from ``arg0``.
+
+    Parameters
+    ----------
+    arg0 : tl.int32
+        The 32-bit integer whose bytes are to be permuted.
+    arg1 : tl.int32
+        First selector value. Each nibble specifies a byte index (0-3)
+        for the lower two output bytes.
+    arg2 : tl.int32
+        Second selector value. Each nibble specifies a byte index (0-3)
+        for the upper two output bytes.
+    _semantic : optional
+        Internal semantic argument. Do not set manually.
+
+    Returns
+    -------
+    out : tl.int32
+        The permuted 32-bit integer.
+
+    Notes
+    -----
+    This function maps to the CUDA libdevice function ``__nv_byte_perm``.
+    The selector arguments encode byte indices in their nibbles (4-bit
+    values). For each output byte position, the corresponding nibble in
+    the selector arguments specifies which input byte (0-3) to select.
+
+    Byte indices must be in the range 0-3. Invalid indices result in
+    undefined behavior.
+
+    This is a pure function with no side effects.
+
+    Examples
+    --------
+    .. code-block:: python
+
+        import triton
+        import triton.language as tl
+
+        @triton.jit
+        def kernel(ptr, BLOCK_SIZE: tl.constexpr):
+            pid = tl.program_id(0)
+            offset = pid * BLOCK_SIZE
+            val = tl.load(ptr + offset)
+            # Select bytes in reverse order (3, 2, 1, 0)
+            selector_low = 0x01020300  # bytes 0,1,2,3 -> positions 0,1,2,3
+            selector_high = 0x00000000
+            permuted = tl.extra.cuda.libdevice.byte_perm(val, selector_low, selector_high)
+            tl.store(ptr + offset, permuted)

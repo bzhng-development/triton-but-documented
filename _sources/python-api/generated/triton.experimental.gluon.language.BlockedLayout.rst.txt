@@ -1,0 +1,76 @@
+BlockedLayout
+=============
+
+.. class:: BlockedLayout(size_per_thread, threads_per_warp, warps_per_cta, order, cga_layout=None)
+
+   Represents a blocked layout, partitioning a tensor across threads, warps, and CTAs.
+
+   This layout distributes tensor elements hierarchically across the GPU execution model:
+   elements are first partitioned per thread, then grouped into warps, and finally
+   organized into cooperative thread arrays (CTAs). The ``order`` parameter controls
+   which dimensions are partitioned first.
+
+   Parameters
+   ----------
+   size_per_thread : List[int]
+       Number of elements each thread holds per dimension. Determines the register
+       footprint per thread.
+   threads_per_warp : List[int]
+       Number of threads per warp per dimension. Typically matches hardware warp
+       size (e.g., 32 for NVIDIA GPUs).
+   warps_per_cta : List[int]
+       Number of warps per CTA per dimension. Controls how warps are distributed
+       across the thread block.
+   order : List[int]
+       Dimension ordering for partitioning. Specifies which dimensions are
+       partitioned first (e.g., [1, 0] partitions dimension 1 before dimension 0).
+   cga_layout : List[List[int]], optional
+       Bases describing how CTAs tile each dimension. Used for multi-CTA
+       cooperation (default is empty list).
+
+   Attributes
+   ----------
+   size_per_thread : List[int]
+   threads_per_warp : List[int]
+   warps_per_cta : List[int]
+   order : List[int]
+   cga_layout : List[List[int]]
+   rank : int
+       The tensor rank (number of dimensions), derived from ``order``.
+
+   Notes
+   -----
+   All list parameters must have the same length, equal to the tensor rank.
+   The class automatically unwraps constexpr values during initialization.
+
+   ``BlockedLayout`` is commonly used for defining register file layouts in
+   Gluon kernels, particularly for matrix multiplication and other tiled
+   operations where explicit control over data distribution is required.
+
+   Examples
+   --------
+   Create a 2D blocked layout for a matrix tile:
+
+   .. code-block:: python
+
+      import triton.experimental.gluon as gluon
+      import triton.experimental.gluon.language as ttgl
+
+      # 2D layout: 4 elements per thread, 32 threads per warp, 4 warps per CTA
+      layout = ttgl.BlockedLayout(
+          size_per_thread=[4, 4],
+          threads_per_warp=[1, 32],
+          warps_per_cta=[4, 1],
+          order=[1, 0]
+      )
+
+      print(layout.rank)  # Output: 2
+
+   Use with a kernel to specify register layout:
+
+   .. code-block:: python
+
+      @gluon.jit
+      def kernel(...):
+          # Use layout for distributed memory operations
+          pass

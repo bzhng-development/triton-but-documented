@@ -1,53 +1,35 @@
-triton.language.uint64
-======================
+uint64
+======
 
 64-bit unsigned integer data type.
 
-This dtype instance represents unsigned 64-bit integers within Triton kernels.
-It corresponds to ``uint64`` in NumPy and maps to ``u64`` in PTX/LLVM IR.
+Represents an unsigned 64-bit integer type for use in Triton GPU kernels.
+This dtype is used to define tensor element types or cast scalars to 64-bit
+unsigned precision.
 
-Parameters
-----------
-
-None
-    This is a singleton dtype instance; no arguments are accepted.
-
-Returns
--------
-
-dtype
-    The ``uint64`` data type object used for type annotations and tensor
-    construction in Triton kernels.
+See Also
+--------
+tl.int64 : 64-bit signed integer data type.
+tl.uint32 : 32-bit unsigned integer data type.
 
 Notes
 -----
-
-*   Values range from 0 to 2^64 - 1.
-*   Arithmetic operations wrap around on overflow (modulo 2^64).
-*   Use this dtype when interfacing with pointers, handles, or large
-    unsigned counters that exceed the range of 32-bit integers.
-*   In kernel code, literals suffixed with ``ul`` or cast via
-    ``tl.cast(..., dtype=tl.uint64)`` produce this type.
+Corresponds to ``u64`` in CUDA PTX. Use when 64-bit address arithmetic or
+large integer values are required. Throughput may be lower than 32-bit
+integers on some architectures.
 
 Examples
 --------
-
 .. code-block:: python
 
     import triton
     import triton.language as tl
 
     @triton.jit
-    def kernel(ptr, N):
-        # Define a 64-bit unsigned index
-        idx: tl.uint64 = tl.program_id(0).to(tl.uint64)
-
-        # Create a tensor of uint64 zeros
-        mask = tl.zeros([1], dtype=tl.uint64) == 0
-
-        # Load a 64-bit unsigned value from global memory
-        val = tl.load(ptr + idx).to(tl.uint64)
-
-        # Perform wrapping arithmetic
-        big_const: tl.uint64 = 18446744073709551615  # 2^64 - 1
-        result = val + big_const  # Wraps around
+    def kernel(ptr, n_elements: tl.constexpr):
+        pid = tl.program_id(0)
+        offset = pid * 32
+        mask = offset + tl.arange(0, 32) < n_elements
+        data = tl.load(ptr + offset, mask=mask)
+        data_u64 = data.to(tl.uint64)
+        tl.store(ptr + offset, data_u64, mask=mask)

@@ -1,0 +1,31 @@
+wait
+====
+
+.. py:function:: triton.experimental.gluon.language.amd.gfx1250.cluster.wait()
+
+   Wait for all CTAs in a cluster to arrive at a cluster barrier.
+
+   Synchronizes execution across all CTAs within the same cluster on AMD GFX1250 (RDNA4) hardware. This operation blocks until all CTAs in the cluster have signaled arrival at the corresponding barrier.
+
+   Returns
+   -------
+   None
+
+   Notes
+   -----
+   This function is specific to AMD GFX1250 hardware. ``wait`` must be paired with a corresponding ``arrive`` operation. Calling ``wait`` before ``arrive``, or calling ``arrive`` multiple times without a matching ``wait``, results in undefined behavior.
+
+   Examples
+   --------
+   .. code-block:: python
+
+      import triton.experimental.gluon as gluon
+      import triton.experimental.gluon.language as ttgl
+      from triton.experimental.gluon.language.amd.gfx1250 import cluster
+
+      @gluon.jit
+      def kernel():
+          # Signal arrival at the cluster barrier
+          cluster.arrive()
+          # Wait for all CTAs in the cluster to arrive
+          cluster.wait()

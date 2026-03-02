@@ -1,0 +1,43 @@
+double2uint_rz
+==============
+
+Convert double-precision floating-point values to 32-bit integers using
+round-towards-zero rounding mode.
+
+Parameters
+----------
+arg0 : tensor
+    Input tensor of double-precision floating-point values (fp64).
+_semantic : optional
+    Internal parameter for Triton semantic analysis. Do not provide manually.
+
+Returns
+-------
+tensor
+    Tensor of 32-bit signed integers (int32) containing the converted values.
+
+Notes
+-----
+This function wraps the CUDA libdevice function ``__nv_double2uint_rz``.
+The conversion truncates the fractional portion (round towards zero).
+
+Values outside the representable range of int32 produce undefined results.
+NaN and infinity inputs produce undefined results.
+
+This function must be called within a :code:`@triton.jit` decorated kernel.
+The ``_semantic`` parameter is handled automatically by the Triton compiler.
+
+Examples
+--------
+.. code-block:: python
+
+    import triton
+    import triton.language as tl
+
+    @triton.jit
+    def convert_kernel(x_ptr, out_ptr, BLOCK_SIZE: tl.constexpr):
+        pid = tl.program_id(0)
+        offset = pid * BLOCK_SIZE
+        x = tl.load(x_ptr + offset).to(tl.float64)
+        out = tl.extra.cuda.libdevice.double2uint_rz(x)
+        tl.store(out_ptr + offset, out)

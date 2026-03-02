@@ -1,0 +1,60 @@
+triton.language.extra.cuda.libdevice.sub_rd
+============================================
+
+.. currentmodule:: triton.language.extra.cuda.libdevice
+
+.. autofunction:: sub_rd
+
+Subtract two floating-point values with round-down (toward negative infinity) rounding mode.
+
+Parameters
+----------
+arg0 : tensor
+    First input tensor. Must be of floating-point type (``fp32`` or ``fp64``).
+arg1 : tensor
+    Second input tensor. Must match the dtype of ``arg0``.
+_semantic : optional
+    Internal semantic argument. Do not set manually.
+
+Returns
+-------
+tensor
+    Element-wise difference of ``arg0 - arg1`` with round-down rounding mode.
+    The dtype matches the input dtype (``fp32`` or ``fp64``).
+
+Notes
+-----
+This function wraps CUDA libdevice intrinsics:
+
+- ``__nv_fsub_rd`` for 32-bit floating-point (``fp32``)
+- ``__nv_dsub_rd`` for 64-bit floating-point (``fp64``)
+
+The "rd" suffix indicates round-down rounding mode (round toward negative
+infinity). This differs from the default round-to-nearest-even mode used by
+standard subtraction operations.
+
+This function is marked as pure, meaning it has no side effects and the same
+inputs will always produce the same outputs.
+
+Only ``fp32`` and ``fp64`` dtypes are supported. Other floating-point types
+(e.g., ``fp16``, ``bf16``, ``fp8``) are not supported by this libdevice
+function.
+
+Examples
+--------
+.. code-block:: python
+
+    import triton
+    import triton.language as tl
+
+    @triton.jit
+    def sub_rd_kernel(x_ptr, y_ptr, out_ptr, n,
+                      BLOCK_SIZE: tl.constexpr):
+        pid = tl.program_id(0)
+        offs = pid * BLOCK_SIZE + tl.arange(0, BLOCK_SIZE)
+        mask = offs < n
+        x = tl.load(x_ptr + offs, mask=mask)
+        y = tl.load(y_ptr + offs, mask=mask)
+        # Subtract with round-down rounding mode
+        result = tl.extra.cuda.libdevice.sub_rd(x, y)
+        tl.store(out_ptr + offs, result, mask=mask)

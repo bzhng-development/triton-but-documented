@@ -1,0 +1,60 @@
+ilogb
+=====
+
+.. currentmodule:: triton.language.extra.cuda.libdevice
+
+.. function:: ilogb(arg0, _semantic=None)
+
+    Returns the unbiased exponent of a floating-point value.
+
+    Parameters
+    ----------
+    arg0 : tl.tensor
+        Input tensor of floating-point values. Must be either ``tl.float32`` or
+        ``tl.float64`` dtype.
+
+    Returns
+    -------
+    tl.tensor
+        Tensor of ``tl.int32`` values containing the unbiased exponent of each
+        input element.
+
+    Notes
+    -----
+    This function is a wrapper around CUDA libdevice functions:
+
+    - For ``fp32`` input: calls ``__nv_ilogbf``
+    - For ``fp64`` input: calls ``__nv_ilogb``
+
+    The unbiased exponent is the exponent value from the IEEE 754 floating-point
+    representation, without the bias. For normal numbers, this equals
+    ``floor(log2(abs(x)))``. Special cases:
+
+    - ``ilogb(0)`` returns ``-2147483648`` (INT32_MIN)
+    - ``ilogb(inf)`` returns ``2147483647`` (INT32_MAX)
+    - ``ilogb(nan)`` returns ``2147483647`` (INT32_MAX)
+
+    This function is pure (no side effects) and can be used in JIT-compiled
+    Triton kernels.
+
+    Examples
+    --------
+    .. code-block:: python
+
+        import triton
+        import triton.language as tl
+
+        @triton.jit
+        def extract_exponent_kernel(x_ptr, exp_ptr, BLOCK: tl.constexpr):
+            pid = tl.program_id(0)
+            offsets = pid * BLOCK + tl.arange(0, BLOCK)
+            x = tl.load(x_ptr + offsets)
+            exp = tl.extra.cuda.libdevice.ilogb(x)
+            tl.store(exp_ptr + offsets, exp)
+
+        # Usage
+        import torch
+        x = torch.tensor([1.0, 2.0, 4.0, 8.0], dtype=torch.float32, device='cuda')
+        exp = torch.empty_like(x, dtype=torch.int32)
+        extract_exponent_kernel[(1,)](x, exp, BLOCK=4)
+        # exp will contain [0, 1, 2, 3]

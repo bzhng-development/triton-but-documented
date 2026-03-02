@@ -1,0 +1,59 @@
+gluon.language.barrier
+======================
+
+.. currentmodule:: triton.experimental.gluon.language
+
+.. function:: barrier(*, cluster=False)
+
+   Insert a barrier to synchronize threads within a CTA or across a CTA cluster.
+
+   Parameters
+   ----------
+   cluster : bool, optional
+       Whether to synchronize across the CTA cluster. Default is ``False``, which
+       synchronizes only within the current CTA. Set to ``True`` for cluster-wide
+       synchronization when multiple CTAs are present.
+
+   Returns
+   -------
+   None
+
+   Notes
+   -----
+   The barrier behavior depends on the kernel configuration and the ``cluster``
+   parameter:
+
+   - When ``cluster=False`` or the kernel has only one CTA (``num_ctas == 1``),
+     inserts a CTA-level synchronization barrier (``debug_barrier``).
+   - When ``cluster=True`` and multiple CTAs are present, inserts a cluster-wide
+     barrier (``create_cluster_barrier``) that synchronizes across all CTAs in
+     the cluster.
+
+   All threads must reach the barrier before any can proceed. Barriers are
+   essential for coordinating shared memory accesses and ensuring correct
+   execution order in parallel kernels.
+
+   Examples
+   --------
+   Synchronize threads within a CTA:
+
+   .. code-block:: python
+
+      import triton.experimental.gluon as gluon
+      import triton.experimental.gluon.language as ttgl
+
+      @gluon.jit
+      def kernel(...):
+          # ... compute ...
+          ttgl.barrier()  # CTA-level synchronization
+          # ... continue ...
+
+   Synchronize across a CTA cluster:
+
+   .. code-block:: python
+
+      @gluon.jit
+      def kernel(...):
+          # ... compute ...
+          ttgl.barrier(cluster=True)  # Cluster-wide synchronization
+          # ... continue ...

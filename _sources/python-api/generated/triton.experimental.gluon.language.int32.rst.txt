@@ -1,0 +1,23 @@
+int32
+=====
+
+32-bit signed integer data type.
+
+Represents a scalar 32-bit signed integer type for use within Gluon JIT kernels. This type ensures consistent precision across supported GPU architectures (NVIDIA Hopper/Blackwell, AMD CDNA/RDNA).
+
+Notes
+-----
+Use this dtype for explicit type annotations, constant creation, or casting inside ``@gluon.jit`` functions. It corresponds to ``i32`` in underlying assembly (PTX/GCN).
+
+Examples
+--------
+.. code-block:: python
+
+    import triton.experimental.gluon as gluon
+    import triton.experimental.gluon.language as ttgl
+
+    @gluon.jit
+    def kernel(x_ptr, n):
+        pid = ttgl.program_id(0).to(ttgl.int32)
+        val = ttgl.load(x_ptr + pid).to(ttgl.int32)
+        ttgl.store(x_ptr + pid, val + 1)

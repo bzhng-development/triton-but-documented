@@ -1,0 +1,41 @@
+floor
+=====
+
+Computes the element-wise floor of the input tensor.
+
+.. function:: floor(x, _semantic=None)
+
+   Computes the element-wise floor of :code:`x`.
+
+   Parameters
+   ----------
+   x : Block
+       The input tensor. Must be a floating-point type (fp32 or fp64).
+   _semantic : GluonSemantic, optional
+       Internal semantic context. Do not set manually.
+
+   Returns
+   -------
+   Block
+       A tensor containing the floor of each element in :code:`x`.
+
+   Notes
+   -----
+   This operation is only supported for floating-point dtypes (fp32, fp64).
+   The floor function returns the largest integer less than or equal to each
+   element.
+
+   Examples
+   --------
+   .. code-block:: python
+
+      import triton.experimental.gluon as gluon
+      import triton.experimental.gluon.language as ttgl
+
+      @gluon.jit
+      def kernel(x_ptr, y_ptr, BLOCK_SIZE: tl.constexpr):
+          pid = ttgl.program_id(0)
+          offs = pid * BLOCK_SIZE + ttgl.arange(0, BLOCK_SIZE)
+          x = ttgl.load(x_ptr + offs)
+          y = ttgl.floor(x)
+          ttgl.store(y_ptr + offs, y)

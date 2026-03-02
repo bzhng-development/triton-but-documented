@@ -1,29 +1,28 @@
-.. class:: triton.language.condition(arg1, disable_licm=False)
+class triton.language.condition
+===============================
 
-   While loop condition wrapper.
+While loop condition wrapper for :code:`triton.jit` functions.
 
-   This class is a special wrapper used to annotate ``while`` loops in the context of
-   :code:`@triton.jit` functions. It allows users to pass extra attributes to the compiler
-   to control optimization behavior.
+Parameters
+----------
+arg1 : tensor
+    The loop condition value.
+disable_licm : bool, optional
+    If True, prevents the compiler from hoisting loop invariant code outside
+    the loop. Default is False. This can help avoid creating long live ranges
+    within a loop.
 
-   .. code-block:: python
+Notes
+-----
+This is a special wrapper used to annotate while loops in the context of
+:code:`triton.jit` functions. It allows users to pass extra attributes to
+the compiler.
 
-      @triton.jit
-      def kernel(...):
-          while tl.condition(c, disable_licm=True):
-              ...
+Examples
+--------
+.. code-block:: python
 
-   Parameters
-   ----------
-   arg1 : tensor
-      The boolean condition tensor controlling the while loop execution.
-   disable_licm : bool, optional
-      If True, tells the compiler not to hoist loop-invariant code outside the loop.
-      This is often useful to avoid creating long live ranges within a loop.
-      Default is False.
-
-   Notes
-   -----
-   This wrapper is specifically designed for use in the condition expression of
-   ``while`` loops inside JIT-compiled Triton kernels. It does not perform any
-   runtime computation but serves as a hint to the compiler backend.
+    @triton.jit
+    def kernel(...):
+        while tl.condition(c, disable_licm=True):
+            ...

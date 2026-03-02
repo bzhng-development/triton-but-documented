@@ -1,0 +1,79 @@
+load
+====
+
+.. currentmodule:: triton.experimental.gluon.language
+
+.. function:: load(pointer, mask=None, other=None, boundary_check=(), padding_option='', cache_modifier='', eviction_policy='', volatile=False)
+
+   Load data from memory at the location defined by ``pointer``.
+
+   Returns a tensor of data whose values are loaded from memory. The behavior depends on the type of ``pointer``:
+
+   1. **Single element pointer**: A scalar is loaded. ``mask`` and ``other`` must be scalars, ``other`` is implicitly typecast to ``pointer.dtype.element_ty``, and ``boundary_check`` and ``padding_option`` must be empty.
+
+   2. **N-dimensional tensor of pointers**: An N-dimensional tensor is loaded. ``mask`` and ``other`` are implicitly broadcast to ``pointer.shape``, ``other`` is implicitly typecast to ``pointer.dtype.element_ty``, and ``boundary_check`` and ``padding_option`` must be empty.
+
+   3. **Block pointer** (defined by :func:`make_block_ptr`): A tensor is loaded. ``mask`` and ``other`` must be ``None``, and ``boundary_check`` and ``padding_option`` can be specified to control out-of-bound access behavior.
+
+   Parameters
+   ----------
+   pointer : `triton.PointerType` or block of `triton.PointerType`
+       Pointer to the data to be loaded.
+   mask : block of `triton.int1`, optional
+       If ``mask[idx]`` is false, do not load the data at address ``pointer[idx]``. Must be ``None`` with block pointers.
+   other : block, optional
+       If ``mask[idx]`` is false, return ``other[idx]``.
+   boundary_check : tuple of ints, optional
+       Tuple of integers indicating the dimensions which should perform the boundary check.
+   padding_option : str, optional
+       Padding value to use while out of bounds. Should be one of ``{"", "zero", "nan"}``. ``""`` means an undefined value.
+   cache_modifier : str, optional
+       Changes cache option in NVIDIA PTX. Should be one of ``{"", ".ca", ".cg", ".cv"}``, where:
+
+       - ``.ca``: cache at all levels
+       - ``.cg``: cache at global level (cache in L2 and below, not L1)
+       - ``.cv``: don't cache and fetch again
+
+       See `cache operator <https://docs.nvidia.com/cuda/parallel-thread-execution/index.html#cache-operators>`_ for more details.
+   eviction_policy : str, optional
+       Changes eviction policy in NVIDIA PTX.
+   volatile : bool, optional
+       Changes volatile option in NVIDIA PTX.
+
+   Returns
+   -------
+   tensor
+       A tensor containing the loaded data.
+
+   Notes
+   -----
+   For block pointers, ``mask`` and ``other`` must be ``None``. Use ``boundary_check`` and ``padding_option`` to control out-of-bound access behavior instead.
+
+   Examples
+   --------
+   Load a scalar from a single pointer:
+
+   .. code-block:: python
+
+      import triton.experimental.gluon as gluon
+      import triton.experimental.gluon.language as ttgl
+
+      @gluon.jit
+      def kernel(ptr):
+          value = ttgl.load(ptr)
+
+   Load a tensor with masking:
+
+   .. code-block:: python
+
+      @gluon.jit
+      def kernel(ptr, mask, other):
+          data = ttgl.load(ptr, mask=mask, other=other)
+
+   Load from a block pointer with boundary checking:
+
+   .. code-block:: python
+
+      @gluon.jit
+      def kernel(block_ptr):
+          data = ttgl.load(block_ptr, boundary_check=(0, 1), padding_option="zero")

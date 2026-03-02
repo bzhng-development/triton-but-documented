@@ -1,0 +1,35 @@
+mbarrier_arrive
+===============
+
+.. py:function:: triton.experimental.gluon.language.amd.gfx1250.async_copy.mbarrier_arrive(mbarrier, _semantic=None)
+
+   Arrive on the memory barrier once all outstanding async copies are complete.
+
+   This operation signals to the barrier that all asynchronous copy operations associated with it have finished. It is required before threads waiting on the barrier can proceed.
+
+   Parameters
+   ----------
+   mbarrier : shared_memory_descriptor
+       Barrier object to arrive on.
+   _semantic : GluonSemantic, optional
+       Internal semantic context injected by the JIT compiler. Users should not pass this argument.
+
+   Returns
+   -------
+   None
+
+   Notes
+   -----
+   This function is specific to AMD GFX1250 hardware (RDNA4/CDNA4). It interfaces with the hardware memory barrier mechanism for async copies (LDS barrier arrive). Ensure all relevant async copy operations are issued before calling this function to guarantee correct synchronization.
+
+   Examples
+   --------
+   >>> import triton.experimental.gluon as gluon
+   >>> import triton.experimental.gluon.language as ttgl
+   >>> @gluon.jit
+   ... def kernel(mbarrier_ptr):
+   ...     # Load barrier descriptor from global memory
+   ...     mbarrier = ttgl.load(mbarrier_ptr)
+   ...     # Issue async copies ...
+   ...     # Signal completion to the barrier
+   ...     ttgl.amd.gfx1250.async_copy.mbarrier_arrive(mbarrier)

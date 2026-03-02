@@ -1,0 +1,45 @@
+erf
+===
+
+Compute the element-wise error function of the input tensor.
+
+Parameters
+----------
+arg0 : tensor
+    Input tensor of floating-point type. Supported dtypes are ``fp32`` and
+    ``fp64``.
+
+Returns
+-------
+tensor
+    Tensor of the same dtype as the input, containing the error function
+    values element-wise.
+
+Notes
+-----
+The error function is defined as:
+
+.. math::
+
+    \\text{erf}(x) = \\frac{2}{\\sqrt{\\pi}} \\int_0^x e^{-t^2} dt
+
+This function dispatches to CUDA libdevice implementations:
+
+- ``__nv_erff`` for 32-bit floating-point (``fp32``)
+- ``__nv_erf`` for 64-bit floating-point (``fp64``)
+
+The operation is pure (has no side effects).
+
+Examples
+--------
+.. code-block:: python
+
+    import triton
+    import triton.language as tl
+
+    @triton.jit
+    def kernel(X_ptr, Y_ptr, BLOCK_SIZE: tl.constexpr):
+        offsets = tl.arange(0, BLOCK_SIZE)
+        x = tl.load(X_ptr + offsets)
+        y = tl.extra.cuda.libdevice.erf(x)
+        tl.store(Y_ptr + offsets, y)

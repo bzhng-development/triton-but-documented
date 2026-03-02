@@ -1,0 +1,58 @@
+ravel
+=====
+
+Returns a contiguous flattened view of a tensor.
+
+.. code-block:: python
+
+    ravel(x, can_reorder=False)
+
+Parameters
+----------
+
+x : Block
+    The input tensor to flatten.
+
+can_reorder : bool, optional
+    If ``True``, allows the compiler to reorder elements for efficiency.
+    Default is ``False``.
+
+Returns
+-------
+
+Block
+    A 1-D tensor containing all elements of ``x`` in contiguous memory.
+
+Notes
+-----
+
+This function can also be called as a member function on :py:class:`tensor`,
+as ``x.ravel(...)`` instead of ``ravel(x, ...)``.
+
+The output tensor has shape ``(x.numel,)`` where ``numel`` is the total
+number of elements in the input tensor.
+
+Examples
+--------
+
+.. code-block:: python
+
+    import triton.experimental.gluon as gluon
+    import triton.experimental.gluon.language as ttgl
+
+    @gluon.jit
+    def kernel(x_ptr, y_ptr, BLOCK_SIZE: ttgl.constexpr):
+        x = ttgl.load(x_ptr + ttgl.arange(0, BLOCK_SIZE))
+        # Reshape to 2D
+        x_2d = ttgl.reshape(x, (BLOCK_SIZE // 4, 4))
+        # Flatten back to 1D
+        x_flat = ttgl.ravel(x_2d)
+        ttgl.store(y_ptr + ttgl.arange(0, BLOCK_SIZE), x_flat)
+
+    # Using member function syntax
+    @gluon.jit
+    def kernel_member(x_ptr, y_ptr, BLOCK_SIZE: ttgl.constexpr):
+        x = ttgl.load(x_ptr + ttgl.arange(0, BLOCK_SIZE))
+        x_2d = ttgl.reshape(x, (BLOCK_SIZE // 4, 4))
+        x_flat = x_2d.ravel()  # Equivalent to ttgl.ravel(x_2d)
+        ttgl.store(y_ptr + ttgl.arange(0, BLOCK_SIZE), x_flat)

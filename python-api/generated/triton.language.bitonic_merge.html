@@ -15,12 +15,11 @@
       <script src="../../_static/documentation_options.js?v=5929fcd5"></script>
       <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
       <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
-      <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-mml-chtml.js"></script>
     <script src="../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
     <link rel="next" title="atomic_add" href="triton.language.atomic_add.html" />
-    <link rel="prev" title="Parameters" href="triton.language.gather.html" /> 
+    <link rel="prev" title="gather" href="triton.language.gather.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -60,19 +59,15 @@
 <li class="toctree-l2"><a class="reference internal" href="../triton.language.html#math-ops">Math Ops</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../triton.language.html#reduction-ops">Reduction Ops</a></li>
 <li class="toctree-l2 current"><a class="reference internal" href="../triton.language.html#scan-sort-ops">Scan/Sort Ops</a><ul class="current">
-<li class="toctree-l3"><a class="reference internal" href="triton.language.associative_scan.html"><code class="docutils literal notranslate"><span class="pre">triton.language.associative_scan()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.language.associative_scan.html">triton.language.associative_scan</a></li>
 <li class="toctree-l3"><a class="reference internal" href="triton.language.cumprod.html">cumprod</a></li>
 <li class="toctree-l3"><a class="reference internal" href="triton.language.cumsum.html">cumsum</a></li>
-<li class="toctree-l3"><a class="reference internal" href="triton.language.histogram.html">Parameters</a></li>
-<li class="toctree-l3"><a class="reference internal" href="triton.language.histogram.html#returns">Returns</a></li>
-<li class="toctree-l3"><a class="reference internal" href="triton.language.histogram.html#notes">Notes</a></li>
-<li class="toctree-l3"><a class="reference internal" href="triton.language.histogram.html#examples">Examples</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.language.histogram.html">histogram</a></li>
 <li class="toctree-l3"><a class="reference internal" href="triton.language.sort.html">sort</a></li>
-<li class="toctree-l3"><a class="reference internal" href="triton.language.topk.html">topk</a></li>
-<li class="toctree-l3"><a class="reference internal" href="triton.language.gather.html"><code class="docutils literal notranslate"><span class="pre">triton.language.gather()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.language.topk.html">triton.language.topk</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.language.gather.html">gather</a></li>
 <li class="toctree-l3 current"><a class="current reference internal" href="#">bitonic_merge</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="#triton.language.bitonic_merge"><code class="docutils literal notranslate"><span class="pre">bitonic_merge()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#id0"><code class="docutils literal notranslate"><span class="pre">bitonic_merge()</span></code></a></li>
 </ul>
 </li>
 </ul>
@@ -88,6 +83,35 @@
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../triton.testing.html">triton.testing</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../triton-semantics.html">Triton Semantics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.language.extra.cuda.html">triton.language.extra.cuda</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.language.extra.cuda.libdevice.html">triton.language.extra.cuda.libdevice</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.runtime.html">triton.runtime</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.tools.html">triton.tools</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Gluon (Experimental) API</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.html">triton.experimental.gluon</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.html">triton.experimental.gluon.language</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.nvidia.ampere.html">triton.experimental.gluon.language.nvidia.ampere</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.nvidia.ampere.async_copy.html">triton.experimental.gluon.language.nvidia.ampere.async_copy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.nvidia.ampere.mbarrier.html">triton.experimental.gluon.language.nvidia.ampere.mbarrier</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.nvidia.hopper.html">triton.experimental.gluon.language.nvidia.hopper</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.nvidia.hopper.tma.html">triton.experimental.gluon.language.nvidia.hopper.tma</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.nvidia.hopper.mbarrier.html">triton.experimental.gluon.language.nvidia.hopper.mbarrier</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.nvidia.hopper.cluster.html">triton.experimental.gluon.language.nvidia.hopper.cluster</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.nvidia.blackwell.html">triton.experimental.gluon.language.nvidia.blackwell</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.nvidia.blackwell.tma.html">triton.experimental.gluon.language.nvidia.blackwell.tma</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.nvidia.blackwell.clc.html">triton.experimental.gluon.language.nvidia.blackwell.clc</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.amd.html">triton.experimental.gluon.language.amd</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.amd.gfx1250.html">triton.experimental.gluon.language.amd.gfx1250</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.amd.gfx1250.async_copy.html">triton.experimental.gluon.language.amd.gfx1250.async_copy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.amd.gfx1250.mbarrier.html">triton.experimental.gluon.language.amd.gfx1250.mbarrier</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.amd.gfx1250.cluster.html">triton.experimental.gluon.language.amd.gfx1250.cluster</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.amd.gfx1250.tdm.html">triton.experimental.gluon.language.amd.gfx1250.tdm</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.amd.cdna3.html">triton.experimental.gluon.language.amd.cdna3</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.amd.cdna4.html">triton.experimental.gluon.language.amd.cdna4</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.amd.rdna3.html">triton.experimental.gluon.language.amd.rdna3</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.amd.rdna4.html">triton.experimental.gluon.language.amd.rdna4</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Triton MLIR Dialects</span></p>
 <ul>
@@ -129,62 +153,50 @@
 <h1>bitonic_merge<a class="headerlink" href="#bitonic-merge" title="Link to this heading">¶</a></h1>
 <dl class="py function">
 <dt class="sig sig-object py" id="triton.language.bitonic_merge">
-<span class="sig-prename descclassname"><span class="pre">triton.language.</span></span><span class="sig-name descname"><span class="pre">bitonic_merge</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dim</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="triton.language.constexpr.html#triton.language.constexpr" title="triton.language.core.constexpr"><span class="pre">constexpr</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">descending</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="triton.language.constexpr.html#triton.language.constexpr" title="triton.language.core.constexpr"><span class="pre">constexpr</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">constexpr[0]</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#triton.language.bitonic_merge" title="Link to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="id0">
-<span class="sig-prename descclassname"><span class="pre">triton.language.</span></span><span class="sig-name descname"><span class="pre">bitonic_merge</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dim</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">descending</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#id0" title="Link to this definition">¶</a></dt>
-<dd><p>Performs a full bitonic merge on the input tensor along the specified dimension.</p>
-<p>This operation assumes the input data forms a bitonic sequence (or is the result
-of prior bitonic sort stages) and merges it into a fully sorted sequence.
-The size of the dimension to be sorted must be a power of two.</p>
-<p>Currently, only the minor (last) dimension is supported.</p>
+<span class="sig-prename descclassname"><span class="pre">triton.language.</span></span><span class="sig-name descname"><span class="pre">bitonic_merge</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dim</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">descending</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#triton.language.bitonic_merge" title="Link to this definition">¶</a></dt>
+<dd><p>Performs a bitonic merge operation on a tensor along a specified dimension.</p>
+<p>This function applies a bitonic sorting network to merge elements along the
+specified dimension. The dimension size must be a power of 2. Currently only
+the last (minor) dimension is supported.</p>
 <section id="parameters">
 <h2>Parameters<a class="headerlink" href="#parameters" title="Link to this heading">¶</a></h2>
 <dl class="simple">
-<dt>x<span class="classifier">tl.tensor</span></dt><dd><p>The input tensor to merge. The size of the merging dimension must be a power of two.</p>
+<dt>x<span class="classifier">tensor</span></dt><dd><p>Input tensor to merge. The size of the merge dimension must be a power of 2.</p>
 </dd>
-<dt>dim<span class="classifier">constexpr, optional</span></dt><dd><p>The dimension along which to perform the merge. If <code class="docutils literal notranslate"><span class="pre">None</span></code>, defaults to the last
-dimension. Only the last dimension is currently supported.</p>
+<dt>dim<span class="classifier">int, optional</span></dt><dd><p>Dimension along which to perform the merge. If None, uses the last dimension.
+Currently only the last dimension is supported.</p>
 </dd>
-<dt>descending<span class="classifier">constexpr, optional</span></dt><dd><p>If <code class="docutils literal notranslate"><span class="pre">True</span></code>, the result is sorted in descending order. If <code class="docutils literal notranslate"><span class="pre">False</span></code> (default),
-the result is sorted in ascending order.</p>
+<dt>descending<span class="classifier">bool, optional</span></dt><dd><p>If True, merge in descending order. If False (default), merge in ascending order.</p>
 </dd>
 </dl>
 </section>
 <section id="returns">
 <h2>Returns<a class="headerlink" href="#returns" title="Link to this heading">¶</a></h2>
 <dl class="simple">
-<dt>tl.tensor</dt><dd><p>A tensor containing the merged values, sorted along the specified dimension.</p>
+<dt>tensor</dt><dd><p>Tensor with elements merged along the specified dimension.</p>
 </dd>
 </dl>
 </section>
 <section id="notes">
 <h2>Notes<a class="headerlink" href="#notes" title="Link to this heading">¶</a></h2>
-<p>This is a low-level primitive used to implement sorting networks (e.g., in <a class="reference internal" href="triton.language.sort.html#triton.language.sort" title="triton.language.sort"><code class="xref py py-func docutils literal notranslate"><span class="pre">triton.language.sort()</span></code></a>
-or <a class="reference internal" href="triton.language.topk.html#triton.language.topk" title="triton.language.topk"><code class="xref py py-func docutils literal notranslate"><span class="pre">triton.language.topk()</span></code></a>). It executes a complete bitonic merging network of depth
-<span class="math notranslate nohighlight">\(\log_2(N)\)</span> where <span class="math notranslate nohighlight">\(N\)</span> is the size of the dimension.</p>
-<p>The function compiles to efficient GPU compare-and-swap instructions using XOR-based
-addressing for thread communication.</p>
+<p>This is a low-level primitive used by sorting operations like <code class="xref py py-func docutils literal notranslate"><span class="pre">sort()</span></code> and
+<a class="reference internal" href="triton.language.topk.html#triton.language.topk" title="triton.language.topk"><code class="xref py py-func docutils literal notranslate"><span class="pre">topk()</span></code></a>. The bitonic merge operation requires the dimension size to be a
+power of 2. Only the last dimension is currently supported.</p>
 </section>
 <section id="examples">
 <h2>Examples<a class="headerlink" href="#examples" title="Link to this heading">¶</a></h2>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">triton</span>
-<span class="kn">import</span><span class="w"> </span><span class="nn">triton.language</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">tl</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">triton.language</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">tl</span>
 
-<span class="nd">@triton</span><span class="o">.</span><span class="n">jit</span>
-<span class="k">def</span><span class="w"> </span><span class="nf">kernel</span><span class="p">(</span><span class="n">x_ptr</span><span class="p">,</span> <span class="n">BLOCK_SIZE</span><span class="p">:</span> <span class="n">tl</span><span class="o">.</span><span class="n">constexpr</span><span class="p">):</span>
-    <span class="c1"># Load data assuming it is in a bitonic sequence state</span>
-    <span class="n">pid</span> <span class="o">=</span> <span class="n">tl</span><span class="o">.</span><span class="n">program_id</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
-    <span class="n">offs</span> <span class="o">=</span> <span class="n">tl</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">BLOCK_SIZE</span><span class="p">)</span>
-    <span class="n">x</span> <span class="o">=</span> <span class="n">tl</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">x_ptr</span> <span class="o">+</span> <span class="n">pid</span> <span class="o">*</span> <span class="n">BLOCK_SIZE</span> <span class="o">+</span> <span class="n">offs</span><span class="p">)</span>
+<span class="c1"># Merge a 1D tensor of 8 elements (must be power of 2)</span>
+<span class="n">x</span> <span class="o">=</span> <span class="n">tl</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">8</span><span class="p">)</span>
+<span class="n">merged</span> <span class="o">=</span> <span class="n">tl</span><span class="o">.</span><span class="n">bitonic_merge</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>  <span class="c1"># Ascending order</span>
 
-    <span class="c1"># Perform a full bitonic merge to sort the block</span>
-    <span class="c1"># BLOCK_SIZE must be a power of 2</span>
-    <span class="n">sorted_x</span> <span class="o">=</span> <span class="n">tl</span><span class="o">.</span><span class="n">bitonic_merge</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">descending</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="c1"># Merge in descending order</span>
+<span class="n">merged_desc</span> <span class="o">=</span> <span class="n">tl</span><span class="o">.</span><span class="n">bitonic_merge</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">descending</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
-    <span class="n">tl</span><span class="o">.</span><span class="n">store</span><span class="p">(</span><span class="n">x_ptr</span> <span class="o">+</span> <span class="n">pid</span> <span class="o">*</span> <span class="n">BLOCK_SIZE</span> <span class="o">+</span> <span class="n">offs</span><span class="p">,</span> <span class="n">sorted_x</span><span class="p">)</span>
+<span class="c1"># 2D tensor - merges along last dimension</span>
+<span class="n">y</span> <span class="o">=</span> <span class="n">tl</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">tl</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">16</span><span class="p">),</span> <span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">8</span><span class="p">))</span>
+<span class="n">merged_2d</span> <span class="o">=</span> <span class="n">tl</span><span class="o">.</span><span class="n">bitonic_merge</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>  <span class="c1"># Merges each row</span>
 </pre></div>
 </div>
 </section>
@@ -196,7 +208,7 @@ addressing for thread communication.</p>
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="triton.language.gather.html" class="btn btn-neutral float-left" title="Parameters" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="triton.language.gather.html" class="btn btn-neutral float-left" title="gather" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
         <a href="triton.language.atomic_add.html" class="btn btn-neutral float-right" title="atomic_add" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 

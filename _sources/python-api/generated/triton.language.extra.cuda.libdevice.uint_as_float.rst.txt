@@ -1,0 +1,50 @@
+uint_as_float
+=============
+
+.. currentmodule:: triton.language.extra.cuda.libdevice
+
+.. function:: uint_as_float(arg0, _semantic=None)
+
+    Reinterpret the bit pattern of an unsigned 32-bit integer as a 32-bit float.
+
+    Parameters
+    ----------
+    arg0 : tl.tensor
+        Input tensor of uint32 values.
+    _semantic : optional
+        Internal parameter used by Triton compiler. Do not provide manually.
+
+    Returns
+    -------
+    tl.tensor
+        Tensor of fp32 values with the same bit pattern as the input.
+
+    Notes
+    -----
+    This function performs a bitcast operation, reinterpreting the binary
+    representation of uint32 values as IEEE 754 single-precision floating
+    point numbers. No numerical conversion is performed - the bits are
+    simply reinterpreted.
+
+    This is a CUDA libdevice function that maps to ``__nv_uint_as_float``
+    in PTX. The operation is pure (no side effects).
+
+    Examples
+    --------
+    .. code-block:: python
+
+        import triton
+        import triton.language as tl
+
+        @triton.jit
+        def kernel(x_ptr, y_ptr, n, BLOCK_SIZE: tl.constexpr):
+            pid = tl.program_id(0)
+            offset = pid * BLOCK_SIZE
+            x = tl.load(x_ptr + offset).to(tl.uint32)
+            y = tl.extra.cuda.libdevice.uint_as_float(x)
+            tl.store(y_ptr + offset, y)
+
+    See Also
+    --------
+    float_as_int : Reinterpret float32 bit pattern as uint32
+    bitcast : General bitcast operation in Triton

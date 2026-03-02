@@ -1,0 +1,78 @@
+async_gather
+============
+
+.. currentmodule:: triton.experimental.gluon.language.nvidia.blackwell.tma
+
+.. autofunction:: async_gather
+
+Asynchronously gather elements from global memory to shared memory using TMA.
+
+Parameters
+----------
+tensor_desc : tensor_descriptor
+    The tensor descriptor specifying the global memory source.
+x_offsets : tensor
+    1D tensor of X offsets for the gather operation.
+y_offset : int
+    Scalar Y offset for the gather operation.
+barrier : shared_memory_descriptor
+    Barrier that will be signaled when the operation is complete.
+result : tensor_memory_descriptor
+    Result shared memory, must have ``NVMMASharedLayout``.
+pred : bool, optional
+    Scalar predicate. Operation is skipped if predicate is False. Defaults to True.
+
+Returns
+-------
+None
+    This function performs an asynchronous memory operation and does not return a value.
+
+Notes
+-----
+This operation is specific to NVIDIA Blackwell architecture and requires TMA (Tensor Memory Accelerator) hardware support. The gather operation asynchronously copies elements from global memory to shared memory, allowing compute to proceed while the transfer is in progress.
+
+The ``result`` shared memory must be allocated with ``NVMMASharedLayout`` to ensure compatibility with TMA operations. The ``barrier`` parameter is used for synchronization - threads can wait on the barrier to ensure the async operation has completed before accessing the data.
+
+When ``pred=False``, the operation is skipped entirely. The predicate is evaluated per thread block.
+
+Examples
+--------
+.. code-block:: python
+
+    import triton.experimental.gluon as gluon
+    import triton.experimental.gluon.language as ttgl
+    from triton.experimental.gluon.language.nvidia.blackwell import tma
+
+    @gluon.jit
+    def kernel(x_ptr, y_ptr, BLOCK_SIZE: tl.constexpr):
+        # Allocate shared memory with NVMMASharedLayout
+        smem = ttgl.allocate_shared_memory(
+            element_ty=ttgl.float16,
+            shape=[BLOCK_SIZE, BLOCK_SIZE],
+            layout=NVMMASharedLayout(...)
+        )
+        
+        # Create barrier for synchronization
+        barrier = ttgl.shared_memory_descriptor(...)
+        
+        # Create tensor descriptor for global memory
+        tensor_desc = tma.make_tensor_descriptor(x_ptr, ...)
+        
+        # Generate x offsets
+        x_offsets = ttgl.arange(0, BLOCK_SIZE, layout=...)
+        
+        # Async gather from global to shared memory
+        tma.async_gather(
+            tensor_desc=tensor_desc,
+            x_offsets=x_offsets,
+            y_offset=0,
+            barrier=barrier,
+            result=smem,
+            pred=True
+        )
+        
+        # Wait for async operation to complete
+        ttgl.barrier()
+        
+        # Now safe to use data in smem
+        data = smem.load(layout=...)

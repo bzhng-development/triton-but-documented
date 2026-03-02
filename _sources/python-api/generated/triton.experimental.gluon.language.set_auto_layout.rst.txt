@@ -1,0 +1,54 @@
+set_auto_layout
+===============
+
+.. currentmodule:: triton.experimental.gluon.language
+
+.. function:: set_auto_layout(value, layout, _semantic=None)
+
+    Convert a tensor with :class:`AutoLayout` to a concrete :class:`DistributedLayout`.
+
+    This operation materializes the automatic layout inference into an explicit
+    distributed layout, enabling further layout-aware operations.
+
+    Parameters
+    ----------
+    value : tensor
+        The input tensor with :class:`AutoLayout`.
+    layout : DistributedLayout
+        The target concrete layout to apply to the tensor.
+    _semantic : GluonSemantic, optional
+        Internal parameter for semantic context. Do not set explicitly.
+
+    Returns
+    -------
+    tensor
+        The tensor with the new concrete layout applied.
+
+    Notes
+    -----
+    This function is typically used internally by Gluon to resolve automatic
+    layout inference. Users should prefer :func:`convert_layout` for explicit
+    layout conversions in kernel code.
+
+    The ``_semantic`` parameter is automatically provided by the ``@gluon.jit``
+    decorator and should not be set by users.
+
+    Examples
+    --------
+    .. code-block:: python
+
+        import triton.experimental.gluon as gluon
+        import triton.experimental.gluon.language as ttgl
+
+        @gluon.jit
+        def kernel(x_ptr, y_ptr, BLOCK: ttgl.constexpr):
+            # Load tensor with AutoLayout
+            x = ttgl.load(x_ptr)
+            
+            # Convert to concrete layout
+            layout = ttgl.BlockedLayout(...)
+            x_concrete = ttgl.set_auto_layout(x, layout)
+            
+            # Now x_concrete has explicit layout for further operations
+            y = x_concrete * 2.0
+            ttgl.store(y_ptr, y)

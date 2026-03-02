@@ -3,9 +3,9 @@ program_id
 
 .. currentmodule:: triton.language
 
-.. function:: program_id(axis, _semantic=None)
+.. function:: program_id(axis)
 
-   Returns the ID of the current program instance along the given ``axis``.
+   Returns the ID of the current program instance along the given axis.
 
    Parameters
    ----------
@@ -14,34 +14,24 @@ program_id
 
    Returns
    -------
-   int
-       The program ID along the specified axis.
+   pid : tl.tensor
+       The program ID along the specified axis. Scalar int32 value.
 
    Notes
    -----
-   This function is typically used within JIT-compiled kernels to determine
-   the position of the current program in the grid. It enables SPMD (Single
-   Program Multiple Data) programming by allowing each program to compute
-   unique memory offsets based on its ID.
+   This function is typically used in SPMD (Single Program Multiple Data) kernels
+   to determine which program instance is executing. The program ID can be used
+   to compute memory offsets or select which data to process.
+
+   The 3D launch grid corresponds to the grid dimensions specified when launching
+   the kernel. Each axis represents one dimension of the grid.
 
    Examples
    --------
-   .. code-block:: python
-
-       import triton
-       import triton.language as tl
-
-       @triton.jit
-       def kernel(
-           input_ptr, output_ptr,
-           BLOCK_SIZE: tl.constexpr,
-       ):
-           # Get the program ID along the x-axis (axis=0)
-           pid = tl.program_id(axis=0)
-           
-           # Compute the start offset for this program
-           offset = pid * BLOCK_SIZE
-           
-           # Load and store data using the computed offset
-           x = tl.load(input_ptr + offset + tl.arange(0, BLOCK_SIZE))
-           tl.store(output_ptr + offset + tl.arange(0, BLOCK_SIZE), x * 2)
+   >>> @triton.jit
+   ... def kernel(x_ptr, N, BLOCK_SIZE: tl.constexpr):
+   ...     pid = tl.program_id(0)
+   ...     offset = pid * BLOCK_SIZE
+   ...     mask = offset + tl.arange(0, BLOCK_SIZE) < N
+   ...     x = tl.load(x_ptr + offset, mask=mask)
+   ...     tl.store(x_ptr + offset, x * 2.0, mask=mask)

@@ -1,0 +1,53 @@
+tn.language.extra.cuda.libdevice.jn
+====================================
+
+.. currentmodule:: triton.language.extra.cuda.libdevice
+
+.. autofunction:: jn
+
+Compute the Bessel function of the first kind of order :code:`n`.
+
+Parameters
+----------
+arg0 : tl.tensor
+    Order of the Bessel function. Must be of type :code:`int32`.
+arg1 : tl.tensor
+    Argument value. Must be of type :code:`fp32` or :code:`fp64`.
+_semantic : optional
+    Internal semantic argument. Do not set manually.
+
+Returns
+-------
+result : tl.tensor
+    Bessel function value :code:`J_n(arg1)`. Returns :code:`fp32` if
+    :code:`arg1` is :code:`fp32`, :code:`fp64` if :code:`arg1` is
+    :code:`fp64`.
+
+Notes
+-----
+This function is a wrapper around CUDA libdevice functions:
+
+- :code:`__nv_jnf` for single precision (:code:`fp32`)
+- :code:`__nv_jn` for double precision (:code:`fp64`)
+
+The Bessel function of the first kind is defined as the solution to
+Bessel's differential equation:
+
+.. math::
+
+    x^2 \\frac{d^2y}{dx^2} + x \\frac{dy}{dx} + (x^2 - n^2)y = 0
+
+Examples
+--------
+.. code-block:: python
+
+    import triton
+    import triton.language as tl
+
+    @triton.jit
+    def bessel_kernel(x_ptr, out_ptr, n: tl.constexpr, BLOCK: tl.constexpr):
+        offsets = tl.arange(0, BLOCK)
+        x = tl.load(x_ptr + offsets)
+        # Compute J_n(x) for each element
+        result = tl.extra.cuda.libdevice.jn(n, x)
+        tl.store(out_ptr + offsets, result)

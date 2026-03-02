@@ -7,15 +7,6 @@ split
 
    Split a tensor in two along its last dimension, which must have size 2.
 
-   For example, given a tensor of shape ``(4, 8, 2)``, produces two tensors of
-   shape ``(4, 8)``. Given a tensor of shape ``(2,)``, returns two scalars.
-
-   If you want to split into more than two pieces, you can use multiple calls
-   to this function (probably plus calling :func:`reshape`). This reflects the
-   constraint in Triton that tensors must have power-of-two sizes.
-
-   :func:`split` is the inverse of :func:`join`.
-
    Parameters
    ----------
    a : tensor
@@ -24,29 +15,50 @@ split
    Returns
    -------
    tuple[tensor, tensor]
-       A tuple containing the two split tensors. If the input was rank-1
-       (shape ``(2,)``), returns two scalars.
+       A tuple of two tensors. Each output tensor has the same shape as the
+       input except the last dimension is removed. If the input is 1D with
+       shape (2,), returns two scalars.
 
    Notes
    -----
-   This function can also be called as a member function on :py:class:`tensor`,
-   as ``x.split()`` instead of ``split(x)``.
+   ``split`` is the inverse of :py:func:`join`. Given two tensors of shape
+   (4, 8), :py:func:`join` produces a tensor of shape (4, 8, 2), and
+   :py:func:`split` recovers the original two tensors.
+
+   Triton requires tensors to have power-of-two sizes. To split into more
+   than two pieces, use multiple calls to this function (possibly combined
+   with :py:func:`reshape`).
+
+   This function can also be called as a member function on
+   :py:class:`tensor`, as ``x.split()`` instead of ``split(x)``.
 
    Examples
    --------
+   Split a 3D tensor along its last dimension:
+
    .. code-block:: python
 
-      import triton
-      import triton.language as tl
+      @triton.jit
+      def kernel(...):
+          x = tl.full((4, 8, 2), 1.0, dtype=tl.float32)
+          left, right = tl.split(x)
+          # left.shape == (4, 8), right.shape == (4, 8)
+
+   Split a 1D tensor (returns scalars):
+
+   .. code-block:: python
 
       @triton.jit
-      def kernel(X_ptr, Y_ptr, Z_ptr, BLOCK_SIZE: tl.constexpr):
-          # Load a tensor of shape [BLOCK_SIZE, 2]
-          x = tl.load(X_ptr + tl.arange(0, BLOCK_SIZE)[:, None] * 2)
-          
-          # Split into two tensors of shape [BLOCK_SIZE]
-          y, z = tl.split(x)
-          
-          # Store results
-          tl.store(Y_ptr + tl.arange(0, BLOCK_SIZE), y)
-          tl.store(Z_ptr + tl.arange(0, BLOCK_SIZE), z)
+      def kernel(...):
+          x = tl.arange(0, 2).to(tl.float32)
+          a, b = tl.split(x)
+          # a and b are scalars
+
+   Using as a member function:
+
+   .. code-block:: python
+
+      @triton.jit
+      def kernel(...):
+          x = tl.full((4, 8, 2), 1.0, dtype=tl.float32)
+          left, right = x.split()

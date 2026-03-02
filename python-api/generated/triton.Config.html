@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>class triton.Config &mdash; Triton  documentation</title>
+  <title>triton.Config &mdash; Triton  documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=03e43079" />
       <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="../../_static/css/custom.css" />
@@ -19,7 +19,7 @@
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
     <link rel="next" title="AsyncCompileMode" href="triton.AsyncCompileMode.html" />
-    <link rel="prev" title="Parameters" href="triton.heuristics.html" /> 
+    <link rel="prev" title="triton.heuristics" href="triton.heuristics.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -50,15 +50,13 @@
 <ul class="current">
 <li class="toctree-l1 current"><a class="reference internal" href="../triton.html">triton</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="triton.jit.html">triton.jit</a></li>
-<li class="toctree-l2"><a class="reference internal" href="triton.autotune.html"><code class="docutils literal notranslate"><span class="pre">triton.autotune()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="triton.heuristics.html">Parameters</a></li>
-<li class="toctree-l2"><a class="reference internal" href="triton.heuristics.html#returns">Returns</a></li>
-<li class="toctree-l2"><a class="reference internal" href="triton.heuristics.html#notes">Notes</a></li>
-<li class="toctree-l2"><a class="reference internal" href="triton.heuristics.html#examples">Examples</a></li>
-<li class="toctree-l2 current"><a class="current reference internal" href="#">class triton.Config</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="triton.autotune.html">triton.autotune</a></li>
+<li class="toctree-l2"><a class="reference internal" href="triton.heuristics.html">triton.heuristics</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">triton.Config</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#parameters">Parameters</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#examples">Examples</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#attributes">Attributes</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#notes">Notes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#examples">Examples</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../triton.html#runtime-and-compiler">Runtime and Compiler</a></li>
@@ -67,6 +65,35 @@
 <li class="toctree-l1"><a class="reference internal" href="../triton.language.html">triton.language</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../triton.testing.html">triton.testing</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../triton-semantics.html">Triton Semantics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.language.extra.cuda.html">triton.language.extra.cuda</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.language.extra.cuda.libdevice.html">triton.language.extra.cuda.libdevice</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.runtime.html">triton.runtime</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.tools.html">triton.tools</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Gluon (Experimental) API</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.html">triton.experimental.gluon</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.html">triton.experimental.gluon.language</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.nvidia.ampere.html">triton.experimental.gluon.language.nvidia.ampere</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.nvidia.ampere.async_copy.html">triton.experimental.gluon.language.nvidia.ampere.async_copy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.nvidia.ampere.mbarrier.html">triton.experimental.gluon.language.nvidia.ampere.mbarrier</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.nvidia.hopper.html">triton.experimental.gluon.language.nvidia.hopper</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.nvidia.hopper.tma.html">triton.experimental.gluon.language.nvidia.hopper.tma</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.nvidia.hopper.mbarrier.html">triton.experimental.gluon.language.nvidia.hopper.mbarrier</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.nvidia.hopper.cluster.html">triton.experimental.gluon.language.nvidia.hopper.cluster</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.nvidia.blackwell.html">triton.experimental.gluon.language.nvidia.blackwell</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.nvidia.blackwell.tma.html">triton.experimental.gluon.language.nvidia.blackwell.tma</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.nvidia.blackwell.clc.html">triton.experimental.gluon.language.nvidia.blackwell.clc</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.amd.html">triton.experimental.gluon.language.amd</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.amd.gfx1250.html">triton.experimental.gluon.language.amd.gfx1250</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.amd.gfx1250.async_copy.html">triton.experimental.gluon.language.amd.gfx1250.async_copy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.amd.gfx1250.mbarrier.html">triton.experimental.gluon.language.amd.gfx1250.mbarrier</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.amd.gfx1250.cluster.html">triton.experimental.gluon.language.amd.gfx1250.cluster</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.amd.gfx1250.tdm.html">triton.experimental.gluon.language.amd.gfx1250.tdm</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.amd.cdna3.html">triton.experimental.gluon.language.amd.cdna3</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.amd.cdna4.html">triton.experimental.gluon.language.amd.cdna4</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.amd.rdna3.html">triton.experimental.gluon.language.amd.rdna3</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.amd.rdna4.html">triton.experimental.gluon.language.amd.rdna4</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Triton MLIR Dialects</span></p>
 <ul>
@@ -94,7 +121,7 @@
   <ul class="wy-breadcrumbs">
       <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
           <li class="breadcrumb-item"><a href="../triton.html">triton</a></li>
-      <li class="breadcrumb-item active">class triton.Config</li>
+      <li class="breadcrumb-item active">triton.Config</li>
       <li class="wy-breadcrumbs-aside">
             <a href="../../_sources/python-api/generated/triton.Config.rst.txt" rel="nofollow"> View page source</a>
       </li>
@@ -104,75 +131,90 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <section id="class-triton-config">
-<h1>class triton.Config<a class="headerlink" href="#class-triton-config" title="Link to this heading">¶</a></h1>
-<p>Represents a possible kernel configuration for the auto-tuner to try.</p>
-<p>This object encapsulates compilation parameters and meta-arguments used to
-instantiate a GPU kernel. Instances are typically passed to
-<a class="reference internal" href="triton.autotune.html#triton.autotune" title="triton.autotune"><code class="xref py py-func docutils literal notranslate"><span class="pre">triton.autotune()</span></code></a> to define the search space for performance tuning.</p>
+  <section id="triton-config">
+<h1>triton.Config<a class="headerlink" href="#triton-config" title="Link to this heading">¶</a></h1>
+<p>Represents a kernel configuration for the auto-tuner to try.</p>
 <section id="parameters">
 <h2>Parameters<a class="headerlink" href="#parameters" title="Link to this heading">¶</a></h2>
 <dl class="simple">
-<dt>kwargs<span class="classifier">dict</span></dt><dd><p>A dictionary of meta-parameters to pass to the kernel as keyword arguments.
-Keys must match the names of <cite>tl.constexpr</cite> arguments in the kernel definition.</p>
+<dt>kwargs<span class="classifier">dict</span></dt><dd><p>Dictionary of meta-parameters to pass to the kernel as keyword arguments.</p>
 </dd>
-<dt>num_warps<span class="classifier">int, optional</span></dt><dd><p>The number of warps to use for the kernel. Defaults to 4.
-Each warp consists of 32 threads; for example, <code class="docutils literal notranslate"><span class="pre">num_warps=8</span></code> results in
-256 concurrent threads per block.</p>
+<dt>num_warps<span class="classifier">int, optional</span></dt><dd><p>Number of warps to use for the kernel when compiled for GPUs. Each warp
+contains 32 threads, so <code class="docutils literal notranslate"><span class="pre">num_warps=8</span></code> means 256 threads per kernel
+instance. Default is 4.</p>
 </dd>
-<dt>num_stages<span class="classifier">int, optional</span></dt><dd><p>The number of stages for software pipelining of loops. Defaults to 3.
-Increasing this value can improve instruction-level parallelism, particularly
-for matrix multiplication workloads on NVIDIA Ampere (SM80+) and newer GPUs.</p>
+<dt>num_stages<span class="classifier">int, optional</span></dt><dd><p>Number of stages for software-pipelining loops. Mostly useful for matrix
+multiplication workloads on SM80+ GPUs. Default is 3.</p>
 </dd>
-<dt>num_ctas<span class="classifier">int, optional</span></dt><dd><p>The number of blocks in a block cluster. Defaults to 1.
-This parameter enables Cooperative Thread Arrays (CTA) and is only supported
-on NVIDIA Hopper (SM90+) GPUs.</p>
+<dt>num_ctas<span class="classifier">int, optional</span></dt><dd><p>Number of blocks in a block cluster. SM90+ only. Default is 1.</p>
 </dd>
-<dt>maxnreg<span class="classifier">int, optional</span></dt><dd><p>Maximum number of registers one thread can use. Corresponds to the PTX
-<code class="docutils literal notranslate"><span class="pre">.maxnreg</span></code> directive. Defaults to <code class="docutils literal notranslate"><span class="pre">None</span></code> (compiler decides).
-Not supported on all platforms.</p>
+<dt>maxnreg<span class="classifier">int, optional</span></dt><dd><p>Maximum number of registers one thread can use. Corresponds to PTX
+<code class="docutils literal notranslate"><span class="pre">.maxnreg</span></code> directive. Not supported on all platforms. Default is None.</p>
 </dd>
-<dt>pre_hook<span class="classifier">callable, optional</span></dt><dd><p>A function called before the kernel is launched. It receives the full
-argument dictionary as its single input. Useful for custom setup logic
-during autotuning.</p>
+<dt>pre_hook<span class="classifier">callable, optional</span></dt><dd><p>Function called before the kernel is called. Receives kernel arguments
+as parameters. Default is None.</p>
 </dd>
-<dt>ir_override<span class="classifier">str, optional</span></dt><dd><p>Path to a file containing user-defined intermediate representation (IR)
-to override the compiler’s generated code. Supported extensions include
-<code class="docutils literal notranslate"><span class="pre">.ttgir</span></code>, <code class="docutils literal notranslate"><span class="pre">.llir</span></code>, <code class="docutils literal notranslate"><span class="pre">.ptx</span></code>, and <code class="docutils literal notranslate"><span class="pre">.amdgcn</span></code>. Defaults to <code class="docutils literal notranslate"><span class="pre">None</span></code>.</p>
+<dt>ir_override<span class="classifier">str, optional</span></dt><dd><p>Filename of a user-defined IR file (.{ttgir|llir|ptx|amdgcn}). Default
+is None.</p>
 </dd>
 </dl>
 </section>
-<section id="examples">
-<h2>Examples<a class="headerlink" href="#examples" title="Link to this heading">¶</a></h2>
-<p>Define a set of configurations to test different block sizes and warp counts:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">triton</span>
-<span class="kn">import</span><span class="w"> </span><span class="nn">triton.language</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">tl</span>
-
-<span class="n">configs</span> <span class="o">=</span> <span class="p">[</span>
-    <span class="n">triton</span><span class="o">.</span><span class="n">Config</span><span class="p">(</span><span class="n">kwargs</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;BLOCK_SIZE&#39;</span><span class="p">:</span> <span class="mi">128</span><span class="p">},</span> <span class="n">num_warps</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">num_stages</span><span class="o">=</span><span class="mi">3</span><span class="p">),</span>
-    <span class="n">triton</span><span class="o">.</span><span class="n">Config</span><span class="p">(</span><span class="n">kwargs</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;BLOCK_SIZE&#39;</span><span class="p">:</span> <span class="mi">1024</span><span class="p">},</span> <span class="n">num_warps</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span> <span class="n">num_stages</span><span class="o">=</span><span class="mi">4</span><span class="p">),</span>
-    <span class="n">triton</span><span class="o">.</span><span class="n">Config</span><span class="p">(</span><span class="n">kwargs</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;BLOCK_SIZE&#39;</span><span class="p">:</span> <span class="mi">64</span><span class="p">},</span> <span class="n">num_warps</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">num_stages</span><span class="o">=</span><span class="mi">2</span><span class="p">),</span>
-<span class="p">]</span>
-
-<span class="nd">@triton</span><span class="o">.</span><span class="n">autotune</span><span class="p">(</span><span class="n">configs</span><span class="o">=</span><span class="n">configs</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;n&#39;</span><span class="p">])</span>
-<span class="nd">@triton</span><span class="o">.</span><span class="n">jit</span>
-<span class="k">def</span><span class="w"> </span><span class="nf">vector_add_kernel</span><span class="p">(</span><span class="n">x_ptr</span><span class="p">,</span> <span class="n">y_ptr</span><span class="p">,</span> <span class="n">out_ptr</span><span class="p">,</span> <span class="n">n</span><span class="p">,</span> <span class="n">BLOCK_SIZE</span><span class="p">:</span> <span class="n">tl</span><span class="o">.</span><span class="n">constexpr</span><span class="p">):</span>
-    <span class="c1"># Kernel implementation</span>
-    <span class="o">...</span>
-</pre></div>
-</div>
+<section id="attributes">
+<h2>Attributes<a class="headerlink" href="#attributes" title="Link to this heading">¶</a></h2>
+<dl class="simple">
+<dt>kwargs<span class="classifier">dict</span></dt><dd><p>Dictionary of meta-parameters.</p>
+</dd>
+<dt>num_warps<span class="classifier">int</span></dt><dd><p>Number of warps.</p>
+</dd>
+<dt>num_stages<span class="classifier">int</span></dt><dd><p>Number of pipeline stages.</p>
+</dd>
+<dt>num_ctas<span class="classifier">int</span></dt><dd><p>Number of block clusters.</p>
+</dd>
+<dt>maxnreg<span class="classifier">int or None</span></dt><dd><p>Maximum register count per thread.</p>
+</dd>
+<dt>pre_hook<span class="classifier">callable or None</span></dt><dd><p>Pre-execution hook function.</p>
+</dd>
+<dt>ir_override<span class="classifier">str or None</span></dt><dd><p>IR override filename.</p>
+</dd>
+</dl>
 </section>
 <section id="notes">
 <h2>Notes<a class="headerlink" href="#notes" title="Link to this heading">¶</a></h2>
-<ul class="simple">
-<li><p>The <code class="docutils literal notranslate"><span class="pre">num_stages</span></code> optimization is most effective on GPUs with large shared
-memory capacity and async memory copy instructions (SM80+).</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">num_ctas</span></code> requires hardware support for block clusters (SM90+); setting
-this on older architectures will result in a compilation error.</p></li>
-<li><p>When used with <a class="reference internal" href="triton.autotune.html#triton.autotune" title="triton.autotune"><code class="xref py py-func docutils literal notranslate"><span class="pre">triton.autotune()</span></code></a>, each configuration causes the kernel
-to be compiled and benchmarked. Ensure side effects are handled correctly
-using <code class="docutils literal notranslate"><span class="pre">reset_to_zero</span></code> or <code class="docutils literal notranslate"><span class="pre">pre_hook</span></code> if the kernel modifies input tensors.</p></li>
-</ul>
+<p>This class is primarily used with <code class="xref py py-func docutils literal notranslate"><span class="pre">triton.autotune()</span></code> to specify
+different configurations to benchmark during auto-tuning. Multiple
+<code class="xref py py-class docutils literal notranslate"><span class="pre">Config</span></code> objects are passed to the <code class="docutils literal notranslate"><span class="pre">configs</span></code> parameter of
+<code class="xref py py-func docutils literal notranslate"><span class="pre">autotune()</span></code>, and the auto-tuner will benchmark each configuration
+to find the best one for the given input.</p>
+</section>
+<section id="examples">
+<h2>Examples<a class="headerlink" href="#examples" title="Link to this heading">¶</a></h2>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">triton</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">triton.language</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">tl</span>
+
+<span class="c1"># Basic configuration with custom block size</span>
+<span class="n">config</span> <span class="o">=</span> <span class="n">triton</span><span class="o">.</span><span class="n">Config</span><span class="p">(</span><span class="n">kwargs</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;BLOCK_SIZE&#39;</span><span class="p">:</span> <span class="mi">128</span><span class="p">},</span> <span class="n">num_warps</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
+
+<span class="c1"># Configuration optimized for matrix multiplication on SM80+</span>
+<span class="n">config</span> <span class="o">=</span> <span class="n">triton</span><span class="o">.</span><span class="n">Config</span><span class="p">(</span>
+    <span class="n">kwargs</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;BLOCK_SIZE&#39;</span><span class="p">:</span> <span class="mi">256</span><span class="p">},</span>
+    <span class="n">num_warps</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span>
+    <span class="n">num_stages</span><span class="o">=</span><span class="mi">2</span>
+<span class="p">)</span>
+
+<span class="c1"># Use with autotune decorator</span>
+<span class="nd">@triton</span><span class="o">.</span><span class="n">autotune</span><span class="p">(</span>
+    <span class="n">configs</span><span class="o">=</span><span class="p">[</span>
+        <span class="n">triton</span><span class="o">.</span><span class="n">Config</span><span class="p">(</span><span class="n">kwargs</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;BLOCK_SIZE&#39;</span><span class="p">:</span> <span class="mi">128</span><span class="p">},</span> <span class="n">num_warps</span><span class="o">=</span><span class="mi">4</span><span class="p">),</span>
+        <span class="n">triton</span><span class="o">.</span><span class="n">Config</span><span class="p">(</span><span class="n">kwargs</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;BLOCK_SIZE&#39;</span><span class="p">:</span> <span class="mi">256</span><span class="p">},</span> <span class="n">num_warps</span><span class="o">=</span><span class="mi">8</span><span class="p">),</span>
+    <span class="p">],</span>
+    <span class="n">key</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;x_size&#39;</span><span class="p">]</span>
+<span class="p">)</span>
+<span class="nd">@triton</span><span class="o">.</span><span class="n">jit</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">kernel</span><span class="p">(</span><span class="n">x_ptr</span><span class="p">,</span> <span class="n">x_size</span><span class="p">,</span> <span class="n">BLOCK_SIZE</span><span class="p">:</span> <span class="n">tl</span><span class="o">.</span><span class="n">constexpr</span><span class="p">):</span>
+    <span class="c1"># kernel implementation</span>
+    <span class="k">pass</span>
+</pre></div>
+</div>
 </section>
 </section>
 
@@ -180,7 +222,7 @@ using <code class="docutils literal notranslate"><span class="pre">reset_to_zero
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="triton.heuristics.html" class="btn btn-neutral float-left" title="Parameters" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="triton.heuristics.html" class="btn btn-neutral float-left" title="triton.heuristics" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
         <a href="triton.AsyncCompileMode.html" class="btn btn-neutral float-right" title="AsyncCompileMode" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 

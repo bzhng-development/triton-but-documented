@@ -1,0 +1,62 @@
+buffer_atomic_add
+=================
+
+.. currentmodule:: triton.experimental.gluon.language.amd.cdna3
+
+.. autofunction:: buffer_atomic_add
+
+Perform an atomic add operation on buffer memory for AMD CDNA3 GPUs.
+
+This function atomically adds a value to elements in buffer memory at specified offsets.
+It is optimized for AMD CDNA3 architecture and uses buffer memory operations.
+
+Parameters
+----------
+ptr : pointer
+    Pointer to the buffer memory region.
+offsets : tensor
+    Tensor of offsets specifying which locations to update.
+value : tensor
+    Tensor of values to add at each offset location.
+mask : tensor, optional
+    Boolean tensor controlling which offsets are active. If provided, only
+    offsets where mask is True will be updated.
+sem : str, optional
+    Memory semantics for the atomic operation. Common options include
+    ``'acquire'``, ``'release'``, ``'acq_rel'``, or ``'relaxed'``.
+    Defaults to relaxed semantics.
+scope : str, optional
+    Memory scope for the atomic operation. Options include ``'cta'``,
+    ``'cluster'``, or ``'gpu'``. Defaults to CTA scope.
+_semantic : GluonSemantic
+    Internal semantic handler. Do not set manually.
+
+Returns
+-------
+tensor
+    Tensor containing the values at each location before the atomic add
+    was performed (original values).
+
+Notes
+-----
+This operation is only available on AMD CDNA3 GPUs. The buffer memory
+must be properly allocated and accessible by the GPU.
+
+The atomic operation ensures that concurrent accesses from multiple
+threads are handled correctly without race conditions.
+
+For best performance, ensure offsets are coalesced and aligned.
+
+Examples
+--------
+.. code-block:: python
+
+    import triton.experimental.gluon as gluon
+    import triton.experimental.gluon.language as ttgl
+    from triton.experimental.gluon.language.amd import cdna3
+
+    @gluon.jit
+    def kernel(ptr, offsets, value):
+        # Perform atomic add on buffer memory
+        old_values = cdna3.buffer_atomic_add(ptr, offsets, value)
+        # old_values contains the values before the add

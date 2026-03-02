@@ -1,0 +1,55 @@
+async_copy.global_to_shared
+===========================
+
+.. function:: triton.experimental.gluon.language.amd.gfx1250.async_copy.global_to_shared(smem, pointer, mask=None, other=None, cache_modifier='', _semantic=None)
+
+   Asynchronously copy elements from global memory to shared memory on AMD GFX1250 GPUs.
+
+   Parameters
+   ----------
+   smem : shared_memory_descriptor
+      Destination shared memory descriptor. Must have shape matching ``pointer``.
+   pointer : tensor
+      Source pointer tensor with distributed layout. Must be a block tensor.
+   mask : tensor, optional
+      Mask tensor for predicated loads. If provided, elements where mask is False
+      will not be loaded. Defaults to None.
+   other : tensor or scalar, optional
+      Default values for masked elements. Used when ``mask`` is provided and
+      evaluates to False. Defaults to None (zero).
+   cache_modifier : str, optional
+      Cache modifier specifier for load operation. Defaults to empty string.
+
+   Returns
+   -------
+   None
+
+   Notes
+   -----
+   This is an asynchronous copy operation that does not block execution. The
+   loaded data is not immediately available in shared memory. You must call
+   :func:`wait_group` to synchronize before accessing the data in ``smem``.
+
+   The ``pointer`` tensor must have a ``DistributedLayout``. The shape of ``smem``
+   must exactly match the shape of ``pointer``.
+
+   This operation is specific to AMD GFX1250 architecture and leverages hardware
+   async copy capabilities.
+
+   Examples
+   --------
+   .. code-block:: python
+
+      import triton.experimental.gluon as gluon
+      import triton.experimental.gluon.language as ttgl
+
+      @gluon.jit
+      def kernel(ptr, smem):
+          # Asynchronously copy from global to shared memory
+          ttgl.amd.gfx1250.async_copy.global_to_shared(smem, ptr)
+          
+          # Must wait before accessing smem contents
+          ttgl.amd.gfx1250.async_copy.wait_group(0)
+          
+          # Now safe to use smem
+          data = smem.load(...)

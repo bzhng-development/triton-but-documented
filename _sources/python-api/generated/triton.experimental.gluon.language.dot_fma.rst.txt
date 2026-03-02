@@ -1,0 +1,81 @@
+dot_fma
+=======
+
+.. currentmodule:: triton.experimental.gluon.language
+
+.. function:: dot_fma(a, b, acc, _semantic=None)
+
+   Perform a fused multiply-add (FMA) matrix multiplication: :math:`acc + a @ b`.
+
+   This is a low-level operation that requires explicit layout control. Input tensors
+   must have compatible :class:`DotOperandLayout` layouts, and the accumulator must
+   have a :class:`BlockedLayout`. All layouts must share the same parent MMA layout.
+
+   Parameters
+   ----------
+   a : tensor
+       First operand tensor with :class:`DotOperandLayout` (operand index 0).
+       Shape must match ``acc`` shape plus a trailing K dimension.
+   b : tensor
+       Second operand tensor with :class:`DotOperandLayout` (operand index 1).
+       Shape must match ``acc`` shape plus a trailing K dimension.
+   acc : tensor
+       Accumulator tensor with :class:`BlockedLayout`. Determines the output
+       shape, dtype, and layout. Must be 2D (M x N) or 3D (batch x M x N).
+   _semantic : GluonSemantic, optional
+       Internal semantic handler. Automatically provided by the ``@gluon.jit``
+       decorator. Do not set manually.
+
+   Returns
+   -------
+   tensor
+       Result tensor with the same shape, dtype, and layout as ``acc``.
+
+   Raises
+   ------
+   AssertionError
+       If input tensors do not meet layout requirements or shape constraints.
+
+   Notes
+   -----
+   - This is a Gluon-specific primitive that gives explicit control over MMA
+     instruction emission. For most use cases, prefer higher-level ``ttgl.dot``.
+   - Tensor ``a`` must have ``operand_index == 0`` and ``b`` must have
+     ``operand_index == 1`` in their respective :class:`DotOperandLayout`.
+   - All three tensors must share the same parent MMA layout.
+   - Large dot operations (product of M x N x K > 2^19) may have slow compile
+     times and will emit a warning.
+   - Supports both 2D matrix multiplication and 3D batched matrix multiplication.
+
+   Examples
+   --------
+   .. code-block:: python
+
+      import triton.experimental.gluon as gluon
+      import triton.experimental.gluon.language as ttgl
+      from triton.experimental.gluon._layouts import BlockedLayout, DotOperandLayout
+
+      @gluon.jit
+      def matmul_kernel(a_ptr, b_ptr, c_ptr, M, N, K, BLOCK_M, BLOCK_N, BLOCK_K):
+          pid = ttgl.program_id(0)
+          offs_m = pid * BLOCK_M
+          offs_n = ttgl.arange(0, BLOCK_N)
+          offs_k = ttgl.arange(0, BLOCK_K)
+
+          # Define MMA layout for accumulator
+          mma_layout = BlockedLayout([BLOCK_M, BLOCK_N], [1, 1])
+
+          # Create dot operand layouts
+          a_layout = DotOperandLayout(mma_layout, operand_index=0)
+          b_layout = DotOperandLayout(mma_layout, operand_index=1)
+
+          # Load tiles with appropriate layouts
+          a = ttgl.load(a_ptr + offs_m * K + offs_k, layout=a_layout)
+          b = ttgl.load(b_ptr + offs_k * N + offs_n, layout=b_layout)
+          acc = ttgl.full([BLOCK_M, BLOCK_N], 0.0, dtype=ttgl.float16, layout=mma_layout)
+
+          # Perform FMA dot operation
+          c = ttgl.dot_fma(a, b, acc)
+
+          # Store result
+          ttgl.store(c_ptr + offs_m * N + offs_n, c)

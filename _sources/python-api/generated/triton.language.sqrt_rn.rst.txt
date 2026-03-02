@@ -1,36 +1,36 @@
-.. py:function:: triton.language.sqrt_rn(x, _semantic=None)
+sqrt_rn
+=======
 
-   Computes the element-wise precise square root (rounding to nearest wrt the IEEE standard) of :code:`x`.
+.. function:: sqrt_rn(x, _semantic=None)
 
-   Parameters
-   ----------
-   x : Block
-       The input values. Must be a tensor of floating-point type (e.g., :code:`tl.float32`).
+Computes the element-wise precise square root (rounding to nearest wrt the IEEE standard) of :code:`x`.
 
-   Returns
-   -------
-   Block
-       A tensor containing the precise square root of each element in :code:`x`.
+Parameters
+----------
+x : Block
+    The input values. Must be :code:`fp32` dtype.
 
-   Notes
-   -----
-   This function computes the square root with rounding to nearest according to the IEEE 754 standard.
-   It is only supported for :code:`fp32` inputs. For other dtypes, use :py:func:`triton.language.sqrt`.
+Returns
+-------
+tensor
+    A tensor containing the precise square root of each element in :code:`x`.
 
-   This function can also be called as a member function on :py:class:`tensor`,
-   as :code:`x.sqrt_rn()` instead of :code:`sqrt_rn(x)`.
+Notes
+-----
+This function is only supported for :code:`fp32` data type. The result is rounded to nearest according to the IEEE standard, providing more accurate results than the default :py:func:`sqrt` operation.
 
-   Examples
-   --------
-   .. code-block:: python
+This function can also be called as a member function on :py:class:`tensor`,
+as :code:`x.sqrt_rn()` instead of :code:`sqrt_rn(x)`.
 
-      import triton
-      import triton.language as tl
+Examples
+--------
+.. code-block:: python
 
-      @triton.jit
-      def kernel(x_ptr, y_ptr, BLOCK_SIZE: tl.constexpr):
-          pid = tl.program_id(axis=0)
-          offs = pid * BLOCK_SIZE + tl.arange(0, BLOCK_SIZE)
-          x = tl.load(x_ptr + offs)
-          y = tl.sqrt_rn(x)
-          tl.store(y_ptr + offs, y)
+    import triton
+    import triton.language as tl
+
+    @triton.jit
+    def kernel(x_ptr, y_ptr, BLOCK_SIZE: tl.constexpr):
+        x = tl.load(x_ptr + tl.arange(0, BLOCK_SIZE))
+        y = tl.sqrt_rn(x)
+        tl.store(y_ptr + tl.arange(0, BLOCK_SIZE), y)

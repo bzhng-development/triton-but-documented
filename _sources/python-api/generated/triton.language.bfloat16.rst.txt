@@ -1,52 +1,22 @@
-triton.language.bfloat16
-========================
+bfloat16
+========
 
-.. currentmodule:: triton.language
+.. py:data:: triton.language.bfloat16
 
-BFloat16 (Brain Floating Point) 16-bit floating point data type.
+   bfloat16 floating-point data type.
 
-This dtype represents the IEEE 754 binary16 format with 8 exponent bits and 7 significand bits (plus 1 implicit bit), matching the precision and range of NVIDIA's Tensor Cores for mixed-precision training. It offers a larger dynamic range than ``float16`` but reduced mantissa precision.
+   Notes
+   -----
+   The bfloat16 format uses 1 sign bit, 8 exponent bits, and 7 mantissa bits.
+   It is designed to accelerate machine learning workloads on GPU hardware,
+   particularly NVIDIA Ampere architecture and later. This type provides
+   a dynamic range similar to ``float32`` while maintaining the memory
+   bandwidth benefits of ``float16``.
 
-Parameters
-----------
-
-None (dtype instance).
-
-Returns
--------
-
-dtype
-    The ``bfloat16`` data type object used to specify tensor element types in Triton kernels.
-
-Notes
------
-
-*   ``bfloat16`` is distinct from ``float16``; it sacrifices precision for range, making it more robust against overflow/underflow during deep learning training.
-*   Hardware support is required (e.g., NVIDIA Ampere architecture or later) for native ``bfloat16`` compute; otherwise, it may emulate via ``float32``.
-*   Use ``tl.bfloat16`` to cast pointers or create tensors of this type within a ``@triton.jit`` function.
-
-Examples
---------
-
-.. code-block:: python
-
-    import triton
-    import triton.language as tl
-
-    @triton.jit
-    def bf16_kernel(
-        X_ptr, Y_ptr, Z_ptr,
-        BLOCK_SIZE: tl.constexpr,
-    ):
-        pid = tl.program_id(0)
-        offs = pid * BLOCK_SIZE + tl.arange(0, BLOCK_SIZE)
-        
-        # Load data as bfloat16
-        x = tl.load(X_ptr + offs).to(tl.bfloat16)
-        y = tl.load(Y_ptr + offs).to(tl.bfloat16)
-        
-        # Perform mixed-precision multiplication
-        z = tl.dot(x[:, None], y[None, :])
-        
-        # Store result
-        tl.store(Z_ptr + offs, z)
+   Examples
+   --------
+   >>> import triton.language as tl
+   >>> @triton.jit
+   ... def kernel(ptr):
+   ...     val = tl.full((1,), 3.14, dtype=tl.bfloat16)
+   ...     tl.store(ptr, val)

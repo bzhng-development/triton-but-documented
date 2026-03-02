@@ -1,0 +1,76 @@
+shared_memory_descriptor
+========================
+
+.. currentmodule:: triton.experimental.gluon.language
+
+.. class:: shared_memory_descriptor(handle, element_ty, shape, layout, alloc_shape)
+
+   Represents a handle to a shared memory allocation in Gluon IR.
+
+   Parameters
+   ----------
+   handle : ir.value
+       The underlying IR value representing the shared memory allocation.
+   element_ty : dtype
+       The data type of elements stored in shared memory.
+   shape : Sequence[int]
+       The logical shape of the shared memory view.
+   layout : SharedLayout
+       The shared memory layout specifying how data is organized in memory.
+   alloc_shape : Sequence[int]
+       The physical allocation shape, which may differ from the logical shape.
+
+   Attributes
+   ----------
+   dtype : dtype
+       The element data type of the shared memory.
+   shape : List[int]
+       The logical shape of the shared memory view.
+   rank : int
+       The number of dimensions (length of shape).
+   numel : int
+       The total number of elements (product of shape dimensions).
+   layout : SharedLayout
+       The shared memory layout.
+
+   Notes
+   -----
+   This class provides a low-level interface for managing shared memory in Gluon
+   kernels. It supports various memory operations including load, store, gather,
+   scatter, and view transformations (slice, index, permute, reshape).
+
+   The descriptor separates the logical view (shape) from the physical allocation
+   (alloc_shape), enabling efficient memory reuse and subview operations without
+   additional allocations.
+
+   Methods prefixed with underscore (e.g., ``_reinterpret``, ``_keep_alive``) are
+   internal APIs and may change in future versions.
+
+   Examples
+   --------
+   .. code-block:: python
+
+      import triton.experimental.gluon as gluon
+      import triton.experimental.gluon.language as ttgl
+      from triton.experimental.gluon.language import SharedLayout
+
+      @gluon.jit
+      def kernel(...):
+          # Allocate shared memory
+          layout = ttgl.SharedLayout(...)
+          smem = ttgl.allocate_shared_memory(ttgl.float16, [128, 64], layout)
+
+          # Store data to shared memory
+          data = ttgl.full([128, 64], 0.0, ttgl.float16, layout)
+          smem.store(data)
+
+          # Load from shared memory with different layout
+          dist_layout = ttgl.DistributedLayout(...)
+          loaded = smem.load(dist_layout)
+
+          # Create a subview by slicing
+          subview = smem.slice(0, 64, dim=0)
+
+          # Gather elements along an axis
+          indices = ttgl.arange(0, 64, layout)
+          gathered = smem.gather(indices, axis=0)

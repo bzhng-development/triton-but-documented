@@ -1,50 +1,73 @@
-.. py:function:: triton.language.associative_scan(input, axis, combine_fn, reverse=False)
+triton.language.associative_scan
+=================================
 
-   Applies an associative scan (parallel prefix sum) along the specified axis of the input tensor(s).
+.. function:: triton.language.associative_scan(input, axis, combine_fn, reverse=False)
 
-   For each position :math:`i` along ``axis``, the output is the reduction of all elements from index ``0`` to ``i`` using the provided ``combine_fn``. The operation requires that ``combine_fn`` be associative.
+   Applies an associative scan operation along the specified axis using a custom
+   combine function.
 
    Parameters
    ----------
    input : tensor or tuple of tensors
-       The input tensor(s) to scan. If a tuple is provided, the scan is applied element-wise across all tensors.
+       The input tensor(s) to perform the scan over.
    axis : int
-       The dimension along which to perform the scan. Negative values are supported and wrap around.
+       The dimension along which to perform the scan.
    combine_fn : callable
-       A JIT-compiled function (decorated with ``@triton.jit``) that takes two scalars (or tuples of scalars if input is a tuple) and returns their combined value. The function must be associative.
+       A JIT-compiled function that combines two scalar tensors. Must be
+       decorated with ``@triton.jit``. The function should take two arguments
+       (representing pairs of elements) and return their combined result.
    reverse : bool, optional
-       If ``True``, the scan is performed in reverse order (from the last element to the first). Default is ``False``.
+       If True, perform the scan in reverse order along the axis (default: False).
 
    Returns
    -------
    tensor or tuple of tensors
-       The result of the associative scan. Has the same shape and dtype as ``input``.
+       The scanned output tensor(s) with the same shape as the input. Each
+       position contains the cumulative combination of all elements up to that
+       position along the specified axis.
 
    Notes
    -----
-   This function can also be called as a member function on :py:class:`tensor`, as ``x.associative_scan(...)`` instead of ``associative_scan(x, ...)``.
+   The ``combine_fn`` must implement an associative operation (i.e.,
+   ``combine_fn(a, combine_fn(b, c)) == combine_fn(combine_fn(a, b), c)``).
+   Common examples include addition, multiplication, or min/max operations.
 
-   The ``combine_fn`` must be marked with ``@triton.jit`` and should accept arguments corresponding to the scalar types of the input tensors. For example, if scanning a single ``float32`` tensor, the combine function should accept two ``float32`` scalars.
+   This function can also be called as a member function on :py:class:`tensor`,
+   as ``x.associative_scan(...)`` instead of
+   ``associative_scan(x, ...)``.
 
-   Common use cases include cumulative sum (using addition), cumulative product (using multiplication), or custom associative operations like max/min with index tracking.
+   For cumulative sum operations, consider using :py:func:`tl.cumsum` which is
+   optimized for addition scans.
 
    Examples
    --------
-   >>> import triton
-   >>> import triton.language as tl
-   >>>
-   >>> @triton.jit
-   >>> def add_fn(a, b):
-   ...     return a + b
-   >>>
-   >>> @triton.jit
-   >>> def kernel(output_ptr, input_ptr, BLOCK_SIZE: tl.constexpr):
-   ...     pid = tl.program_id(0)
-   ...     offsets = tl.arange(0, BLOCK_SIZE)
-   ...     mask = offsets < BLOCK_SIZE
-   ...     input = tl.load(input_ptr + pid * BLOCK_SIZE + offsets, mask=mask)
-   ...     output = tl.associative_scan(input, 0, add_fn)
-   ...     tl.store(output_ptr + pid * BLOCK_SIZE + offsets, output, mask=mask)
-   >>>
-   >>> # Example usage: computes cumulative sum for each block
-   >>> # input = [1, 2, 3, 4] -> output = [1, 3, 6, 10]
+   .. code-block:: python
+
+       import triton
+       import triton.language as tl
+
+       @triton.jit
+       def add_fn(a, b):
+           return a + b
+
+       @triton.jit
+       def kernel(input_ptr, output_ptr, N: tl.constexpr):
+           pid = tl.program_id(0)
+           offsets = tl.arange(0, N)
+           input = tl.load(input_ptr + offsets)
+           # Perform cumulative sum scan
+           output = tl.associative_scan(input, 0, add_fn)
+           tl.store(output_ptr + offsets, output)
+
+       # Example with multiplication scan (cumulative product)
+       @triton.jit
+       def mul_fn(a, b):
+           return a * b
+
+       @triton.jit
+       def cumprod_kernel(input_ptr, output_ptr, N: tl.constexpr):
+           pid = tl.program_id(0)
+           offsets = tl.arange(0, N)
+           input = tl.load(input_ptr + offsets)
+           output = tl.associative_scan(input, 0, mul_fn)
+           tl.store(output_ptr + offsets, output)

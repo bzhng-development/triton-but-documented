@@ -1,0 +1,43 @@
+ull2float_rd
+============
+
+.. currentmodule:: triton.language.extra.cuda.libdevice
+
+.. function:: ull2float_rd(arg0, _semantic=None)
+
+   Convert unsigned 64-bit integer to float32 with round-down rounding mode.
+
+   Parameters
+   ----------
+   arg0 : tensor of uint64
+       Input unsigned 64-bit integer tensor.
+   _semantic : optional
+       Internal semantic argument (do not pass explicitly).
+
+   Returns
+   -------
+   tensor of fp32
+       Float32 tensor with values converted from uint64 using round-down rounding.
+
+   Notes
+   -----
+   This is an extern function that wraps the CUDA libdevice function ``__nv_ull2float_rd``.
+   The "rd" suffix indicates round-down (toward negative infinity) rounding mode for the
+   integer-to-float conversion.
+
+   This function is pure and elementwise, operating independently on each element of the
+   input tensor.
+
+   Examples
+   --------
+   .. code-block:: python
+
+      import triton
+      import triton.language as tl
+
+      @triton.jit
+      def kernel(input_ptr, output_ptr, BLOCK_SIZE: tl.constexpr):
+          offsets = tl.arange(0, BLOCK_SIZE)
+          uint64_vals = tl.load(input_ptr + offsets).to(tl.uint64)
+          float32_vals = tl.extra.cuda.libdevice.ull2float_rd(uint64_vals)
+          tl.store(output_ptr + offsets, float32_vals)

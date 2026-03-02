@@ -1,0 +1,40 @@
+triton.language.extra.cuda.libdevice.float2ll_rn
+=================================================
+
+.. currentmodule:: triton.language.extra.cuda.libdevice
+
+.. autofunction:: float2ll_rn
+
+Convert a 32-bit floating-point value to a 64-bit signed integer using round-to-nearest-even rounding mode.
+
+Parameters
+----------
+arg0 : tensor of float32
+    Input floating-point value(s) to convert.
+
+Returns
+-------
+tensor of int64
+    Converted integer value(s). Each input element is rounded to the nearest integer, with ties rounded to even.
+
+Notes
+-----
+This function wraps the CUDA libdevice function ``__nv_float2ll_rn``. The rounding mode is round-to-nearest-even (RN), which is the default IEEE 754 rounding mode.
+
+For values outside the representable range of int64, the result is undefined. NaN inputs produce undefined results.
+
+Examples
+--------
+.. code-block:: python
+
+    import triton
+    import triton.language as tl
+
+    @triton.jit
+    def kernel(x_ptr, y_ptr, BLOCK_SIZE: tl.constexpr):
+        pid = tl.program_id(0)
+        offsets = pid * BLOCK_SIZE + tl.arange(0, BLOCK_SIZE)
+        x = tl.load(x_ptr + offsets)
+        # Convert float32 to int64 with round-to-nearest
+        y = tl.extra.cuda.libdevice.float2ll_rn(x)
+        tl.store(y_ptr + offsets, y)

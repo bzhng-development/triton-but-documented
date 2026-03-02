@@ -1,0 +1,65 @@
+async_scatter
+=============
+
+.. function:: triton.experimental.gluon.language.amd.gfx1250.tdm.async_scatter(desc, dst_row_indices, dst_col_offset, src, mbarrier=None)
+
+   Scatter data from shared memory to non-contiguous rows in global memory asynchronously.
+
+   This operation uses TDM (Tensor Data Movement) scatter mode to write data to arbitrary
+   rows in global memory. Unlike :func:`async_store` which writes to contiguous rows,
+   scatter allows writing to non-contiguous rows specified by the ``dst_row_indices``
+   tensor.
+
+   Parameters
+   ----------
+   desc : tensor_descriptor
+       The destination tensor descriptor. Must be 2D.
+   dst_row_indices : ttgl.tensor
+       1D tensor of row indices (int16 or int32) in the destination tensor.
+   dst_col_offset : int or tensor
+       The starting column offset in the destination tensor for all scattered rows.
+   src : shared_memory_descriptor
+       The shared memory source containing data to scatter. Must be 2D.
+   mbarrier : shared_memory_descriptor, optional
+       The barrier object to signal "arrive" on. If None, no barrier signaling occurs.
+
+   Returns
+   -------
+   None
+
+   Notes
+   -----
+   The dtype of ``dst_row_indices`` determines the index size and scattering capacity:
+
+   - **int16**: up to 16 rows can be scattered per TDM instruction
+   - **int32**: up to 8 rows can be scattered per TDM instruction
+
+   If more rows are needed than a single TDM instruction supports, multiple TDM
+   instructions will be automatically issued.
+
+   This is an AMD GFX1250-specific operation using TDM scatter mode. The operation
+   is asynchronous and returns immediately without waiting for the memory transfer
+   to complete.
+
+   Examples
+   --------
+   .. code-block:: python
+
+      import triton.experimental.gluon as gluon
+      import triton.experimental.gluon.language as ttgl
+      from triton.experimental.gluon.language.amd import gfx1250
+
+      @gluon.jit
+      def kernel(desc, src, mbarrier):
+          # Create row indices for non-contiguous scatter
+          row_indices = ttgl.full([8], 0, dtype=ttgl.int16)
+          row_indices = ttgl.arange(0, 8, layout=...)  # customize layout
+
+          # Scatter from shared memory to global memory at specified rows
+          gfx1250.tdm.async_scatter(
+              desc=desc,
+              dst_row_indices=row_indices,
+              dst_col_offset=0,
+              src=src,
+              mbarrier=mbarrier
+          )

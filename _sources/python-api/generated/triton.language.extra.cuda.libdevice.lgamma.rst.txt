@@ -1,0 +1,48 @@
+lgamma
+======
+
+Compute the natural logarithm of the absolute value of the Gamma function.
+
+Parameters
+----------
+arg0 : tensor
+    Input tensor. Must have floating-point dtype (``fp32`` or ``fp64``).
+_semantic : optional
+    Internal semantic argument. Do not set manually.
+
+Returns
+-------
+tensor
+    Element-wise log gamma of ``arg0``. Same dtype as input.
+
+Notes
+-----
+This function dispatches to CUDA libdevice:
+
+- ``__nv_lgammaf`` for ``fp32`` inputs
+- ``__nv_lgamma`` for ``fp64`` inputs
+
+The Gamma function is defined as :math:`\Gamma(x) = \int_0^\infty t^{x-1} e^{-t} dt`.
+For positive integers, :math:`\Gamma(n) = (n-1)!`.
+
+The function is pure (no side effects) and supports automatic broadcasting.
+
+Examples
+--------
+.. code-block:: python
+
+    import triton
+    import triton.language as tl
+
+    @triton.jit
+    def kernel(x_ptr, y_ptr, BLOCK: tl.constexpr):
+        x = tl.load(x_ptr + tl.arange(0, BLOCK))
+        y = tl.extra.cuda.libdevice.lgamma(x)
+        tl.store(y_ptr + tl.arange(0, BLOCK), y)
+
+    # Compute log gamma of values 1.0 to 8.0
+    import torch
+    x = torch.arange(1, 9, dtype=torch.float32, device='cuda')
+    y = torch.empty_like(x)
+    kernel[(1,)](x, y, BLOCK=8)
+    # y contains log((n-1)!) for n = 1..8

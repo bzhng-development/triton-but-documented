@@ -1,0 +1,44 @@
+log2
+====
+
+Compute the base-2 logarithm of the input tensor element-wise.
+
+Parameters
+----------
+arg0 : tensor
+    Input tensor. Must be of floating-point type (``fp32`` or ``fp64``).
+_semantic : optional
+    Internal semantic argument. Do not set manually.
+
+Returns
+-------
+tensor
+    Tensor of the same shape as ``arg0`` containing the base-2 logarithm
+    of each element. Returns ``fp32`` for ``fp32`` input, ``fp64`` for
+    ``fp64`` input.
+
+Notes
+-----
+This function is implemented using CUDA libdevice functions:
+
+- ``__nv_log2f`` for 32-bit floating-point inputs
+- ``__nv_log2`` for 64-bit floating-point inputs
+
+The operation is pure (no side effects). Input values must be positive;
+behavior for non-positive values follows IEEE-754 semantics (returns NaN
+for negative inputs, -inf for zero).
+
+Examples
+--------
+.. code-block:: python
+
+    import triton
+    import triton.language as tl
+
+    @triton.jit
+    def log2_kernel(x_ptr, y_ptr, BLOCK_SIZE: tl.constexpr):
+        pid = tl.program_id(0)
+        offsets = pid * BLOCK_SIZE + tl.arange(0, BLOCK_SIZE)
+        x = tl.load(x_ptr + offsets)
+        y = tl.extra.cuda.libdevice.log2(x)
+        tl.store(y_ptr + offsets, y)

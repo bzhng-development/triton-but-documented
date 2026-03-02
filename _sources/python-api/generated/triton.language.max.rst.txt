@@ -1,49 +1,52 @@
-Returns the maximum of all elements in the :code:`input` tensor along the provided :code:`axis`.
+triton.language.max
+===================
 
-If :code:`return_indices` is True, also returns the index corresponding to the maximum value. In case of ties, the behavior is controlled by :code:`return_indices_tie_break_left`.
+.. function:: max(input, axis=None, return_indices=False, return_indices_tie_break_left=True, keep_dims=False)
 
-Parameters
-----------
-input : tensor
-    The input values.
-axis : int, optional
-    The dimension along which the reduction should be done. If None, reduce all dimensions.
-return_indices : bool, optional
-    If True, return the index corresponding to the maximum value. Default is False.
-return_indices_tie_break_left : bool, optional
-    If True and there are multiple elements with the same maximum value, return the left-most index. If False, the tie-breaking behavior is implementation-defined but faster. Default is True.
-keep_dims : bool, optional
-    If True, keep the reduced dimensions with length 1. Default is False.
+   Returns the maximum of all elements in the input tensor along the provided axis.
 
-Returns
--------
-max_val : tensor
-    The maximum values. If :code:`return_indices` is True, this is a tuple of (max_val, max_idx).
-max_idx : tensor, optional
-    The indices of the maximum values. Only returned if :code:`return_indices` is True.
+   Parameters
+   ----------
+   input : tensor
+       The input values.
+   axis : int, optional
+       The dimension along which the reduction should be done. If None, reduce all dimensions.
+   return_indices : bool, optional
+       If True, return index corresponding to the maximum value. Default is False.
+   return_indices_tie_break_left : bool, optional
+       If True, in case of a tie (i.e., multiple elements have the same maximum value), return the left-most index for values that aren't NaN. Default is True.
+   keep_dims : bool, optional
+       If True, keep the reduced dimensions with length 1. Default is False.
 
-Notes
------
-This function can also be called as a member function on :py:class:`tensor`,
-as :code:`x.max(...)` instead of :code:`max(x, ...)`.
+   Returns
+   -------
+   tensor or tuple of tensors
+       If ``return_indices`` is False, returns a tensor containing the maximum values. If ``return_indices`` is True, returns a tuple of (max_values, indices).
 
-For floating-point inputs with bitwidth less than 32, the input is promoted to float32 before reduction.
-For integer inputs with bitwidth less than 32, the input is promoted to int32 before reduction.
+   Notes
+   -----
+   The reduction operation is associative and commutative.
 
-The reduction operation is associative and commutative.
+   Input tensors with bfloat16 dtype are promoted to float32. For integer or floating-point dtypes with bitwidth less than 32, the input is promoted to int32 or float32 respectively before reduction.
 
-Examples
---------
-.. code-block:: python
+   This function can also be called as a member function on :py:class:`tensor`, as ``x.max(...)`` instead of ``max(x, ...)``.
 
-    import triton.language as tl
+   Examples
+   --------
+   .. code-block:: python
 
-    # Compute maximum along axis 1
-    x = tl.arange(0, 16).reshape(4, 4)
-    max_vals = tl.max(x, axis=1)
+      import triton.language as tl
 
-    # Get both maximum values and their indices
-    max_vals, max_indices = tl.max(x, axis=1, return_indices=True)
+      # Find maximum along axis 0
+      x = tl.arange(0, 16).reshape(4, 4)
+      m = tl.max(x, axis=0)
 
-    # Keep reduced dimension
-    max_vals_keep = tl.max(x, axis=1, keep_dims=True)
+      # Keep reduced dimensions
+      m_keep = tl.max(x, axis=0, keep_dims=True)
+
+      # Get maximum value and index
+      m_val, m_idx = tl.max(x, axis=1, return_indices=True)
+
+      # Control tie-breaking behavior
+      m_val, m_idx = tl.max(x, axis=1, return_indices=True, 
+                            return_indices_tie_break_left=False)

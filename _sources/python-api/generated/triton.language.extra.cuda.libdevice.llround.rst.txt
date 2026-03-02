@@ -1,0 +1,48 @@
+llround
+=======
+
+llround
+-------
+
+.. currentmodule:: triton.language.extra.cuda.libdevice
+
+.. function:: llround(arg0, _semantic=None)
+
+    Round the input floating-point value to the nearest integer.
+
+    Parameters
+    ----------
+    arg0 : tl.tensor
+        Input tensor of floating-point values. Must be fp32 or fp64 dtype.
+
+    Returns
+    -------
+    ret : tl.tensor
+        Tensor of int64 values representing the rounded input.
+
+    Notes
+    -----
+    This function dispatches to CUDA libdevice intrinsics:
+    
+    - ``__nv_llroundf`` for fp32 inputs
+    - ``__nv_llround`` for fp64 inputs
+    
+    Rounding is performed to the nearest integer value, with halfway cases
+    rounded away from zero. The result is always returned as a 64-bit
+    signed integer (int64).
+
+    This is an extern function and requires CUDA backend support.
+
+    Example
+    -------
+    .. code-block:: python
+
+        import triton
+        import triton.language as tl
+
+        @triton.jit
+        def round_kernel(x_ptr, y_ptr, BLOCK_SIZE: tl.constexpr):
+            offset = tl.arange(0, BLOCK_SIZE)
+            x = tl.load(x_ptr + offset)
+            y = tl.extra.cuda.libdevice.llround(x)
+            tl.store(y_ptr + offset, y)

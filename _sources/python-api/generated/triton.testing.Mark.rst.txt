@@ -1,107 +1,84 @@
-class Mark
-============
+class triton.testing.Mark
+====================
 
-Decorator class for running and visualizing Triton kernel benchmarks.
-
-Wraps a benchmarked function and one or more :class:`Benchmark` configurations to
-automatically execute performance tests, generate plots, and export results to CSV.
-Typically instantiated via the :func:`perf_report` helper.
+Wrapper class for benchmarking functions with specified configurations.
 
 Parameters
 ----------
 fn : callable
-    The Triton kernel or benchmark function to execute. It must accept arguments
-    defined in the benchmark configurations (x_names, line_arg, and args).
+    The function to benchmark. Should accept arguments matching the benchmark
+    configuration and return timing metrics (mean, min, max) or just mean.
 benchmarks : Benchmark or list of Benchmark
-    A single :class:`Benchmark` instance or a list of instances defining the
-    parameter sweeps, axis labels, and plot metadata.
+    Benchmark configuration(s) defining x-axis values, line values, plot
+    settings, and other benchmark parameters.
 
 Attributes
 ----------
 fn : callable
-    The stored function to benchmark.
-benchmarks : list of Benchmark
-    The stored list of benchmark configurations.
+    The wrapped benchmark function.
+benchmarks : Benchmark or list of Benchmark
+    The benchmark configurations.
 
 Methods
 -------
 run(show_plots=False, print_data=False, save_path='', return_df=False, **kwargs)
-    Execute the benchmarks defined in the constructor.
+    Execute the benchmarks and optionally save results.
 
     Parameters
     ----------
     show_plots : bool, optional
-        If True, display matplotlib windows during execution. Default is False.
+        Whether to display matplotlib plots (default: False).
     print_data : bool, optional
-        If True, print the resulting DataFrame to stdout. Default is False.
+        Whether to print benchmark data to stdout (default: False).
     save_path : str, optional
-        Directory path to save generated plots (`.png`) and data (`.csv`).
-        If provided, an `results.html` file summarizing the plots is also created.
-        Default is empty string (no saving).
+        Directory path to save plots and CSV results (default: '').
     return_df : bool, optional
-        If True, return the pandas DataFrame(s) containing the results.
-        Default is False.
-    **kwargs : dict
-        Additional keyword arguments passed directly to the benchmark function `fn`.
+        Whether to return pandas DataFrame(s) with results (default: False).
+    **kwargs
+        Additional keyword arguments passed to the benchmarked function.
 
     Returns
     -------
-    pandas.DataFrame or list of pandas.DataFrame or None
-        If `return_df` is True, returns the result DataFrame for a single benchmark
-        or a list of DataFrames for multiple benchmarks. Otherwise, returns None.
+    df : pandas.DataFrame or list of pandas.DataFrame or None
+        If ``return_df=True``, returns DataFrame(s) containing benchmark
+        results. Otherwise returns None.
 
-Notes
------
-The benchmark function `fn` is expected to return a scalar (mean time) or a tuple
-of three values (mean, min, max). If a scalar is returned, min/max error bars
-will not be plotted.
-
-The x-axis values are derived from `Benchmark.x_vals`. If multiple `x_names` are
-specified, `x_vals` elements can be scalars (broadcasted) or sequences matching
-the length of `x_names`.
-
-Output files saved to `save_path` include:
-- `{plot_name}.png`: Line plot with optional error bands.
-- `{plot_name}.csv`: Tabular data with mean values.
-- `results.html`: Simple HTML page embedding all generated plots.
+    Notes
+    -----
+    The benchmarked function should return either a single value (mean) or
+    a tuple of (mean, min, max) timing values. Results are saved as PNG
+    plots and CSV files if ``save_path`` is provided.
 
 Examples
 --------
 .. code-block:: python
 
     import triton
-    import triton.language as tl
-    from triton.testing import Benchmark, perf_report
+    import triton.testing as tt
 
     @triton.jit
-    def vector_add_kernel(x_ptr, y_ptr, out_ptr, n,
-                          BLOCK_SIZE: tl.constexpr):
-        pid = tl.program_id(0)
-        offs = pid * BLOCK_SIZE + tl.arange(0, BLOCK_SIZE)
-        mask = offs < n
-        x = tl.load(x_ptr + offs, mask=mask)
-        y = tl.load(y_ptr + offs, mask=mask)
-        tl.store(out_ptr + offs, x + y, mask=mask)
+    def kernel_fn(...):
+        # kernel implementation
+        pass
 
-    def run_benchmark(BLOCK_SIZE, n):
-        # Setup tensors and launch kernel...
-        # Returns latency in ms
-        return latency
+    def run_benchmark(...):
+        # benchmark harness
+        return triton.testing.do_bench(lambda: kernel_fn[...])
 
-    # Define benchmark configuration
-    bench = Benchmark(
-        x_names=['n'],
+    # Create benchmark configuration
+    bench = tt.Benchmark(
+        x_names=['size'],
         x_vals=[2**i for i in range(10, 20)],
-        line_arg='BLOCK_SIZE',
-        line_vals=[128, 256, 512, 1024],
-        line_names=['BS128', 'BS256', 'BS512', 'BS1024'],
-        plot_name='vector-add-performance',
+        line_arg='provider',
+        line_vals=['triton', 'torch'],
+        line_names=['Triton', 'PyTorch'],
+        plot_name='vector-add-benchmark',
         args={},
-        ylabel='Time (ms)',
-        x_log=True,
-        y_log=True
+        ylabel='GB/s'
     )
 
-    # Mark the function and run
-    report = perf_report(bench)
-    report(run_benchmark, save_path='./results', return_df=True)
+    # Mark function for benchmarking
+    benchmark = tt.perf_report(bench)(run_benchmark)
+
+    # Execute benchmarks
+    benchmark.run(save_path='results', print_data=True)

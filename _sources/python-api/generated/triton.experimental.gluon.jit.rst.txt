@@ -1,0 +1,56 @@
+jit
+===
+
+.. py:function:: triton.experimental.gluon.jit(fn=None, *, version=None, repr=None, launch_metadata=None, do_not_specialize=None, do_not_specialize_on_alignment=None, debug=None, noinline=None)
+
+   Decorator for JIT-compiling a function using the Gluon experimental API.
+
+   Gluon provides explicit control over layouts, shared memory, barriers, and hardware-specific features (NVIDIA Hopper/Blackwell, AMD CDNA3/CDNA4). Kernels should be decorated with ``@gluon.jit`` rather than ``@triton.jit``.
+
+   Parameters
+   ----------
+   fn : Callable, optional
+      The function to be JIT-compiled. If provided, the decorator is applied immediately. If omitted, returns a decorator factory.
+   version : int, optional
+      Version identifier for the kernel.
+   repr : Callable, optional
+      Custom function to generate string representation of the kernel.
+   launch_metadata : Callable, optional
+      Function to attach metadata to the kernel launch.
+   do_not_specialize : Iterable[int or str], optional
+      Arguments (by index or name) on which specialization should be disabled.
+   do_not_specialize_on_alignment : Iterable[int or str], optional
+      Arguments (by index or name) on which alignment specialization should be disabled.
+   debug : bool, optional
+      Enable debug mode for compilation.
+   noinline : bool, optional
+      Prevent inlining of the function.
+
+   Returns
+   -------
+   GluonJITFunction or Callable
+      If ``fn`` is provided, returns the compiled ``GluonJITFunction``. Otherwise, returns a decorator callable.
+
+   Notes
+   -----
+   When a JIT'd function is called, arguments are implicitly converted to pointers if they have a ``.data_ptr()`` method and a ``.dtype`` attribute.
+
+   The function will be compiled and run on the GPU. It will only have access to:
+
+   * Python primitives
+   * Builtins within the ``triton`` package
+   * Arguments to this function
+   * Other JIT'd functions
+
+   Examples
+   --------
+   .. code-block:: python
+
+      import triton.experimental.gluon as gluon
+      import triton.experimental.gluon.language as ttgl
+
+      @gluon.jit
+      def kernel(x_ptr, y_ptr, n):
+          pid = ttgl.program_id(0)
+          x = ttgl.load(x_ptr + pid)
+          ttgl.store(y_ptr + pid, x)

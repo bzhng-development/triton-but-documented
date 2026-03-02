@@ -1,0 +1,92 @@
+pointer_type
+============
+
+.. currentmodule:: triton.experimental.gluon.language
+
+.. class:: pointer_type(element_ty, address_space=1, const=False)
+
+   Represents a pointer type in Triton IR with explicit element type, address
+   space, and constness qualifiers.
+
+   Pointer types are used to define memory access patterns in Gluon kernels,
+   enabling explicit control over shared memory, global memory, and other
+   address spaces.
+
+   Parameters
+   ----------
+   element_ty : dtype
+       The element type that the pointer points to (e.g., :code:`ttgl.int32`,
+       :code:`ttgl.float16`).
+   address_space : int, optional
+       The address space number. Default is 1 (global memory). Address space 0
+       typically represents shared memory.
+   const : bool, optional
+       Whether the pointer points to constant data. Constant pointers cannot
+       be used with store operations. Default is False.
+
+   Attributes
+   ----------
+   element_ty : dtype
+       The scalar element type of the pointer.
+   address_space : int
+       The address space number.
+   const : bool
+       Whether the pointer is constant.
+   name : str
+       Human-readable string representation (e.g., :code:`pointer<int32>` or
+       :code:`const_pointer<float16>`).
+
+   Methods
+   -------
+   to_ir(builder)
+       Convert to MLIR pointer type for code generation.
+   is_ptr()
+       Returns True (identifies this type as a pointer).
+   is_const()
+       Returns True if the pointer is constant, False otherwise.
+   mangle()
+       Returns the mangled name for type encoding in kernel signatures.
+   scalar
+       Property returning the pointer type itself (pointer types are scalar).
+
+   See Also
+   --------
+   dtype : Base type class for all Triton types.
+   block_type : Type for blocked/tensor types.
+
+   Examples
+   --------
+   Create a pointer to int32 in global memory:
+
+   .. code-block:: python
+
+      import triton.experimental.gluon as gluon
+      import triton.experimental.gluon.language as ttgl
+
+      @gluon.jit
+      def kernel(ptr: ttgl.pointer_type(ttgl.int32)):
+          # Kernel implementation
+          pass
+
+   Create a constant pointer (read-only):
+
+   .. code-block:: python
+
+      const_ptr_ty = ttgl.pointer_type(ttgl.float16, const=True)
+      # const_ptr_ty.is_const() returns True
+
+   Create a shared memory pointer (address space 0):
+
+   .. code-block:: python
+
+      shared_ptr_ty = ttgl.pointer_type(ttgl.int32, address_space=0)
+
+   Check pointer type properties:
+
+   .. code-block:: python
+
+      ptr_ty = ttgl.pointer_type(ttgl.int64)
+      print(ptr_ty.is_ptr())      # True
+      print(ptr_ty.is_const())    # False
+      print(ptr_ty.element_ty)    # int64
+      print(ptr_ty.address_space) # 1

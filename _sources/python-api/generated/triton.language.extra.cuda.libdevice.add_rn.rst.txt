@@ -1,0 +1,59 @@
+add_rn
+======
+
+.. currentmodule:: triton.language.extra.cuda.libdevice
+
+.. function:: add_rn(arg0, arg1, _semantic=None)
+
+    Performs floating-point addition with round-to-nearest rounding mode.
+
+    Parameters
+    ----------
+    arg0 : tl.tensor
+        First input tensor. Must be floating-point type (fp32 or fp64).
+    arg1 : tl.tensor
+        Second input tensor. Must be floating-point type (fp32 or fp64).
+        Must have the same dtype as ``arg0``.
+    _semantic : optional
+        Internal parameter, do not set directly.
+
+    Returns
+    -------
+    result : tl.tensor
+        Tensor containing the element-wise sum of ``arg0`` and ``arg1`` with
+        round-to-nearest-even rounding mode.
+
+    Notes
+    -----
+    This function dispatches to CUDA libdevice intrinsics:
+
+    - ``__nv_fadd_rn`` for 32-bit floating-point (fp32)
+    - ``__nv_dadd_rn`` for 64-bit floating-point (fp64)
+
+    The ``rn`` suffix indicates round-to-nearest-even rounding mode, which is
+    the default IEEE 754 rounding mode. This provides deterministic rounding
+    behavior for reproducible numerical results.
+
+    Both inputs must have matching dtypes. Mixed precision operations are not
+    supported. The function is marked as pure (no side effects).
+
+    Examples
+    --------
+    .. code-block:: python
+
+        import triton
+        import triton.language as tl
+
+        @triton.jit
+        def add_kernel(x_ptr, y_ptr, out_ptr, BLOCK_SIZE: tl.constexpr):
+            pid = tl.program_id(axis=0)
+            offsets = pid * BLOCK_SIZE + tl.arange(0, BLOCK_SIZE)
+            x = tl.load(x_ptr + offsets)
+            y = tl.load(y_ptr + offsets)
+            result = tl.extra.cuda.libdevice.add_rn(x, y)
+            tl.store(out_ptr + offsets, result)
+
+    See Also
+    --------
+    tl.add : Standard Triton addition operation
+    tl.extra.cuda.libdevice : CUDA libdevice function collection

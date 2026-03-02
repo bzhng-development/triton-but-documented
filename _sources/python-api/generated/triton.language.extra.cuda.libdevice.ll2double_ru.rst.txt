@@ -1,0 +1,44 @@
+ll2double_ru
+============
+
+.. currentmodule:: triton.language.extra.cuda.libdevice
+
+.. function:: ll2double_ru(arg0, _semantic=None)
+
+   Convert a 64-bit signed integer to double-precision floating point with round-up rounding mode.
+
+   Parameters
+   ----------
+   arg0 : tensor of int64
+      Input integer value(s) to convert.
+
+   Returns
+   -------
+   tensor of fp64
+      Converted floating point value(s) with round-up rounding applied.
+
+   Notes
+   -----
+   This function wraps the CUDA libdevice intrinsic ``__nv_ll2double_ru``.
+
+   The round-up rounding mode rounds towards positive infinity when the
+   integer cannot be exactly represented as a double-precision float.
+
+   This is a pure function with no side effects.
+
+   Only supports ``int64`` input type.
+
+   Examples
+   --------
+   .. code-block:: python
+
+      import triton
+      import triton.language as tl
+      from triton.language.extra.cuda import libdevice
+
+      @triton.jit
+      def kernel(ptr, BLOCK: tl.constexpr):
+          offsets = tl.arange(0, BLOCK)
+          int_vals = tl.load(ptr + offsets).to(tl.int64)
+          float_vals = libdevice.ll2double_ru(int_vals)
+          tl.store(ptr + offsets, float_vals)

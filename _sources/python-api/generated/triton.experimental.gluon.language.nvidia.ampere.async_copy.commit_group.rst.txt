@@ -1,0 +1,54 @@
+commit_group
+============
+
+.. currentmodule:: triton.experimental.gluon.language.nvidia.ampere.async_copy
+
+.. function:: commit_group(_semantic=None)
+
+   Commit the current asynchronous copy group.
+
+   This finalizes a set of asynchronous copy operations issued through
+   asynchronous copy primitives (e.g., :func:`async_copy`). All copies
+   issued before this call are grouped together and can be waited on
+   as a unit using :func:`wait_group`.
+
+   Parameters
+   ----------
+   _semantic : GluonSemantic, optional
+       Internal semantic object passed by the JIT compiler. Users should not
+       pass this argument directly when calling from a ``@gluon.jit`` kernel.
+
+   Returns
+   -------
+   None
+
+   Notes
+   -----
+   This function is typically called implicitly by the Gluon JIT compiler when
+   using asynchronous copy operations. Direct calls are only needed in advanced
+   use cases where explicit control over copy group boundaries is required.
+
+   Asynchronous copies must be committed before they can be waited on using
+   :func:`wait_group`. Multiple commit groups can be issued to create
+   independent synchronization points.
+
+   This operation is specific to NVIDIA Ampere architecture and later GPUs
+   that support asynchronous copy instructions (Hopper, Blackwell).
+
+   Examples
+   --------
+   .. code-block:: python
+
+       import triton.experimental.gluon as gluon
+       import triton.experimental.gluon.language as ttgl
+
+       @gluon.jit
+       def async_copy_kernel(...):
+           # Issue async copies to shared memory
+           ttgl.nvidia.ampere.async_copy.async_copy(src_ptr, dst_desc, ...)
+           
+           # Commit the group before waiting
+           ttgl.nvidia.ampere.async_copy.commit_group()
+           
+           # Wait for all copies in the group to complete
+           ttgl.nvidia.ampere.async_copy.wait_group()

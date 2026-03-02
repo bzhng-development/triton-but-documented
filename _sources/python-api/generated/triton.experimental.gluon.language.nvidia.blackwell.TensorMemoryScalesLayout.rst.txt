@@ -1,0 +1,41 @@
+class TensorMemoryScalesLayout
+==============================
+
+Describes the layout for tensor memory scales in Blackwell architecture.
+
+Parameters
+----------
+cga_layout : list of list of int, optional
+    CGA (Cooperative Group Array) layout bases. Each basis must be a 2-element
+    list. Defaults to empty list.
+
+Notes
+-----
+This layout type is used for scaled tensor memory operations on NVIDIA Blackwell
+GPUs. All basis vectors in ``cga_layout`` must have exactly 2 elements.
+
+The layout is immutable (frozen dataclass) and supports hashing for use in
+caching and deduplication.
+
+Examples
+--------
+.. code-block:: python
+
+    import triton.experimental.gluon as gluon
+    import triton.experimental.gluon.language as ttgl
+    
+    # Create a simple scales layout with no CGA bases
+    layout = gluon.language.nvidia.blackwell.TensorMemoryScalesLayout()
+    
+    # Create a layout with custom CGA bases
+    layout = gluon.language.nvidia.blackwell.TensorMemoryScalesLayout(
+        cga_layout=[[0, 1], [1, 0]]
+    )
+    
+    # Use layout in tensor memory descriptor type
+    desc_ty = ttgl.tensor_memory_descriptor_type(
+        element_ty=ttgl.float16,
+        shape=[128, 128],
+        layout=layout,
+        alloc_shape=[128, 128]
+    )

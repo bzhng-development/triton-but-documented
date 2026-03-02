@@ -1,0 +1,42 @@
+triton.language.extra.cuda.libdevice.double2int_rn
+===================================================
+
+.. currentmodule:: triton.language.extra.cuda.libdevice
+
+.. function:: double2int_rn(arg0, _semantic=None)
+
+   Convert double-precision floating-point value to 32-bit integer using round-to-nearest rounding mode.
+
+   Parameters
+   ----------
+   arg0 : tl.tensor
+       Input tensor of dtype ``tl.float64``. Values are rounded to the nearest integer.
+
+   _semantic : optional
+       Internal semantic parameter. Do not set manually.
+
+   Returns
+   -------
+   tl.tensor
+       Tensor of dtype ``tl.int32`` containing the converted values.
+
+   Notes
+   -----
+   This function wraps the CUDA libdevice intrinsic ``__nv_double2int_rn``. The rounding mode is round-to-nearest-even (ties round to even). Values outside the representable int32 range result in undefined behavior.
+
+   This function is pure (no side effects) and can be used in device code within ``@triton.jit`` decorated kernels.
+
+   Examples
+   --------
+   .. code-block:: python
+
+      import triton
+      import triton.language as tl
+
+      @triton.jit
+      def kernel(x_ptr, y_ptr, BLOCK_SIZE: tl.constexpr):
+          pid = tl.program_id(0)
+          offsets = pid * BLOCK_SIZE + tl.arange(0, BLOCK_SIZE)
+          x = tl.load(x_ptr + offsets)  # fp64 tensor
+          y = tl.extra.cuda.libdevice.double2int_rn(x)  # convert to int32
+          tl.store(y_ptr + offsets, y)

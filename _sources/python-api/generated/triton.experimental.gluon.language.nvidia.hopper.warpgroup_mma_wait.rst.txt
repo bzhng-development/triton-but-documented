@@ -1,0 +1,58 @@
+warpgroup_mma_wait
+==================
+
+.. currentmodule:: triton.experimental.gluon.language.nvidia.hopper
+
+.. function:: warpgroup_mma_wait(num_outstanding=0, deps=None)
+
+   Wait until the specified number of warpgroup MMA operations are in-flight.
+
+   Blocks execution until ``num_outstanding`` or fewer asynchronous warpgroup
+   matrix multiply-accumulate operations remain pending. Use this to control
+   MMA operation scheduling and ensure dependencies are preserved during
+   asynchronous execution.
+
+   Parameters
+   ----------
+   num_outstanding : int, optional
+       Maximum number of outstanding warpgroup MMA operations to allow.
+       Defaults to 0, which waits until all pending MMAs complete.
+   deps : Sequence[tensor], optional
+       List of tensor dependencies that must be kept alive while the MMA
+       operations are unfinished. This parameter is required at runtime
+       despite the default value in the signature.
+
+   Returns
+   -------
+   tensor or Tuple[tensor, ...]
+       The dependency tensors returned to maintain liveness. If ``deps``
+       contains a single tensor, returns that tensor directly. Otherwise
+       returns a tuple of all dependency tensors.
+
+   Notes
+   -----
+   This function is specific to NVIDIA Hopper architecture and controls
+   warpgroup-level asynchronous MMA operations. The ``deps`` parameter
+       ensures that input tensors remain valid until MMA completion.
+
+   Passing ``deps=None`` will raise a :exc:`ValueError` at runtime.
+
+   Examples
+   --------
+   .. code-block:: python
+
+      import triton.experimental.gluon as gluon
+      import triton.experimental.gluon.language as ttgl
+      from triton.experimental.gluon.language.nvidia.hopper import warpgroup_mma_wait
+
+      @gluon.jit
+      def kernel(...):
+          # Issue asynchronous warpgroup MMA operations
+          acc = ttgl.dot(a, b, acc)
+
+          # Wait until 2 or fewer MMA operations are in-flight
+          # Keep acc alive during the wait
+          warpgroup_mma_wait(num_outstanding=2, deps=[acc])
+
+          # Continue with dependent operations
+          ...

@@ -1,0 +1,63 @@
+atomic_xor
+==========
+
+.. currentmodule:: triton.experimental.gluon.language
+
+.. function:: atomic_xor(pointer, val, mask=None, sem=None, scope=None, _semantic=None)
+
+   Performs an atomic logical XOR at the memory location specified by ``pointer``.
+
+   Returns the data stored at ``pointer`` before the atomic operation.
+
+   Parameters
+   ----------
+   pointer : tensor
+       The memory locations to operate on. Must be a block of pointer type.
+   val : tensor
+       The values with which to perform the atomic operation. Must have the same
+       dtype as ``pointer.dtype.element_ty``.
+   mask : tensor, optional
+       Boolean tensor specifying which elements to operate on. If provided, only
+       elements where ``mask`` is true will perform the atomic operation.
+   sem : str, optional
+       Specifies the memory semantics for the operation. Acceptable values are
+       ``"acquire"``, ``"release"``, ``"acq_rel"`` (stands for "ACQUIRE_RELEASE"),
+       and ``"relaxed"``. Defaults to ``"acq_rel"``.
+   scope : str, optional
+       Defines the scope of threads that observe the synchronizing effect of the
+       atomic operation. Acceptable values are ``"gpu"`` (default), ``"cta"``
+       (cooperative thread array, thread block), or ``"sys"`` (stands for "SYSTEM").
+   _semantic
+       Internal parameter for semantic operations. Do not set manually.
+
+   Returns
+   -------
+   tensor
+       The data stored at ``pointer`` before the atomic operation was performed.
+
+   Notes
+   -----
+   This function can also be called as a member function on :py:class:`tensor`,
+   as ``x.atomic_xor(...)`` instead of ``atomic_xor(x, ...)``.
+
+   The atomic XOR operation computes ``*pointer = *pointer ^ val`` atomically.
+   This is useful for implementing lock-free data structures and synchronization
+   primitives.
+
+   Examples
+   --------
+   .. code-block:: python
+
+      import triton.experimental.gluon as gluon
+      import triton.experimental.gluon.language as ttgl
+
+      @gluon.jit
+      def kernel(x_ptr, val):
+          # Atomic XOR on a single element
+          old_val = ttgl.atomic_xor(x_ptr, val)
+
+      @gluon.jit
+      def kernel_block(x_ptr, val_ptr, mask):
+          # Atomic XOR on a block of elements with masking
+          vals = ttgl.load(val_ptr)
+          old_vals = ttgl.atomic_xor(x_ptr, vals, mask=mask)

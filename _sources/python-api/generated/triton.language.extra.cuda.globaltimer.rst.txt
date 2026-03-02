@@ -1,0 +1,49 @@
+globaltimer
+===========
+
+globaltimer
+-----------
+
+.. currentmodule:: triton.language.extra.cuda
+
+.. function:: globaltimer()
+
+    Returns the CUDA global timer value.
+
+    Reads the hardware global timer on CUDA GPUs. This is a cycle counter
+    that can be used for performance measurement and profiling.
+
+    Parameters
+    ----------
+    _semantic : None, optional
+        Internal Triton parameter. Do not pass directly.
+
+    Returns
+    -------
+    timer : tl.tensor
+        A tensor of type ``tl.int64`` containing the global timer value.
+
+    Notes
+    -----
+    This function is CUDA-specific and uses inline PTX assembly to read
+    the ``%globaltimer`` special register. The operation is not pure
+    (has side effects) as it reads hardware state.
+
+    The timer value represents GPU clock cycles and can be used for
+    measuring kernel execution time or profiling code sections.
+
+    Examples
+    --------
+    .. code-block:: python
+
+        import triton
+        import triton.language as tl
+
+        @triton.jit
+        def kernel(timer_ptr, BLOCK: tl.constexpr):
+            timer = tl.extra.cuda.globaltimer()
+            tl.store(timer_ptr, timer)
+
+        # Launch kernel
+        timer = torch.empty(1, dtype=torch.int64, device="cuda")
+        kernel[(1,)](timer, BLOCK=1024)

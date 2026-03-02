@@ -1,0 +1,64 @@
+mfma_scaled
+===========
+
+AMD scaled matrix fragment multiply-accumulate operation with microscaling formats.
+
+Performs the computation ``c = a * a_scale @ b * b_scale + acc`` using AMD MFMA
+instructions with microscaling (MX) operand formats.
+
+Parameters
+----------
+a : tensor
+    The left-hand operand tensor to be multiplied. Must use a
+    :class:`DotOperandLayout` with parent matching the MFMA layout.
+a_scale : tensor, optional
+    Scale factor tensor for operand ``a``.
+a_format : str
+    Microscaling format of operand ``a``. Available formats: ``e2m1``,
+    ``e4m3``, ``e5m2``.
+b : tensor
+    The right-hand operand tensor to be multiplied. Must use a
+    :class:`DotOperandLayout` with parent matching the MFMA layout.
+b_scale : tensor, optional
+    Scale factor tensor for operand ``b``.
+b_format : str
+    Microscaling format of operand ``b``. Available formats: ``e2m1``,
+    ``e4m3``, ``e5m2``.
+acc : tensor
+    Accumulator tensor. Must use an :class:`AMDMFMALayout`.
+
+Returns
+-------
+tensor
+    Result tensor of the scaled MFMA operation with the same layout as
+    ``acc``.
+
+Notes
+-----
+This operation is currently supported only on AMD CDNA4 hardware.
+
+Operands ``a`` and ``b`` use microscaling formats described in the
+"OCP Microscaling Formats (MX) Specification":
+https://www.opencompute.org/documents/ocp-microscaling-formats-mx-v1-0-spec-final-pdf
+
+Layout requirements:
+- ``acc`` must have an :class:`AMDMFMALayout`
+- ``a`` and ``b`` must have :class:`DotOperandLayout` with parent matching
+  the MFMA layout of ``acc``
+
+Examples
+--------
+.. code-block:: python
+
+    import triton.experimental.gluon as gluon
+    import triton.experimental.gluon.language as ttgl
+    from triton.experimental.gluon.language.amd import cdna4
+
+    @gluon.jit
+    def kernel(...):
+        # Assume a, b, acc are properly laid out tensors
+        result = cdna4.mfma_scaled(
+            a, a_scale, "e4m3",
+            b, b_scale, "e4m3",
+            acc
+        )

@@ -1,0 +1,63 @@
+buffer_atomic_min
+=================
+
+.. currentmodule:: triton.experimental.gluon.language.amd.cdna4
+
+.. function:: buffer_atomic_min(ptr, offsets, value, mask=None, sem=None, scope=None, _semantic=None)
+
+    Perform an atomic minimum operation on AMD CDNA4 buffer memory.
+
+    Atomically computes ``min(*ptr[offsets], value)`` and stores the result back to
+    memory. Returns the original value at the memory location before the operation.
+
+    Parameters
+    ----------
+    ptr : pointer_type
+        Pointer to the buffer memory location(s) to operate on.
+    offsets : tensor
+        Tensor of offsets specifying which elements to operate on.
+    value : tensor
+        Tensor of values to compare with memory contents.
+    mask : tensor, optional
+        Boolean tensor controlling which offsets participate in the operation.
+        Elements where mask is False are skipped.
+    sem : str, optional
+        Memory semantics for the atomic operation (e.g., "acquire", "release", "acq_rel").
+        Defaults to hardware default if not specified.
+    scope : str, optional
+        Memory scope for the atomic operation (e.g., "cta", "cluster", "gpu").
+        Defaults to hardware default if not specified.
+    _semantic : GluonSemantic, optional
+        Internal semantic handler. Must be provided by the JIT compiler.
+
+    Returns
+    -------
+    tensor
+        Tensor containing the original values from memory before the atomic minimum
+        operation was applied.
+
+    Notes
+    -----
+    This function is specific to AMD CDNA4 architecture and uses buffer atomic
+    instructions. It must be called from within a kernel decorated with
+    ``@gluon.jit``.
+
+    The operation is equivalent to:
+    ``old_value = atomicMin(ptr[offset], value)``
+
+    Only integer and floating-point dtypes are supported for buffer atomics on
+    CDNA4.
+
+    Examples
+    --------
+    .. code-block:: python
+
+        import triton.experimental.gluon as gluon
+        import triton.experimental.gluon.language as ttgl
+        from triton.experimental.gluon.language.amd import cdna4
+
+        @gluon.jit
+        def kernel(ptr, offsets, value):
+            # Perform atomic minimum on buffer memory
+            old_vals = cdna4.buffer_atomic_min(ptr, offsets, value)
+            return old_vals

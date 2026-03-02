@@ -1,0 +1,48 @@
+add_rz
+======
+
+.. currentmodule:: triton.language.extra.cuda.libdevice
+
+.. function:: add_rz(arg0, arg1, _semantic=None)
+
+   Adds two floating-point values with round-to-zero rounding mode.
+
+   Parameters
+   ----------
+   arg0 : tl.tensor
+       First input tensor. Must be fp32 or fp64.
+   arg1 : tl.tensor
+       Second input tensor. Must be fp32 or fp64.
+   _semantic
+       Internal parameter. Do not set.
+
+   Returns
+   -------
+   result : tl.tensor
+       Element-wise sum of ``arg0`` and ``arg1`` with round-to-zero rounding.
+       Same dtype as inputs.
+
+   Notes
+   -----
+   This function calls CUDA libdevice ``__nv_fadd_rz`` (for fp32) or
+   ``__nv_dadd_rz`` (for fp64). Round-to-zero rounding truncates the
+   result towards zero, which differs from the default round-to-nearest
+   behavior.
+
+   This function must be used inside a :py:func:`@triton.jit` decorated kernel.
+
+   Examples
+   --------
+   .. code-block:: python
+
+       import triton
+       import triton.language as tl
+
+       @triton.jit
+       def kernel(x_ptr, y_ptr, out_ptr, BLOCK: tl.constexpr):
+           pid = tl.program_id(0)
+           offsets = pid * BLOCK + tl.arange(0, BLOCK)
+           x = tl.load(x_ptr + offsets)
+           y = tl.load(y_ptr + offsets)
+           result = tl.extra.cuda.libdevice.add_rz(x, y)
+           tl.store(out_ptr + offsets, result)

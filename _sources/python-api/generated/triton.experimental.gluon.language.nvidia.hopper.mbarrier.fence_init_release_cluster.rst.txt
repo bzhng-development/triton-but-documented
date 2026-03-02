@@ -1,0 +1,59 @@
+fence_init_release_cluster
+==========================
+
+.. currentmodule:: triton.experimental.gluon.language.nvidia.hopper.mbarrier
+
+.. autofunction:: fence_init_release_cluster
+
+Insert a memory fence that makes prior mbarrier initialization visible across the CTA cluster.
+
+This fence ensures that mbarrier initialization operations performed before the fence are visible to all CTAs in the cluster. It must be used in conjunction with :func:`cluster.barrier` with ``relaxed=True`` to establish proper synchronization ordering.
+
+Parameters
+----------
+_semantic : GluonSemantic, optional
+    Internal semantic builder. Do not pass this argument directly; it is automatically provided by the ``@gluon.jit`` decorator.
+
+Returns
+-------
+None
+
+Notes
+-----
+This function is specific to NVIDIA Hopper architecture and requires multi-CTA cluster configuration.
+
+The fence must be paired with :func:`triton.experimental.gluon.language.barrier` called with ``cluster=True`` and ``relaxed=True`` to ensure correct synchronization semantics across the CTA cluster.
+
+Typical usage pattern::
+
+    # Initialize mbarrier
+    mbarrier.init(...)
+    # Make initialization visible across cluster
+    mbarrier.fence_init_release_cluster()
+    # Synchronize across cluster
+    gluon.barrier(cluster=True)
+
+This ordering ensures all CTAs in the cluster observe the mbarrier initialization before proceeding.
+
+Examples
+--------
+
+.. code-block:: python
+
+    import triton.experimental.gluon as gluon
+    import triton.experimental.gluon.language as ttgl
+    from triton.experimental.gluon.language.nvidia.hopper import mbarrier
+
+    @gluon.jit
+    def kernel_fn(...):
+        # Initialize mbarrier in shared memory
+        mbarrier.init(mbarrier_desc, transaction_bytes=...)
+        
+        # Ensure initialization is visible across CTA cluster
+        mbarrier.fence_init_release_cluster()
+        
+        # Synchronize all CTAs in the cluster
+        gluon.barrier(cluster=True)
+        
+        # Now safe to use mbarrier across cluster
+        ...

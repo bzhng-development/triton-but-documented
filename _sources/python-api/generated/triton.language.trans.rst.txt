@@ -1,58 +1,73 @@
-tl.trans
-========
+triton.language.trans
+=====================
 
-Permutes the dimensions of a tensor.
+.. currentmodule:: triton.language
 
-If the parameter ``dims`` is not specified, the function defaults to swapping
-the last two axes, thereby performing an (optionally batched) 2D transpose.
+.. function:: trans(input, *dims, _semantic=None)
 
-Parameters
-----------
-input : tensor
-    The input tensor.
-dims : int or tuple of ints, optional
-    The desired ordering of dimensions. For example, ``(2, 1, 0)`` reverses
-    the order of dims in a 3D tensor. If not provided, swaps the last two
-    dimensions.
+    Permutes the dimensions of a tensor.
 
-Returns
--------
-tensor
-    A tensor with permuted dimensions.
+    If the parameter ``dims`` is not specified, the function defaults to
+    swapping the last two axes, thereby performing an (optionally batched)
+    2D transpose.
 
-Notes
------
-``dims`` can be passed as a tuple or as individual parameters:
+    Parameters
+    ----------
+    input : tensor
+        The input tensor to transpose.
+    *dims : int or tuple of ints, optional
+        The desired ordering of dimensions. For example, ``(2, 1, 0)``
+        reverses the order of dims in a 3D tensor. If not specified,
+        defaults to swapping the last two axes.
 
-.. code-block:: python
+    Returns
+    -------
+    tensor
+        The transposed tensor with dimensions permuted according to ``dims``.
 
-    # These are equivalent
-    trans(x, (2, 1, 0))
-    trans(x, 2, 1, 0)
+    Notes
+    -----
+    ``dims`` can be passed as a tuple or as individual parameters:
 
-:py:func:`permute` is equivalent to this function, except it doesn't have the
-special case when no permutation is specified.
+    .. code-block:: python
 
-This function can also be called as a member function on :py:class:`tensor`,
-as ``x.trans(...)`` instead of ``trans(x, ...)``.
+        # These are equivalent
+        trans(x, (2, 1, 0))
+        trans(x, 2, 1, 0)
 
-Examples
---------
-.. code-block:: python
+    :py:func:`permute` is equivalent to this function, except it doesn't
+    have the special case when no permutation is specified.
 
-    import triton
-    import triton.language as tl
+    This function can also be called as a member function on :py:class:`tensor`,
+    as ``x.trans(...)`` instead of ``trans(x, ...)``.
 
-    @triton.jit
-    def kernel(X, Y, stride_m, stride_n, BLOCK_M: tl.constexpr, BLOCK_N: tl.constexpr):
-        # Load a 2D block
-        offs_m = tl.arange(0, BLOCK_M)
-        offs_n = tl.arange(0, BLOCK_N)
-        mask = (offs_m[:, None] < BLOCK_M) & (offs_n[None, :] < BLOCK_N)
-        x = tl.load(X + offs_m[:, None] * stride_m + offs_n[None, :] * stride_n, mask=mask)
+    Examples
+    --------
+    Transpose a 2D tensor (swap last two axes by default):
 
-        # Transpose the block (swap last two dims)
-        y = tl.trans(x)
+    .. code-block:: python
 
-        # Store the result
-        tl.store(Y + offs_n[:, None] * stride_m + offs_m[None, :] * stride_n, y, mask=mask)
+        @triton.jit
+        def kernel(X, Y, M, N, BLOCK_M: tl.constexpr, BLOCK_N: tl.constexpr):
+            offs_m = tl.arange(0, BLOCK_M)
+            offs_n = tl.arange(0, BLOCK_N)
+            x = tl.load(X + offs_m[:, None] * N + offs_n[None, :])
+            y = tl.trans(x)  # Swaps the last two axes
+            tl.store(Y + offs_n[:, None] * M + offs_m[None, :], y)
+
+    Transpose a 3D tensor with explicit dimension ordering:
+
+    .. code-block:: python
+
+        @triton.jit
+        def kernel(X, Y, D, M, N, BLOCK_D: tl.constexpr, BLOCK_M: tl.constexpr, BLOCK_N: tl.constexpr):
+            offs_d = tl.arange(0, BLOCK_D)
+            offs_m = tl.arange(0, BLOCK_M)
+            offs_n = tl.arange(0, BLOCK_N)
+            x = tl.load(X + offs_d[:, None, None] * M * N + 
+                           offs_m[None, :, None] * N + 
+                           offs_n[None, None, :])
+            y = tl.trans(x, 2, 1, 0)  # Reverses dimension order
+            tl.store(Y + offs_n[:, None, None] * M * D + 
+                        offs_m[None, :, None] * D + 
+                        offs_n[None, None, :], y)

@@ -1,0 +1,69 @@
+mma_v2
+======
+
+.. currentmodule:: triton.experimental.gluon.language.nvidia.hopper
+
+.. function:: mma_v2(a, b, acc, input_precision=None, _semantic=None)
+
+    Perform a matrix multiply-accumulate operation using NVIDIA Hopper MMA version 2.0.
+
+    This function executes a tensor core MMA instruction with explicit layout control.
+    The accumulator tensor determines the MMA layout version and distribution, while
+    input tensors must have compatible dot operand layouts.
+
+    Parameters
+    ----------
+    a : tensor
+        First input tensor with DotOperandLayout (operand_index=0). The parent layout
+        must match the accumulator's NVMMADistributedLayout.
+    b : tensor
+        Second input tensor with DotOperandLayout (operand_index=1). The parent layout
+        must match the accumulator's NVMMADistributedLayout.
+    acc : tensor
+        Accumulator tensor with NVMMADistributedLayout version 2.0. Defines the output
+        layout and dtype.
+    input_precision : dtype, optional
+        Precision for intermediate computation (e.g., float32, tf32). Defaults to None,
+        using the accumulator's dtype.
+    _semantic : GluonSemantic, optional
+        Internal parameter for semantic context. Do not set manually.
+
+    Returns
+    -------
+    tensor
+        Result tensor with the same type and layout as the accumulator.
+
+    Notes
+    -----
+    This is a low-level primitive for explicit GPU programming. All tensors must have
+    compatible layouts as verified by runtime assertions:
+
+    - ``acc`` must have ``NVMMADistributedLayout`` with version ``[2, 0]``
+    - ``a`` must have ``DotOperandLayout`` with ``operand_index=0``
+    - ``b`` must have ``DotOperandLayout`` with ``operand_index=1``
+    - Both operand layouts must share the same parent as ``acc``
+
+    The function requires execution within a ``@gluon.jit`` decorated kernel.
+
+    Examples
+    --------
+    >>> import triton.experimental.gluon as gluon
+    >>> import triton.experimental.gluon.language as ttgl
+    >>> from triton.experimental.gluon.language.nvidia import hopper
+    >>>
+    >>> @gluon.jit
+    >>> def kernel(...):
+    ...     # Create MMA layout version 2.0
+    ...     mma_layout = hopper.NVMMADistributedLayout(version=[2, 0], ...)
+    ...
+    ...     # Create dot operand layouts
+    ...     a_layout = ttgl.DotOperandLayout(parent=mma_layout, operand_index=0)
+    ...     b_layout = ttgl.DotOperandLayout(parent=mma_layout, operand_index=1)
+    ...
+    ...     # Load or create tensors with appropriate layouts
+    ...     a = ...  # tensor with a_layout
+    ...     b = ...  # tensor with b_layout
+    ...     acc = ttgl.full(shape, 0.0, dtype=ttl.float16, layout=mma_layout)
+    ...
+    ...     # Perform MMA v2 operation
+    ...     result = hopper.mma_v2(a, b, acc)

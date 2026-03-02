@@ -15,12 +15,11 @@
       <script src="../../_static/documentation_options.js?v=5929fcd5"></script>
       <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
       <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
-      <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-mml-chtml.js"></script>
     <script src="../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
     <link rel="next" title="get_max_tensorcore_tflops" href="triton.testing.get_max_tensorcore_tflops.html" />
-    <link rel="prev" title="get_dram_gbps" href="triton.testing.get_dram_gbps.html" /> 
+    <link rel="prev" title="triton.testing.get_dram_gbps" href="triton.testing.get_dram_gbps.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -53,35 +52,56 @@
 <li class="toctree-l1"><a class="reference internal" href="../triton.language.html">triton.language</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="../triton.testing.html">triton.testing</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="triton.testing.Benchmark.html">class triton.testing.Benchmark</a></li>
-<li class="toctree-l2"><a class="reference internal" href="triton.testing.do_bench.html"><code class="docutils literal notranslate"><span class="pre">triton.testing.do_bench()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="triton.testing.do_bench_cudagraph.html"><code class="docutils literal notranslate"><span class="pre">triton.testing.do_bench_cudagraph()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="triton.testing.do_bench.html">do_bench</a></li>
+<li class="toctree-l2"><a class="reference internal" href="triton.testing.do_bench_cudagraph.html">triton.testing.do_bench_cudagraph</a></li>
 <li class="toctree-l2"><a class="reference internal" href="triton.testing.perf_report.html">perf_report</a></li>
-<li class="toctree-l2"><a class="reference internal" href="triton.testing.assert_close.html">assert_close</a></li>
+<li class="toctree-l2"><a class="reference internal" href="triton.testing.assert_close.html">triton.testing.assert_close</a></li>
 <li class="toctree-l2 current"><a class="reference internal" href="../triton.testing.html#utilities">Utilities</a><ul class="current">
-<li class="toctree-l3"><a class="reference internal" href="triton.testing.Mark.html">class Mark</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.testing.Mark.html">class triton.testing.Mark</a></li>
 <li class="toctree-l3"><a class="reference internal" href="triton.testing.cuda_memcheck.html">cuda_memcheck</a></li>
-<li class="toctree-l3"><a class="reference internal" href="triton.testing.get_dram_gbps.html">get_dram_gbps</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.testing.get_dram_gbps.html">triton.testing.get_dram_gbps</a></li>
 <li class="toctree-l3 current"><a class="current reference internal" href="#">get_max_simd_tflops</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="#triton.testing.get_max_simd_tflops"><code class="docutils literal notranslate"><span class="pre">get_max_simd_tflops()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#parameters">Parameters</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#returns">Returns</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#raises">Raises</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#notes">Notes</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#examples">Examples</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id0"><code class="docutils literal notranslate"><span class="pre">get_max_simd_tflops()</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="triton.testing.get_max_tensorcore_tflops.html">get_max_tensorcore_tflops</a></li>
 <li class="toctree-l3"><a class="reference internal" href="triton.testing.nvsmi.html">nvsmi</a></li>
-<li class="toctree-l3"><a class="reference internal" href="triton.testing.set_gpu_clock.html">Parameters</a></li>
-<li class="toctree-l3"><a class="reference internal" href="triton.testing.set_gpu_clock.html#yields">Yields</a></li>
-<li class="toctree-l3"><a class="reference internal" href="triton.testing.set_gpu_clock.html#raises">Raises</a></li>
-<li class="toctree-l3"><a class="reference internal" href="triton.testing.set_gpu_clock.html#notes">Notes</a></li>
-<li class="toctree-l3"><a class="reference internal" href="triton.testing.set_gpu_clock.html#examples">Examples</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.testing.set_gpu_clock.html">triton.testing.set_gpu_clock</a></li>
 </ul>
 </li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../triton-semantics.html">Triton Semantics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.language.extra.cuda.html">triton.language.extra.cuda</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.language.extra.cuda.libdevice.html">triton.language.extra.cuda.libdevice</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.runtime.html">triton.runtime</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.tools.html">triton.tools</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Gluon (Experimental) API</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.html">triton.experimental.gluon</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.html">triton.experimental.gluon.language</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.nvidia.ampere.html">triton.experimental.gluon.language.nvidia.ampere</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.nvidia.ampere.async_copy.html">triton.experimental.gluon.language.nvidia.ampere.async_copy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.nvidia.ampere.mbarrier.html">triton.experimental.gluon.language.nvidia.ampere.mbarrier</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.nvidia.hopper.html">triton.experimental.gluon.language.nvidia.hopper</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.nvidia.hopper.tma.html">triton.experimental.gluon.language.nvidia.hopper.tma</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.nvidia.hopper.mbarrier.html">triton.experimental.gluon.language.nvidia.hopper.mbarrier</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.nvidia.hopper.cluster.html">triton.experimental.gluon.language.nvidia.hopper.cluster</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.nvidia.blackwell.html">triton.experimental.gluon.language.nvidia.blackwell</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.nvidia.blackwell.tma.html">triton.experimental.gluon.language.nvidia.blackwell.tma</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.nvidia.blackwell.clc.html">triton.experimental.gluon.language.nvidia.blackwell.clc</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.amd.html">triton.experimental.gluon.language.amd</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.amd.gfx1250.html">triton.experimental.gluon.language.amd.gfx1250</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.amd.gfx1250.async_copy.html">triton.experimental.gluon.language.amd.gfx1250.async_copy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.amd.gfx1250.mbarrier.html">triton.experimental.gluon.language.amd.gfx1250.mbarrier</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.amd.gfx1250.cluster.html">triton.experimental.gluon.language.amd.gfx1250.cluster</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.amd.gfx1250.tdm.html">triton.experimental.gluon.language.amd.gfx1250.tdm</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.amd.cdna3.html">triton.experimental.gluon.language.amd.cdna3</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.amd.cdna4.html">triton.experimental.gluon.language.amd.cdna4</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.amd.rdna3.html">triton.experimental.gluon.language.amd.rdna3</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.amd.rdna4.html">triton.experimental.gluon.language.amd.rdna4</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Triton MLIR Dialects</span></p>
 <ul>
@@ -126,75 +146,73 @@
 <span class="sig-prename descclassname"><span class="pre">triton.testing.</span></span><span class="sig-name descname"><span class="pre">get_max_simd_tflops</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dtype</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">clock_rate</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">device</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#triton.testing.get_max_simd_tflops" title="Link to this definition">¶</a></dt>
 <dd></dd></dl>
 
-<p>Calculate the theoretical peak SIMD (single-issue scalar) performance in TFLOPS for a given CUDA device and data type.</p>
-<p>This function computes the maximum floating-point throughput based on the number of streaming multiprocessors (SMs), the GPU clock rate, and the number of operations per sub-core supported by the hardware architecture for the specified dtype.</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="id0">
+<span class="sig-prename descclassname"><span class="pre">triton.testing.</span></span><span class="sig-name descname"><span class="pre">get_max_simd_tflops</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dtype</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">clock_rate</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">device</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#id0" title="Link to this definition">¶</a></dt>
+<dd><p>Calculate the maximum theoretical SIMD TFLOPS for a GPU device.</p>
+<p>Computes peak floating-point performance based on the number of streaming
+multiprocessors, clock rate, and operations per sub-core for the given
+data type and GPU compute capability.</p>
 <section id="parameters">
 <h2>Parameters<a class="headerlink" href="#parameters" title="Link to this heading">¶</a></h2>
 <dl class="simple">
-<dt>dtype<span class="classifier">torch.dtype</span></dt><dd><p>The data type for which to calculate performance. Supported types are <code class="docutils literal notranslate"><span class="pre">torch.float32</span></code>, <code class="docutils literal notranslate"><span class="pre">torch.float16</span></code>, and <code class="docutils literal notranslate"><span class="pre">torch.bfloat16</span></code>.</p>
+<dt>dtype<span class="classifier">torch.dtype</span></dt><dd><p>Data type for computation. Supported types depend on compute capability:
+<code class="docutils literal notranslate"><span class="pre">torch.float32</span></code>, <code class="docutils literal notranslate"><span class="pre">torch.float16</span></code>, or <code class="docutils literal notranslate"><span class="pre">torch.bfloat16</span></code>.</p>
 </dd>
-<dt>clock_rate<span class="classifier">float</span></dt><dd><p>The GPU clock frequency in MHz.</p>
+<dt>clock_rate<span class="classifier">float</span></dt><dd><p>GPU clock rate in MHz.</p>
 </dd>
-<dt>device<span class="classifier">int, optional</span></dt><dd><p>The CUDA device ID. If <code class="docutils literal notranslate"><span class="pre">None</span></code>, defaults to the currently active device (<code class="docutils literal notranslate"><span class="pre">torch.cuda.current_device()</span></code>).</p>
+<dt>device<span class="classifier">int, optional</span></dt><dd><p>CUDA device ID. Defaults to current device if not specified.</p>
 </dd>
 </dl>
 </section>
 <section id="returns">
 <h2>Returns<a class="headerlink" href="#returns" title="Link to this heading">¶</a></h2>
 <dl class="simple">
-<dt>tflops<span class="classifier">float</span></dt><dd><p>The theoretical peak performance in tera-floating-point operations per second (TFLOPS).</p>
+<dt>tflops<span class="classifier">float</span></dt><dd><p>Maximum theoretical TFLOPS (tera floating-point operations per second).</p>
 </dd>
 </dl>
 </section>
 <section id="raises">
 <h2>Raises<a class="headerlink" href="#raises" title="Link to this heading">¶</a></h2>
 <dl class="simple">
-<dt>RuntimeError</dt><dd><p>If the provided <code class="docutils literal notranslate"><span class="pre">dtype</span></code> is not supported for the device’s compute capability.</p>
+<dt>RuntimeError</dt><dd><p>If the dtype is not supported for the device’s compute capability.</p>
 </dd>
 </dl>
 </section>
 <section id="notes">
 <h2>Notes<a class="headerlink" href="#notes" title="Link to this heading">¶</a></h2>
-<p>The calculation distinguishes between GPU architectures based on compute capability:</p>
+<p>The calculation uses the formula:</p>
+<p><code class="docutils literal notranslate"><span class="pre">tflops</span> <span class="pre">=</span> <span class="pre">num_subcores</span> <span class="pre">*</span> <span class="pre">clock_rate</span> <span class="pre">*</span> <span class="pre">ops_per_sub_core</span> <span class="pre">*</span> <span class="pre">1e-9</span></code></p>
+<p>where <code class="docutils literal notranslate"><span class="pre">num_subcores</span> <span class="pre">=</span> <span class="pre">multiprocessor_count</span> <span class="pre">*</span> <span class="pre">4</span></code>.</p>
+<p>Operations per sub-core vary by compute capability and dtype:</p>
 <ul class="simple">
-<li><p><strong>Compute Capability &lt; 8.0 (Volta, Turing, Ampere consumer):</strong>
-- <code class="docutils literal notranslate"><span class="pre">float32</span></code>: 32 operations per sub-core.
-- <code class="docutils literal notranslate"><span class="pre">float16</span></code>: 64 operations per sub-core.</p></li>
-<li><p><strong>Compute Capability &gt;= 8.0 (Ampere datacenter, Hopper, Blackwell):</strong>
-- <code class="docutils literal notranslate"><span class="pre">float32</span></code>: 32 operations per sub-core.
-- <code class="docutils literal notranslate"><span class="pre">float16</span></code>, <code class="docutils literal notranslate"><span class="pre">bfloat16</span></code>: 64 operations per sub-core.</p></li>
+<li><p>Compute capability &lt; 8.0: float32 = 32 ops, float16 = 64 ops</p></li>
+<li><p>Compute capability &gt;= 8.0: float32 = 32 ops, float16/bfloat16 = 64 ops</p></li>
 </ul>
-<p>The formula used is:
-<span class="math notranslate nohighlight">\(\text{TFLOPS} = \text{num\_subcores} \times \text{clock\_rate} \times \text{ops\_per\_sub\_core} \times 10^{-9}\)</span></p>
-<p>where <code class="docutils literal notranslate"><span class="pre">num_subcores</span></code> is derived from <code class="docutils literal notranslate"><span class="pre">multiprocessor_count</span> <span class="pre">*</span> <span class="pre">4</span></code>.</p>
 </section>
 <section id="examples">
 <h2>Examples<a class="headerlink" href="#examples" title="Link to this heading">¶</a></h2>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">torch</span>
-<span class="kn">import</span><span class="w"> </span><span class="nn">triton.testing</span>
-
-<span class="c1"># Get current device properties</span>
-<span class="n">device</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">cuda</span><span class="o">.</span><span class="n">current_device</span><span class="p">()</span>
-<span class="n">props</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">cuda</span><span class="o">.</span><span class="n">get_device_properties</span><span class="p">(</span><span class="n">device</span><span class="p">)</span>
-<span class="n">clock_rate_mhz</span> <span class="o">=</span> <span class="n">props</span><span class="o">.</span><span class="n">clock_rate</span> <span class="o">/</span> <span class="mf">1000.0</span>  <span class="c1"># Convert kHz to MHz</span>
-
-<span class="c1"># Calculate peak FP32 performance</span>
-<span class="n">fp32_tflops</span> <span class="o">=</span> <span class="n">triton</span><span class="o">.</span><span class="n">testing</span><span class="o">.</span><span class="n">get_max_simd_tflops</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">float32</span><span class="p">,</span> <span class="n">clock_rate_mhz</span><span class="p">,</span> <span class="n">device</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Peak FP32 SIMD performance: </span><span class="si">{</span><span class="n">fp32_tflops</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2"> TFLOPS&quot;</span><span class="p">)</span>
-
-<span class="c1"># Calculate peak FP16 performance</span>
-<span class="n">fp16_tflops</span> <span class="o">=</span> <span class="n">triton</span><span class="o">.</span><span class="n">testing</span><span class="o">.</span><span class="n">get_max_simd_tflops</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">float16</span><span class="p">,</span> <span class="n">clock_rate_mhz</span><span class="p">,</span> <span class="n">device</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Peak FP16 SIMD performance: </span><span class="si">{</span><span class="n">fp16_tflops</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2"> TFLOPS&quot;</span><span class="p">)</span>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span><span class="w"> </span><span class="nn">torch</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span><span class="w"> </span><span class="nn">triton.testing</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">tt</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># Calculate max SIMD TFLOPS for float32 at 1400 MHz</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">tflops</span> <span class="o">=</span> <span class="n">tt</span><span class="o">.</span><span class="n">get_max_simd_tflops</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">float32</span><span class="p">,</span> <span class="mi">1400</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Peak performance: </span><span class="si">{</span><span class="n">tflops</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2"> TFLOPS&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># Specify device explicitly</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">tflops</span> <span class="o">=</span> <span class="n">tt</span><span class="o">.</span><span class="n">get_max_simd_tflops</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">float16</span><span class="p">,</span> <span class="mi">1200</span><span class="p">,</span> <span class="n">device</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
 </pre></div>
 </div>
 </section>
+</dd></dl>
+
 </section>
 
 
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="triton.testing.get_dram_gbps.html" class="btn btn-neutral float-left" title="get_dram_gbps" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="triton.testing.get_dram_gbps.html" class="btn btn-neutral float-left" title="triton.testing.get_dram_gbps" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
         <a href="triton.testing.get_max_tensorcore_tflops.html" class="btn btn-neutral float-right" title="get_max_tensorcore_tflops" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 

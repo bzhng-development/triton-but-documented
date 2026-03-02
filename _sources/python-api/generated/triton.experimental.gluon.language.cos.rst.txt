@@ -1,0 +1,40 @@
+cos
+===
+
+.. currentmodule:: triton.experimental.gluon.language
+
+.. function:: cos(x, _semantic=None)
+
+   Computes the element-wise cosine of :code:`x`.
+
+   Parameters
+   ----------
+   x : tensor
+       The input values. Must be floating point (fp32 or fp64).
+   _semantic : GluonSemantic, optional
+       Internal semantic context. Do not set manually.
+
+   Returns
+   -------
+   tensor
+       A tensor containing the cosine of each element in :code:`x`.
+
+   Notes
+   -----
+   This function only supports fp32 and fp64 data types. Attempting to use
+   other dtypes will raise an error.
+
+   Examples
+   --------
+   .. code-block:: python
+
+      import triton.experimental.gluon as gluon
+      import triton.experimental.gluon.language as ttgl
+
+      @gluon.jit
+      def kernel(x_ptr, y_ptr, BLOCK_SIZE: ttgl.constexpr):
+          pid = ttgl.program_id(0)
+          offs = pid * BLOCK_SIZE + ttgl.arange(0, BLOCK_SIZE)
+          x = ttgl.load(x_ptr + offs)
+          y = ttgl.cos(x)
+          ttgl.store(y_ptr + offs, y)

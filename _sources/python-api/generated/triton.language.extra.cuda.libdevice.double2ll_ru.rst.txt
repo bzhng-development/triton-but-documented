@@ -1,0 +1,45 @@
+triton.language.extra.cuda.libdevice.double2ll_ru
+===================================================
+
+.. currentmodule:: triton.language.extra.cuda.libdevice
+
+.. function:: double2ll_ru(arg0, _semantic=None)
+
+    Convert a double-precision floating-point value to a 64-bit signed integer with round toward zero.
+
+    Parameters
+    ----------
+    arg0 : tl.tensor
+        Input tensor of dtype ``tl.float64``. The floating-point values to convert.
+
+    _semantic : optional
+        Internal semantic argument. Do not set manually.
+
+    Returns
+    -------
+    tl.tensor
+        Tensor of dtype ``tl.int64`` containing the converted integer values.
+
+    Notes
+    -----
+    This function invokes the CUDA libdevice intrinsic ``__nv_double2ll_ru`` which performs
+    conversion with round toward zero (truncate) semantics. Fractional parts are discarded.
+
+    This is a pure function with no side effects.
+
+    Only available on CUDA targets with libdevice support.
+
+    Examples
+    --------
+    .. code-block:: python
+
+        import triton
+        import triton.language as tl
+
+        @triton.jit
+        def kernel(x_ptr, y_ptr, BLOCK_SIZE: tl.constexpr):
+            pid = tl.program_id(0)
+            offs = pid * BLOCK_SIZE + tl.arange(0, BLOCK_SIZE)
+            x = tl.load(x_ptr + offs).to(tl.float64)
+            y = tl.extra.cuda.libdevice.double2ll_ru(x)
+            tl.store(y_ptr + offs, y)

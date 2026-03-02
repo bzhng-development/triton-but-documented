@@ -1,0 +1,44 @@
+ll2float_rz
+===========
+
+.. currentmodule:: triton.language.extra.cuda.libdevice
+
+.. function:: ll2float_rz(arg0, _semantic=None)
+
+    Convert 64-bit signed integer to 32-bit float with round-toward-zero.
+
+    Parameters
+    ----------
+    arg0 : tensor
+        Input tensor of int64 values to convert.
+    _semantic : optional
+        Internal parameter for Triton semantics. Do not set manually.
+
+    Returns
+    -------
+    tensor
+        Tensor of fp32 values converted from int64 input with round-toward-zero
+        rounding mode.
+
+    Notes
+    -----
+    This function calls the CUDA libdevice intrinsic ``__nv_ll2float_rz``.
+    The conversion uses round-toward-zero (truncate) rounding mode, which
+    truncates the fractional part toward zero. This differs from the default
+    round-to-nearest-even mode.
+
+    The function is pure (no side effects) and operates elementwise on tensors.
+
+    Examples
+    --------
+    .. code-block:: python
+
+        import triton
+        import triton.language as tl
+
+        @triton.jit
+        def kernel(input_ptr, output_ptr, BLOCK_SIZE: tl.constexpr):
+            offsets = tl.arange(0, BLOCK_SIZE)
+            int64_vals = tl.load(input_ptr + offsets).to(tl.int64)
+            float_vals = tl.extra.cuda.libdevice.ll2float_rz(int64_vals)
+            tl.store(output_ptr + offsets, float_vals)

@@ -1,0 +1,24 @@
+float16
+=======
+
+.. py:data:: triton.experimental.gluon.language.float16
+
+   16-bit floating-point data type instance.
+
+   Notes
+   -----
+   Represents the IEEE 754 binary16 floating-point format (half precision).
+   This instance is used to specify element types for tensors and memory
+   operations in Gluon kernels. It is optimized for high-throughput compute
+   on NVIDIA Hopper/Blackwell and AMD CDNA/RDNA architectures supporting FP16.
+
+   Examples
+   --------
+   Import and inspect the dtype instance:
+
+   .. code-block:: python
+
+      import triton.experimental.gluon.language as ttgl
+
+      dtype = ttgl.float16
+      print(dtype)  # <dtype: float16>

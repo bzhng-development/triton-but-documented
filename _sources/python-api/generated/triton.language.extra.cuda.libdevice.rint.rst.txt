@@ -1,0 +1,40 @@
+triton.language.extra.cuda.libdevice.rint
+==========================================
+
+Round input to the nearest integer value.
+
+Parameters
+----------
+arg0 : tensor
+    Input tensor of floating-point values (``fp32`` or ``fp64``).
+_semantic : optional
+    Internal parameter for semantic context. Do not set manually.
+
+Returns
+-------
+tensor
+    Tensor of the same shape as ``arg0``, with each element rounded to the
+    nearest integer. Returns ``fp32`` for ``fp32`` input and ``fp64`` for
+    ``fp64`` input.
+
+Notes
+-----
+This function wraps CUDA libdevice intrinsics: ``__nv_rintf`` for ``fp32``
+and ``__nv_rint`` for ``fp64``. Rounding follows IEEE 754 standard
+(round to nearest, ties to even).
+
+The function is pure (no side effects) and operates element-wise on tensors.
+
+Examples
+--------
+.. code-block:: python
+
+    import triton
+    import triton.language as tl
+    from triton.language.extra.cuda import libdevice
+
+    @triton.jit
+    def kernel(x_ptr, y_ptr, BLOCK_SIZE: tl.constexpr):
+        x = tl.load(x_ptr + tl.arange(0, BLOCK_SIZE))
+        y = libdevice.rint(x)
+        tl.store(y_ptr + tl.arange(0, BLOCK_SIZE), y)

@@ -1,0 +1,51 @@
+fma
+===
+
+.. currentmodule:: triton.experimental.gluon.language
+
+.. function:: fma(x, y, z, _semantic=None)
+
+   Computes the element-wise fused multiply-add of :code:`x`, :code:`y`, and :code:`z`.
+
+   Performs the operation :code:`x * y + z` with a single rounding step, providing
+   improved numerical precision compared to separate multiply and add operations.
+
+   Parameters
+   ----------
+   x : Block
+       First input tensor (multiplicand).
+   y : Block
+       Second input tensor (multiplicand).
+   z : Block
+       Third input tensor (addend).
+   _semantic : GluonSemantic, optional
+       Internal semantic context. Do not set manually.
+
+   Returns
+   -------
+   Block
+       Tensor containing the element-wise fused multiply-add result.
+
+   Notes
+   -----
+   - All input tensors undergo type legalization to ensure compatible dtypes.
+   - FMA operations provide better precision than separate multiply and add.
+   - Hardware support varies by GPU architecture (NVIDIA Hopper/Blackwell, AMD CDNA3/CDNA4).
+   - Must be called within a :code:`@gluon.jit` decorated kernel.
+
+   Examples
+   --------
+   .. code-block:: python
+
+      import triton.experimental.gluon as gluon
+      import triton.experimental.gluon.language as ttgl
+
+      @gluon.jit
+      def kernel(x_ptr, y_ptr, z_ptr, out_ptr, BLOCK_SIZE: tl.constexpr):
+          pid = ttgl.program_id(0)
+          offs = pid * BLOCK_SIZE + ttgl.arange(0, BLOCK_SIZE)
+          x = ttgl.load(x_ptr + offs)
+          y = ttgl.load(y_ptr + offs)
+          z = ttgl.load(z_ptr + offs)
+          result = ttgl.fma(x, y, z)
+          ttgl.store(out_ptr + offs, result)

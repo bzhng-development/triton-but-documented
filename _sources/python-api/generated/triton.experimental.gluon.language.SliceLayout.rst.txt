@@ -1,0 +1,54 @@
+class triton.experimental.gluon.language.SliceLayout
+=====================================================
+
+Represents a layout corresponding to slicing a distributed tensor along one dimension.
+
+Parameters
+----------
+dim : int
+    The dimension index to slice. Must satisfy ``0 <= dim < parent.rank``.
+parent : DistributedLayout
+    The parent layout before slicing. Determines the rank and CGA layout of the
+    sliced layout.
+
+Attributes
+----------
+dim : int
+    The dimension index that was sliced.
+parent : DistributedLayout
+    The original layout before slicing.
+rank : int
+    The rank of the sliced layout, equal to ``parent.rank - 1``.
+cga_layout : List[List[int]]
+    The CGA layout with the sliced dimension removed from each basis vector.
+
+Notes
+-----
+``SliceLayout`` is used to represent the layout of a tensor after slicing one
+dimension from a distributed layout. The resulting layout has rank one less than
+the parent layout. The CGA layout bases have the sliced dimension component
+removed from each basis vector.
+
+The layout is immutable (frozen dataclass) and unwraps constexpr values during
+initialization.
+
+Examples
+--------
+.. code-block:: python
+
+    import triton.experimental.gluon as gluon
+    import triton.experimental.gluon.language as ttgl
+
+    # Create a blocked layout with rank 2
+    parent_layout = ttgl.BlockedLayout(
+        size_per_thread=[4, 8],
+        threads_per_warp=[16, 1],
+        warps_per_cta=[4, 1],
+        order=[1, 0],
+    )
+
+    # Slice along dimension 0, resulting in rank 1 layout
+    sliced_layout = ttgl.SliceLayout(dim=0, parent=parent_layout)
+
+    print(sliced_layout.rank)  # Output: 1
+    print(sliced_layout.dim)   # Output: 0

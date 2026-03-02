@@ -1,0 +1,392 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>associative_scan &mdash; Triton  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=03e43079" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/custom.css" />
+
+  
+      <script src="../../_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="assume" href="triton.experimental.gluon.language.assume.html" />
+    <link rel="prev" title="arange" href="triton.experimental.gluon.language.arange.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            Triton
+              <img src="https://cdn.openai.com/triton/assets/triton-logo.png" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../getting-started/installation.html">Installation</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Python API</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../triton.html">triton</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.language.html">triton.language</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.testing.html">triton.testing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton-semantics.html">Triton Semantics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.language.extra.cuda.html">triton.language.extra.cuda</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.language.extra.cuda.libdevice.html">triton.language.extra.cuda.libdevice</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.runtime.html">triton.runtime</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.tools.html">triton.tools</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Gluon (Experimental) API</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.html">triton.experimental.gluon</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../triton.experimental.gluon.language.html">triton.experimental.gluon.language</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="../triton.experimental.gluon.language.html#language-primitives">Language Primitives</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="triton.experimental.gluon.language.AutoLayout.html">AutoLayout</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.experimental.gluon.language.BlockedLayout.html">BlockedLayout</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.experimental.gluon.language.CoalescedLayout.html">class triton.experimental.gluon.language.CoalescedLayout</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.experimental.gluon.language.DistributedLinearLayout.html">DistributedLinearLayout</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.experimental.gluon.language.DotOperandLayout.html">class triton.experimental.gluon.language.DotOperandLayout</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.experimental.gluon.language.NVMMADistributedLayout.html">class triton.experimental.gluon.language.NVMMADistributedLayout</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.experimental.gluon.language.NVMMASharedLayout.html">class triton.experimental.gluon.language.NVMMASharedLayout</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.experimental.gluon.language.PaddedSharedLayout.html">class PaddedSharedLayout</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.experimental.gluon.language.SharedLinearLayout.html">SharedLinearLayout</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.experimental.gluon.language.SliceLayout.html">class triton.experimental.gluon.language.SliceLayout</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.experimental.gluon.language.SwizzledSharedLayout.html">class triton.experimental.gluon.language.SwizzledSharedLayout</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.experimental.gluon.language.abs.html">abs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.experimental.gluon.language.add.html">add</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.experimental.gluon.language.allocate_shared_memory.html">allocate_shared_memory</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.experimental.gluon.language.arange.html">arange</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">associative_scan</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#triton.experimental.gluon.language.associative_scan"><code class="docutils literal notranslate"><span class="pre">associative_scan()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#parameters">Parameters</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#returns">Returns</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#notes">Notes</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#examples">Examples</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="triton.experimental.gluon.language.assume.html">assume</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.experimental.gluon.language.atomic_add.html">atomic_add</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.experimental.gluon.language.atomic_and.html">atomic_and</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.experimental.gluon.language.atomic_cas.html">atomic_cas</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.experimental.gluon.language.atomic_max.html">atomic_max</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.experimental.gluon.language.atomic_min.html">atomic_min</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.experimental.gluon.language.atomic_or.html">atomic_or</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.experimental.gluon.language.atomic_xchg.html">atomic_xchg</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.experimental.gluon.language.atomic_xor.html">atomic_xor</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.experimental.gluon.language.bank_conflicts.html">bank_conflicts</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.experimental.gluon.language.barrier.html">gluon.language.barrier</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.experimental.gluon.language.base_type.html">base_type</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.experimental.gluon.language.base_value.html">base_value</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.experimental.gluon.language.bfloat16.html">bfloat16</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.experimental.gluon.language.block_type.html">block_type</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.experimental.gluon.language.broadcast.html">broadcast</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.experimental.gluon.language.cast.html">cast</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.experimental.gluon.language.cdiv.html">cdiv</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.experimental.gluon.language.ceil.html">ceil</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.experimental.gluon.language.constexpr.html">constexpr</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.experimental.gluon.language.convert_layout.html">convert_layout</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.experimental.gluon.language.cos.html">cos</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.experimental.gluon.language.device_assert.html">device_assert</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.experimental.gluon.language.device_print.html">device_print</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.experimental.gluon.language.distributed_type.html">distributed_type</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.experimental.gluon.language.div_rn.html">div_rn</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.experimental.gluon.language.dot_fma.html">dot_fma</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.experimental.gluon.language.dtype.html">dtype</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.experimental.gluon.language.erf.html">erf</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.experimental.gluon.language.exp.html">exp</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.experimental.gluon.language.exp2.html">exp2</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.experimental.gluon.language.expand_dims.html">expand_dims</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.experimental.gluon.language.fdiv.html">fdiv</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.experimental.gluon.language.float16.html">float16</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.experimental.gluon.language.float32.html">float32</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.experimental.gluon.language.float64.html">float64</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.experimental.gluon.language.float8e4b15.html">float8e4b15</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.experimental.gluon.language.float8e4b8.html">float8e4b8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.experimental.gluon.language.float8e4nv.html">float8e4nv</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.experimental.gluon.language.float8e5.html">float8e5</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.experimental.gluon.language.float8e5b16.html">float8e5b16</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.experimental.gluon.language.floor.html">floor</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.experimental.gluon.language.fma.html">fma</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.experimental.gluon.language.fp4_to_fp.html">fp4_to_fp</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.experimental.gluon.language.full.html">full</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.experimental.gluon.language.full_like.html">full_like</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.experimental.gluon.language.gather.html">gather</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.experimental.gluon.language.histogram.html">histogram</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.experimental.gluon.language.inline_asm_elementwise.html">inline_asm_elementwise</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.experimental.gluon.language.int1.html">int1</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.experimental.gluon.language.int16.html">int16</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.experimental.gluon.language.int32.html">int32</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.experimental.gluon.language.int64.html">int64</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.experimental.gluon.language.int8.html">int8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.experimental.gluon.language.join.html">join</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.experimental.gluon.language.load.html">load</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.experimental.gluon.language.log.html">log</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.experimental.gluon.language.log2.html">log2</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.experimental.gluon.language.map_elementwise.html">map_elementwise</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.experimental.gluon.language.max.html">ttgl.max</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.experimental.gluon.language.max_constancy.html">max_constancy</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.experimental.gluon.language.max_contiguous.html">max_contiguous</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.experimental.gluon.language.maximum.html">maximum</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.experimental.gluon.language.min.html">min</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.experimental.gluon.language.minimum.html">minimum</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.experimental.gluon.language.mul.html">mul</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.experimental.gluon.language.multiple_of.html">multiple_of</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.experimental.gluon.language.num_ctas.html">num_ctas</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.experimental.gluon.language.num_programs.html">num_programs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.experimental.gluon.language.num_warps.html">num_warps</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.experimental.gluon.language.permute.html">permute</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.experimental.gluon.language.pointer_type.html">pointer_type</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.experimental.gluon.language.program_id.html">program_id</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.experimental.gluon.language.ravel.html">ravel</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.experimental.gluon.language.reduce.html">reduce</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.experimental.gluon.language.reduce_or.html">reduce_or</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.experimental.gluon.language.reshape.html">reshape</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.experimental.gluon.language.rsqrt.html">rsqrt</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.experimental.gluon.language.set_auto_layout.html">set_auto_layout</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.experimental.gluon.language.shared_memory_descriptor.html">shared_memory_descriptor</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.experimental.gluon.language.shared_memory_descriptor_type.html">shared_memory_descriptor_type</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.experimental.gluon.language.sin.html">sin</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.experimental.gluon.language.split.html">split</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.experimental.gluon.language.sqrt.html">sqrt</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.experimental.gluon.language.sqrt_rn.html">sqrt_rn</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.experimental.gluon.language.static_assert.html">static_assert</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.experimental.gluon.language.static_print.html">static_print</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.experimental.gluon.language.static_range.html">static_range</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.experimental.gluon.language.store.html">store</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.experimental.gluon.language.sub.html">sub</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.experimental.gluon.language.sum.html">sum</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.experimental.gluon.language.tensor.html">class tensor</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.experimental.gluon.language.to_linear_layout.html">to_linear_layout</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.experimental.gluon.language.to_tensor.html">to_tensor</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.experimental.gluon.language.tuple.html">tuple</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.experimental.gluon.language.tuple_type.html">tuple_type</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.experimental.gluon.language.uint16.html">uint16</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.experimental.gluon.language.uint32.html">uint32</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.experimental.gluon.language.uint64.html">uint64</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.experimental.gluon.language.uint8.html">uint8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.experimental.gluon.language.umulhi.html">umulhi</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.experimental.gluon.language.void.html">void</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.experimental.gluon.language.warp_specialize.html">warp_specialize</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.experimental.gluon.language.where.html">ttgl.where</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.experimental.gluon.language.xor_sum.html">xor_sum</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.experimental.gluon.language.zeros.html">zeros</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.experimental.gluon.language.zeros_like.html">zeros_like</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.nvidia.ampere.html">triton.experimental.gluon.language.nvidia.ampere</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.nvidia.ampere.async_copy.html">triton.experimental.gluon.language.nvidia.ampere.async_copy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.nvidia.ampere.mbarrier.html">triton.experimental.gluon.language.nvidia.ampere.mbarrier</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.nvidia.hopper.html">triton.experimental.gluon.language.nvidia.hopper</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.nvidia.hopper.tma.html">triton.experimental.gluon.language.nvidia.hopper.tma</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.nvidia.hopper.mbarrier.html">triton.experimental.gluon.language.nvidia.hopper.mbarrier</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.nvidia.hopper.cluster.html">triton.experimental.gluon.language.nvidia.hopper.cluster</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.nvidia.blackwell.html">triton.experimental.gluon.language.nvidia.blackwell</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.nvidia.blackwell.tma.html">triton.experimental.gluon.language.nvidia.blackwell.tma</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.nvidia.blackwell.clc.html">triton.experimental.gluon.language.nvidia.blackwell.clc</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.amd.html">triton.experimental.gluon.language.amd</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.amd.gfx1250.html">triton.experimental.gluon.language.amd.gfx1250</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.amd.gfx1250.async_copy.html">triton.experimental.gluon.language.amd.gfx1250.async_copy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.amd.gfx1250.mbarrier.html">triton.experimental.gluon.language.amd.gfx1250.mbarrier</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.amd.gfx1250.cluster.html">triton.experimental.gluon.language.amd.gfx1250.cluster</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.amd.gfx1250.tdm.html">triton.experimental.gluon.language.amd.gfx1250.tdm</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.amd.cdna3.html">triton.experimental.gluon.language.amd.cdna3</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.amd.cdna4.html">triton.experimental.gluon.language.amd.cdna4</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.amd.rdna3.html">triton.experimental.gluon.language.amd.rdna3</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.amd.rdna4.html">triton.experimental.gluon.language.amd.rdna4</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Triton MLIR Dialects</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../dialects/dialects.html">Triton MLIR Dialects and Ops</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Programming Guide</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../programming-guide/chapter-1/introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../programming-guide/chapter-2/related-work.html">Related Work</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../programming-guide/chapter-3/debugging.html">Debugging Triton</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">Triton</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../triton.experimental.gluon.language.html">triton.experimental.gluon.language</a></li>
+      <li class="breadcrumb-item active">associative_scan</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../_sources/python-api/generated/triton.experimental.gluon.language.associative_scan.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="associative-scan">
+<h1>associative_scan<a class="headerlink" href="#associative-scan" title="Link to this heading">¶</a></h1>
+<dl class="py function">
+<dt class="sig sig-object py" id="triton.experimental.gluon.language.associative_scan">
+<span class="sig-prename descclassname"><span class="pre">triton.experimental.gluon.language.</span></span><span class="sig-name descname"><span class="pre">associative_scan</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">axis</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">combine_fn</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reverse</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">_semantic</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">_generator</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#triton.experimental.gluon.language.associative_scan" title="Link to this definition">¶</a></dt>
+<dd><p>Applies the combine_fn to each elements with a carry in <code class="code docutils literal notranslate"><span class="pre">input</span></code> tensors along the provided <code class="code docutils literal notranslate"><span class="pre">axis</span></code> and update the carry</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>input</strong> (<em>Tensor</em>) – the input tensor, or tuple of tensors</p></li>
+<li><p><strong>axis</strong> (<em>int</em>) – the dimension along which the reduction should be done</p></li>
+<li><p><strong>combine_fn</strong> (<em>Callable</em>) – a function to combine two groups of scalar tensors (must be marked with &#64;triton.jit)</p></li>
+<li><p><strong>reverse</strong> (<em>bool</em>) – whether to apply the associative scan in the reverse direction along axis</p></li>
+</ul>
+</dd>
+</dl>
+<p>This function can also be called as a member function on <a class="reference internal" href="triton.experimental.gluon.language.tensor.html#triton.experimental.gluon.language.tensor" title="triton.experimental.gluon.language.tensor"><code class="xref py py-class docutils literal notranslate"><span class="pre">tensor</span></code></a>,
+as <code class="code docutils literal notranslate"><span class="pre">x.associative_scan(...)</span></code> instead of
+<code class="code docutils literal notranslate"><span class="pre">associative_scan(x,</span> <span class="pre">...)</span></code>.</p>
+</dd></dl>
+
+<p>Apply an associative scan operation along a specified axis of input tensors.</p>
+<p>This function applies a combining function cumulatively to elements along an axis,
+propagating a carry value through the sequence. It supports both forward and reverse
+scan directions, and can operate on single tensors or tuples of tensors.</p>
+<section id="parameters">
+<h2>Parameters<a class="headerlink" href="#parameters" title="Link to this heading">¶</a></h2>
+<dl class="simple">
+<dt>input<span class="classifier">tensor or tuple of tensors</span></dt><dd><p>The input tensor(s) to scan. When a tuple is provided, the scan is applied
+element-wise across all tensors simultaneously.</p>
+</dd>
+<dt>axis<span class="classifier">int</span></dt><dd><p>The dimension along which to perform the scan operation.</p>
+</dd>
+<dt>combine_fn<span class="classifier">callable</span></dt><dd><p>A JIT-compiled function (decorated with <code class="docutils literal notranslate"><span class="pre">&#64;gluon.jit</span></code>) that combines two
+scalar tensor values. Must accept two arguments and return the combined result.</p>
+</dd>
+<dt>reverse<span class="classifier">bool, optional</span></dt><dd><p>If <code class="docutils literal notranslate"><span class="pre">True</span></code>, perform the scan in reverse order along the axis (default: <code class="docutils literal notranslate"><span class="pre">False</span></code>).</p>
+</dd>
+</dl>
+</section>
+<section id="returns">
+<h2>Returns<a class="headerlink" href="#returns" title="Link to this heading">¶</a></h2>
+<dl class="simple">
+<dt>tensor or tuple of tensors</dt><dd><p>The scanned output tensor(s) with the same shape as the input. Each position
+contains the cumulative combination of all elements up to that position along
+the specified axis.</p>
+</dd>
+</dl>
+</section>
+<section id="notes">
+<h2>Notes<a class="headerlink" href="#notes" title="Link to this heading">¶</a></h2>
+<p>The <code class="docutils literal notranslate"><span class="pre">combine_fn</span></code> must be associative for the scan to produce correct results.
+Common operations include addition, multiplication, or custom reduction operations.</p>
+<p>This function can also be called as a member method on tensor objects:
+<code class="docutils literal notranslate"><span class="pre">x.associative_scan(axis,</span> <span class="pre">combine_fn,</span> <span class="pre">reverse=False)</span></code> instead of
+<code class="docutils literal notranslate"><span class="pre">associative_scan(x,</span> <span class="pre">axis,</span> <span class="pre">combine_fn,</span> <span class="pre">reverse=False)</span></code>.</p>
+<p>The scan operation is parallelized across warps and is optimized for GPU execution.</p>
+</section>
+<section id="examples">
+<h2>Examples<a class="headerlink" href="#examples" title="Link to this heading">¶</a></h2>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">triton.experimental.gluon</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">gluon</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">triton.experimental.gluon.language</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">ttgl</span>
+
+<span class="nd">@gluon</span><span class="o">.</span><span class="n">jit</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">add_fn</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">a</span> <span class="o">+</span> <span class="n">b</span>
+
+<span class="nd">@gluon</span><span class="o">.</span><span class="n">jit</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">kernel</span><span class="p">(</span><span class="n">x_ptr</span><span class="p">,</span> <span class="n">stride</span><span class="p">):</span>
+    <span class="c1"># Load input tensor</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="n">ttgl</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">x_ptr</span><span class="p">)</span>
+
+    <span class="c1"># Perform cumulative sum along axis 0</span>
+    <span class="n">result</span> <span class="o">=</span> <span class="n">ttgl</span><span class="o">.</span><span class="n">associative_scan</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">combine_fn</span><span class="o">=</span><span class="n">add_fn</span><span class="p">)</span>
+
+    <span class="c1"># Store result</span>
+    <span class="n">ttgl</span><span class="o">.</span><span class="n">store</span><span class="p">(</span><span class="n">x_ptr</span><span class="p">,</span> <span class="n">result</span><span class="p">)</span>
+
+<span class="c1"># Using as a member function</span>
+<span class="nd">@gluon</span><span class="o">.</span><span class="n">jit</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">kernel_member</span><span class="p">(</span><span class="n">x_ptr</span><span class="p">,</span> <span class="n">stride</span><span class="p">):</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="n">ttgl</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">x_ptr</span><span class="p">)</span>
+    <span class="n">result</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">associative_scan</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">combine_fn</span><span class="o">=</span><span class="n">add_fn</span><span class="p">)</span>
+    <span class="n">ttgl</span><span class="o">.</span><span class="n">store</span><span class="p">(</span><span class="n">x_ptr</span><span class="p">,</span> <span class="n">result</span><span class="p">)</span>
+
+<span class="c1"># Reverse scan</span>
+<span class="nd">@gluon</span><span class="o">.</span><span class="n">jit</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">kernel_reverse</span><span class="p">(</span><span class="n">x_ptr</span><span class="p">,</span> <span class="n">stride</span><span class="p">):</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="n">ttgl</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">x_ptr</span><span class="p">)</span>
+    <span class="n">result</span> <span class="o">=</span> <span class="n">ttgl</span><span class="o">.</span><span class="n">associative_scan</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">combine_fn</span><span class="o">=</span><span class="n">add_fn</span><span class="p">,</span> <span class="n">reverse</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">ttgl</span><span class="o">.</span><span class="n">store</span><span class="p">(</span><span class="n">x_ptr</span><span class="p">,</span> <span class="n">result</span><span class="p">)</span>
+
+<span class="c1"># Scan on tuple of tensors</span>
+<span class="nd">@gluon</span><span class="o">.</span><span class="n">jit</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">kernel_tuple</span><span class="p">(</span><span class="n">x_ptr</span><span class="p">,</span> <span class="n">y_ptr</span><span class="p">,</span> <span class="n">stride</span><span class="p">):</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="n">ttgl</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">x_ptr</span><span class="p">)</span>
+    <span class="n">y</span> <span class="o">=</span> <span class="n">ttgl</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">y_ptr</span><span class="p">)</span>
+    <span class="n">result</span> <span class="o">=</span> <span class="n">ttgl</span><span class="o">.</span><span class="n">associative_scan</span><span class="p">((</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">combine_fn</span><span class="o">=</span><span class="n">add_fn</span><span class="p">)</span>
+    <span class="n">ttgl</span><span class="o">.</span><span class="n">store</span><span class="p">(</span><span class="n">x_ptr</span><span class="p">,</span> <span class="n">result</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+    <span class="n">ttgl</span><span class="o">.</span><span class="n">store</span><span class="p">(</span><span class="n">y_ptr</span><span class="p">,</span> <span class="n">result</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+</pre></div>
+</div>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="triton.experimental.gluon.language.arange.html" class="btn btn-neutral float-left" title="arange" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="triton.experimental.gluon.language.assume.html" class="btn btn-neutral float-right" title="assume" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2020, Philippe Tillet.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

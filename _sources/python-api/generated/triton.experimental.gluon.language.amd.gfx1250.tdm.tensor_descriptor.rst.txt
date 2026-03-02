@@ -1,0 +1,77 @@
+class tensor_descriptor
+===================
+
+.. currentmodule:: triton.experimental.gluon.language.amd.gfx1250.tdm
+
+.. class:: tensor_descriptor(handle, shape, strides, type)
+
+   A descriptor representing a tensor in global memory.
+
+   Tensor descriptors encapsulate metadata required for asynchronous tensor data
+   movement (TDM) operations on AMD GFX1250 architectures. They contain a handle
+   to the global memory tensor, its shape, strides, and type information including
+   block layout.
+
+   Parameters
+   ----------
+   handle : ir.value
+       IR value representing the tensor descriptor handle.
+   shape : ttgl.tuple
+       Tuple containing the tensor's shape dimensions.
+   strides : ttgl.tuple
+       Tuple containing the tensor's stride values.
+   type : tensor_descriptor_type
+       The type descriptor containing block type, shape type, strides type, and layout.
+
+   Attributes
+   ----------
+   handle : ir.value
+       The IR handle for the tensor descriptor.
+   shape : ttgl.tuple
+       The shape of the tensor as a tuple.
+   strides : ttgl.tuple
+       The strides of the tensor as a tuple.
+   type : tensor_descriptor_type
+       The tensor descriptor type object.
+
+   Properties
+   ----------
+   block_type : ttgl.block_type
+       The block type of the tensor descriptor.
+   block_shape : tuple
+       The shape of each memory block.
+   dtype : dtype
+       The element data type of the tensor.
+   layout : PaddedSharedLayout | SwizzledSharedLayout
+       The shared memory layout configuration.
+
+   Notes
+   -----
+   Tensor descriptors are typically created using :func:`make_tensor_descriptor`
+   rather than instantiated directly. They are used with asynchronous TDM operations
+   such as :func:`async_load`, :func:`async_store`, :func:`async_gather`, and
+   :func:`async_scatter` for efficient global-to-shared memory transfers.
+
+   The descriptor supports 1 to 5 dimensions. Strides are 64-bit integers while
+   shape dimensions are 32-bit integers.
+
+   Examples
+   --------
+   .. code-block:: python
+
+      import triton.experimental.gluon as gluon
+      import triton.experimental.gluon.language as ttgl
+      from triton.experimental.gluon.language.amd.gfx1250.tdm import tensor_descriptor
+
+      # Tensor descriptors are typically created via make_tensor_descriptor
+      @gluon.jit
+      def kernel(...):
+          desc = tdm.make_tensor_descriptor(
+              base=global_ptr,
+              shape=[height, width],
+              strides=[stride_h, stride_w],
+              block_shape=[block_h, block_w],
+              layout=layout
+          )
+          # Use descriptor with async operations
+          tdm.async_load(desc, offsets=[0, 0], dest=shared_mem)

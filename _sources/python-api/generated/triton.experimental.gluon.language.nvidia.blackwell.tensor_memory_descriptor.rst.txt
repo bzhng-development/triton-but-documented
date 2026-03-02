@@ -1,0 +1,139 @@
+class tensor_memory_descriptor
+==============================
+
+.. currentmodule:: triton.experimental.gluon.language.nvidia.blackwell
+
+.. autoclass:: tensor_memory_descriptor
+
+   Represents a tensor memory descriptor handle for Tensor Core Gen5 (TCGen5)
+   operations on NVIDIA Blackwell architecture. This class provides explicit
+   control over tensor memory allocation, load/store operations, and reduction
+   primitives for high-performance GPU computing.
+
+   Parameters
+   ----------
+   handle : ir.value
+       Low-level IR handle for the tensor memory descriptor.
+   element_ty : dtype
+       The element data type of the tensor (e.g., ``ttgl.float16``, ``ttgl.bfloat16``).
+   shape : Sequence[int]
+       The logical shape of the tensor in memory.
+   layout : TensorMemoryLayout or TensorMemoryScalesLayout
+       The memory layout describing how tensor elements are distributed across
+       warps and CTAs.
+   alloc_shape : Sequence[int]
+       The allocated shape, which may differ from logical shape for padding or
+       alignment purposes.
+
+   Attributes
+   ----------
+   dtype : dtype
+       The element data type of the tensor.
+   shape : List[int]
+       The logical shape of the tensor.
+   rank : int
+       The number of dimensions (length of shape).
+   layout : TensorMemoryLayout or TensorMemoryScalesLayout
+       The memory layout configuration.
+
+   Methods
+   -------
+   get_reg_layout(num_warps=None, instr_variant="32x32b")
+       Return the register layout used to access this tensor memory descriptor.
+   load(layout=None)
+       Load a tensor from tensor memory into registers.
+   load_min(layout=None, abs=False, propagate_nan=PROPAGATE_NAN.NONE)
+       Load with MIN reduction along the N-dimension.
+   load_max(layout=None, abs=False, propagate_nan=PROPAGATE_NAN.NONE)
+       Load with MAX reduction along the N-dimension.
+   store(value, pred=True)
+       Store a tensor from registers into tensor memory.
+   slice(start, length)
+       Create a slice along the last dimension.
+   index(index)
+       Create a subview by indexing the first dimension.
+
+   Notes
+   -----
+   Tensor memory descriptors are used with TCGen5 MMA instructions on NVIDIA
+   Blackwell GPUs (compute capability 9.0+). They provide explicit control over
+   tensor memory layout, enabling fine-grained optimization of memory access
+   patterns for matrix multiplication workloads.
+
+   The descriptor handle is managed by the Gluon compiler and should not be
+   manipulated directly. Use the provided methods for safe memory operations.
+
+   Examples
+   --------
+   Allocate tensor memory and perform load/store operations:
+
+   .. code-block:: python
+
+      import triton.experimental.gluon as gluon
+      import triton.experimental.gluon.language as ttgl
+      from triton.experimental.gluon.language.nvidia.blackwell import (
+          allocate_tensor_memory, TensorMemoryLayout
+      )
+
+      @gluon.jit
+      def kernel():
+          # Define tensor memory layout: 128x128 block, stride 1
+          layout = TensorMemoryLayout(block=(128, 128), col_stride=1)
+          
+          # Allocate tensor memory for 1024x1024 float16 matrix
+          tmem = allocate_tensor_memory(
+              element_ty=ttgl.float16,
+              shape=[1024, 1024],
+              layout=layout
+          )
+          
+          # Load tensor from tensor memory to registers
+          tensor = tmem.load()
+          
+          # Perform computation...
+          
+          # Store result back to tensor memory
+          tmem.store(tensor)
+
+   Use reduction load operations:
+
+   .. code-block:: python
+
+      @gluon.jit
+      def reduction_kernel():
+          layout = TensorMemoryLayout(block=(64, 64), col_stride=1)
+          tmem = allocate_tensor_memory(
+              element_ty=ttgl.float16,
+              shape=[512, 512],
+              layout=layout
+          )
+          
+          # Load with MIN reduction along N-dimension
+          tensor, reduced = tmem.load_min()
+          # reduced contains min values along axis 1
+
+   Create tensor memory slices and views:
+
+   .. code-block:: python
+
+      @gluon.jit
+      def sliced_kernel():
+          layout = TensorMemoryLayout(block=(128, 128), col_stride=1)
+          tmem = allocate_tensor_memory(
+              element_ty=ttgl.float16,
+              shape=[1024, 1024],
+              layout=layout
+          )
+          
+          # Slice last dimension (columns 0-256)
+          sliced = tmem.slice(start=0, length=256)
+          
+          # Index first dimension (row 5)
+          indexed = tmem.index(5)
+
+   See Also
+   --------
+   allocate_tensor_memory : Allocate new tensor memory
+   TensorMemoryLayout : Define tensor memory layout parameters
+   tcgen05_mma : Execute Tensor Core Gen5 matrix multiplication
+   triton.experimental.gluon.language.distributed_type : Create distributed tensor types

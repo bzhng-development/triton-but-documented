@@ -1,0 +1,67 @@
+buffer_atomic_or
+================
+
+.. currentmodule:: triton.experimental.gluon.language.amd.cdna3
+
+.. function:: buffer_atomic_or(ptr, offsets, value, mask=None, sem=None, scope=None, _semantic=None)
+
+    Perform an atomic bitwise OR operation on buffer memory for AMD CDNA3 GPUs.
+
+    This function atomically reads a value from buffer memory, performs a bitwise OR
+    with the provided value, and writes the result back. Returns the original value
+    from memory before the operation.
+
+    Parameters
+    ----------
+    ptr : tensor
+        Pointer tensor to the buffer memory location(s).
+    offsets : tensor
+        Tensor of byte offsets from the base pointer.
+    value : tensor
+        Tensor of values to OR with the memory contents.
+    mask : tensor, optional
+        Boolean tensor controlling which elements are updated. If None, all elements
+        are processed.
+    sem : str, optional
+        Memory semantics for the atomic operation. Options include ``"acquire"``,
+        ``"release"``, ``"acq_rel"``, or ``"relaxed"``. Defaults to relaxed semantics.
+    scope : str, optional
+        Scope of the atomic operation. Options include ``"cta"``, ``"cluster"``, or
+        ``"gpu"``. Defaults to CTA scope.
+    _semantic : GluonSemantic, optional
+        Internal semantic handler. Must be provided by the JIT compiler; do not set
+        manually.
+
+    Returns
+    -------
+    tensor
+        Tensor containing the original values from memory before the OR operation.
+
+    Notes
+    -----
+    This function is specific to AMD CDNA3 architecture and uses buffer atomic
+    instructions. The operation is equivalent to:
+
+    .. code-block:: python
+
+        original = memory[addr]
+        memory[addr] = original | value
+        return original
+
+    For proper synchronization in multi-threaded contexts, consider setting
+    appropriate ``sem`` and ``scope`` parameters.
+
+    This function must be called from a kernel decorated with ``@gluon.jit``.
+
+    Examples
+    --------
+    .. code-block:: python
+
+        import triton.experimental.gluon as gluon
+        import triton.experimental.gluon.language as ttgl
+        from triton.experimental.gluon.language.amd import cdna3
+
+        @gluon.jit
+        def kernel(ptr, offsets, value):
+            result = cdna3.buffer_atomic_or(ptr, offsets, value)
+            # result contains original memory values before OR

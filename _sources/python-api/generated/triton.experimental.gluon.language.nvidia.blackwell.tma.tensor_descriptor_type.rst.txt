@@ -1,0 +1,75 @@
+class triton.experimental.gluon.language.nvidia.blackwell.tma.tensor_descriptor_type
+================================================================================
+
+Type for tiled tensor descriptors.
+
+Represents a typed descriptor for Tensor Memory Accelerator (TMA) operations on NVIDIA Blackwell/Hopper GPUs. This type encapsulates the block shape, tensor shape, strides, and shared memory layout required for efficient tiled global-to-shared memory transfers.
+
+Parameters
+----------
+block_type : ttgl.block_type
+    The block type defining the element type and block shape for tiled access.
+shape_type : ttgl.tuple_type
+    Tuple type representing the runtime tensor shape dimensions.
+strides_type : ttgl.tuple_type
+    Tuple type representing the runtime tensor stride dimensions.
+layout : NVMMASharedLayout
+    Shared memory layout specifying the arrangement of data in shared memory (e.g., swizzling, CGA partitioning).
+_type_name : str, optional
+    Internal type name identifier. Default is ``"tensor_descriptor"``.
+_mangle_prefix : str, optional
+    Internal mangle prefix for type naming. Default is ``"TD"``.
+
+Returns
+-------
+tensor_descriptor_type
+    A typed descriptor for TMA tiled tensor operations.
+
+Notes
+-----
+This type is typically constructed via :func:`triton.experimental.gluon.language.nvidia.blackwell.tma.make_tensor_descriptor` rather than instantiated directly. The descriptor enables efficient asynchronous memory transfers using TMA hardware units on NVIDIA Blackwell and Hopper architectures.
+
+The ``block_type`` must satisfy alignment requirements: the last dimension must contain at least 16 bytes of data. For FP4 layouts with padding, 64-byte alignment is required.
+
+See Also
+--------
+make_tensor_descriptor : Construct a tensor descriptor from base pointer, shape, and strides.
+tensor_descriptor_im2col_type : Type for im2col tensor descriptors (convolution-friendly patterns).
+async_copy_global_to_shared : Perform async TMA copy from global to shared memory.
+
+Examples
+--------
+.. code-block:: python
+
+    import triton.experimental.gluon as gluon
+    import triton.experimental.gluon.language as ttgl
+    from triton.experimental.gluon.language._layouts import NVMMASharedLayout
+
+    @gluon.jit
+    def kernel(...):
+        # Define block shape (static)
+        block_shape = [128, 64]
+        
+        # Define layout (e.g., swizzled shared memory layout)
+        layout = NVMMASharedLayout(...)
+        
+        # Create tensor descriptor type
+        block_type = ttgl.block_type(ttgl.float16, block_shape)
+        shape_type = ttgl.tuple_type([ttgl.int32, ttgl.int32])
+        strides_type = ttgl.tuple_type([ttgl.int64, ttgl.int64])
+        
+        desc_type = ttgl.nvidia.blackwell.tma.tensor_descriptor_type(
+            block_type=block_type,
+            shape_type=shape_type,
+            strides_type=strides_type,
+            layout=layout
+        )
+        
+        # Use with make_tensor_descriptor to create actual descriptor
+        desc = ttgl.nvidia.blackwell.tma.make_tensor_descriptor(
+            base=global_ptr,
+            shape=[h, w],
+            strides=[stride_h, stride_w],
+            block_shape=block_shape,
+            layout=layout
+        )

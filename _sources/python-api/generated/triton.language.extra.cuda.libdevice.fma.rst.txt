@@ -1,0 +1,49 @@
+triton.language.extra.cuda.libdevice.fma
+========================================
+
+.. function:: fma(arg0, arg1, arg2, _semantic=None)
+
+    Compute fused multiply-add :code:`arg0 * arg1 + arg2` with single rounding.
+
+    Parameters
+    ----------
+    arg0 : tl.tensor
+        First input tensor (multiplicand). Must be fp32 or fp64.
+    arg1 : tl.tensor
+        Second input tensor (multiplicand). Must be fp32 or fp64.
+    arg2 : tl.tensor
+        Third input tensor (addend). Must be fp32 or fp64.
+    _semantic : optional
+        Internal parameter, do not set manually.
+
+    Returns
+    -------
+    result : tl.tensor
+        Tensor of type :code:`arg0 * arg1 + arg2` with the same dtype as inputs.
+
+    Notes
+    -----
+    This operation performs multiplication and addition in a single rounding
+    step, providing better numerical accuracy than separate multiply and add
+    operations.
+
+    Supported dtypes:
+
+    - :code:`fp32` maps to CUDA libdevice function :code:`__nv_fmaf`
+    - :code:`fp64` maps to CUDA libdevice function :code:`__nv_fma`
+
+    All three arguments must have the same dtype.
+
+    Examples
+    --------
+    .. code-block:: python
+
+        @triton.jit
+        def kernel(x_ptr, y_ptr, z_ptr, out_ptr, BLOCK_SIZE: tl.constexpr):
+            offs = tl.arange(0, BLOCK_SIZE)
+            x = tl.load(x_ptr + offs)
+            y = tl.load(y_ptr + offs)
+            z = tl.load(z_ptr + offs)
+            # Compute x * y + z with single rounding
+            result = tl.libdevice.fma(x, y, z)
+            tl.store(out_ptr + offs, result)

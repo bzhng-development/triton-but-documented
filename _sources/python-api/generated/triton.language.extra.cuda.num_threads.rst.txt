@@ -1,0 +1,43 @@
+triton.language.extra.cuda.num_threads
+======================================
+
+.. currentmodule:: triton.language.extra.cuda
+
+.. function:: num_threads()
+
+   Returns the total number of threads in a thread block.
+
+   This is computed as :code:`num_warps * 32`, where each warp contains 32
+   threads on CUDA architectures.
+
+   .. note::
+      This function can only be called inside a :code:`@triton.jit` decorated
+      kernel function. The :code:`_semantic` parameter is handled automatically
+      by the Triton compiler.
+
+   Returns
+   -------
+   constexpr
+      A compile-time constant representing the total thread count.
+
+   Examples
+   --------
+   .. code-block:: python
+
+      import triton
+      import triton.language as tl
+
+      @triton.jit
+      def kernel(
+          ptr,
+          BLOCK_SIZE: tl.constexpr,
+      ):
+          # Get total number of threads in the block
+          n_threads = tl.num_threads()
+          
+          # Thread ID within the block
+          thread_id = tl.arange(0, BLOCK_SIZE)
+          
+          # Each thread processes one element
+          mask = thread_id < n_threads
+          tl.store(ptr + thread_id, thread_id, mask=mask)

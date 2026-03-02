@@ -1,0 +1,42 @@
+ldexp
+=====
+
+.. currentmodule:: triton.language.extra.cuda.libdevice
+
+.. function:: ldexp(arg0, arg1, _semantic=None)
+
+    Compute :code:`arg0 * 2**arg1`.
+
+    Parameters
+    ----------
+    arg0 : tl.tensor
+        Floating-point mantissa. Supported dtypes: fp32, fp64.
+    arg1 : tl.tensor
+        Integer exponent. Supported dtype: int32.
+    _semantic : optional
+        Internal parameter, do not set manually.
+
+    Returns
+    -------
+    result : tl.tensor
+        Floating-point value of :code:`arg0 * 2**arg1`. Same dtype as :code:`arg0`.
+
+    Notes
+    -----
+    This function wraps CUDA libdevice's :code:`__nv_ldexpf` for fp32 inputs
+    and :code:`__nv_ldexp` for fp64 inputs. The operation is pure (no side effects).
+
+    Examples
+    --------
+    .. code-block:: python
+
+        import triton
+        import triton.language as tl
+
+        @triton.jit
+        def kernel(x_ptr, y_ptr, exp_ptr, BLOCK_SIZE: tl.constexpr):
+            offsets = tl.arange(0, BLOCK_SIZE)
+            x = tl.load(x_ptr + offsets)
+            exp = tl.load(exp_ptr + offsets)
+            y = tl.extra.cuda.libdevice.ldexp(x, exp)
+            tl.store(y_ptr + offsets, y)

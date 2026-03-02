@@ -27,6 +27,9 @@ Python API
 - :doc:`triton.testing <python-api/triton.testing>`
 - :doc:`Triton semantics <python-api/triton-semantics>`
 - :doc:`triton.language.extra.cuda <python-api/triton.language.extra.cuda>`
+- :doc:`triton.language.extra.cuda.libdevice <python-api/triton.language.extra.cuda.libdevice>`
+- :doc:`triton.runtime <python-api/triton.runtime>`
+- :doc:`triton.tools <python-api/triton.tools>`
 
 
 .. toctree::
@@ -38,6 +41,49 @@ Python API
    python-api/triton.language
    python-api/triton.testing
    python-api/triton-semantics
+   python-api/triton.language.extra.cuda
+   python-api/triton.language.extra.cuda.libdevice
+   python-api/triton.runtime
+   python-api/triton.tools
+
+
+Gluon (Experimental) API
+------------------------
+
+- :doc:`triton.experimental.gluon <python-api/triton.experimental.gluon>`
+- :doc:`triton.experimental.gluon.language <python-api/triton.experimental.gluon.language>`
+- :doc:`NVIDIA Ampere <python-api/triton.experimental.gluon.language.nvidia.ampere>`
+- :doc:`NVIDIA Hopper <python-api/triton.experimental.gluon.language.nvidia.hopper>`
+- :doc:`NVIDIA Blackwell <python-api/triton.experimental.gluon.language.nvidia.blackwell>`
+- :doc:`AMD <python-api/triton.experimental.gluon.language.amd>`
+
+.. toctree::
+   :maxdepth: 1
+   :caption: Gluon (Experimental) API
+   :hidden:
+
+   python-api/triton.experimental.gluon
+   python-api/triton.experimental.gluon.language
+   python-api/triton.experimental.gluon.language.nvidia.ampere
+   python-api/triton.experimental.gluon.language.nvidia.ampere.async_copy
+   python-api/triton.experimental.gluon.language.nvidia.ampere.mbarrier
+   python-api/triton.experimental.gluon.language.nvidia.hopper
+   python-api/triton.experimental.gluon.language.nvidia.hopper.tma
+   python-api/triton.experimental.gluon.language.nvidia.hopper.mbarrier
+   python-api/triton.experimental.gluon.language.nvidia.hopper.cluster
+   python-api/triton.experimental.gluon.language.nvidia.blackwell
+   python-api/triton.experimental.gluon.language.nvidia.blackwell.tma
+   python-api/triton.experimental.gluon.language.nvidia.blackwell.clc
+   python-api/triton.experimental.gluon.language.amd
+   python-api/triton.experimental.gluon.language.amd.gfx1250
+   python-api/triton.experimental.gluon.language.amd.gfx1250.async_copy
+   python-api/triton.experimental.gluon.language.amd.gfx1250.mbarrier
+   python-api/triton.experimental.gluon.language.amd.gfx1250.cluster
+   python-api/triton.experimental.gluon.language.amd.gfx1250.tdm
+   python-api/triton.experimental.gluon.language.amd.cdna3
+   python-api/triton.experimental.gluon.language.amd.cdna4
+   python-api/triton.experimental.gluon.language.amd.rdna3
+   python-api/triton.experimental.gluon.language.amd.rdna4
 
 
 Triton MLIR Dialects and Ops

@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Parameters &mdash; Triton  documentation</title>
+  <title>class triton.language.tuple &mdash; Triton  documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=03e43079" />
       <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="../../_static/css/custom.css" />
@@ -18,8 +18,8 @@
     <script src="../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
-    <link rel="next" title="Parameters" href="triton.language.arange.html" />
-    <link rel="prev" title="triton.language.tensor_descriptor_type" href="triton.language.tensor_descriptor_type.html" /> 
+    <link rel="next" title="triton.language.arange" href="triton.language.arange.html" />
+    <link rel="prev" title="slice" href="triton.language.slice.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -51,20 +51,26 @@
 <li class="toctree-l1"><a class="reference internal" href="../triton.html">triton</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="../triton.language.html">triton.language</a><ul class="current">
 <li class="toctree-l2 current"><a class="reference internal" href="../triton.language.html#programming-model">Programming Model</a><ul class="current">
-<li class="toctree-l3"><a class="reference internal" href="triton.language.tensor.html"><code class="docutils literal notranslate"><span class="pre">triton.language.tensor</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.language.tensor.html">class triton.language.tensor</a></li>
 <li class="toctree-l3"><a class="reference internal" href="triton.language.tensor_descriptor.html">tensor_descriptor</a></li>
 <li class="toctree-l3"><a class="reference internal" href="triton.language.program_id.html">program_id</a></li>
-<li class="toctree-l3"><a class="reference internal" href="triton.language.num_programs.html">num_programs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.language.num_programs.html">triton.language.num_programs</a></li>
 <li class="toctree-l3"><a class="reference internal" href="triton.language.block_type.html">block_type</a></li>
-<li class="toctree-l3"><a class="reference internal" href="triton.language.condition.html"><code class="docutils literal notranslate"><span class="pre">triton.language.condition</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="triton.language.const.html"><code class="docutils literal notranslate"><span class="pre">triton.language.const</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="triton.language.constexpr.html">class constexpr</a></li>
-<li class="toctree-l3"><a class="reference internal" href="triton.language.constexpr_type.html"><code class="docutils literal notranslate"><span class="pre">constexpr_type</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="triton.language.dtype.html">dtype</a></li>
-<li class="toctree-l3"><a class="reference internal" href="triton.language.pointer_type.html"><code class="docutils literal notranslate"><span class="pre">pointer_type</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.language.condition.html">class triton.language.condition</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.language.const.html">const</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.language.constexpr.html">constexpr</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.language.constexpr_type.html">constexpr_type</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.language.dtype.html">class dtype</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.language.pointer_type.html">pointer_type</a></li>
 <li class="toctree-l3"><a class="reference internal" href="triton.language.slice.html">slice</a></li>
-<li class="toctree-l3"><a class="reference internal" href="triton.language.tensor_descriptor_type.html">triton.language.tensor_descriptor_type</a></li>
-<li class="toctree-l3 current"><a class="current reference internal" href="#"><code class="docutils literal notranslate"><span class="pre">triton.language.tuple</span></code></a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">class triton.language.tuple</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#parameters">Parameters</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#attributes">Attributes</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#notes">Notes</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#examples">Examples</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#see-also">See Also</a></li>
+</ul>
+</li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../triton.language.html#creation-ops">Creation Ops</a></li>
@@ -86,6 +92,35 @@
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../triton.testing.html">triton.testing</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../triton-semantics.html">Triton Semantics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.language.extra.cuda.html">triton.language.extra.cuda</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.language.extra.cuda.libdevice.html">triton.language.extra.cuda.libdevice</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.runtime.html">triton.runtime</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.tools.html">triton.tools</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Gluon (Experimental) API</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.html">triton.experimental.gluon</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.html">triton.experimental.gluon.language</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.nvidia.ampere.html">triton.experimental.gluon.language.nvidia.ampere</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.nvidia.ampere.async_copy.html">triton.experimental.gluon.language.nvidia.ampere.async_copy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.nvidia.ampere.mbarrier.html">triton.experimental.gluon.language.nvidia.ampere.mbarrier</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.nvidia.hopper.html">triton.experimental.gluon.language.nvidia.hopper</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.nvidia.hopper.tma.html">triton.experimental.gluon.language.nvidia.hopper.tma</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.nvidia.hopper.mbarrier.html">triton.experimental.gluon.language.nvidia.hopper.mbarrier</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.nvidia.hopper.cluster.html">triton.experimental.gluon.language.nvidia.hopper.cluster</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.nvidia.blackwell.html">triton.experimental.gluon.language.nvidia.blackwell</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.nvidia.blackwell.tma.html">triton.experimental.gluon.language.nvidia.blackwell.tma</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.nvidia.blackwell.clc.html">triton.experimental.gluon.language.nvidia.blackwell.clc</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.amd.html">triton.experimental.gluon.language.amd</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.amd.gfx1250.html">triton.experimental.gluon.language.amd.gfx1250</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.amd.gfx1250.async_copy.html">triton.experimental.gluon.language.amd.gfx1250.async_copy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.amd.gfx1250.mbarrier.html">triton.experimental.gluon.language.amd.gfx1250.mbarrier</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.amd.gfx1250.cluster.html">triton.experimental.gluon.language.amd.gfx1250.cluster</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.amd.gfx1250.tdm.html">triton.experimental.gluon.language.amd.gfx1250.tdm</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.amd.cdna3.html">triton.experimental.gluon.language.amd.cdna3</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.amd.cdna4.html">triton.experimental.gluon.language.amd.cdna4</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.amd.rdna3.html">triton.experimental.gluon.language.amd.rdna3</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.amd.rdna4.html">triton.experimental.gluon.language.amd.rdna4</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Triton MLIR Dialects</span></p>
 <ul>
@@ -113,7 +148,7 @@
   <ul class="wy-breadcrumbs">
       <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
           <li class="breadcrumb-item"><a href="../triton.language.html">triton.language</a></li>
-      <li class="breadcrumb-item active">Parameters</li>
+      <li class="breadcrumb-item active">class triton.language.tuple</li>
       <li class="wy-breadcrumbs-aside">
             <a href="../../_sources/python-api/generated/triton.language.tuple.rst.txt" rel="nofollow"> View page source</a>
       </li>
@@ -123,72 +158,98 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <dl class="py class">
-<dt class="sig sig-object py" id="triton.language.tuple">
-<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">triton.language.</span></span><span class="sig-name descname"><span class="pre">tuple</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#triton.language.tuple" title="Link to this definition">¶</a></dt>
-<dd><p>Construct a tuple of values that exist in the Triton IR.</p>
-<p>This class represents a heterogeneous collection of <code class="docutils literal notranslate"><span class="pre">base_value</span></code> objects
-(e.g., <code class="docutils literal notranslate"><span class="pre">tensor</span></code>, <code class="docutils literal notranslate"><span class="pre">constexpr</span></code>) grouped together. Unlike Python’s built-in
-tuple, this structure exists within the compiled Triton IR graph and supports
-typed field access if a schema is provided.</p>
+  <section id="class-triton-language-tuple">
+<h1>class triton.language.tuple<a class="headerlink" href="#class-triton-language-tuple" title="Link to this heading">¶</a></h1>
+<p>Base class for tuple values that exist in the Triton IR.</p>
 <section id="parameters">
-<h1>Parameters<a class="headerlink" href="#parameters" title="Link to this heading">¶</a></h1>
+<h2>Parameters<a class="headerlink" href="#parameters" title="Link to this heading">¶</a></h2>
 <dl class="simple">
-<dt>args<span class="classifier">Sequence</span></dt><dd><p>A sequence of Triton values (e.g., tensors, constexprs) to include in the tuple.</p>
+<dt>args<span class="classifier">Sequence</span></dt><dd><p>Sequence of values to store in the tuple. Each value must be a Triton IR
+value (e.g., <code class="xref py py-class docutils literal notranslate"><span class="pre">tensor</span></code>, <a class="reference internal" href="triton.experimental.gluon.language.constexpr.html#id0" title="constexpr"><code class="xref py py-class docutils literal notranslate"><span class="pre">constexpr</span></code></a>, or nested
+<a class="reference internal" href="triton.experimental.gluon.language.tuple.html#id0" title="tuple"><code class="xref py py-class docutils literal notranslate"><span class="pre">tuple</span></code></a>).</p>
 </dd>
-<dt>type<span class="classifier">tuple_type, optional</span></dt><dd><p>An optional type definition describing the element types and optional field
-names. If omitted, the type is inferred from <code class="docutils literal notranslate"><span class="pre">args</span></code>.</p>
+<dt>type<span class="classifier">tuple_type, optional</span></dt><dd><p>Optional type specification for the tuple. If not provided, the type is
+inferred from the values in <code class="docutils literal notranslate"><span class="pre">args</span></code>.</p>
 </dd>
 </dl>
 </section>
-<section id="returns">
-<h1>Returns<a class="headerlink" href="#returns" title="Link to this heading">¶</a></h1>
+<section id="attributes">
+<h2>Attributes<a class="headerlink" href="#attributes" title="Link to this heading">¶</a></h2>
 <dl class="simple">
-<dt>tuple</dt><dd><p>A new <code class="docutils literal notranslate"><span class="pre">triton.language.tuple</span></code> instance containing the provided values.</p>
+<dt>values<span class="classifier">list</span></dt><dd><p>List of values stored in the tuple.</p>
+</dd>
+<dt>type<span class="classifier">tuple_type</span></dt><dd><p>The type of the tuple, including field names if applicable.</p>
 </dd>
 </dl>
 </section>
 <section id="notes">
-<h1>Notes<a class="headerlink" href="#notes" title="Link to this heading">¶</a></h1>
+<h2>Notes<a class="headerlink" href="#notes" title="Link to this heading">¶</a></h2>
+<p>The <a class="reference internal" href="triton.experimental.gluon.language.tuple.html#id0" title="tuple"><code class="xref py py-class docutils literal notranslate"><span class="pre">tuple</span></code></a> class represents structured collections of values in
+Triton kernels. Unlike Python tuples, these exist at compile-time in the
+Triton IR and support:</p>
 <ul class="simple">
-<li><p>If <code class="docutils literal notranslate"><span class="pre">type</span></code> includes field names, elements can be accessed via attribute lookup
-(e.g., <code class="docutils literal notranslate"><span class="pre">t.field_name</span></code>). Otherwise, use integer indexing (e.g., <code class="docutils literal notranslate"><span class="pre">t[0]</span></code>).</p></li>
-<li><p>Slicing a tuple returns a new <code class="docutils literal notranslate"><span class="pre">tuple</span></code> containing the selected subset of values.</p></li>
-<li><p>Arithmetic operations (<code class="docutils literal notranslate"><span class="pre">+</span></code>, <code class="docutils literal notranslate"><span class="pre">*</span></code>) and comparisons (<code class="docutils literal notranslate"><span class="pre">==</span></code>) are supported
-between tuples of compatible structures.</p></li>
-<li><p>This type is distinct from Python’s built-in <code class="docutils literal notranslate"><span class="pre">tuple</span></code>; it is intended for
-use inside <code class="docutils literal notranslate"><span class="pre">&#64;triton.jit</span></code> functions to return multiple tensors or manage
-structured data in the kernel IR.</p></li>
+<li><p>Indexing via <code class="xref py py-meth docutils literal notranslate"><span class="pre">__getitem__()</span></code> with <a class="reference internal" href="triton.experimental.gluon.language.constexpr.html#id0" title="constexpr"><code class="xref py py-class docutils literal notranslate"><span class="pre">constexpr</span></code></a> indices</p></li>
+<li><p>Attribute access if the tuple type has named fields</p></li>
+<li><p>Iteration over elements</p></li>
+<li><p>Arithmetic operations (addition, multiplication)</p></li>
+<li><p>Equality comparison</p></li>
 </ul>
+<p>Tuples are commonly used to return multiple values from Triton functions or
+to group related data. When a tuple type has named fields, elements can be
+accessed via attribute notation (e.g., <code class="docutils literal notranslate"><span class="pre">t.field_name</span></code>).</p>
 </section>
 <section id="examples">
-<h1>Examples<a class="headerlink" href="#examples" title="Link to this heading">¶</a></h1>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span><span class="w"> </span><span class="nn">triton</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span><span class="w"> </span><span class="nn">triton.language</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">tl</span>
-<span class="gp">&gt;&gt;&gt;</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="nd">@triton</span><span class="o">.</span><span class="n">jit</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="k">def</span><span class="w"> </span><span class="nf">kernel</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">Y</span><span class="p">,</span> <span class="n">BLOCK</span><span class="p">:</span> <span class="n">tl</span><span class="o">.</span><span class="n">constexpr</span><span class="p">):</span>
-<span class="gp">&gt;&gt;&gt; </span>    <span class="n">a</span> <span class="o">=</span> <span class="n">tl</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">X</span> <span class="o">+</span> <span class="n">tl</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">BLOCK</span><span class="p">))</span>
-<span class="gp">&gt;&gt;&gt; </span>    <span class="n">b</span> <span class="o">=</span> <span class="n">tl</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">Y</span> <span class="o">+</span> <span class="n">tl</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">BLOCK</span><span class="p">))</span>
-<span class="gp">&gt;&gt;&gt; </span>    <span class="c1"># Create a tuple of two tensors</span>
-<span class="gp">&gt;&gt;&gt; </span>    <span class="n">t</span> <span class="o">=</span> <span class="n">tl</span><span class="o">.</span><span class="n">tuple</span><span class="p">((</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">))</span>
-<span class="gp">&gt;&gt;&gt; </span>    <span class="c1"># Access via indexing</span>
-<span class="gp">&gt;&gt;&gt; </span>    <span class="n">first</span> <span class="o">=</span> <span class="n">t</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-<span class="gp">&gt;&gt;&gt; </span>    <span class="n">second</span> <span class="o">=</span> <span class="n">t</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
-<span class="gp">&gt;&gt;&gt; </span>    <span class="c1"># Return multiple values (implicitly packed as a tuple)</span>
-<span class="gp">&gt;&gt;&gt; </span>    <span class="k">return</span> <span class="n">first</span><span class="p">,</span> <span class="n">second</span>
+<h2>Examples<a class="headerlink" href="#examples" title="Link to this heading">¶</a></h2>
+<p>Creating and using tuples in a Triton kernel:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">triton</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">triton.language</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">tl</span>
+
+<span class="nd">@triton</span><span class="o">.</span><span class="n">jit</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">kernel</span><span class="p">(</span><span class="o">...</span><span class="p">):</span>
+    <span class="c1"># Create a tuple of tensors</span>
+    <span class="n">t</span> <span class="o">=</span> <span class="n">tl</span> <span class="nb">tuple</span><span class="p">([</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">])</span>
+
+    <span class="c1"># Access elements by index</span>
+    <span class="n">first</span> <span class="o">=</span> <span class="n">t</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">second</span> <span class="o">=</span> <span class="n">t</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+
+    <span class="c1"># Iterate over tuple elements</span>
+    <span class="k">for</span> <span class="n">val</span> <span class="ow">in</span> <span class="n">t</span><span class="p">:</span>
+        <span class="o">...</span>
+
+    <span class="c1"># Return multiple values as a tuple</span>
+    <span class="k">return</span> <span class="n">tl</span> <span class="nb">tuple</span><span class="p">([</span><span class="n">result1</span><span class="p">,</span> <span class="n">result2</span><span class="p">])</span>
+
+<span class="c1"># Unpack returned tuple</span>
+<span class="n">r1</span><span class="p">,</span> <span class="n">r2</span> <span class="o">=</span> <span class="n">kernel</span><span class="p">[</span><span class="o">...</span><span class="p">]</span>
+</pre></div>
+</div>
+<p>Named field access (when tuple type has fields defined):</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nd">@triton</span><span class="o">.</span><span class="n">jit</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">kernel</span><span class="p">(</span><span class="o">...</span><span class="p">):</span>
+    <span class="c1"># Tuple with named fields</span>
+    <span class="n">point</span> <span class="o">=</span> <span class="n">tl</span> <span class="nb">tuple</span><span class="p">([</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">],</span> <span class="nb">type</span><span class="o">=</span><span class="n">tl</span> <span class="n">tuple_type</span><span class="p">([</span><span class="n">tl</span><span class="o">.</span><span class="n">int32</span><span class="p">,</span> <span class="n">tl</span><span class="o">.</span><span class="n">int32</span><span class="p">],</span>
+                                                 <span class="n">fields</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;x&quot;</span><span class="p">,</span> <span class="s2">&quot;y&quot;</span><span class="p">]))</span>
+    <span class="c1"># Access by field name</span>
+    <span class="n">px</span> <span class="o">=</span> <span class="n">point</span><span class="o">.</span><span class="n">x</span>
+    <span class="n">py</span> <span class="o">=</span> <span class="n">point</span><span class="o">.</span><span class="n">y</span>
 </pre></div>
 </div>
 </section>
-</dd></dl>
-
+<section id="see-also">
+<h2>See Also<a class="headerlink" href="#see-also" title="Link to this heading">¶</a></h2>
+<p>tuple_type : Type specification for tuples with optional field names.
+split : Split a tensor into a tuple of tensors.
+join : Join tensors into a single tensor (inverse of split).</p>
+</section>
+</section>
 
 
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="triton.language.tensor_descriptor_type.html" class="btn btn-neutral float-left" title="triton.language.tensor_descriptor_type" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="triton.language.arange.html" class="btn btn-neutral float-right" title="Parameters" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="triton.language.slice.html" class="btn btn-neutral float-left" title="slice" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="triton.language.arange.html" class="btn btn-neutral float-right" title="triton.language.arange" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>

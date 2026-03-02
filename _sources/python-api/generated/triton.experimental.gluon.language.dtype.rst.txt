@@ -1,0 +1,116 @@
+dtype
+=====
+
+.. py:class:: dtype(name)
+
+   Represents a data type in Triton IR.
+
+   The ``dtype`` class encapsulates information about primitive data types
+   including signed/unsigned integers, floating-point formats (including FP8
+   variants), and void types. It provides methods to query type properties
+   and convert to IR types.
+
+   Parameters
+   ----------
+   name : str
+       The name of the data type. Must be one of the supported type strings:
+       ``'int1'``, ``'int8'``, ``'int16'``, ``'int32'``, ``'int64'``,
+       ``'uint8'``, ``'uint16'``, ``'uint32'``, ``'uint64'``,
+       ``'fp8e4b15'``, ``'fp8e4nv'``, ``'fp8e4b8'``, ``'fp8e5'``,
+       ``'fp8e5b16'``, ``'fp16'``, ``'bf16'``, ``'fp32'``, ``'fp64'``,
+       or ``'void'``.
+
+   Attributes
+   ----------
+   name : str
+       The type name string.
+   primitive_bitwidth : int
+       The bit width of the primitive type.
+   itemsize : int
+       The size in bytes (primitive_bitwidth // 8).
+   int_signedness : SIGNEDNESS
+       For integer types, indicates signed or unsigned.
+   int_bitwidth : int
+       For integer types, the bit width.
+   fp_mantissa_width : int
+       For floating-point types, the mantissa width.
+   exponent_bias : int
+       For floating-point types, the exponent bias.
+
+   Methods
+   -------
+   is_fp8()
+       Returns True if this is an FP8 type.
+   is_fp16(), is_bf16(), is_fp32(), is_fp64()
+       Check for specific floating-point types.
+   is_int8(), is_int16(), is_int32(), is_int64()
+       Check for specific signed integer types.
+   is_uint8(), is_uint16(), is_uint32(), is_uint64()
+       Check for specific unsigned integer types.
+   is_floating()
+       Returns True if this is any floating-point type.
+   is_standard_floating()
+       Returns True if this is fp16, bf16, fp32, or fp64.
+   is_int_signed(), is_int_unsigned(), is_int()
+       Check integer type categories.
+   is_bool()
+       Returns True if this is int1 (boolean).
+   kind()
+       Returns KIND enum (BOOLEAN, INTEGRAL, or FLOATING).
+   get_int_max_value(), get_int_min_value()
+       Return max/min representable values for integer types.
+   to_ir(builder)
+       Convert to Triton IR type using the given builder.
+   mangle()
+       Return mangled type name for ABI compatibility.
+   codegen_name()
+       Return code generation friendly type name.
+
+   Notes
+   -----
+   Predefined dtype instances are available as module-level constants:
+   ``int1``, ``int8``, ``int16``, ``int32``, ``int64``, ``uint8``,
+   ``uint16``, ``uint32``, ``uint64``, ``float8e5``, ``float8e5b16``,
+   ``float8e4nv``, ``float8e4b8``, ``float8e4b15``, ``float16``,
+   ``bfloat16``, ``float32``, ``float64``, and ``void``.
+
+   FP8 types may not be supported on all architectures. The ``to_ir()``
+   method will raise an error if the FP8 type is not supported by the
+   target architecture.
+
+   Examples
+   --------
+   >>> import triton.experimental.gluon.language as ttgl
+   >>> dtype = ttgl.dtype('fp16')
+   >>> dtype.name
+   'fp16'
+   >>> dtype.primitive_bitwidth
+   16
+   >>> dtype.itemsize
+   2
+   >>> dtype.is_floating()
+   True
+   >>> dtype.is_fp16()
+   True
+   >>> dtype.kind()
+   <KIND.FLOATING: 2>
+
+   Using predefined constants:
+
+   .. code-block:: python
+
+       import triton.experimental.gluon.language as ttgl
+
+       # Use predefined dtype constants
+       dtype = ttgl.float16
+       assert dtype.name == 'fp16'
+
+       # Check type properties
+       if dtype.is_floating():
+           print(f"Mantissa width: {dtype.fp_mantissa_width}")
+
+       # Convert to IR type in a kernel
+       @gluon.jit
+       def kernel(x_ptr, n):
+           ir_type = ttgl.float32.to_ir(gluon.language.core.builder())
+           # ... use ir_type in IR operations

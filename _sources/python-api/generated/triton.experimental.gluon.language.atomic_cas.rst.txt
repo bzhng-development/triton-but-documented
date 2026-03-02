@@ -1,0 +1,49 @@
+atomic_cas
+==========
+
+Performs an atomic compare-and-swap operation at the specified memory location.
+
+Atomically compares the value at ``pointer`` with ``cmp``. If they are equal, stores ``val`` 
+to ``pointer``. Returns the value that was stored at ``pointer`` before the operation.
+
+Parameters
+----------
+pointer : tensor
+    Pointer to the memory location to operate on. Must be a block of pointer type 
+    (``triton.PointerDType``).
+cmp : tensor
+    The expected value to compare against. Must have the same dtype as the element type 
+    of ``pointer``.
+val : tensor
+    The value to store if the comparison succeeds. Must have the same dtype as the element 
+    type of ``pointer``.
+sem : str, optional
+    Memory semantics for the operation. Acceptable values are ``"acquire"``, ``"release"``, 
+    ``"acq_rel"`` (ACQUIRE_RELEASE), and ``"relaxed"``. Defaults to ``"acq_rel"``.
+scope : str, optional
+    Scope of threads that observe the synchronizing effect of the atomic operation. 
+    Acceptable values are ``"gpu"`` (default), ``"cta"`` (cooperative thread array/thread 
+    block), or ``"sys"`` (SYSTEM). Defaults to ``"gpu"``.
+
+Returns
+-------
+tensor
+    The value stored at ``pointer`` before the atomic operation.
+
+Notes
+-----
+This function can also be called as a member function on :py:class:`tensor` objects, as 
+``x.atomic_cas(...)`` instead of ``atomic_cas(x, ...)``.
+
+Examples
+--------
+.. code-block:: python
+
+    import triton.experimental.gluon as gluon
+    import triton.experimental.gluon.language as ttgl
+
+    @gluon.jit
+    def atomic_update_kernel(ptr, expected, new_val):
+        # Perform atomic compare-and-swap
+        old = ttgl.atomic_cas(ptr, expected, new_val)
+        # old contains the value before the operation

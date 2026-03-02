@@ -1,0 +1,61 @@
+triton.language.extra.cuda.libdevice.logb
+=========================================
+
+.. currentmodule:: triton.language.extra.cuda.libdevice
+
+.. function:: logb(arg0, _semantic=None)
+
+    Compute the exponent of a floating-point value.
+
+    Returns the unbiased exponent of :code:`arg0` as a floating-point value.
+    For finite :code:`arg0`, the result is :code:`floor(log2(|arg0|))`.
+
+    Parameters
+    ----------
+    arg0 : tl.tensor
+        Input tensor of floating-point values. Must be :code:`fp32` or :code:`fp64`.
+    _semantic : optional
+        Internal Triton semantic parameter. Do not set manually.
+
+    Returns
+    -------
+    out : tl.tensor
+        Tensor of the same dtype as :code:`arg0` containing the unbiased exponents.
+        For :code:`fp32` input, returns :code:`fp32`; for :code:`fp64` input, returns :code:`fp64`.
+
+    Notes
+    -----
+    This function is a wrapper around CUDA libdevice functions:
+
+    - :code:`__nv_logbf` for :code:`fp32` inputs
+    - :code:`__nv_logb` for :code:`fp64` inputs
+
+    Special values:
+
+    - :code:`logb(+inf)` = :code:`+inf`
+    - :code:`logb(-inf)` = :code:`+inf`
+    - :code:`logb(0)` = :code:`-inf`
+    - :code:`logb(NaN)` = :code:`NaN`
+
+    The function is pure (no side effects) and can be used in JIT-compiled kernels.
+
+    Examples
+    --------
+    .. code-block:: python
+
+        import triton
+        import triton.language as tl
+
+        @triton.jit
+        def kernel(x_ptr, out_ptr, BLOCK: tl.constexpr):
+            offsets = tl.arange(0, BLOCK)
+            x = tl.load(x_ptr + offsets)
+            # Extract exponent from floating-point values
+            exp = tl.extra.cuda.libdevice.logb(x)
+            tl.store(out_ptr + offsets, exp)
+
+        # Launch kernel
+        BLOCK = 1024
+        x = torch.randn(BLOCK, device='cuda', dtype=torch.float32)
+        out = torch.empty(BLOCK, device='cuda', dtype=torch.float32)
+        kernel[(1,)](x, out, BLOCK)

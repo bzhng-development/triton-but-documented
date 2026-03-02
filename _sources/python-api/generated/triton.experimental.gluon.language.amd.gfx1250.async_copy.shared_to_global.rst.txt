@@ -1,0 +1,54 @@
+shared_to_global
+================
+
+.. py:function:: shared_to_global(pointer, smem, mask=None, cache_modifier='', _semantic=None)
+
+    Asynchronously copy elements from shared memory to global memory.
+
+    This operation initiates an asynchronous transfer from shared memory to global
+    memory. Completion must be enforced manually using :func:`wait_group` before
+    the data is guaranteed to be visible in global memory.
+
+    Parameters
+    ----------
+    pointer : tensor
+        Destination pointer tensor. Must have a ``DistributedLayout``.
+    smem : shared_memory_descriptor
+        Source shared memory descriptor. Shape must match ``pointer``.
+    mask : tensor, optional
+        Predicate mask for predicated stores. Defaults to ``None``.
+    cache_modifier : str, optional
+        Cache modifier specifier (e.g., ``.cg``, ``.cs``). Defaults to ``''``.
+    _semantic : GluonSemantic, optional
+        Internal semantic argument. Do not set manually.
+
+    Returns
+    -------
+    None
+
+    Notes
+    -----
+    Specific to AMD GFX1250 architecture. Requires manual synchronization via
+    :func:`wait_group` after issuance before accessing the stored data globally.
+    The shape of ``smem`` must exactly match the shape of ``pointer``. The pointer
+    type layout must be a ``DistributedLayout``.
+
+    Examples
+    --------
+    .. code-block:: python
+
+        import triton.experimental.gluon as gluon
+        import triton.experimental.gluon.language as ttgl
+
+        @gluon.jit
+        def kernel(...):
+            # Allocate shared memory
+            smem = ttgl.allocate_shared_memory(...)
+            # ... compute data into smem ...
+
+            # Async copy to global
+            ptr = ttgl.make_block_ptr(...)
+            ttgl.amd.gfx1250.async_copy.shared_to_global(ptr, smem)
+
+            # Must wait before data is visible globally
+            ttgl.amd.gfx1250.async_copy.wait_group(0)

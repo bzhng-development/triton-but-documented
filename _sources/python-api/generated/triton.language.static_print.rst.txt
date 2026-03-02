@@ -1,27 +1,22 @@
 static_print
 ============
 
-.. currentmodule:: triton.language
-
-.. autofunction:: static_print
-
-Print the values at compile time. The parameters match the builtin :code:`print`.
-
-.. note::
-   Calling the Python builtin :code:`print` inside a JIT function is not equivalent to :code:`static_print`. The builtin maps to :code:`device_print`, which emits runtime GPU print instructions with different argument requirements.
+Print values at compile time during kernel compilation.
 
 Parameters
 ----------
 *values : variadic
-    Values to print. These must be compile-time constants (e.g., :code:`constexpr` or Python literals).
+    Values to print at compile time.
 sep : str, optional
-    String inserted between values. Default is a space.
+    Separator between values (default is space).
 end : str, optional
-    String appended after the last value. Default is a newline.
-file : object, optional
-    Ignored. Provided for API compatibility with builtin :code:`print`.
+    String appended after all values (default is newline).
+file : optional
+    File-like object (unused in Triton).
 flush : bool, optional
-    Ignored. Provided for API compatibility with builtin :code:`print`.
+    Flush flag (unused in Triton).
+_semantic : optional
+    Internal semantic argument (auto-provided by Triton).
 
 Returns
 -------
@@ -29,7 +24,13 @@ None
 
 Notes
 -----
-This function emits output during compilation (to stdout/stderr of the compiler process), not during kernel execution. It is useful for debugging metaprogramming logic or inspecting compile-time constant values.
+This function prints values during kernel compilation, not at runtime. It is
+distinct from Python's builtin :code:`print`, which maps to
+:py:func:`triton.language.device_print` and executes on the GPU device at
+runtime.
+
+Use :py:func:`static_print` for debugging compile-time constants such as
+:py:class:`constexpr` values and :py:obj:`tl.constexpr` parameters.
 
 Examples
 --------
@@ -41,4 +42,7 @@ Examples
     @triton.jit
     def kernel(BLOCK_SIZE: tl.constexpr):
         tl.static_print(f"BLOCK_SIZE={BLOCK_SIZE}")
-        # Kernel logic here
+        # ... kernel code ...
+
+    # Prints "BLOCK_SIZE=1024" during compilation
+    kernel[(1,)](BLOCK_SIZE=1024)

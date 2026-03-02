@@ -1,0 +1,237 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>buffer_atomic_min &mdash; Triton  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=03e43079" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/custom.css" />
+
+  
+      <script src="../../_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="buffer_atomic_or" href="triton.experimental.gluon.language.amd.cdna3.buffer_atomic_or.html" />
+    <link rel="prev" title="buffer_atomic_max" href="triton.experimental.gluon.language.amd.cdna3.buffer_atomic_max.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            Triton
+              <img src="https://cdn.openai.com/triton/assets/triton-logo.png" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../getting-started/installation.html">Installation</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Python API</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../triton.html">triton</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.language.html">triton.language</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.testing.html">triton.testing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton-semantics.html">Triton Semantics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.language.extra.cuda.html">triton.language.extra.cuda</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.language.extra.cuda.libdevice.html">triton.language.extra.cuda.libdevice</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.runtime.html">triton.runtime</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.tools.html">triton.tools</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Gluon (Experimental) API</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.html">triton.experimental.gluon</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.html">triton.experimental.gluon.language</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.nvidia.ampere.html">triton.experimental.gluon.language.nvidia.ampere</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.nvidia.ampere.async_copy.html">triton.experimental.gluon.language.nvidia.ampere.async_copy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.nvidia.ampere.mbarrier.html">triton.experimental.gluon.language.nvidia.ampere.mbarrier</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.nvidia.hopper.html">triton.experimental.gluon.language.nvidia.hopper</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.nvidia.hopper.tma.html">triton.experimental.gluon.language.nvidia.hopper.tma</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.nvidia.hopper.mbarrier.html">triton.experimental.gluon.language.nvidia.hopper.mbarrier</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.nvidia.hopper.cluster.html">triton.experimental.gluon.language.nvidia.hopper.cluster</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.nvidia.blackwell.html">triton.experimental.gluon.language.nvidia.blackwell</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.nvidia.blackwell.tma.html">triton.experimental.gluon.language.nvidia.blackwell.tma</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.nvidia.blackwell.clc.html">triton.experimental.gluon.language.nvidia.blackwell.clc</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.amd.html">triton.experimental.gluon.language.amd</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.amd.gfx1250.html">triton.experimental.gluon.language.amd.gfx1250</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.amd.gfx1250.async_copy.html">triton.experimental.gluon.language.amd.gfx1250.async_copy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.amd.gfx1250.mbarrier.html">triton.experimental.gluon.language.amd.gfx1250.mbarrier</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.amd.gfx1250.cluster.html">triton.experimental.gluon.language.amd.gfx1250.cluster</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.amd.gfx1250.tdm.html">triton.experimental.gluon.language.amd.gfx1250.tdm</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../triton.experimental.gluon.language.amd.cdna3.html">triton.experimental.gluon.language.amd.cdna3</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="../triton.experimental.gluon.language.amd.cdna3.html#amd-cdna3">AMD CDNA3</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="triton.experimental.gluon.language.amd.cdna3.buffer_atomic_add.html">buffer_atomic_add</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.experimental.gluon.language.amd.cdna3.buffer_atomic_and.html">buffer_atomic_and</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.experimental.gluon.language.amd.cdna3.buffer_atomic_max.html">buffer_atomic_max</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">buffer_atomic_min</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#triton.experimental.gluon.language.amd.cdna3.buffer_atomic_min"><code class="docutils literal notranslate"><span class="pre">buffer_atomic_min()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#parameters">Parameters</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#returns">Returns</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#notes">Notes</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#examples">Examples</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="triton.experimental.gluon.language.amd.cdna3.buffer_atomic_or.html">buffer_atomic_or</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.experimental.gluon.language.amd.cdna3.buffer_atomic_xor.html">buffer_atomic_xor</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.experimental.gluon.language.amd.cdna3.buffer_load.html">buffer_load</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.experimental.gluon.language.amd.cdna3.buffer_store.html">buffer_store</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.experimental.gluon.language.amd.cdna3.mfma.html">mfma</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.amd.cdna4.html">triton.experimental.gluon.language.amd.cdna4</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.amd.rdna3.html">triton.experimental.gluon.language.amd.rdna3</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.amd.rdna4.html">triton.experimental.gluon.language.amd.rdna4</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Triton MLIR Dialects</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../dialects/dialects.html">Triton MLIR Dialects and Ops</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Programming Guide</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../programming-guide/chapter-1/introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../programming-guide/chapter-2/related-work.html">Related Work</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../programming-guide/chapter-3/debugging.html">Debugging Triton</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">Triton</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../triton.experimental.gluon.language.amd.cdna3.html">triton.experimental.gluon.language.amd.cdna3</a></li>
+      <li class="breadcrumb-item active">buffer_atomic_min</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../_sources/python-api/generated/triton.experimental.gluon.language.amd.cdna3.buffer_atomic_min.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="buffer-atomic-min">
+<h1>buffer_atomic_min<a class="headerlink" href="#buffer-atomic-min" title="Link to this heading">¶</a></h1>
+<dl class="py function">
+<dt class="sig sig-object py" id="triton.experimental.gluon.language.amd.cdna3.buffer_atomic_min">
+<span class="sig-prename descclassname"><span class="pre">triton.experimental.gluon.language.amd.cdna3.</span></span><span class="sig-name descname"><span class="pre">buffer_atomic_min</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ptr</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">offsets</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">value</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mask</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sem</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scope</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">_semantic</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#triton.experimental.gluon.language.amd.cdna3.buffer_atomic_min" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<p>Perform an atomic minimum operation on AMD CDNA3 buffer memory.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">buffer_atomic_min</span><span class="p">(</span><span class="n">ptr</span><span class="p">,</span> <span class="n">offsets</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">mask</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">sem</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">scope</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">_semantic</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Atomically computes <code class="docutils literal notranslate"><span class="pre">min(*ptr[off],</span> <span class="pre">value)</span></code> for each offset and stores the result back to memory. Returns the original values at the memory locations before the update.</p>
+<section id="parameters">
+<h2>Parameters<a class="headerlink" href="#parameters" title="Link to this heading">¶</a></h2>
+<dl class="simple">
+<dt>ptr<span class="classifier">pointer_type</span></dt><dd><p>Pointer to the global memory buffer.</p>
+</dd>
+<dt>offsets<span class="classifier">tensor</span></dt><dd><p>Tensor of offsets specifying which locations to access.</p>
+</dd>
+<dt>value<span class="classifier">tensor</span></dt><dd><p>Tensor of values to compare against memory contents.</p>
+</dd>
+<dt>mask<span class="classifier">tensor, optional</span></dt><dd><p>Boolean tensor controlling which offsets are active. If <code class="docutils literal notranslate"><span class="pre">None</span></code>, all offsets are active.</p>
+</dd>
+<dt>sem<span class="classifier">str, optional</span></dt><dd><p>Memory semantics for the atomic operation (e.g., <code class="docutils literal notranslate"><span class="pre">&quot;acquire&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;release&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;acq_rel&quot;</span></code>).</p>
+</dd>
+<dt>scope<span class="classifier">str, optional</span></dt><dd><p>Memory scope for the atomic operation (e.g., <code class="docutils literal notranslate"><span class="pre">&quot;cta&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;cluster&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;gpu&quot;</span></code>).</p>
+</dd>
+<dt>_semantic<span class="classifier">GluonSemantic</span></dt><dd><p>Internal semantic handler. Do not pass directly; set via <code class="docutils literal notranslate"><span class="pre">&#64;gluon.jit</span></code> decorator.</p>
+</dd>
+</dl>
+</section>
+<section id="returns">
+<h2>Returns<a class="headerlink" href="#returns" title="Link to this heading">¶</a></h2>
+<dl class="simple">
+<dt>tensor</dt><dd><p>Tensor containing the original values from memory before the atomic minimum update.</p>
+</dd>
+</dl>
+</section>
+<section id="notes">
+<h2>Notes<a class="headerlink" href="#notes" title="Link to this heading">¶</a></h2>
+<p>This operation is specific to AMD CDNA3 architecture and uses the buffer atomic instruction
+set. The atomic minimum compares each <code class="docutils literal notranslate"><span class="pre">value</span></code> with the corresponding memory location and
+stores the smaller of the two.</p>
+<p>The operation is only valid within kernels decorated with <code class="docutils literal notranslate"><span class="pre">&#64;gluon.jit</span></code>. The <code class="docutils literal notranslate"><span class="pre">_semantic</span></code>
+parameter is automatically provided by the JIT compiler and should not be passed manually.</p>
+<p>Memory semantics (<code class="docutils literal notranslate"><span class="pre">sem</span></code>) and scope (<code class="docutils literal notranslate"><span class="pre">scope</span></code>) control synchronization behavior across
+threads and memory hierarchies. Consult AMD CDNA3 documentation for valid options.</p>
+</section>
+<section id="examples">
+<h2>Examples<a class="headerlink" href="#examples" title="Link to this heading">¶</a></h2>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">triton.experimental.gluon</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">gluon</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">triton.experimental.gluon.language</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">ttgl</span>
+
+<span class="nd">@gluon</span><span class="o">.</span><span class="n">jit</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">atomic_min_kernel</span><span class="p">(</span><span class="n">ptr</span><span class="p">,</span> <span class="n">offsets</span><span class="p">,</span> <span class="n">values</span><span class="p">,</span> <span class="n">n_elements</span><span class="p">,</span> <span class="n">BLOCK_SIZE</span><span class="p">:</span> <span class="n">tl</span><span class="o">.</span><span class="n">constexpr</span><span class="p">):</span>
+    <span class="n">pid</span> <span class="o">=</span> <span class="n">ttgl</span><span class="o">.</span><span class="n">program_id</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+    <span class="n">offs</span> <span class="o">=</span> <span class="n">pid</span> <span class="o">*</span> <span class="n">BLOCK_SIZE</span> <span class="o">+</span> <span class="n">ttgl</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">BLOCK_SIZE</span><span class="p">)</span>
+    <span class="n">mask</span> <span class="o">=</span> <span class="n">offs</span> <span class="o">&lt;</span> <span class="n">n_elements</span>
+    <span class="n">old_vals</span> <span class="o">=</span> <span class="n">ttgl</span><span class="o">.</span><span class="n">amd</span><span class="o">.</span><span class="n">cdna3</span><span class="o">.</span><span class="n">buffer_atomic_min</span><span class="p">(</span><span class="n">ptr</span><span class="p">,</span> <span class="n">offs</span><span class="p">,</span> <span class="n">values</span><span class="p">,</span> <span class="n">mask</span><span class="o">=</span><span class="n">mask</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="triton.experimental.gluon.language.amd.cdna3.buffer_atomic_max.html" class="btn btn-neutral float-left" title="buffer_atomic_max" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="triton.experimental.gluon.language.amd.cdna3.buffer_atomic_or.html" class="btn btn-neutral float-right" title="buffer_atomic_or" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2020, Philippe Tillet.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

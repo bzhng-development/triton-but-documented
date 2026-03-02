@@ -1,0 +1,65 @@
+xor_sum
+=======
+
+Compute the XOR sum of tensor elements along specified axes.
+
+.. code-block:: python
+
+    xor_sum(input, axis=None, keep_dims=False)
+
+Returns the bitwise XOR sum of all elements in the :code:`input` tensor along the
+provided :code:`axis`. The reduction operation is associative and commutative.
+
+Parameters
+----------
+input : Tensor
+    The input tensor. Must have integer dtype.
+axis : int, optional
+    The dimension along which the reduction should be performed. If :code:`None`,
+    reduce across all dimensions.
+keep_dims : bool, optional
+    If :code:`True`, keep the reduced dimensions with length 1. Default is
+    :code:`False`.
+
+Returns
+-------
+Tensor
+    A tensor containing the XOR sum of the input elements. The output dtype
+    matches the input dtype.
+
+Notes
+-----
+This function only supports integer tensors. Calling :code:`xor_sum` on
+floating-point tensors will raise a compilation error.
+
+The function can be called as a member function on :py:class:`tensor`, as
+:code:`x.xor_sum(...)` instead of :code:`xor_sum(x, ...)`.
+
+Examples
+--------
+.. code-block:: python
+
+    import triton.experimental.gluon as gluon
+    import triton.experimental.gluon.language as ttgl
+
+    @gluon.jit
+    def kernel(x_ptr, out_ptr, BLOCK_SIZE: ttgl.constexpr):
+        x = ttgl.load(x_ptr + ttgl.arange(0, BLOCK_SIZE))
+        # Compute XOR sum across all elements
+        result = ttgl.xor_sum(x)
+        ttgl.store(out_ptr, result)
+
+    # Using keep_dims to preserve shape
+    @gluon.jit
+    def kernel_2d(x_ptr, out_ptr, BLOCK_M: ttgl.constexpr, BLOCK_N: ttgl.constexpr):
+        x = ttgl.load(x_ptr + ttgl.arange(0, BLOCK_M)[:, None] * BLOCK_N + ttgl.arange(0, BLOCK_N)[None, :])
+        # Reduce along axis 1, keeping the dimension
+        result = ttgl.xor_sum(x, axis=1, keep_dims=True)
+        ttgl.store(out_ptr, result)
+
+    # Using member function syntax
+    @gluon.jit
+    def kernel_member(x_ptr, out_ptr, BLOCK_SIZE: ttgl.constexpr):
+        x = ttgl.load(x_ptr + ttgl.arange(0, BLOCK_SIZE))
+        result = x.xor_sum()
+        ttgl.store(out_ptr, result)

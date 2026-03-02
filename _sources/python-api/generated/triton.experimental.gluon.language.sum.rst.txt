@@ -1,0 +1,73 @@
+sum
+===
+
+.. currentmodule:: triton.experimental.gluon.language
+
+.. function:: sum(input, axis=None, keep_dims=False, dtype=None)
+
+   Returns the sum of all elements in the :code:`input` tensor along the provided :code:`axis`.
+
+   The reduction operation is associative and commutative.
+
+   Parameters
+   ----------
+   input : Tensor
+       The input tensor values to sum.
+   axis : int, optional
+       The dimension along which the reduction should be performed. If :code:`None`,
+       reduces all dimensions.
+   keep_dims : bool, optional
+       If :code:`True`, keeps the reduced dimensions with length 1. Default is :code:`False`.
+   dtype : tl.dtype, optional
+       The desired data type of the returned tensor. If specified, the input tensor is
+       casted to :code:`dtype` before the operation is performed. This is useful for
+       preventing data overflows. If not specified, integer and bool dtypes are upcasted
+       to :code:`tl.int32` and float dtypes are upcasted to at least :code:`tl.float32`.
+
+   Returns
+   -------
+   Tensor
+       A tensor containing the sum of the input elements along the specified axis.
+
+   Notes
+   -----
+   This function can also be called as a member function on :py:class:`tensor`,
+   as :code:`x.sum(...)` instead of :code:`sum(x, ...)`.
+
+   Default dtype promotion rules:
+   - Signed integers with bitwidth < 32 are promoted to :code:`tl.int32`
+   - Unsigned integers with bitwidth < 32 are promoted to :code:`tl.uint32`
+   - Float types are promoted to at least :code:`tl.float32`
+
+   Examples
+   --------
+   .. code-block:: python
+
+      import triton.experimental.gluon as gluon
+      import triton.experimental.gluon.language as ttgl
+
+      @gluon.jit
+      def kernel(x_ptr, out_ptr, N: ttgl.constexpr):
+          pid = ttgl.program_id(0)
+          x = ttgl.load(x_ptr + pid * N)
+          # Sum all elements in the tensor
+          total = ttgl.sum(x)
+          ttgl.store(out_ptr + pid, total)
+
+      # Sum along a specific axis
+      @gluon.jit
+      def kernel_axis(x_ptr, out_ptr, M: ttgl.constexpr, N: ttgl.constexpr):
+          pid = ttgl.program_id(0)
+          x = ttgl.load(x_ptr + pid * M * N)
+          # Sum along axis 0, keeping dimensions
+          result = ttgl.sum(x, axis=0, keep_dims=True)
+          ttgl.store(out_ptr + pid * N, result)
+
+      # Specify output dtype to prevent overflow
+      @gluon.jit
+      def kernel_dtype(x_ptr, out_ptr, N: ttgl.constexpr):
+          pid = ttgl.program_id(0)
+          x = ttgl.load(x_ptr + pid * N)
+          # Cast to int32 before summing to avoid overflow
+          total = ttgl.sum(x, dtype=ttl.int32)
+          ttgl.store(out_ptr + pid, total)

@@ -1,6 +1,70 @@
-﻿triton.language.extra.cuda.gdc\_launch\_dependents
-==================================================
+triton.language.extra.cuda.gdc_launch_dependents
+=================================================
 
 .. currentmodule:: triton.language.extra.cuda
 
-.. autofunction:: gdc_launch_dependents
+.. function:: gdc_launch_dependents(_semantic=None)
+
+   Signal that dependent kernels may launch once all program instances complete.
+
+   This PTX instruction provides a synchronization point for programmatic
+   dependent launch, allowing the runtime to schedule subsequent kernels
+   once all instances of the current kernel have reached this point or
+   terminated.
+
+Parameters
+----------
+_semantic
+    Internal Triton semantic object. Do not pass this argument directly;
+    it is automatically provided when called within a :code:`@triton.jit`
+    decorated kernel.
+
+Returns
+-------
+None
+    This function emits a PTX instruction and does not return a value.
+
+Notes
+-----
+This function emits the :code:`griddepcontrol.launch_dependents` PTX
+instruction, which is part of CUDA's parallel synchronization and
+communication instructions.
+
+Key behaviors:
+
+* Only the first call has effect; repeated calls are no-ops.
+* Safe to execute even when programmatic dependent launch is disabled.
+* Should be treated as a hint to the runtime system for kernel scheduling.
+* All program instances must call this function or complete for dependent
+  kernels to launch.
+
+This is a CUDA-specific operation and will not work on other GPU
+backends.
+
+See the `NVIDIA PTX documentation`_ for more details on grid dependency
+control instructions.
+
+.. _NVIDIA PTX documentation: https://docs.nvidia.com/cuda/parallel-thread-execution/index.html#parallel-synchronization-and-communication-instructions-griddepcontrol
+
+Examples
+--------
+.. code-block:: python
+
+   import triton
+   import triton.language as tl
+
+   @triton.jit
+   def producer_kernel(...):
+       # Kernel computation
+       ...
+       # Signal that dependent kernels may launch
+       tl.extra.cuda.gdc_launch_dependents()
+
+   @triton.jit
+   def consumer_kernel(...):
+       # Depends on producer_kernel completion
+       ...
+
+   # Launch with programmatic dependent launch enabled
+   producer_kernel[grid](...)
+   consumer_kernel[grid](...)  # Will launch after producer signals

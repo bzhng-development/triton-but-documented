@@ -1,0 +1,13 @@
+triton.experimental.gluon.language.amd.rdna4
+============================================
+
+.. currentmodule:: triton.experimental.gluon.language.amd.rdna4
+
+AMD RDNA4
+---------
+
+.. autosummary::
+    :toctree: generated
+    :nosignatures:
+
+    wmma

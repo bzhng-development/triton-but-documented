@@ -1,0 +1,39 @@
+RedisRemoteCacheBackend
+=======================
+
+.. class:: triton.runtime.RedisRemoteCacheBackend(key)
+
+   Redis-backed remote cache implementation.
+
+   Implements the :class:`~triton.runtime.RemoteCacheBackend` interface using
+   a Redis server. Configuration is loaded from ``triton.knobs.cache.redis``.
+
+   Parameters
+   ----------
+   key : str
+       Unique identifier for the cache namespace. Used to prefix Redis keys.
+
+   Notes
+   -----
+   Requires the ``redis`` Python package to be installed.
+
+   Connection parameters are read from the following ``triton.knobs`` settings:
+
+   - ``knobs.cache.redis.host``
+   - ``knobs.cache.redis.port``
+   - ``knobs.cache.redis.key_format``
+
+   Examples
+   --------
+   .. code-block:: python
+
+       from triton.runtime import RedisRemoteCacheBackend
+
+       # Initialize the backend with a namespace key
+       cache = RedisRemoteCacheBackend(key="my_cache_key")
+
+       # Store data
+       cache.put("kernel.so", b"binary_data")
+
+       # Retrieve data
+       data = cache.get(["kernel.so"])

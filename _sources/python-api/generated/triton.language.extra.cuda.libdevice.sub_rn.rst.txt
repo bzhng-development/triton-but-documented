@@ -1,0 +1,52 @@
+sub_rn
+======
+
+.. currentmodule:: triton.language.extra.cuda.libdevice
+
+.. function:: sub_rn(arg0, arg1, _semantic=None)
+
+    Subtract two values with round-to-nearest rounding mode.
+
+    Parameters
+    ----------
+    arg0 : tl.tensor
+        First input tensor. Must be floating-point type (fp32 or fp64).
+    arg1 : tl.tensor
+        Second input tensor. Must be floating-point type (fp32 or fp64).
+    _semantic : optional
+        Internal parameter for Triton semantics. Do not set manually.
+
+    Returns
+    -------
+    result : tl.tensor
+        Tensor containing the element-wise difference ``arg0 - arg1`` with
+        round-to-nearest rounding.
+
+    Notes
+    -----
+    This function maps to CUDA libdevice functions:
+
+    - ``__nv_fsub_rn`` for fp32 inputs
+    - ``__nv_dsub_rn`` for fp64 inputs
+
+    The ``rn`` suffix indicates round-to-nearest rounding mode, which is the
+    default IEEE 754 rounding mode. Both inputs must have the same dtype.
+
+    This operation is pure (no side effects) and supports elementwise
+    broadcasting.
+
+    Examples
+    --------
+    .. code-block:: python
+
+        import triton
+        import triton.language as tl
+
+        @triton.jit
+        def kernel(x_ptr, y_ptr, out_ptr, BLOCK_SIZE: tl.constexpr):
+            pid = tl.program_id(0)
+            offsets = pid * BLOCK_SIZE + tl.arange(0, BLOCK_SIZE)
+            x = tl.load(x_ptr + offsets)
+            y = tl.load(y_ptr + offsets)
+            result = tl.extra.cuda.libdevice.sub_rn(x, y)
+            tl.store(out_ptr + offsets, result)

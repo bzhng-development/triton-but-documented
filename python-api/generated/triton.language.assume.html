@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>assume &mdash; Triton  documentation</title>
+  <title>triton.language.assume &mdash; Triton  documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=03e43079" />
       <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="../../_static/css/custom.css" />
@@ -18,7 +18,7 @@
     <script src="../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
-    <link rel="next" title="Parameters" href="triton.language.debug_barrier.html" />
+    <link rel="next" title="debug_barrier" href="triton.language.debug_barrier.html" />
     <link rel="prev" title="inline_asm_elementwise" href="triton.language.inline_asm_elementwise.html" /> 
 </head>
 
@@ -64,18 +64,14 @@
 <li class="toctree-l2"><a class="reference internal" href="../triton.language.html#iterators">Iterators</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../triton.language.html#inline-assembly">Inline Assembly</a></li>
 <li class="toctree-l2 current"><a class="reference internal" href="../triton.language.html#compiler-hint-ops">Compiler Hint Ops</a><ul class="current">
-<li class="toctree-l3 current"><a class="current reference internal" href="#">assume</a><ul>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">triton.language.assume</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="#triton.language.assume"><code class="docutils literal notranslate"><span class="pre">assume()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#parameters">Parameters</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#returns">Returns</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#notes">Notes</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#examples">Examples</a></li>
 </ul>
 </li>
-<li class="toctree-l3"><a class="reference internal" href="triton.language.debug_barrier.html"><code class="docutils literal notranslate"><span class="pre">triton.language.debug_barrier()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="triton.language.max_constancy.html"><code class="docutils literal notranslate"><span class="pre">triton.language.max_constancy()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="triton.language.max_contiguous.html"><code class="docutils literal notranslate"><span class="pre">triton.language.max_contiguous()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="triton.language.multiple_of.html"><code class="docutils literal notranslate"><span class="pre">triton.language.multiple_of()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.language.debug_barrier.html">debug_barrier</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.language.max_constancy.html">triton.language.max_constancy</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.language.max_contiguous.html">max_contiguous</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.language.multiple_of.html">triton.language.multiple_of</a></li>
 <li class="toctree-l3"><a class="reference internal" href="triton.language.map_elementwise.html">map_elementwise</a></li>
 </ul>
 </li>
@@ -85,6 +81,35 @@
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../triton.testing.html">triton.testing</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../triton-semantics.html">Triton Semantics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.language.extra.cuda.html">triton.language.extra.cuda</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.language.extra.cuda.libdevice.html">triton.language.extra.cuda.libdevice</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.runtime.html">triton.runtime</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.tools.html">triton.tools</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Gluon (Experimental) API</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.html">triton.experimental.gluon</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.html">triton.experimental.gluon.language</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.nvidia.ampere.html">triton.experimental.gluon.language.nvidia.ampere</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.nvidia.ampere.async_copy.html">triton.experimental.gluon.language.nvidia.ampere.async_copy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.nvidia.ampere.mbarrier.html">triton.experimental.gluon.language.nvidia.ampere.mbarrier</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.nvidia.hopper.html">triton.experimental.gluon.language.nvidia.hopper</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.nvidia.hopper.tma.html">triton.experimental.gluon.language.nvidia.hopper.tma</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.nvidia.hopper.mbarrier.html">triton.experimental.gluon.language.nvidia.hopper.mbarrier</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.nvidia.hopper.cluster.html">triton.experimental.gluon.language.nvidia.hopper.cluster</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.nvidia.blackwell.html">triton.experimental.gluon.language.nvidia.blackwell</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.nvidia.blackwell.tma.html">triton.experimental.gluon.language.nvidia.blackwell.tma</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.nvidia.blackwell.clc.html">triton.experimental.gluon.language.nvidia.blackwell.clc</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.amd.html">triton.experimental.gluon.language.amd</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.amd.gfx1250.html">triton.experimental.gluon.language.amd.gfx1250</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.amd.gfx1250.async_copy.html">triton.experimental.gluon.language.amd.gfx1250.async_copy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.amd.gfx1250.mbarrier.html">triton.experimental.gluon.language.amd.gfx1250.mbarrier</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.amd.gfx1250.cluster.html">triton.experimental.gluon.language.amd.gfx1250.cluster</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.amd.gfx1250.tdm.html">triton.experimental.gluon.language.amd.gfx1250.tdm</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.amd.cdna3.html">triton.experimental.gluon.language.amd.cdna3</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.amd.cdna4.html">triton.experimental.gluon.language.amd.cdna4</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.amd.rdna3.html">triton.experimental.gluon.language.amd.rdna3</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.amd.rdna4.html">triton.experimental.gluon.language.amd.rdna4</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Triton MLIR Dialects</span></p>
 <ul>
@@ -112,7 +137,7 @@
   <ul class="wy-breadcrumbs">
       <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
           <li class="breadcrumb-item"><a href="../triton.language.html">triton.language</a></li>
-      <li class="breadcrumb-item active">assume</li>
+      <li class="breadcrumb-item active">triton.language.assume</li>
       <li class="wy-breadcrumbs-aside">
             <a href="../../_sources/python-api/generated/triton.language.assume.rst.txt" rel="nofollow"> View page source</a>
       </li>
@@ -122,37 +147,38 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <section id="assume">
-<h1>assume<a class="headerlink" href="#assume" title="Link to this heading">¶</a></h1>
+  <section id="triton-language-assume">
+<h1>triton.language.assume<a class="headerlink" href="#triton-language-assume" title="Link to this heading">¶</a></h1>
 <dl class="py function">
 <dt class="sig sig-object py" id="triton.language.assume">
 <span class="sig-prename descclassname"><span class="pre">triton.language.</span></span><span class="sig-name descname"><span class="pre">assume</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cond</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">_semantic</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#triton.language.assume" title="Link to this definition">¶</a></dt>
-<dd><p>Allow compiler to assume the <code class="code docutils literal notranslate"><span class="pre">cond</span></code> is True.</p>
-</dd></dl>
-
-<p>Allow the compiler to assume a condition is true, enabling downstream optimizations.</p>
+<dd><p>Allow the compiler to assume a condition is true.</p>
+<p>This function inserts a compiler hint that the given condition <code class="code docutils literal notranslate"><span class="pre">cond</span></code>
+always evaluates to true at runtime. This can enable additional optimizations
+in the generated GPU code by eliminating unreachable control flow paths.</p>
 <section id="parameters">
 <h2>Parameters<a class="headerlink" href="#parameters" title="Link to this heading">¶</a></h2>
 <dl class="simple">
-<dt>cond<span class="classifier">tensor</span></dt><dd><p>The condition to assume is true. Must be a boolean tensor.</p>
+<dt>cond<span class="classifier">tensor or bool</span></dt><dd><p>The condition to assume is true. Must evaluate to a boolean value.</p>
+</dd>
+<dt>_semantic<span class="classifier">optional</span></dt><dd><p>Internal parameter for semantic analysis. Do not set manually.</p>
 </dd>
 </dl>
 </section>
 <section id="returns">
 <h2>Returns<a class="headerlink" href="#returns" title="Link to this heading">¶</a></h2>
 <dl class="simple">
-<dt>None</dt><dd><p>This function returns no value; it acts as a compiler hint.</p>
+<dt>None</dt><dd><p>This function has no runtime effect and returns nothing. It only
+provides a hint to the compiler.</p>
 </dd>
 </dl>
 </section>
 <section id="notes">
 <h2>Notes<a class="headerlink" href="#notes" title="Link to this heading">¶</a></h2>
-<p>This operation inserts an LLVM <code class="docutils literal notranslate"><span class="pre">assume</span></code> intrinsic into the generated IR.
-It is useful for guiding the compiler’s control flow analysis and dead code
-elimination when the programmer knows a specific predicate holds at a
-program point.</p>
-<p>If <code class="docutils literal notranslate"><span class="pre">cond</span></code> is a scalar, it is automatically converted to a tensor.
-The behavior is undefined if the assumption is violated at runtime.</p>
+<p>This is equivalent to LLVM’s <code class="code docutils literal notranslate"><span class="pre">assume</span></code> intrinsic. The condition is
+not checked at runtime; if the assumption is violated, behavior is
+undefined. Use only when you can guarantee the condition holds.</p>
+<p>This function must be called within a <code class="code docutils literal notranslate"><span class="pre">&#64;triton.jit</span></code> decorated kernel.</p>
 </section>
 <section id="examples">
 <h2>Examples<a class="headerlink" href="#examples" title="Link to this heading">¶</a></h2>
@@ -160,16 +186,19 @@ The behavior is undefined if the assumption is violated at runtime.</p>
 <span class="kn">import</span><span class="w"> </span><span class="nn">triton.language</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">tl</span>
 
 <span class="nd">@triton</span><span class="o">.</span><span class="n">jit</span>
-<span class="k">def</span><span class="w"> </span><span class="nf">kernel</span><span class="p">(</span><span class="n">ptr</span><span class="p">,</span> <span class="n">n</span><span class="p">,</span> <span class="n">BLOCK_SIZE</span><span class="p">:</span> <span class="n">tl</span><span class="o">.</span><span class="n">constexpr</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">kernel</span><span class="p">(</span><span class="n">ptr</span><span class="p">,</span> <span class="n">n</span><span class="p">,</span> <span class="n">BLOCK</span><span class="p">:</span> <span class="n">tl</span><span class="o">.</span><span class="n">constexpr</span><span class="p">):</span>
     <span class="n">pid</span> <span class="o">=</span> <span class="n">tl</span><span class="o">.</span><span class="n">program_id</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
-    <span class="n">offset</span> <span class="o">=</span> <span class="n">pid</span> <span class="o">*</span> <span class="n">BLOCK_SIZE</span>
-    <span class="c1"># Assume offset is always less than n to enable loop hoisting</span>
-    <span class="n">tl</span><span class="o">.</span><span class="n">assume</span><span class="p">(</span><span class="n">offset</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">)</span>
-    <span class="n">data</span> <span class="o">=</span> <span class="n">tl</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">ptr</span> <span class="o">+</span> <span class="n">offset</span><span class="p">)</span>
-    <span class="n">tl</span><span class="o">.</span><span class="n">store</span><span class="p">(</span><span class="n">ptr</span> <span class="o">+</span> <span class="n">offset</span><span class="p">,</span> <span class="n">data</span> <span class="o">+</span> <span class="mf">1.0</span><span class="p">)</span>
+    <span class="n">offset</span> <span class="o">=</span> <span class="n">pid</span> <span class="o">*</span> <span class="n">BLOCK</span>
+    <span class="c1"># Assume offset is always within bounds</span>
+    <span class="n">tlassume</span><span class="p">(</span><span class="n">offset</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">)</span>
+    <span class="c1"># Compiler can optimize knowing offset &lt; n is true</span>
+    <span class="n">val</span> <span class="o">=</span> <span class="n">tl</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">ptr</span> <span class="o">+</span> <span class="n">offset</span><span class="p">)</span>
+    <span class="n">tl</span><span class="o">.</span><span class="n">store</span><span class="p">(</span><span class="n">ptr</span> <span class="o">+</span> <span class="n">offset</span><span class="p">,</span> <span class="n">val</span> <span class="o">*</span> <span class="mi">2</span><span class="p">)</span>
 </pre></div>
 </div>
 </section>
+</dd></dl>
+
 </section>
 
 
@@ -177,7 +206,7 @@ The behavior is undefined if the assumption is violated at runtime.</p>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
         <a href="triton.language.inline_asm_elementwise.html" class="btn btn-neutral float-left" title="inline_asm_elementwise" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="triton.language.debug_barrier.html" class="btn btn-neutral float-right" title="Parameters" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="triton.language.debug_barrier.html" class="btn btn-neutral float-right" title="debug_barrier" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>

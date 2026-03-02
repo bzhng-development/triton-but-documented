@@ -1,0 +1,45 @@
+async_copy_shared_to_global
+===========================
+
+.. py:function:: async_copy_shared_to_global(tensor_desc, coord, src, _semantic=None)
+
+    Asynchronously copy data from shared memory to global memory using Tensor Memory Accelerator (TMA).
+
+    This operation initiates a non-blocking copy from a shared memory allocation to a global memory tensor described by a TMA descriptor. It is specific to NVIDIA Hopper architecture.
+
+    Parameters
+    ----------
+    tensor_desc : tensor_descriptor
+        The TMA tensor descriptor defining the global memory destination layout and address.
+    coord : tensor or tuple of int
+        Coordinates specifying the offset in the global tensor where the data will be written.
+        Converted to IR values during compilation.
+    src : shared_memory_descriptor
+        The shared memory descriptor containing the source data to copy.
+
+    Returns
+    -------
+    None
+        This operation performs a side-effect and does not return a value.
+
+    Notes
+    -----
+    This function is available only on NVIDIA Hopper GPUs (compute capability 90+).
+    The copy is asynchronous; use barriers or wait operations to ensure completion before
+    accessing the global memory data.
+    Alignment checks are performed if the ``enable_iisan`` builder option is enabled.
+    Ensure the shared memory layout and global tensor descriptor are compatible for TMA operations.
+
+    Examples
+    --------
+    .. code-block:: python
+
+        import triton.experimental.gluon as gluon
+        import triton.experimental.gluon.language as ttgl
+
+        @gluon.jit
+        def kernel(desc, smem, coord):
+            # Assume desc is a TMA tensor_descriptor and smem is a shared_memory_descriptor
+            ttgl.nvidia.hopper.tma.async_copy_shared_to_global(desc, coord, smem)
+            # Insert barrier to wait for copy completion if needed
+            ttgl.barrier()

@@ -1,0 +1,45 @@
+fdim
+====
+
+fdim(arg0, arg1, _semantic=None)
+
+    Returns the positive difference between two arguments.
+
+    Computes :code:`max(arg0 - arg1, 0)` element-wise.
+
+    Parameters
+    ----------
+    arg0 : tl.tensor
+        First input tensor. Must be floating-point type (fp32 or fp64).
+    arg1 : tl.tensor
+        Second input tensor. Must be floating-point type (fp32 or fp64).
+        Must have the same dtype as arg0.
+    _semantic : optional
+        Internal parameter for semantic propagation. Do not set manually.
+
+    Returns
+    -------
+    result : tl.tensor
+        Tensor of the positive differences. Has the same dtype as the inputs.
+
+    Notes
+    -----
+    This function is an extern wrapper for CUDA libdevice functions:
+
+    - :code:`__nv_fdimf` for fp32 inputs
+    - :code:`__nv_fdim` for fp64 inputs
+
+    The function is pure (no side effects) and supports element-wise operations
+    on tensors.
+
+    Examples
+    --------
+    .. code-block:: python
+
+        @triton.jit
+        def kernel(x_ptr, y_ptr, out_ptr, BLOCK: tl.constexpr):
+            x = tl.load(x_ptr + tl.arange(0, BLOCK))
+            y = tl.load(y_ptr + tl.arange(0, BLOCK))
+            # Computes max(x - y, 0) for each element
+            result = tl.extra.cuda.libdevice.fdim(x, y)
+            tl.store(out_ptr + tl.arange(0, BLOCK), result)

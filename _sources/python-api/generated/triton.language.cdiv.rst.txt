@@ -1,5 +1,5 @@
-cdiv
-====
+triton.language.cdiv
+====================
 
 .. currentmodule:: triton.language
 
@@ -7,47 +7,37 @@ cdiv
 
    Computes the ceiling division of ``x`` by ``div``.
 
-   Equivalent to ``(x + div - 1) // div`` for integer arithmetic, commonly used
-   to calculate grid dimensions or loop bounds in GPU kernels.
-
    Parameters
    ----------
    x : Block
-       The dividend. Can be a scalar or a tensor (Block).
+       The input number or tensor.
    div : Block
-       The divisor. Can be a scalar or a tensor (Block). Must be non-zero.
+       The divisor.
 
    Returns
    -------
    Block
-       The result of the ceiling division. The type matches the input type.
+       The ceiling division result ``ceil(x / div)``.
 
    Notes
    -----
-   This function is decorated with ``@core._tensor_member_fn``, allowing it to
-   be called as a method on tensor objects: ``x.cdiv(div)``.
-
-   The operation is performed element-wise if inputs are tensors.
+   This function computes ``(x + (div - 1)) // div``, which is equivalent to
+   ceiling division for positive integers. It can also be called as a member
+   function on :py:class:`tensor`, as ``x.cdiv(...)`` instead of
+   ``cdiv(x, ...)``.
 
    Examples
    --------
-   >>> import triton
-   >>> import triton.language as tl
-   >>>
-   >>> @triton.jit
-   ... def kernel(x_ptr, div_ptr, out_ptr, BLOCK_SIZE: tl.constexpr):
-   ...     pid = tl.program_id(0)
-   ...     x = tl.load(x_ptr + pid)
-   ...     div = tl.load(div_ptr + pid)
-   ...     # Compute ceiling division
-   ...     result = tl.cdiv(x, div)
-   ...     tl.store(out_ptr + pid, result)
-   ...
-   >>> # Using the member function syntax
-   >>> @triton.jit
-   ... def kernel_method(x_ptr, div_ptr, out_ptr, BLOCK_SIZE: tl.constexpr):
-   ...     pid = tl.program_id(0)
-   ...     x = tl.load(x_ptr + pid)
-   ...     div = tl.load(div_ptr + pid)
-   ...     result = x.cdiv(div)  # Equivalent to tl.cdiv(x, div)
-   ...     tl.store(out_ptr + pid, result)
+   .. code-block:: python
+
+      import triton.language as tl
+
+      # Ceiling division of scalar values
+      result = tl.cdiv(10, 3)  # Returns 4
+
+      # Ceiling division on tensors
+      x = tl.arange(0, 16)
+      result = tl.cdiv(x, 4)  # Returns [0, 1, 1, 1, 1, 2, 2, 2, 2, 3, 3, 3, 3, 4, 4, 4]
+
+      # Using member function syntax
+      result = x.cdiv(4)  # Equivalent to tl.cdiv(x, 4)

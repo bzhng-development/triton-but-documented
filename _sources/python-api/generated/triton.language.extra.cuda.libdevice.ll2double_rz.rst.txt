@@ -1,0 +1,45 @@
+ll2double_rz
+============
+
+.. currentmodule:: triton.language.extra.cuda.libdevice
+
+.. function:: ll2double_rz(arg0, _semantic=None)
+
+   Convert a 64-bit signed integer to double-precision floating point with round toward zero.
+
+   Parameters
+   ----------
+   arg0 : tl.int64
+       Input 64-bit signed integer value to convert.
+   _semantic : optional
+       Internal semantic argument; do not set directly.
+
+   Returns
+   -------
+   tl.fp64
+       Double-precision floating point value representing the input integer,
+       rounded toward zero.
+
+   Notes
+   -----
+   This function wraps the CUDA libdevice intrinsic ``__nv_ll2double_rz``.
+   The rounding mode is round toward zero (rz), which truncates any fractional
+   part when converting from integer to floating point representation.
+
+   This is a pure function with no side effects. The conversion is exact for
+   all int64 values that can be represented exactly in fp64 format.
+
+   Examples
+   --------
+   .. code-block:: python
+
+      import triton
+      import triton.language as tl
+
+      @triton.jit
+      def kernel(ptr, n):
+          pid = tl.program_id(0)
+          offset = pid * 8
+          int_val = tl.load(ptr + offset).to(tl.int64)
+          float_val = tl.extra.cuda.libdevice.ll2double_rz(int_val)
+          tl.store(ptr + offset + 4, float_val)

@@ -1,0 +1,55 @@
+convert_layout
+==============
+
+Convert a tensor to a different distributed layout.
+
+.. code-block:: python
+
+    convert_layout(value, layout, assert_trivial=False)
+
+Parameters
+----------
+value : tensor
+    The input tensor to convert.
+layout : DistributedLayout
+    The target distributed layout for the output tensor.
+assert_trivial : bool, optional
+    If True, asserts that the conversion is trivial (no data movement required).
+    Default is False.
+
+Returns
+-------
+tensor
+    The input tensor converted to the specified layout.
+
+Notes
+-----
+This operation may insert data movement instructions if the source and target
+layouts differ. Setting ``assert_trivial=True`` will cause compilation to fail
+if the conversion requires actual data movement rather than just a type change.
+
+The ``_semantic`` parameter is internal and should not be provided by users;
+it is automatically injected when using ``@gluon.jit`` decorated kernels.
+
+Examples
+--------
+.. code-block:: python
+
+    import triton.experimental.gluon as gluon
+    import triton.experimental.gluon.language as ttgl
+    from triton.experimental.gluon.language import BlockedLayout
+
+    @gluon.jit
+    def kernel(x_ptr, y_ptr, BLOCK_SIZE: tl.constexpr):
+        pid = ttgl.program_id(0)
+        offs = ttgl.arange(0, BLOCK_SIZE)
+        mask = offs < BLOCK_SIZE
+        x = ttgl.load(x_ptr + pid * BLOCK_SIZE + offs, mask=mask)
+        
+        # Convert from default layout to blocked layout
+        blocked_layout = BlockedLayout([1], [BLOCK_SIZE], [32], [0])
+        x_blocked = ttgl.convert_layout(x, blocked_layout)
+        
+        # Use converted tensor in computation
+        y = x_blocked * 2.0
+        ttgl.store(y_ptr + pid * BLOCK_SIZE + offs, y, mask=mask)

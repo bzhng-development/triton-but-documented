@@ -1,42 +1,37 @@
-.. py:function:: triton.language.make_block_ptr(base, shape, strides, offsets, block_shape, order)
+make_block_ptr
+==============
 
-   Creates a pointer to a rectangular block within a parent tensor, enabling
-   efficient block-wise memory access (e.g., via ``tl.load`` or ``tl.store``).
+.. function:: triton.language.make_block_ptr(base, shape, strides, offsets, block_shape, order)
 
-   This function is typically used to define block pointers for matrices or
-   higher-dimensional tensors, allowing the compiler to generate optimized
-   memory instructions (such as NVIDIA's TMA) when supported.
+   Returns a pointer to a block in a parent tensor.
 
    Parameters
    ----------
    base : tensor
-      The base pointer to the parent tensor in global memory.
-   shape : sequence of int or constexpr
-      The shape of the parent tensor (e.g., ``[M, N]``).
-   strides : sequence of int or constexpr
-      The strides of the parent tensor, defining the byte offset between
-      consecutive elements along each dimension.
-   offsets : sequence of int or constexpr
-      The starting coordinates (offsets) of the block within the parent tensor.
-   block_shape : sequence of int or constexpr
-      The shape of the block to be loaded or stored (e.g., ``[BLOCK_M, BLOCK_N]``).
-   order : sequence of int
-      The dimension order (layout) of the original data format, specifying how
-      dimensions map to memory strides (e.g., ``[0, 1]`` for row-major).
+       The base pointer to the parent tensor.
+   shape : tuple of ints
+       The shape of the parent tensor.
+   strides : tuple of ints
+       The strides of the parent tensor.
+   offsets : tuple of ints
+       The offsets to the block.
+   block_shape : tuple of ints
+       The shape of the block.
+   order : tuple of ints
+       The order of the original data format (e.g., row-major or column-major).
 
    Returns
    -------
    tensor_descriptor
-      A block pointer object that can be passed to ``tl.load``, ``tl.store``,
-      or advanced with ``tl.advance``.
+       A pointer to the specified block in the parent tensor.
 
    Notes
    -----
-   The returned pointer is immutable. To move the pointer to a different block,
-   use ``tl.advance`` and assign the result to a new variable.
+   Block pointers enable efficient memory access patterns for tiled operations.
+   They are commonly used with :func:`triton.language.load` and :func:`triton.language.store`
+   when the ``pointer`` argument is a block pointer.
 
-   Block pointers are required for certain hardware-accelerated memory operations
-   on modern GPU architectures (e.g., Hopper TMA units).
+   Use :func:`triton.language.advance` to move the block pointer to different positions.
 
    Examples
    --------
@@ -46,29 +41,14 @@
       import triton.language as tl
 
       @triton.jit
-      def copy_kernel(in_ptr, out_ptr, M, N, BLOCK_M: tl.constexpr, BLOCK_N: tl.constexpr):
-          # Create a block pointer for the input matrix
-          in_block = tl.make_block_ptr(
-              base=in_ptr,
-              shape=[M, N],
-              strides=[N, 1],
-              offsets=[0, 0],
-              block_shape=[BLOCK_M, BLOCK_N],
-              order=[0, 1]
+      def kernel(ptr, M, N, BLOCK_M: tl.constexpr, BLOCK_N: tl.constexpr):
+          block_ptr = tl.make_block_ptr(
+              base=ptr,
+              shape=(M, N),
+              strides=(N, 1),
+              offsets=(0, 0),
+              block_shape=(BLOCK_M, BLOCK_N),
+              order=(1, 0)
           )
-
-          # Create a block pointer for the output matrix
-          out_block = tl.make_block_ptr(
-              base=out_ptr,
-              shape=[M, N],
-              strides=[N, 1],
-              offsets=[0, 0],
-              block_shape=[BLOCK_M, BLOCK_N],
-              order=[0, 1]
-          )
-
-          # Load the block
-          data = tl.load(in_block)
-
-          # Store the block
-          tl.store(out_block, data)
+          block = tl.load(block_ptr)
+          # ... process block ...

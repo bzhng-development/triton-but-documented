@@ -1,52 +1,51 @@
-.. py:function:: triton.language.atomic_or(pointer, val, mask=None, sem=None, scope=None)
+atomic_or
+=========
 
-   Performs an atomic logical OR at the memory location specified by ``pointer``.
+.. currentmodule:: triton.language
 
-   Returns the data stored at ``pointer`` before the atomic operation.
+.. function:: atomic_or(pointer, val, mask=None, sem=None, scope=None)
 
-   Parameters
-   ----------
-   pointer : tl.pointer_type
-       The memory locations to operate on. Must be a block of pointer type.
-   val : tl.tensor
-       The values with which to perform the atomic operation. Must have the same
-       dtype as ``pointer.dtype.element_ty``.
-   mask : tl.tensor, optional
-       A boolean tensor indicating which elements to update. If ``mask[idx]`` is
-       false, the atomic operation is skipped for that index.
-   sem : str, optional
-       Specifies the memory semantics for the operation. Acceptable values are
-       ``"acquire"``, ``"release"``, ``"acq_rel"``, and ``"relaxed"``. Defaults
-       to ``"acq_rel"``.
-   scope : str, optional
-       Defines the scope of threads that observe the synchronizing effect of the
-       atomic operation. Acceptable values are ``"gpu"``, ``"cta"``, and
-       ``"sys"``. Defaults to ``"gpu"``.
+    Performs an atomic logical OR at the memory location specified by ``pointer``.
 
-   Returns
-   -------
-   tl.tensor
-       A tensor containing the values stored at ``pointer`` before the atomic
-       operation was performed.
+    Returns the data stored at ``pointer`` before the atomic operation.
 
-   Notes
-   -----
-   This function can also be called as a member function on ``tensor`` as
-   ``x.atomic_or(...)`` instead of ``atomic_or(x, ...)``.
+    Parameters
+    ----------
+    pointer : triton.PointerType or block of triton.PointerType
+        The memory locations to operate on.
+    val : block of dtype=pointer.dtype.element_ty
+        The values with which to perform the atomic operation.
+    mask : block of triton.int1, optional
+        If ``mask[idx]`` is false, do not perform the atomic operation at
+        ``pointer[idx]``.
+    sem : str, optional
+        Specifies the memory semantics for the operation. Acceptable values are
+        ``"acquire"``, ``"release"``, ``"acq_rel"`` (ACQUIRE_RELEASE), and
+        ``"relaxed"``. If not provided, defaults to ``"acq_rel"``.
+    scope : str, optional
+        Defines the scope of threads that observe the synchronizing effect of
+        the atomic operation. Acceptable values are ``"gpu"`` (default),
+        ``"cta"`` (cooperative thread array/thread block), or ``"sys"``
+        (SYSTEM).
 
-   The operation performs a bitwise OR between the value at ``pointer`` and
-   ``val``, storing the result back to ``pointer`` atomically.
+    Returns
+    -------
+    block
+        The data stored at ``pointer`` before the atomic operation.
 
-   Examples
-   --------
-   .. code-block:: python
+    Notes
+    -----
+    This function can also be called as a member function on :py:class:`tensor`,
+    as ``x.atomic_or(...)`` instead of ``atomic_or(x, ...)``.
 
-      import triton
-      import triton.language as tl
+    The atomic OR operation computes ``*pointer = *pointer | val`` atomically.
 
-      @triton.jit
-      def kernel(ptr, val, BLOCK_SIZE: tl.constexpr):
-          pid = tl.program_id(0)
-          offset = pid * BLOCK_SIZE + tl.arange(0, BLOCK_SIZE)
-          old_val = tl.atomic_or(ptr + offset, val)
-          # old_val contains the value before the OR operation
+    Examples
+    --------
+    .. code-block:: python
+
+        @triton.jit
+        def kernel(ptr, val, BLOCK_SIZE: tl.constexpr):
+            pid = tl.program_id(0)
+            offset = pid * BLOCK_SIZE + tl.arange(0, BLOCK_SIZE)
+            old_val = tl.atomic_or(ptr + offset, val)

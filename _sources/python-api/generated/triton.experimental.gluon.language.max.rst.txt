@@ -1,0 +1,80 @@
+ttgl.max
+========
+
+.. currentmodule:: triton.experimental.gluon.language
+
+.. function:: max(input, axis=None, return_indices=False, return_indices_tie_break_left=True, keep_dims=False)
+
+   Returns the maximum value of all elements in the input tensor along the specified axis.
+
+   The reduction operation is associative and commutative. For floating-point inputs with bitwidth less than 32, values are promoted to float32 before reduction. For integer inputs with bitwidth less than 32, values are promoted to int32.
+
+   Parameters
+   ----------
+   input : Tensor
+       The input tensor containing values to reduce.
+   axis : int, optional
+       The dimension along which the reduction should be performed. If None, reduces all dimensions.
+   return_indices : bool, optional
+       If True, returns both the maximum value and the index corresponding to the maximum value. Default is False.
+   return_indices_tie_break_left : bool, optional
+       If True, in case of a tie (multiple elements have the same maximum value), returns the left-most index for values that aren't NaN. Only used when return_indices is True. Default is True.
+   keep_dims : bool, optional
+       If True, keeps the reduced dimensions with length 1 in the output shape. Default is False.
+
+   Returns
+   -------
+   output : Tensor
+       The maximum values. If return_indices is True, returns a tuple of (max_values, max_indices).
+
+   Notes
+   -----
+   This function can also be called as a member function on :py:class:`tensor`, as ``x.max(...)`` instead of ``max(x, ...)``.
+
+   bfloat16 inputs are automatically promoted to float32 before reduction. For other floating-point types with bitwidth less than 32, values are promoted to float32. For integer types with bitwidth less than 32, values are promoted to int32.
+
+   When return_indices is True, the tie-breaking behavior is controlled by return_indices_tie_break_left. When True, the left-most index is returned in case of ties. When False, tie-breaking is implementation-dependent and may be faster.
+
+   Examples
+   --------
+   .. code-block:: python
+
+      import triton.experimental.gluon as gluon
+      import triton.experimental.gluon.language as ttgl
+
+      @gluon.jit
+      def kernel(x_ptr, output_ptr, n: ttgl.constexpr):
+          pid = ttgl.program_id(0)
+          x = ttgl.load(x_ptr + pid * n)
+          
+          # Compute maximum along axis 0
+          max_val = ttgl.max(x, axis=0)
+          ttgl.store(output_ptr + pid, max_val)
+
+      # Compute maximum with indices
+      @gluon.jit
+      def kernel_with_indices(x_ptr, output_ptr, indices_ptr, n: ttgl.constexpr):
+          pid = ttgl.program_id(0)
+          x = ttgl.load(x_ptr + pid * n)
+          
+          max_val, max_idx = ttgl.max(x, axis=0, return_indices=True)
+          ttgl.store(output_ptr + pid, max_val)
+          ttgl.store(indices_ptr + pid, max_idx)
+
+      # Keep reduced dimensions
+      @gluon.jit
+      def kernel_keep_dims(x_ptr, output_ptr, n: ttgl.constexpr):
+          pid = ttgl.program_id(0)
+          x = ttgl.load(x_ptr + pid * n)
+          
+          max_val = ttgl.max(x, axis=0, keep_dims=True)
+          ttgl.store(output_ptr + pid * n, max_val)
+
+      # Member function syntax
+      @gluon.jit
+      def kernel_member_fn(x_ptr, output_ptr, n: ttgl.constexpr):
+          pid = ttgl.program_id(0)
+          x = ttgl.load(x_ptr + pid * n)
+          
+          max_val = x.max(axis=0)
+          ttgl.store(output_ptr + pid, max_val)

@@ -1,60 +1,75 @@
-.. py:class:: pointer_type(element_ty, address_space=1, const=False)
+pointer_type
+============
 
-   Represents a pointer to a specific data type in a given address space.
+.. class:: triton.language.pointer_type(element_ty, address_space=1, const=False)
 
-   This class is used to define pointer types for memory operations in Triton kernels.
-   It encodes the element type, the GPU address space, and whether the pointer
-   targets constant (read-only) memory.
+   Represents a pointer type in Triton IR.
+
+   Pointer types are used to describe memory addresses in Triton kernels. They
+   encode the element type, address space, and optional const qualifier.
 
    Parameters
    ----------
    element_ty : dtype
-       The data type of the element pointed to (e.g., ``tl.int32``, ``tl.float16``).
+       The data type of the pointed-to element. Must be a :py:class:`dtype`
+       instance (e.g., :py:data:`tl.int32`, :py:data:`tl.float32`).
    address_space : int, optional
-       The address space identifier. Default is 1 (global memory).
+       The address space of the pointer. Default is 1 (global memory).
+       Different address spaces correspond to different memory regions
+       (e.g., global, shared, constant memory).
    const : bool, optional
-       If True, the pointer points to constant data and cannot be used with
-       store operations. Default is False.
+       Whether the pointer points to constant data. Default is False.
+       Const pointers cannot be used with :py:func:`tl.store` operations.
 
    Attributes
    ----------
    element_ty : dtype
-       The scalar data type of the pointed-to value.
+       The element type of the pointer.
    address_space : int
-       The numeric identifier for the memory address space.
+       The address space number.
    const : bool
-       Whether the pointer is read-only.
+       Whether this is a const pointer.
    name : str
-       String representation of the type (e.g., ``pointer<int32>``).
+       String representation (e.g., ``pointer<int32>`` or
+       ``const_pointer<float32>``).
 
    Methods
    -------
    to_ir(builder)
-       Converts the frontend type to the corresponding MLIR IR type.
+       Convert to LLVM IR pointer type.
    is_ptr()
-       Returns True (identifies this type as a pointer).
+       Returns True (identifies as pointer type).
    is_const()
-       Returns True if the pointer is constant.
+       Returns whether the pointer is const.
+   mangle()
+       Returns the mangled name for code generation.
 
    Notes
    -----
-   Pointer types are strictly typed; a ``const_pointer`` cannot be passed to
-   functions expecting a mutable pointer, and vice versa. Address spaces are
-   hardware-specific (e.g., 1 for global, 3 for shared on NVIDIA GPUs).
+   Pointer types are fundamental for memory operations in Triton. The
+   :py:data:`address_space` parameter typically follows GPU conventions where
+   1 represents global memory. Const pointers provide type safety by preventing
+   stores through the pointer.
+
+   Pointer types can be compared for equality, which checks element type,
+   address space, and const qualifier.
 
    Examples
    --------
-   Create a pointer type to 32-bit integers in global memory:
+   >>> import triton.language as tl
+   >>> ptr_ty = tl.pointer_type(tl.int32)
+   >>> print(ptr_ty)
+   pointer<int32>
+   >>> const_ptr_ty = tl.pointer_type(tl.float32, const=True)
+   >>> print(const_ptr_ty)
+   const_pointer<float32>
+   >>> ptr_ty.is_ptr()
+   True
+   >>> const_ptr_ty.is_const()
+   True
 
-   .. code-block:: python
-
-      import triton.language as tl
-
-      # Define a pointer to int32 in address space 1 (global)
-      ptr_ty = tl.pointer_type(tl.int32, address_space=1)
-
-      # Define a constant pointer to float16
-      const_ptr_ty = tl.pointer_type(tl.float16, const=True)
-
-      print(ptr_ty)       # Output: pointer<int32>
-      print(const_ptr_ty) # Output: const_pointer<float16>
+   See Also
+   --------
+   triton.language.dtype : Base data type class.
+   triton.language.load : Load from pointer.
+   triton.language.store : Store to pointer.

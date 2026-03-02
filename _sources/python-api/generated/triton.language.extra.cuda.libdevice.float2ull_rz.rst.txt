@@ -1,0 +1,49 @@
+float2ull_rz
+============
+
+.. currentmodule:: triton.language.extra.cuda.libdevice
+
+.. function:: float2ull_rz(arg0, _semantic=None)
+
+   Convert a 32-bit floating-point value to an unsigned 64-bit integer using round-towards-zero.
+
+   Parameters
+   ----------
+   arg0 : tl.tensor
+       Input tensor of 32-bit floating-point values (``tl.float32``).
+
+   Returns
+   -------
+   tl.tensor
+       Tensor of unsigned 64-bit integers (``tl.int64``).
+
+   Notes
+   -----
+   This function wraps the CUDA libdevice intrinsic ``__nv_float2ull_rz``. The conversion uses
+   round-towards-zero (RTZ) rounding mode, truncating the fractional part of the input.
+
+   Behavior is undefined for:
+
+   - Negative values (result is implementation-defined)
+   - NaN inputs
+   - Infinity inputs
+   - Values outside the representable range of uint64
+
+   This operation is pure and element-wise.
+
+   Examples
+   --------
+   .. code-block:: python
+
+      import triton
+      import triton.language as tl
+      from triton.language.extra.cuda import libdevice
+
+      @triton.jit
+      def kernel(x_ptr, out_ptr, BLOCK: tl.constexpr):
+          pid = tl.program_id(0)
+          offsets = pid * BLOCK + tl.arange(0, BLOCK)
+          x = tl.load(x_ptr + offsets)
+          # Convert float32 to uint64 with round-towards-zero
+          out = libdevice.float2ull_rz(x)
+          tl.store(out_ptr + offsets, out)

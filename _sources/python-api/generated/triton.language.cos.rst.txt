@@ -1,5 +1,5 @@
-cos
-===
+triton.language.cos
+===================
 
 .. currentmodule:: triton.language
 
@@ -9,21 +9,19 @@ cos
 
    Parameters
    ----------
-   x : Block
+   x : tl.tensor
        The input tensor. Must be a floating-point type (:code:`fp32` or :code:`fp64`).
 
    Returns
    -------
-   Block
-       A tensor containing the cosine of each element in :code:`x`.
+   tl.tensor
+       A tensor containing the cosine of each element in :code:`x`. The output has the same shape and dtype as the input.
 
    Notes
    -----
-   This function can also be called as a member function on :py:class:`tensor`,
-   as :code:`x.cos()` instead of :code:`tl.cos(x)`.
+   This function can also be called as a member function on :py:class:`tensor`, as :code:`x.cos()` instead of :code:`tl.cos(x)`.
 
-   The operation is only supported for floating-point data types. Passing integer
-   types will result in a compilation error.
+   Supported dtypes are :code:`fp32` and :code:`fp64`. Passing other dtypes will result in a compilation error.
 
    Examples
    --------
@@ -31,21 +29,18 @@ cos
 
       import triton
       import triton.language as tl
-      import torch
 
       @triton.jit
-      def cosine_kernel(x_ptr, out_ptr, n_elements, BLOCK_SIZE: tl.constexpr):
-          pid = tl.program_id(axis=0)
-          block_start = pid * BLOCK_SIZE
-          offsets = block_start + tl.arange(0, BLOCK_SIZE)
-          mask = offsets < n_elements
-          x = tl.load(x_ptr + offsets, mask=mask)
-          out = tl.cos(x)
-          tl.store(out_ptr + offsets, out, mask=mask)
+      def cosine_kernel(x_ptr, y_ptr, BLOCK_SIZE: tl.constexpr):
+          offsets = tl.arange(0, BLOCK_SIZE)
+          x = tl.load(x_ptr + offsets)
+          y = tl.cos(x)
+          tl.store(y_ptr + offsets, y)
 
-      # Example usage
-      n_elements = 1024
-      x = torch.linspace(0, 2 * torch.pi, n_elements, device="cuda")
-      out = torch.empty_like(x)
-      grid = lambda meta: (triton.cdiv(n_elements, meta["BLOCK_SIZE"]),)
-      cosine_kernel[grid](x, out, n_elements, BLOCK_SIZE=128)
+      # Or using the member function syntax:
+      @triton.jit
+      def cosine_kernel_member(x_ptr, y_ptr, BLOCK_SIZE: tl.constexpr):
+          offsets = tl.arange(0, BLOCK_SIZE)
+          x = tl.load(x_ptr + offsets)
+          y = x.cos()
+          tl.store(y_ptr + offsets, y)

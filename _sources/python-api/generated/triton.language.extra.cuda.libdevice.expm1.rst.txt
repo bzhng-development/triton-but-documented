@@ -1,0 +1,41 @@
+expm1(arg0, _semantic=None)
+===========================
+
+Compute :math:`e^{arg0} - 1` element-wise.
+
+Parameters
+----------
+arg0 : tensor
+    Input tensor of floating-point values. Supports ``fp32`` and ``fp64`` dtypes.
+
+Returns
+-------
+tensor
+    Tensor of the same shape as :code:`arg0` containing :math:`e^{arg0} - 1`.
+    Return dtype matches input dtype.
+
+Notes
+-----
+This function provides better numerical accuracy than computing :code:`exp(arg0) - 1`
+directly for small values of :code:`arg0`, as it avoids catastrophic cancellation
+when :code:`arg0` is near zero.
+
+On CUDA GPUs, this function maps to the libdevice functions:
+
+- :code:`__nv_expm1f` for ``fp32`` inputs
+- :code:`__nv_expm1` for ``fp64`` inputs
+
+The function is pure (no side effects) and can be safely used in any context.
+
+Examples
+--------
+.. code-block:: python
+
+    import triton
+    import triton.language as tl
+
+    @triton.jit
+    def expm1_kernel(X, Y, BLOCK: tl.constexpr):
+        x = tl.load(X + tl.arange(0, BLOCK))
+        y = tl.expm1(x)
+        tl.store(Y + tl.arange(0, BLOCK), y)

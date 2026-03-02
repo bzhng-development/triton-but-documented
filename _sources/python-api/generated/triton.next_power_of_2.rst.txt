@@ -1,52 +1,33 @@
 next_power_of_2
-================
+===============
 
-.. currentmodule:: triton
-
-.. py:function:: next_power_of_2(n)
+.. py:function:: triton.next_power_of_2(n)
 
    Return the smallest power of 2 greater than or equal to ``n``.
-
-   This is a constexpr function evaluated at compile-time. It is commonly used
-   to calculate optimal block sizes or shared memory allocations for GPU kernels.
 
    Parameters
    ----------
    n : int
-       The input integer. Must be non-negative. If ``n`` is 0, the result is 1.
+       Input integer value.
 
    Returns
    -------
    int
-       The smallest power of 2 such that ``2**k >= n``.
+       The smallest power of 2 greater than or equal to ``n``.
 
    Notes
    -----
-   The implementation uses a bit-fiddling algorithm (filling all bits to the
-   right of the most significant bit, then adding 1) to compute the result
-   without branching. It supports 64-bit integers.
+   This is a :func:`constexpr_function <triton.constexpr_function>`, evaluated at
+   compile time. Commonly used for determining block sizes or memory allocations.
 
    Examples
    --------
-   >>> import triton
-   >>> triton.next_power_of_2(10)
-   16
-   >>> triton.next_power_of_2(16)
-   16
-   >>> triton.next_power_of_2(0)
-   1
-
    .. code-block:: python
 
       import triton
-      import triton.language as tl
 
-      @triton.jit
-      def kernel(
-          X_ptr,
-          N: tl.constexpr,
-      ):
-          # Compute block size as next power of 2
-          block_size: tl.constexpr = triton.next_power_of_2(N)
-          pid = tl.program_id(0)
-          # ... kernel logic using block_size
+      # Returns 16
+      result = triton.next_power_of_2(10)
+
+      # Returns 1024
+      result = triton.next_power_of_2(1024)

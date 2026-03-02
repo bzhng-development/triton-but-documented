@@ -1,0 +1,49 @@
+triton.language.extra.cuda.libdevice.div_rn
+===========================================
+
+.. currentmodule:: triton.language.extra.cuda.libdevice
+
+.. function:: div_rn(arg0, arg1, _semantic=None)
+
+    Divide arg0 by arg1 with round-to-nearest rounding mode.
+
+    Parameters
+    ----------
+    arg0 : tl.tensor
+        Dividend tensor. Must be floating point (fp32 or fp64).
+    arg1 : tl.tensor
+        Divisor tensor. Must be floating point (fp32 or fp64) with same dtype as arg0.
+    _semantic : optional
+        Internal parameter for Triton semantics. Do not set manually.
+
+    Returns
+    -------
+    result : tl.tensor
+        Tensor containing arg0 / arg1 with round-to-nearest rounding. Same dtype as inputs.
+
+    Notes
+    -----
+    This function calls CUDA libdevice division intrinsics:
+
+    - ``__nv_fdiv_rn`` for fp32 inputs
+    - ``__nv_ddiv_rn`` for fp64 inputs
+
+    The ``_rn`` suffix indicates round-to-nearest rounding mode. Both inputs must have
+    the same floating point dtype. Division by zero follows IEEE 754 semantics.
+
+    Examples
+    --------
+    .. code-block:: python
+
+        import triton
+        import triton.language as tl
+
+        @triton.jit
+        def kernel(x_ptr, y_ptr, out_ptr, n, BLOCK_SIZE: tl.constexpr):
+            pid = tl.program_id(0)
+            offs = pid * BLOCK_SIZE + tl.arange(0, BLOCK_SIZE)
+            mask = offs < n
+            x = tl.load(x_ptr + offs, mask=mask)
+            y = tl.load(y_ptr + offs, mask=mask)
+            out = tl.extra.cuda.libdevice.div_rn(x, y)
+            tl.store(out_ptr + offs, out, mask=mask)

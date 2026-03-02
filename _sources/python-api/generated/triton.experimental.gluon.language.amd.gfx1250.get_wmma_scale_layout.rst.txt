@@ -1,0 +1,45 @@
+get_wmma_scale_layout
+=====================
+
+Compute the distributed layout for scale factors required by AMD WMMA scaled operations.
+
+Derives the scale tensor layout from the matrix operand layout, ensuring correct
+mapping of scale factors to threads and warps for :py:func:`ttgl.amd.gfx1250.wmma_scaled`
+on AMD GFX1250 architectures.
+
+Parameters
+----------
+dot_operand_layout : DotOperandLayout
+    The layout of the matrix operand (A or B) involved in the WMMA operation.
+    The parent layout must be an instance of ``AMDWMMALayout``.
+shape : list[int]
+    The logical shape of the scale tensor (e.g., ``[M, K]`` for operand A).
+
+Returns
+-------
+layout : DistributedLinearLayout
+    The distributed layout describing how scale elements are partitioned
+    across threads, warps, and CGAs.
+
+Notes
+-----
+This is a ``constexpr_function`` evaluated at compile time.
+Specific to AMD RDNA4 (GFX1250) hardware features.
+Typically invoked internally by :py:func:`ttgl.amd.gfx1250.wmma_scaled`, but
+exposed for custom layout manipulation.
+
+Examples
+--------
+.. code-block:: python
+
+    import triton.experimental.gluon as gluon
+    import triton.experimental.gluon.language as ttgl
+    from triton.experimental.gluon.language.amd import gfx1250
+
+    @gluon.jit
+    def kernel(...):
+        # Assume 'a' is a tensor with WMMA layout
+        layout = a.type.layout
+        scale_shape = [M, K]  # Derived from problem shape
+        scale_layout = gfx1250.get_wmma_scale_layout(layout, scale_shape)
+        # Use scale_layout to allocate shared memory or load scales

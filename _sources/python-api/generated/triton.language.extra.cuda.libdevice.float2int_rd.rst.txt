@@ -1,0 +1,47 @@
+float2int_rd
+============
+
+.. currentmodule:: triton.language.extra.cuda.libdevice
+
+.. autofunction:: float2int_rd
+
+Converts a floating-point value to a signed integer by rounding towards negative infinity.
+
+Parameters
+----------
+arg0 : tl.tensor
+    Input tensor of 32-bit floating-point values (``tl.float32``).
+
+Returns
+-------
+result : tl.tensor
+    Tensor of 32-bit signed integers (``tl.int32``) with the same shape as ``arg0``.
+
+Notes
+-----
+This function wraps the CUDA libdevice function ``__nv_float2int_rd`` which performs
+rounding towards negative infinity (floor rounding). For positive values, this behaves
+like truncation. For negative non-integer values, this rounds away from zero
+(e.g., ``-3.7`` becomes ``-4``).
+
+This operation is only available on CUDA devices and compiles to the PTX
+``cvt.rni.s32.f32`` instruction with round-down modifier.
+
+The function is pure (no side effects) and operates element-wise on tensors.
+
+Examples
+--------
+.. code-block:: python
+
+    import triton
+    import triton.language as tl
+    from triton.language.extra.cuda import libdevice
+
+    @triton.jit
+    def kernel(x_ptr, y_ptr, BLOCK_SIZE: tl.constexpr):
+        pid = tl.program_id(axis=0)
+        offs = pid * BLOCK_SIZE + tl.arange(0, BLOCK_SIZE)
+        x = tl.load(x_ptr + offs)
+        # Round towards negative infinity
+        y = libdevice.float2int_rd(x)
+        tl.store(y_ptr + offs, y)

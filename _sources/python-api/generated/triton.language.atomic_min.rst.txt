@@ -5,50 +5,50 @@ atomic_min
 
 .. function:: atomic_min(pointer, val, mask=None, sem=None, scope=None)
 
-   Performs an atomic minimum at the memory location specified by ``pointer``.
+   Performs an atomic minimum operation at the memory location specified by ``pointer``.
 
-   For each element, computes ``min(*pointer, val)`` and stores the result in
-   ``pointer``. Returns the value stored at ``pointer`` before the operation.
+   Atomically computes ``min(*pointer, val)`` and stores the result at ``pointer``. Returns the value stored at ``pointer`` before the atomic operation.
 
    Parameters
    ----------
-   pointer : tensor of pointer type
-       The memory locations to operate on. Must be a block of pointers.
-   val : tensor
-       The values with which to perform the atomic operation. Must have the
-       same shape as ``pointer`` and dtype equal to ``pointer.dtype.element_ty``.
-   mask : tensor of int1, optional
-       If ``mask[idx]`` is false, the atomic operation is skipped for
-       ``pointer[idx]``. By default, all elements are processed.
+   pointer : triton.PointerType or block of triton.PointerType
+       The memory locations to operate on. Must be a pointer or block of pointers.
+   val : block of pointer.dtype.element_ty
+       The values with which to perform the atomic minimum operation. Must have the same dtype as ``pointer.dtype.element_ty``.
+   mask : block of triton.int1, optional
+       If ``mask[idx]`` is false, the atomic operation is not performed at ``pointer[idx]``.
    sem : str, optional
-       Specifies the memory semantics for the operation. Acceptable values are
-       ``"acquire"``, ``"release"``, ``"acq_rel"``, and ``"relaxed"``.
-       Defaults to ``"acq_rel"``.
+       Specifies the memory semantics for the operation. Acceptable values are ``"acquire"``, ``"release"``, ``"acq_rel"`` (ACQUIRE_RELEASE), and ``"relaxed"``. Defaults to ``"acq_rel"``.
    scope : str, optional
-       Defines the scope of threads that observe the synchronizing effect of
-       the atomic operation. Acceptable values are ``"gpu"``, ``"cta"``, or
-       ``"sys"``. Defaults to ``"gpu"``.
+       Defines the scope of threads that observe the synchronizing effect of the atomic operation. Acceptable values are ``"gpu"`` (default), ``"cta"`` (cooperative thread array/thread block), or ``"sys"`` (SYSTEM).
 
    Returns
    -------
-   tensor
+   block of pointer.dtype.element_ty
        The data stored at ``pointer`` before the atomic operation.
 
    Notes
    -----
-   This function can also be called as a member function on :py:class:`tensor`,
-   as ``x.atomic_min(...)`` instead of ``atomic_min(x, ...)``.
+   This function can also be called as a member function on :py:class:`tensor`, as ``x.atomic_min(...)`` instead of ``atomic_min(x, ...)``.
 
-   Supported dtypes depend on the target architecture. Typically includes
-   signed and unsigned integers and floating-point types.
+   The atomic minimum operation is useful for parallel reduction patterns where multiple threads may attempt to update the same memory location concurrently.
 
    Examples
    --------
    .. code-block:: python
 
       @triton.jit
-      def kernel(ptr, vals, BLOCK_SIZE: tl.constexpr):
-          pid = tl.program_id(0)
-          offs = pid * BLOCK_SIZE + tl.arange(0, BLOCK_SIZE)
-          # Atomically update global memory with min
-          old_vals = tl.atomic_min(ptr + offs, vals)
+      def atomic_min_kernel(pointer, val, BLOCK_SIZE: tl.constexpr):
+          # Perform atomic min across all threads
+          old_val = tl.atomic_min(pointer, val)
+          # old_val contains the value before the atomic operation
+
+      @triton.jit
+      def atomic_min_masked_kernel(pointer, val, mask, BLOCK_SIZE: tl.constexpr):
+          # Perform atomic min only where mask is true
+          old_val = tl.atomic_min(pointer, val, mask=mask)
+
+      @triton.jit
+      def atomic_min_member_fn(x, val):
+          # Can also be called as a member function
+          old_val = x.atomic_min(val)

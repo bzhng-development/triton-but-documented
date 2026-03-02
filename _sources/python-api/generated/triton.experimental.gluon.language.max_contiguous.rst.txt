@@ -1,0 +1,46 @@
+max_contiguous
+==============
+
+.. function:: max_contiguous(input, values, _semantic=None)
+
+   Inform the compiler that the first N elements in ``input`` are contiguous in memory.
+
+   Parameters
+   ----------
+   input : tensor
+       The input tensor to annotate with contiguity information.
+   values : constexpr or list of constexpr
+       Compile-time constant(s) specifying the number of contiguous elements.
+       Each value must be a ``constexpr[int]``.
+   _semantic : GluonSemantic, optional
+       Internal semantic handler. Do not set manually; provided automatically
+       when using ``@gluon.jit``.
+
+   Returns
+   -------
+   tensor
+       The input tensor with contiguity hints applied for compiler optimizations.
+
+   Notes
+   -----
+   This function provides memory access pattern hints to the compiler, enabling
+   optimizations for contiguous memory operations. The hints are used during
+   code generation to improve load/store efficiency.
+
+   All values must be compile-time constants. Passing runtime values will raise
+   a ``TypeError``. Multiple contiguity hints can be provided as a list.
+
+   Examples
+   --------
+   .. code-block:: python
+
+      import triton.experimental.gluon as gluon
+      import triton.experimental.gluon.language as ttgl
+      from triton.language import constexpr
+
+      @gluon.jit
+      def kernel(x_ptr, BLOCK: constexpr):
+          x = ttgl.load(x_ptr)
+          x = ttgl.max_contiguous(x, [BLOCK])
+          # Compiler can now optimize for contiguous access
+          # ... rest of kernel

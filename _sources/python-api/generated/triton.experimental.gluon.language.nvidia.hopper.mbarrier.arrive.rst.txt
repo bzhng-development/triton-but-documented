@@ -1,0 +1,37 @@
+arrive
+======
+
+.. py:function:: arrive(mbarrier, *, count=1, pred=True)
+
+   Arrive at an mbarrier with a specified count.
+
+   Parameters
+   ----------
+   mbarrier : shared_memory_descriptor
+       Barrier to be signalled.
+   count : int, optional
+       Count to arrive with. Defaults to 1.
+   pred : bool, optional
+       Scalar predicate. Operation is skipped if predicate is False. Defaults to True.
+
+   Returns
+   -------
+   None
+
+   Notes
+   -----
+   This operation is specific to NVIDIA Hopper architectures. It signals arrival at a
+   memory barrier located in shared memory, optionally incrementing the transaction count.
+   The operation is predicated; if ``pred`` is False, no state change occurs.
+
+   Examples
+   --------
+   .. code-block:: python
+
+      import triton.experimental.gluon as gluon
+      import triton.experimental.gluon.language as ttgl
+
+      @gluon.jit
+      def kernel(mb_ptr):
+          # Assume mb_ptr is a shared_memory_descriptor representing an mbarrier
+          ttgl.nvidia.hopper.mbarrier.arrive(mb_ptr, count=1)

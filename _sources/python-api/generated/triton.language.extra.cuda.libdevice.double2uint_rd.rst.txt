@@ -1,0 +1,38 @@
+triton.language.extra.cuda.libdevice.double2uint_rd
+=====================================================
+
+Convert double-precision floating-point value to 32-bit unsigned integer with round-down rounding mode.
+
+Parameters
+----------
+arg0 : tensor of fp64
+    Input tensor containing double-precision floating-point values to convert.
+
+Returns
+-------
+tensor of int32
+    Tensor containing 32-bit unsigned integer values converted from the input.
+
+Notes
+-----
+This function invokes the CUDA libdevice intrinsic ``__nv_double2uint_rd`` which converts
+double-precision floating-point values to unsigned 32-bit integers using round-down
+(round toward negative infinity) rounding mode.
+
+The operation is pure (no side effects) and element-wise. Only ``fp64`` input type
+is supported.
+
+Examples
+--------
+.. code-block:: python
+
+    import triton
+    import triton.language as tl
+
+    @triton.jit
+    def kernel(x_ptr, y_ptr, BLOCK_SIZE: tl.constexpr):
+        pid = tl.program_id(0)
+        offs = pid * BLOCK_SIZE + tl.arange(0, BLOCK_SIZE)
+        x = tl.load(x_ptr + offs).to(tl.float64)
+        y = tl.extra.cuda.libdevice.double2uint_rd(x)
+        tl.store(y_ptr + offs, y)

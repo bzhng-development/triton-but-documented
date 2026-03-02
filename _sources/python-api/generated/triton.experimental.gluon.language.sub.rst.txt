@@ -1,0 +1,48 @@
+sub
+===
+
+.. py:function:: sub(x, y, sanitize_overflow: 'constexpr' = True, _semantic=None)
+
+   Element-wise subtraction of two arguments.
+
+   Computes :math:`x - y` element-wise. Supports broadcasting according to standard
+   Triton rules. This operation is available within Gluon JIT kernels.
+
+   Parameters
+   ----------
+   x : tensor or scalar
+      The left-hand operand.
+   y : tensor or scalar
+      The right-hand operand.
+   sanitize_overflow : constexpr, optional
+      If True (default), sanitizes overflow. Must be a compile-time constant.
+   _semantic : GluonSemantic, optional
+      Internal argument injected by the JIT compiler; do not set manually.
+
+   Returns
+   -------
+   tensor
+      The result of subtracting :math:`y` from :math:`x`.
+
+   Notes
+   -----
+   Broadcasting rules apply if ``x`` and ``y`` have different shapes.
+   Overflow sanitization ensures defined behavior for integer subtraction
+   when overflow occurs, depending on the backend implementation.
+
+   Examples
+   --------
+   .. code-block:: python
+
+      import triton.experimental.gluon as gluon
+      import triton.experimental.gluon.language as ttgl
+
+      @gluon.jit
+      def sub_kernel(X_PTR, Y_PTR, OUT_PTR, BLOCK_SIZE: ttgl.constexpr):
+          pid = ttgl.program_id(0)
+          offs = pid * BLOCK_SIZE + ttgl.arange(0, BLOCK_SIZE)
+          x = ttgl.load(X_PTR + offs)
+          y = ttgl.load(Y_PTR + offs)
+          # Element-wise subtraction
+          out = ttgl.sub(x, y)
+          ttgl.store(OUT_PTR + offs, out)

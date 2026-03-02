@@ -1,0 +1,54 @@
+arange
+======
+
+.. currentmodule:: triton.experimental.gluon.language
+
+.. function:: arange(start, end, layout=None)
+
+   Generate a sequence tensor with values in the half-open interval ``[start, end)``.
+
+   Creates a 1D tensor containing sequential integer values from ``start`` (inclusive) to
+   ``end`` (exclusive), distributed according to the specified layout.
+
+   Parameters
+   ----------
+   start : int
+       Inclusive start of the sequence.
+   end : int
+       Exclusive end of the sequence.
+   layout : DistributedLayout, optional
+       The layout of the output tensor. Defaults to :class:`AutoLayout` if not specified.
+
+   Returns
+   -------
+   tensor
+       A 1D tensor containing sequential integer values from ``start`` to ``end - 1``.
+
+   Notes
+   -----
+   The ``layout`` parameter controls how the sequence values are distributed across
+   threads and warps. When using Gluon kernels, explicit layout specification enables
+   fine-grained control over memory access patterns and thread-level parallelism.
+
+   This function must be called within a kernel decorated with :func:`@gluon.jit`.
+
+   Examples
+   --------
+   .. code-block:: python
+
+      import triton.experimental.gluon as gluon
+      import triton.experimental.gluon.language as ttgl
+
+      @gluon.jit
+      def kernel(X, stride, BLOCK_SIZE: tl.constexpr):
+          # Generate sequence [0, BLOCK_SIZE) with default AutoLayout
+          offsets = ttgl.arange(0, BLOCK_SIZE)
+
+          # Generate sequence with explicit coalesced layout
+          from triton.experimental.gluon.language._layouts import CoalescedLayout
+          offsets = ttgl.arange(0, BLOCK_SIZE, layout=CoalescedLayout())
+
+          # Use offsets for memory access
+          pid = ttgl.program_id(0)
+          mask = offsets < stride
+          x = ttgl.load(X + pid * stride + offsets, mask=mask)

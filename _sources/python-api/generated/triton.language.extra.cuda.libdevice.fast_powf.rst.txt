@@ -1,0 +1,38 @@
+fast_powf
+=========
+
+Compute :code:`arg0` raised to the power of :code:`arg1` using a fast approximation.
+
+Parameters
+----------
+arg0 : tl.tensor
+    Base value. Must be float32.
+arg1 : tl.tensor
+    Exponent value. Must be float32.
+
+Returns
+-------
+result : tl.tensor
+    Result of :code:`arg0 ** arg1`. Float32.
+
+Notes
+-----
+This function uses NVIDIA's libdevice ``__nv_fast_powf`` intrinsic for faster
+computation at the cost of reduced precision compared to standard power
+operations. Only supports float32 inputs and outputs. The operation is pure
+(no side effects).
+
+Examples
+--------
+.. code-block:: python
+
+    import triton
+    import triton.language as tl
+
+    @triton.jit
+    def kernel(X, Y, BLOCK: tl.constexpr):
+        offsets = tl.arange(0, BLOCK)
+        x = tl.load(X + offsets)
+        y = tl.load(Y + offsets)
+        result = tl.extra.cuda.libdevice.fast_powf(x, y)
+        tl.store(X + offsets, result)

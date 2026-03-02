@@ -1,42 +1,53 @@
-Computes the minimum of all elements in the :code:`input` tensor along the provided :code:`axis`.
+triton.language.min
+===================
 
-The reduction operation is associative and commutative. For floating-point inputs with bitwidth less than 32, values are promoted to :code:`float32` before reduction. For integer inputs with bitwidth less than 32, values are promoted to :code:`int32`.
+.. currentmodule:: triton.language
 
-Parameters
-----------
-input : tensor
-    The input values.
-axis : int, optional
-    The dimension along which the reduction should be done. If :code:`None`, reduce over all dimensions.
-return_indices : bool, optional
-    If :code:`True`, return the index corresponding to the minimum value. Default is :code:`False`.
-return_indices_tie_break_left : bool, optional
-    If :code:`True`, in case of a tie (i.e., multiple elements have the same minimum value), return the left-most index for values that aren't NaN. Default is :code:`True`.
-keep_dims : bool, optional
-    If :code:`True`, keep the reduced dimensions with length 1. Default is :code:`False`.
+.. function:: min(input, axis=None, return_indices=False, return_indices_tie_break_left=True, keep_dims=False)
 
-Returns
--------
-tensor
-    A tensor containing the minimum values. If :code:`return_indices` is :code:`True`, returns a tuple of (min_values, min_indices).
+   Returns the minimum of all elements in the input tensor along the provided axis.
 
-Notes
------
-This function can also be called as a member function on :py:class:`tensor`,
-as :code:`x.min(...)` instead of :code:`min(x, ...)`.
+   Parameters
+   ----------
+   input : tensor
+       The input values.
+   axis : int, optional
+       The dimension along which the reduction should be done. If None, reduce all dimensions.
+   return_indices : bool, optional
+       If True, return index corresponding to the minimum value. Default is False.
+   return_indices_tie_break_left : bool, optional
+       If True, in case of a tie (i.e., multiple elements have the same minimum value), return the left-most index for values that aren't NaN. Default is True.
+   keep_dims : bool, optional
+       If True, keep the reduced dimensions with length 1. Default is False.
 
-Examples
---------
-.. code-block:: python
+   Returns
+   -------
+   tensor or tuple of tensors
+       If ``return_indices`` is False, returns a tensor containing the minimum values. If ``return_indices`` is True, returns a tuple of (min_values, min_indices).
 
-    import triton.language as tl
+   Notes
+   -----
+   The reduction operation is associative and commutative.
 
-    # Compute minimum along axis 0
-    x = tl.arange(0, 16).reshape((4, 4))
-    min_val = tl.min(x, axis=0)
+   This function promotes bfloat16 inputs to float32. For integer or floating-point dtypes with bitwidth less than 32, inputs are promoted to int32 or float32 respectively before reduction.
 
-    # Get minimum value and its index
-    min_val, min_idx = tl.min(x, axis=1, return_indices=True)
+   This function can also be called as a member function on :py:class:`tensor`, as ``x.min(...)`` instead of ``min(x, ...)``.
 
-    # Keep reduced dimension
-    min_val = tl.min(x, axis=0, keep_dims=True)
+   Examples
+   --------
+   .. code-block:: python
+
+      import triton.language as tl
+
+      # Find minimum along axis 0
+      x = tl.arange(0, 16).reshape(4, 4)
+      min_val = tl.min(x, axis=0)
+
+      # Find minimum across all dimensions
+      min_val = tl.min(x, axis=None)
+
+      # Get minimum values and indices
+      min_val, min_idx = tl.min(x, axis=1, return_indices=True)
+
+      # Keep reduced dimensions
+      min_val = tl.min(x, axis=0, keep_dims=True)

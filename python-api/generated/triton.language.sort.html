@@ -18,8 +18,8 @@
     <script src="../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
-    <link rel="next" title="topk" href="triton.language.topk.html" />
-    <link rel="prev" title="Parameters" href="triton.language.histogram.html" /> 
+    <link rel="next" title="triton.language.topk" href="triton.language.topk.html" />
+    <link rel="prev" title="histogram" href="triton.language.histogram.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -59,19 +59,19 @@
 <li class="toctree-l2"><a class="reference internal" href="../triton.language.html#math-ops">Math Ops</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../triton.language.html#reduction-ops">Reduction Ops</a></li>
 <li class="toctree-l2 current"><a class="reference internal" href="../triton.language.html#scan-sort-ops">Scan/Sort Ops</a><ul class="current">
-<li class="toctree-l3"><a class="reference internal" href="triton.language.associative_scan.html"><code class="docutils literal notranslate"><span class="pre">triton.language.associative_scan()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.language.associative_scan.html">triton.language.associative_scan</a></li>
 <li class="toctree-l3"><a class="reference internal" href="triton.language.cumprod.html">cumprod</a></li>
 <li class="toctree-l3"><a class="reference internal" href="triton.language.cumsum.html">cumsum</a></li>
-<li class="toctree-l3"><a class="reference internal" href="triton.language.histogram.html">Parameters</a></li>
-<li class="toctree-l3"><a class="reference internal" href="triton.language.histogram.html#returns">Returns</a></li>
-<li class="toctree-l3"><a class="reference internal" href="triton.language.histogram.html#notes">Notes</a></li>
-<li class="toctree-l3"><a class="reference internal" href="triton.language.histogram.html#examples">Examples</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.language.histogram.html">histogram</a></li>
 <li class="toctree-l3 current"><a class="current reference internal" href="#">sort</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="#triton.language.sort"><code class="docutils literal notranslate"><span class="pre">triton.language.sort()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#parameters">Parameters</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#returns">Returns</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#notes">Notes</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#examples">Examples</a></li>
 </ul>
 </li>
-<li class="toctree-l3"><a class="reference internal" href="triton.language.topk.html">topk</a></li>
-<li class="toctree-l3"><a class="reference internal" href="triton.language.gather.html"><code class="docutils literal notranslate"><span class="pre">triton.language.gather()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.language.topk.html">triton.language.topk</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.language.gather.html">gather</a></li>
 <li class="toctree-l3"><a class="reference internal" href="triton.language.bitonic_merge.html">bitonic_merge</a></li>
 </ul>
 </li>
@@ -86,6 +86,35 @@
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../triton.testing.html">triton.testing</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../triton-semantics.html">Triton Semantics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.language.extra.cuda.html">triton.language.extra.cuda</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.language.extra.cuda.libdevice.html">triton.language.extra.cuda.libdevice</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.runtime.html">triton.runtime</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.tools.html">triton.tools</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Gluon (Experimental) API</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.html">triton.experimental.gluon</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.html">triton.experimental.gluon.language</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.nvidia.ampere.html">triton.experimental.gluon.language.nvidia.ampere</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.nvidia.ampere.async_copy.html">triton.experimental.gluon.language.nvidia.ampere.async_copy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.nvidia.ampere.mbarrier.html">triton.experimental.gluon.language.nvidia.ampere.mbarrier</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.nvidia.hopper.html">triton.experimental.gluon.language.nvidia.hopper</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.nvidia.hopper.tma.html">triton.experimental.gluon.language.nvidia.hopper.tma</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.nvidia.hopper.mbarrier.html">triton.experimental.gluon.language.nvidia.hopper.mbarrier</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.nvidia.hopper.cluster.html">triton.experimental.gluon.language.nvidia.hopper.cluster</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.nvidia.blackwell.html">triton.experimental.gluon.language.nvidia.blackwell</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.nvidia.blackwell.tma.html">triton.experimental.gluon.language.nvidia.blackwell.tma</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.nvidia.blackwell.clc.html">triton.experimental.gluon.language.nvidia.blackwell.clc</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.amd.html">triton.experimental.gluon.language.amd</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.amd.gfx1250.html">triton.experimental.gluon.language.amd.gfx1250</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.amd.gfx1250.async_copy.html">triton.experimental.gluon.language.amd.gfx1250.async_copy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.amd.gfx1250.mbarrier.html">triton.experimental.gluon.language.amd.gfx1250.mbarrier</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.amd.gfx1250.cluster.html">triton.experimental.gluon.language.amd.gfx1250.cluster</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.amd.gfx1250.tdm.html">triton.experimental.gluon.language.amd.gfx1250.tdm</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.amd.cdna3.html">triton.experimental.gluon.language.amd.cdna3</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.amd.cdna4.html">triton.experimental.gluon.language.amd.cdna4</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.amd.rdna3.html">triton.experimental.gluon.language.amd.rdna3</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.amd.rdna4.html">triton.experimental.gluon.language.amd.rdna4</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Triton MLIR Dialects</span></p>
 <ul>
@@ -125,70 +154,60 @@
              
   <section id="sort">
 <h1>sort<a class="headerlink" href="#sort" title="Link to this heading">¶</a></h1>
-<p>Sorts a tensor along its last dimension using a bitonic sorting network.</p>
-<dl class="py function">
-<dt class="sig sig-object py" id="triton.language.sort">
-<span class="sig-prename descclassname"><span class="pre">triton.language.</span></span><span class="sig-name descname"><span class="pre">sort</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dim</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">descending</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#triton.language.sort" title="Link to this definition">¶</a></dt>
-<dd><p>Sorts the input tensor <code class="docutils literal notranslate"><span class="pre">x</span></code> in ascending or descending order. Currently, only sorting
-along the last (minor) dimension is supported. The size of the dimension to be sorted
-must be a power of two.</p>
+<p>Sorts a tensor along a specified dimension using bitonic sort.</p>
 <section id="parameters">
 <h2>Parameters<a class="headerlink" href="#parameters" title="Link to this heading">¶</a></h2>
 <dl class="simple">
-<dt>x<span class="classifier">tl.tensor</span></dt><dd><p>The input tensor to sort.</p>
+<dt>x<span class="classifier">Tensor</span></dt><dd><p>The input tensor to be sorted.</p>
 </dd>
-<dt>dim<span class="classifier">constexpr, optional</span></dt><dd><p>The dimension along which to sort. If <code class="docutils literal notranslate"><span class="pre">None</span></code>, defaults to the last dimension.
-Only the last dimension is currently supported.</p>
+<dt>dim<span class="classifier">constexpr, optional</span></dt><dd><p>The dimension along which to sort the tensor. If None, the tensor is
+sorted along the last dimension. Currently, only sorting along the last
+dimension is supported.</p>
 </dd>
-<dt>descending<span class="classifier">constexpr, optional</span></dt><dd><p>If <code class="docutils literal notranslate"><span class="pre">True</span></code>, sorts in descending order. If <code class="docutils literal notranslate"><span class="pre">False</span></code> (default), sorts in ascending
-order.</p>
+<dt>descending<span class="classifier">constexpr, optional</span></dt><dd><p>If True, sorts in descending order. If False (default), sorts in
+ascending order.</p>
 </dd>
 </dl>
 </section>
 <section id="returns">
 <h2>Returns<a class="headerlink" href="#returns" title="Link to this heading">¶</a></h2>
 <dl class="simple">
-<dt>tl.tensor</dt><dd><p>A tensor containing the sorted elements.</p>
+<dt>Tensor</dt><dd><p>A sorted tensor with the same shape as the input.</p>
 </dd>
 </dl>
 </section>
 <section id="notes">
 <h2>Notes<a class="headerlink" href="#notes" title="Link to this heading">¶</a></h2>
-<p>This operation uses a bitonic sort algorithm, which requires the dimension size to be
-a power of two. The operation is fully differentiable and runs entirely on the GPU.</p>
+<p>This function uses a bitonic sort algorithm which requires the dimension
+size to be a power of 2. Only the last/minor dimension is currently
+supported. The input tensor must have a shape that is compatible with
+bitonic sorting constraints.</p>
 </section>
 <section id="examples">
 <h2>Examples<a class="headerlink" href="#examples" title="Link to this heading">¶</a></h2>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">triton</span>
-<span class="kn">import</span><span class="w"> </span><span class="nn">triton.language</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">tl</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">triton.language</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">tl</span>
 
-<span class="nd">@triton</span><span class="o">.</span><span class="n">jit</span>
-<span class="k">def</span><span class="w"> </span><span class="nf">kernel</span><span class="p">(</span><span class="n">X_ptr</span><span class="p">,</span> <span class="n">stride</span><span class="p">,</span> <span class="n">BLOCK_SIZE</span><span class="p">:</span> <span class="n">tl</span><span class="o">.</span><span class="n">constexpr</span><span class="p">):</span>
-    <span class="n">pid</span> <span class="o">=</span> <span class="n">tl</span><span class="o">.</span><span class="n">program_id</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
-    <span class="n">offs</span> <span class="o">=</span> <span class="n">tl</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">BLOCK_SIZE</span><span class="p">)</span>
-    <span class="n">mask</span> <span class="o">=</span> <span class="n">offs</span> <span class="o">&lt;</span> <span class="n">stride</span>
-    <span class="n">x</span> <span class="o">=</span> <span class="n">tl</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">X_ptr</span> <span class="o">+</span> <span class="n">pid</span> <span class="o">*</span> <span class="n">stride</span> <span class="o">+</span> <span class="n">offs</span><span class="p">,</span> <span class="n">mask</span><span class="o">=</span><span class="n">mask</span><span class="p">)</span>
+<span class="c1"># Sort a 1D tensor in ascending order</span>
+<span class="n">x</span> <span class="o">=</span> <span class="n">tl</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">16</span><span class="p">)</span>
+<span class="n">sorted_x</span> <span class="o">=</span> <span class="n">tl</span><span class="o">.</span><span class="n">sort</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
 
-    <span class="c1"># Sort in ascending order</span>
-    <span class="n">x_sorted</span> <span class="o">=</span> <span class="n">tl</span><span class="o">.</span><span class="n">sort</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+<span class="c1"># Sort in descending order</span>
+<span class="n">sorted_x_desc</span> <span class="o">=</span> <span class="n">tl</span><span class="o">.</span><span class="n">sort</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">descending</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
-    <span class="c1"># Sort in descending order</span>
-    <span class="n">x_rev</span> <span class="o">=</span> <span class="n">tl</span><span class="o">.</span><span class="n">sort</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">descending</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-
-    <span class="n">tl</span><span class="o">.</span><span class="n">store</span><span class="p">(</span><span class="n">X_ptr</span> <span class="o">+</span> <span class="n">pid</span> <span class="o">*</span> <span class="n">stride</span> <span class="o">+</span> <span class="n">offs</span><span class="p">,</span> <span class="n">x_sorted</span><span class="p">,</span> <span class="n">mask</span><span class="o">=</span><span class="n">mask</span><span class="p">)</span>
+<span class="c1"># Sort along the last dimension of a 2D tensor</span>
+<span class="n">x_2d</span> <span class="o">=</span> <span class="n">tl</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">32</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">([</span><span class="mi">2</span><span class="p">,</span> <span class="mi">16</span><span class="p">])</span>
+<span class="n">sorted_2d</span> <span class="o">=</span> <span class="n">tl</span><span class="o">.</span><span class="n">sort</span><span class="p">(</span><span class="n">x_2d</span><span class="p">,</span> <span class="n">dim</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 </pre></div>
 </div>
 </section>
-</dd></dl>
-
 </section>
 
 
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="triton.language.histogram.html" class="btn btn-neutral float-left" title="Parameters" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="triton.language.topk.html" class="btn btn-neutral float-right" title="topk" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="triton.language.histogram.html" class="btn btn-neutral float-left" title="histogram" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="triton.language.topk.html" class="btn btn-neutral float-right" title="triton.language.topk" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>

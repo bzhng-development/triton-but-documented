@@ -1,0 +1,60 @@
+device_assert
+=============
+
+.. currentmodule:: triton.experimental.gluon.language
+
+.. function:: device_assert(cond, msg='', mask=None, _semantic=None)
+
+   Assert a condition at runtime from the GPU device.
+
+   This function inserts a device-side assertion that checks ``cond`` during kernel
+   execution. If the condition is false, the message ``msg`` is printed. The assertion
+   only has effect when the environment variable :code:`TRITON_DEBUG` is set to a
+   non-zero value.
+
+   Parameters
+   ----------
+   cond : tensor
+       Boolean tensor representing the condition to assert. Must evaluate to true
+       for all active lanes.
+   msg : str, optional
+       Message to print if the assertion fails. Must be a string literal.
+       Default is empty string.
+   mask : tensor, optional
+       Boolean tensor mask. If provided, assertion is only checked for lanes
+       where mask is true.
+   _semantic : GluonSemantic, optional
+       Internal semantic object. Do not set manually.
+
+   Returns
+   -------
+   None
+
+   Notes
+   -----
+   Using the Python :code:`assert` statement within a Gluon kernel is equivalent to
+   calling this function, but requires the message argument to be provided as a
+   string literal, e.g., :code:`assert pid == 0, "pid != 0"`.
+
+   Device assertions are only evaluated when :code:`TRITON_DEBUG` environment
+   variable is set to a non-zero value. In production builds (TRITON_DEBUG=0),
+   assertions are elided.
+
+   Examples
+   --------
+   .. code-block:: python
+
+      import triton.experimental.gluon as gluon
+      import triton.experimental.gluon.language as ttgl
+
+      @gluon.jit
+      def kernel(pid):
+          # Assert that program ID is zero
+          ttgl.device_assert(pid == 0, "pid must be 0")
+
+          # Equivalent Python assert syntax
+          assert pid == 0, "pid must be 0"
+
+          # Conditional assertion with mask
+          mask = pid < 8
+          ttgl.device_assert(pid >= 0, "pid negative", mask=mask)

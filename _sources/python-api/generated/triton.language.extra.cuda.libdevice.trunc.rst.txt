@@ -1,0 +1,40 @@
+trunc
+=====
+
+.. currentmodule:: triton.language.extra.cuda.libdevice
+
+.. function:: trunc(arg0, _semantic=None)
+
+    Truncate a floating-point value towards zero.
+
+    Parameters
+    ----------
+    arg0 : tl.tensor
+        Input tensor of floating-point values. Must be fp32 or fp64.
+
+    Returns
+    -------
+    result : tl.tensor
+        Tensor of truncated values with the same dtype as ``arg0``.
+
+    Notes
+    -----
+    This function dispatches to CUDA libdevice: ``__nv_trunc`` for fp64 and
+    ``__nv_truncf`` for fp32. Truncation rounds towards zero, discarding the
+    fractional part (e.g., ``trunc(3.7) = 3``, ``trunc(-3.7) = -3``).
+
+    The operation is pure (no side effects).
+
+    Examples
+    --------
+    .. code-block:: python
+
+        import triton
+        import triton.language as tl
+        from triton.language.extra.cuda import libdevice
+
+        @triton.jit
+        def kernel(x_ptr, y_ptr, BLOCK_SIZE: tl.constexpr):
+            x = tl.load(x_ptr + tl.arange(0, BLOCK_SIZE))
+            y = libdevice.trunc(x)
+            tl.store(y_ptr + tl.arange(0, BLOCK_SIZE), y)

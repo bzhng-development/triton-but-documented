@@ -1,62 +1,26 @@
-triton.language.pi32_t
-======================
+pi32_t
+======
 
-Pointer type for 32-bit integers.
+.. py:data:: triton.language.pi32_t
 
-``pi32_t`` is a pointer type instance representing pointers to 32-bit integer
-values in device memory. It is used to define the type signature of pointer
-arguments in JIT-compiled kernels, enabling type-safe memory operations such as
-loading and storing 32-bit integers.
+   Pointer type instance for 32-bit integers.
 
-This type corresponds to ``i32*`` in LLVM IR and is typically constructed using
-``tl.make_block_ptr`` or passed directly as an argument to a kernel function.
+   Represents the type of a pointer to 32-bit integer data (:py:data:`tl.int32`) in GPU memory. This constant is used to annotate pointer types or perform type introspection within Triton kernels.
 
-Parameters
-----------
+   .. rubric:: Notes
 
-None (Type instance).
+   Equivalent to ``tl.pointer_type(tl.int32)``. Prefer using type inference or :py:func:`tl.make_block_ptr` for pointer construction in most cases.
 
-Returns
--------
+   .. rubric:: Examples
 
-None (Type definition).
+   .. code-block:: python
 
-Notes
------
+      import triton.language as tl
 
-*   ``pi32_t`` is a singleton type instance; do not instantiate it directly.
-*   Use this type when defining kernel arguments that expect pointers to
-    32-bit integer buffers.
-*   Compatible with ``tl.load`` and ``tl.store`` operations when the pointed
-    data type is ``tl.int32``.
-
-Examples
---------
-
-.. code-block:: python
-
-    import triton
-    import triton.language as tl
-
-    @triton.jit
-    def add_kernel(
-        x_ptr,  # Implicitly treated as pi32_t if passed as int32 pointer
-        y_ptr,
-        output_ptr,
-        n,
-        BLOCK_SIZE: tl.constexpr,
-    ):
-        pid = tl.program_id(axis=0)
-        offs = pid * BLOCK_SIZE + tl.arange(0, BLOCK_SIZE)
-        mask = offs < n
-
-        # Load 32-bit integers from pointers
-        x = tl.load(x_ptr + offs, mask=mask)
-        y = tl.load(y_ptr + offs, mask=mask)
-
-        # Store 32-bit integers to pointer
-        tl.store(output_ptr + offs, x + y, mask=mask)
-
-    # Launch kernel
-    # The pointers passed here match the pi32_t expectation
-    # add_kernel[(grid,)](x_ptr, y_ptr, out_ptr, n, BLOCK_SIZE=1024)
+      # Check type of a pointer argument
+      @triton.jit
+      def kernel(x_ptr: tl.pi32_t, size: tl.int32):
+          # x_ptr is guaranteed to be a pointer to i32
+          pid = tl.program_id(0)
+          val = tl.load(x_ptr + pid)
+          tl.store(x_ptr + pid, val + 1)

@@ -1,0 +1,67 @@
+allocate_shared_memory
+======================
+
+Allocate shared memory for a tensor with specified element type, shape, and layout.
+
+Allocates a shared memory region accessible by all threads in a CTA. Returns a descriptor that can be used for subsequent shared memory operations (load, store, gather, scatter, etc.).
+
+Parameters
+----------
+element_ty : dtype
+    The element data type of the tensor (e.g., ``ttgl.float16``, ``ttgl.int32``).
+shape : Sequence[int]
+    The dimensions of the shared memory allocation.
+layout : SharedLayout
+    The shared memory layout specifying how data is organized in memory
+    (e.g., ``BlockedLayout``, ``SwizzledLayout``).
+value : tensor, optional
+    Initial tensor value to copy into the allocated shared memory. If None,
+    memory is allocated but not initialized.
+_semantic : GluonSemantic, optional
+    Internal semantic handler. Do not provide manually; this is set
+    automatically by the ``@gluon.jit`` decorator.
+
+Returns
+-------
+shared_memory_descriptor
+    A descriptor handle for the allocated shared memory region. This descriptor
+    provides methods for loading, storing, and transforming the shared memory
+    view.
+
+Notes
+-----
+This function must be called within a ``@gluon.jit`` decorated kernel. The
+``_semantic`` parameter is automatically injected by the JIT compiler and
+should not be provided by users.
+
+Shared memory allocated this way is visible to all threads in the CTA and
+persists for the kernel's lifetime. Proper synchronization (e.g., via
+``gluon.barrier()``) is required when coordinating access between threads.
+
+The returned descriptor supports operations such as ``load()``, ``store()``,
+``gather()``, ``scatter()``, ``slice()``, ``reshape()``, and ``permute()``.
+
+Examples
+--------
+.. code-block:: python
+
+    import triton.experimental.gluon as gluon
+    import triton.experimental.gluon.language as ttgl
+    from triton.experimental.gluon.language._layouts import BlockedLayout
+
+    @gluon.jit
+    def kernel(...):
+        # Allocate 128-element float16 shared memory with blocked layout
+        layout = BlockedLayout([128], [32], [4], [1], [0], [0])
+        shared = ttgl.allocate_shared_memory(ttgl.float16, [128], layout)
+
+        # Initialize with zeros
+        zeros = ttgl.full([128], 0.0, ttgl.float16, layout)
+        shared.store(zeros)
+
+        # Load from shared memory with distributed layout
+        dist_layout = ttgl.AutoLayout()
+        data = shared.load(dist_layout)
+
+        # Use data in computation
+        ...

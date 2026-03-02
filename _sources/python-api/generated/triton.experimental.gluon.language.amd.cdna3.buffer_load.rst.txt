@@ -1,0 +1,57 @@
+buffer_load
+===========
+
+AMD CDNA3 buffer load from global memory using a scalar base pointer and offsets tensor.
+
+This operation loads data directly from global memory into registers using AMD's
+buffer load instruction, which takes a scalar base pointer and a tensor of
+offsets rather than a tensor of pointers.
+
+Parameters
+----------
+ptr : pointer to scalar
+    Global memory scalar base pointer to load from.
+offsets : tensor
+    Tensor of offsets specifying memory locations relative to ``ptr``.
+mask : tensor, optional
+    Boolean mask tensor for predicated loads. Elements where mask is False
+    will not be loaded. Defaults to None.
+other : tensor or scalar, optional
+    Default values for masked elements. Used when ``mask`` is provided.
+    Defaults to None.
+cache : str, optional
+    Cache modifier specifier for load operation (e.g., "ca", "cg").
+    Defaults to None (no cache modifier).
+
+Returns
+-------
+tensor
+    A Gluon tensor containing the loaded data with the same shape as
+    ``offsets`` and element type matching ``ptr``.
+
+Notes
+-----
+This function is specific to AMD CDNA3 architecture and uses the buffer
+load instruction for efficient memory access patterns. The scalar base
+pointer approach can be more efficient than pointer tensors for certain
+access patterns.
+
+The ``mask`` and ``other`` parameters enable predicated loads, allowing
+conditional memory access without branching.
+
+Examples
+--------
+.. code-block:: python
+
+    import triton.experimental.gluon as gluon
+    import triton.experimental.gluon.language as ttgl
+
+    @gluon.jit
+    def kernel(ptr, offsets):
+        # Load from global memory using scalar pointer + offsets
+        data = ttgl.amd.cdna3.buffer_load(ptr, offsets)
+
+    @gluon.jit
+    def kernel_masked(ptr, offsets, mask):
+        # Predicated load with default value for masked elements
+        data = ttgl.amd.cdna3.buffer_load(ptr, offsets, mask=mask, other=0.0)

@@ -1,0 +1,71 @@
+async_copy_global_to_shared_im2col
+==================================
+
+.. function:: triton.experimental.gluon.language.nvidia.hopper.tma.async_copy_global_to_shared_im2col(tensor_desc, coord, offsets, barrier, result, pred=True, multicast=False)
+
+   Asynchronously copy data from global memory to shared memory using TMA in im2col mode.
+
+   Parameters
+   ----------
+   tensor_desc : TensorDescriptor
+       Tensor descriptor for the source global memory tensor configured for im2col access pattern.
+   coord : tensor
+       Coordinates in the source tensor specifying the copy region. Must be convertible to IR values.
+   offsets : tensor or sequence of int
+       Im2col offset values (must be i16). Number of offsets depends on source tensor rank:
+       
+       - 3D tensors: 1 offset
+       - 4D tensors: 2 offsets
+       - 5D tensors: 3 offsets
+   barrier : Barrier
+       Barrier handle for synchronization. Signals completion when the async copy finishes.
+   result : shared_memory_descriptor
+       Destination shared memory descriptor where data will be copied.
+   pred : tensor or bool, optional
+       Predicate for conditional execution. If False, the copy is skipped (default: True).
+   multicast : bool, optional
+       Enable multicast for cluster-wide copy operation (default: False).
+
+   Returns
+   -------
+   None
+
+   Notes
+   -----
+   This function is NVIDIA Hopper-specific and requires TMA (Tensor Memory Accelerator) hardware support. The operation is asynchronous and returns immediately without waiting for the copy to complete. Use the provided barrier to synchronize completion before accessing the shared memory.
+
+   When ``multicast=True``, the copy is broadcast to all CTAs in the cluster. All participating CTAs must call this function with matching parameters.
+
+   Examples
+   --------
+   .. code-block:: python
+
+      import triton.experimental.gluon as gluon
+      import triton.experimental.gluon.language as ttgl
+
+      @gluon.jit
+      def im2col_kernel(...):
+          # Setup tensor descriptor for global memory
+          desc = ttgl.make_tensor_descriptor(...)
+          
+          # Allocate shared memory with appropriate layout
+          smem = ttgl.allocate_shared_memory(...)
+          
+          # Create barrier for synchronization
+          barrier = ttgl.barrier()
+          
+          # Compute coordinates and im2col offsets
+          coord = ttgl.arange(0, block_size, layout=...)
+          offsets = [h_offset, w_offset]  # For 4D tensor
+          
+          # Async copy with im2col offsets
+          ttgl.nvidia.hopper.tma.async_copy_global_to_shared_im2col(
+              desc,
+              coord,
+              offsets,
+              barrier,
+              smem
+          )
+          
+          # Wait for copy completion before using smem
+          ttgl.barrier_wait(barrier)

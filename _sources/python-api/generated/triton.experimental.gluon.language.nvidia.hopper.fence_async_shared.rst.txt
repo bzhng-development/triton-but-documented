@@ -1,0 +1,64 @@
+fence_async_shared
+==================
+
+.. currentmodule:: triton.experimental.gluon.language.nvidia.hopper
+
+.. autofunction:: fence_async_shared
+
+.. rubric:: Description
+
+Issue a fence to complete asynchronous shared memory operations on NVIDIA Hopper GPUs.
+
+Parameters
+----------
+cluster : bool, optional
+    Whether to fence across the CTA cluster. Defaults to ``False``, which fences
+    within the current CTA only. Set to ``True`` to synchronize across all CTAs
+    in the cluster.
+
+Returns
+-------
+None
+
+Notes
+-----
+This function is specific to NVIDIA Hopper architecture (compute capability 90+).
+It ensures that all prior asynchronous shared memory operations (such as TMA
+loads/stores) are completed before subsequent memory operations proceed.
+
+When ``cluster=True``, the fence synchronizes across all CTAs in the cluster,
+which is required for correct coordination of cluster-wide shared memory
+accesses. This incurs additional overhead compared to CTA-local fencing.
+
+This builtin requires the ``_semantic`` argument to be provided by the Gluon
+JIT compiler and should not be called directly outside of a ``@gluon.jit``
+decorated kernel.
+
+Examples
+--------
+.. code-block:: python
+
+    import triton.experimental.gluon as gluon
+    import triton.experimental.gluon.language as ttgl
+
+    @gluon.jit
+    def kernel_async_fence(...):
+        # Issue async shared memory operations (e.g., TMA load)
+        # ...
+
+        # Fence to ensure async operations complete
+        ttgl.nvidia.hopper.fence_async_shared()
+
+        # Safe to access shared memory now
+        # ...
+
+    @gluon.jit
+    def kernel_cluster_fence(...):
+        # Cluster-wide async operations
+        # ...
+
+        # Fence across entire cluster
+        ttgl.nvidia.hopper.fence_async_shared(cluster=True)
+
+        # All CTAs in cluster see consistent shared memory state
+        # ...

@@ -1,0 +1,40 @@
+triton.language.extra.cuda.num_warps
+=====================================
+
+.. py:function:: num_warps()
+
+   Returns the number of warps per block for the current kernel.
+
+   Returns
+   -------
+   constexpr
+      The number of warps configured for the kernel at compile time.
+
+   Notes
+   -----
+   This function returns a compile-time constant representing the number of
+   CUDA warps (groups of 32 threads) that will execute each program instance.
+   The value is determined by the kernel launch configuration and cannot be
+   changed at runtime.
+
+   Common values are powers of 2 (1, 2, 4, 8, 16, 32). The optimal value
+   depends on the kernel's resource requirements (registers, shared memory)
+   and the target GPU's multiprocessor capacity.
+
+   This is a CUDA-specific function. For other backends, use the appropriate
+   backend-specific API.
+
+   Examples
+   --------
+   .. code-block:: python
+
+      import triton
+      import triton.language as tl
+
+      @triton.jit
+      def kernel(...):
+          num_warps = tl.extra.cuda.num_warps()
+          # num_warps is a constexpr, can be used in compile-time logic
+          if num_warps == 4:
+              # Specialized code for 4 warps per block
+              ...

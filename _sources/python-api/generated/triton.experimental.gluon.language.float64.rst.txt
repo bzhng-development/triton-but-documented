@@ -1,0 +1,33 @@
+float64
+=======
+
+.. py:data:: triton.experimental.gluon.language.float64
+
+   64-bit floating-point data type.
+
+   Represents IEEE 754 double-precision floating-point numbers. Use this type
+   for high-precision arithmetic within Gluon kernels. Hardware support and
+   performance characteristics vary across GPU architectures (e.g., NVIDIA
+   Hopper/Blackwell, AMD CDNA).
+
+   Notes
+   -----
+   Typically accessed via the alias ``ttgl.float64`` after importing:
+
+   .. code-block:: python
+
+      import triton.experimental.gluon.language as ttgl
+
+   Examples
+   --------
+   Specify a kernel pointer argument as 64-bit float:
+
+   .. code-block:: python
+
+      import triton.experimental.gluon as gluon
+      import triton.experimental.gluon.language as ttgl
+
+      @gluon.jit
+      def load_kernel(ptr: ttgl.pointer[ttgl.float64], size: ttgl.int32):
+          # Implementation using float64 precision
+          pass

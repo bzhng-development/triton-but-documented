@@ -1,0 +1,81 @@
+block_type
+==========
+
+.. class:: block_type(element_ty, shape)
+
+   Represents a typed memory block with a specific element type and shape.
+
+   ``block_type`` is used to describe the type of tensor blocks in Gluon kernels,
+   specifying both the scalar element type and the multidimensional shape of the
+   block. This is fundamental for defining tensor layouts, shared memory allocations,
+   and TMA descriptor block shapes.
+
+   Parameters
+   ----------
+   element_ty : dtype
+       The scalar data type of elements in the block (e.g., ``tl.float16``, ``tl.int32``).
+   shape : list or tuple of int
+       The multidimensional shape of the block. Must be non-empty (0D blocks are forbidden).
+
+   Attributes
+   ----------
+   element_ty : dtype
+       The scalar element type of the block.
+   shape : tuple of int
+       The shape dimensions of the block.
+   numel : int
+       Total number of elements in the block (product of shape dimensions).
+   scalar : dtype
+       Alias for ``element_ty``.
+   nbytes : int
+       Total size in bytes of the block (numel × element bitwidth / 8).
+
+   Methods
+   -------
+   to_ir(builder)
+       Converts the block type to an IR block type for the given builder.
+   get_block_shapes()
+       Returns the shape tuple of the block.
+   with_element_ty(scalar_ty)
+       Returns a new ``block_type`` with the same shape but different element type.
+   is_block()
+       Returns ``True`` (identifies this as a block type).
+   mangle()
+       Returns a mangled string representation for type encoding.
+
+   Notes
+   -----
+   - ``block_type`` differs from ``tensor`` in that its shape is stored as a tuple
+     of Python integers, not ``constexpr`` values.
+   - 0D block types are forbidden and will raise ``TypeError``.
+   - The ``numel`` attribute is validated against ``TRITON_MAX_TENSOR_NUMEL``.
+   - Block types are used extensively in Gluon for explicit layout control, TMA
+     descriptors, and warpgroup MMA operations.
+
+   Examples
+   --------
+   .. code-block:: python
+
+      import triton.experimental.gluon as gluon
+      import triton.experimental.gluon.language as ttgl
+
+      # Create a 2D block type with 16x32 float16 elements
+      block_ty = ttgl.block_type(ttgl.float16, [16, 32])
+      print(block_ty)  # <(16, 32), fp16>
+
+      # Access block properties
+      print(block_ty.shape)      # (16, 32)
+      print(block_ty.numel)      # 512
+      print(block_ty.nbytes)     # 1024 (512 × 2 bytes)
+
+      # Create a new block type with different element type
+      int_block = block_ty.with_element_ty(ttgl.int32)
+      print(int_block)           # <(16, 32), int32>
+      print(int_block.nbytes)    # 2048 (512 × 4 bytes)
+
+      # Use in tensor descriptor creation
+      @gluon.jit
+      def kernel(desc, BLOCK_M: ttgl.constexpr, BLOCK_N: ttgl.constexpr):
+          block_shape = [BLOCK_M, BLOCK_N]
+          # Block types define the load/store granularity for TMA operations
+          ...

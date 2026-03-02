@@ -1,60 +1,45 @@
 load_tensor_descriptor
 ======================
 
-Load a block of data from a tensor descriptor.
+.. currentmodule:: triton.language
 
-.. code-block:: python
+.. function:: load_tensor_descriptor(desc, offsets)
 
-    load_tensor_descriptor(desc, offsets, _semantic=None)
+   Load a block of data from a tensor descriptor.
 
-Parameters
-----------
-desc : tensor_descriptor_base
-    The tensor descriptor object representing the global memory tensor.
-offsets : Sequence[constexpr | tensor]
-    A sequence of offsets specifying the starting coordinates for the block load.
-    Each element corresponds to a dimension of the tensor.
-_semantic : optional
-    Internal semantic argument; do not set manually.
+   Parameters
+   ----------
+   desc : tensor_descriptor_base
+      The tensor descriptor to load from. Created by :py:func:`make_tensor_descriptor`.
+   offsets : Sequence[constexpr | tensor]
+      The offsets specifying the starting position for each dimension of the block load.
+      Must have the same length as the tensor rank.
 
-Returns
--------
-tensor
-    A tensor containing the loaded data with shape defined by the descriptor's block shape.
+   Returns
+   -------
+   tensor
+      A tensor containing the loaded data with shape matching the descriptor's block shape.
 
-Notes
------
-This function is a wrapper around the :py:meth:`tensor_descriptor_base.load` method.
-It requires the descriptor to be created via :py:func:`triton.language.make_tensor_descriptor`.
-Offsets must align with the hardware requirements (typically 16-byte alignment for TMA).
-Out-of-bounds access behavior is determined by the descriptor's padding option (default is zero).
+   Notes
+   -----
+   This function uses the Tensor Memory Accelerator (TMA) on NVIDIA GPUs with TMA support.
+   Loads are performed in units of the descriptor's block shape. Values outside of the tensor
+   bounds will be filled with zeros.
 
-Examples
---------
-.. code-block:: python
+   Offsets must be multiples of 16 bytes for proper alignment.
 
-    import triton
-    import triton.language as tl
+   See Also
+   --------
+   make_tensor_descriptor : Create a tensor descriptor
+   store_tensor_descriptor : Store data to a tensor descriptor
 
-    @triton.jit
-    def kernel(desc_ptr, M, N, BLOCK_M: tl.constexpr, BLOCK_N: tl.constexpr):
-        # Create a tensor descriptor for a 2D tensor
-        desc = tl.make_tensor_descriptor(
-            base=desc_ptr,
-            shape=[M, N],
-            strides=[N, 1],
-            block_shape=[BLOCK_M, BLOCK_N],
-        )
+   Examples
+   --------
+   .. code-block:: python
 
-        # Calculate offsets based on program ID
-        offset_m = tl.program_id(0) * BLOCK_M
-        offset_n = tl.program_id(1) * BLOCK_N
-
-        # Load a block of data using the descriptor
-        data = tl.load_tensor_descriptor(desc, [offset_m, offset_n])
-
-        # Perform computation
-        res = tl.abs(data)
-
-        # Store result back using the descriptor
-        tl.store_tensor_descriptor(desc, [offset_m, offset_n], res)
+      @triton.jit
+      def load_kernel(desc, M_BLOCK: tl.constexpr, N_BLOCK: tl.constexpr):
+          moffset = tl.program_id(0) * M_BLOCK
+          noffset = tl.program_id(1) * N_BLOCK
+          data = tl.load_tensor_descriptor(desc, [moffset, noffset])
+          # data has shape [M_BLOCK, N_BLOCK]

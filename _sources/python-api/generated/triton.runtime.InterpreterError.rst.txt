@@ -1,0 +1,26 @@
+InterpreterError
+================
+
+.. class:: InterpreterError(error_message: Optional[str] = None)
+
+    Exception raised when an error occurs during Triton interpreter execution.
+
+    Parameters
+    ----------
+    error_message : Optional[str], optional
+        Optional error message string.
+
+    Notes
+    -----
+    Subclass of :class:`triton.errors.TritonError`. Raised specifically when the Triton interpreter encounters an execution error.
+
+    Examples
+    --------
+    .. code-block:: python
+
+        from triton.runtime import InterpreterError
+
+        try:
+            raise InterpreterError("Interpreter execution failed")
+        except InterpreterError as e:
+            print(e)  # Outputs: Interpreter execution failed

@@ -1,0 +1,42 @@
+mul
+===
+
+mul
+---
+
+.. py:function:: mul(x, y, sanitize_overflow=True)
+
+   Element-wise multiplication of two tensors.
+
+   Parameters
+   ----------
+   x : tensor
+       First input tensor.
+   y : tensor
+       Second input tensor.
+   sanitize_overflow : constexpr, optional
+       If True (default), enables overflow sanitization for integer operations.
+
+   Returns
+   -------
+   tensor
+       Element-wise product of ``x`` and ``y``.
+
+   Notes
+   -----
+   Both inputs must have compatible shapes for broadcasting. The ``sanitize_overflow``
+   parameter controls whether integer overflow checks are inserted.
+
+   Examples
+   --------
+   .. code-block:: python
+
+      import triton.experimental.gluon as gluon
+      import triton.experimental.gluon.language as ttgl
+
+      @gluon.jit
+      def kernel(x_ptr, y_ptr, out_ptr, BLOCK_SIZE: ttgl.constexpr):
+          x = ttgl.load(x_ptr)
+          y = ttgl.load(y_ptr)
+          z = ttgl.mul(x, y)
+          ttgl.store(out_ptr, z)

@@ -1,55 +1,50 @@
-topk
-====
+triton.language.topk
+====================
 
 .. currentmodule:: triton.language
 
 .. function:: topk(x, k, dim=None, descending=True)
 
-   Returns the ``k`` largest (or smallest) elements of the input tensor along the specified dimension.
+    Returns the :code:`k` largest (or smallest) elements of the input tensor along the specified dimension.
 
-   The elements are returned in sorted order (largest first if ``descending=True``, smallest first if ``descending=False``).
+    The elements are returned in sorted order (largest first when :code:`descending=True`).
 
-   Parameters
-   ----------
-   x : tensor
-       The input tensor.
-   k : constexpr
-       The number of top elements to return. Must be a power of two.
-   dim : constexpr, optional
-       The dimension along which to find the top ``k`` elements.
-       If ``None``, uses the last dimension. Currently only the last dimension is supported.
-   descending : constexpr, optional
-       If ``True``, returns the ``k`` largest elements. If ``False``, returns the ``k`` smallest elements.
-       Defaults to ``True``.
+    Parameters
+    ----------
+    x : tensor
+        The input tensor.
+    k : constexpr
+        The number of top elements to return. Must be a power of two.
+    dim : constexpr, optional
+        The dimension along which to find the top :code:`k` elements. If None, uses the last dimension. Currently only the last dimension is supported.
+    descending : constexpr, optional
+        If True (default), returns :code:`k` largest elements. If False, returns :code:`k` smallest elements.
 
-   Returns
-   -------
-   tensor
-       A tensor containing the top ``k`` elements along the specified dimension, sorted in the requested order.
+    Returns
+    -------
+    tensor
+        A tensor containing the :code:`k` largest (or smallest) elements along the specified dimension, in sorted order.
 
-   Notes
-   -----
-   This operation uses a bitonic sort network. The size of the dimension being reduced must be a power of two,
-   and ``k`` must also be a power of two.
+    Notes
+    -----
+    The value of :code:`k` must be a power of two for the underlying bitonic sort algorithm to work correctly.
 
-   Examples
-   --------
-   Get the top 4 largest elements from a 1D tensor:
+    Only the last (minor) dimension is currently supported for the :code:`dim` parameter.
 
-   .. code-block:: python
+    Examples
+    --------
+    Get top 4 elements from a 1D tensor:
 
-       import triton.language as tl
+    .. code-block:: python
 
-       x = tl.arange(0, 16)
-       top4 = tl.topk(x, 4)
-       # top4 contains [15, 14, 13, 12]
+        import triton.language as tl
 
-   Get the 2 smallest elements from a 2D tensor along the last dimension:
+        x = tl.arange(0, 16)
+        top4 = tl.topk(x, 4)  # Returns [15, 14, 13, 12]
 
-   .. code-block:: python
+    Get bottom 4 elements (smallest):
 
-       import triton.language as tl
+    .. code-block:: python
 
-       x = tl.arange(0, 8).reshape((2, 4))
-       bottom2 = tl.topk(x, 2, descending=False)
-       # bottom2 contains the two smallest values from each row
+        x = tl.arange(0, 16)
+        bottom4 = tl.topk(x, 4, descending=False)  # Returns [0, 1, 2, 3]

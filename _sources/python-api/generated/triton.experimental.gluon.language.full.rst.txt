@@ -1,0 +1,46 @@
+full
+====
+
+Create a tensor filled with a scalar value.
+
+.. function:: triton.experimental.gluon.language.full(shape, value, dtype, layout=None)
+
+   Create a tensor filled with a scalar value, with specified shape, dtype, and layout.
+
+   Parameters
+   ----------
+   shape : Sequence[int]
+       The shape of the tensor.
+   value : int or float
+       The fill value for all elements in the tensor.
+   dtype : dtype
+       The data type for the tensor elements (e.g., ``ttgl.float32``, ``ttgl.int32``).
+   layout : DistributedLayout, optional
+       The layout of the output tensor. Defaults to ``AutoLayout()`` if not specified.
+
+   Returns
+   -------
+   tensor
+       A tensor where every element equals ``value``.
+
+   Notes
+   -----
+   This function must be called within a Gluon JIT kernel (decorated with ``@gluon.jit``).
+   The ``_semantic`` parameter is internal and should not be provided by users.
+
+   Examples
+   --------
+   .. code-block:: python
+
+      import triton.experimental.gluon as gluon
+      import triton.experimental.gluon.language as ttgl
+
+      @gluon.jit
+      def kernel():
+          # Create a 128x128 tensor filled with 1.0 (float32)
+          ones = ttgl.full((128, 128), 1.0, ttgl.float32)
+
+          # Create a 64-element tensor filled with 0 (int32) with explicit layout
+          from triton.experimental.gluon.language._layouts import BlockedLayout
+          layout = BlockedLayout([1, 1], [64], [32], [1, 0])
+          zeros = ttgl.full((64,), 0, ttgl.int32, layout=layout)

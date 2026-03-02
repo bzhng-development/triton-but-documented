@@ -1,35 +1,42 @@
-Element-wise multiplication of two tensors.
+triton.language.mul
+===================
 
-.. rubric:: Parameters
+.. currentmodule:: triton.language
 
-x : tl.tensor
-    The first input tensor.
-y : tl.tensor
-    The second input tensor.
-sanitize_overflow : tl.constexpr, optional
-    If true, the compiler inserts checks to detect integer overflow. Default is true.
+.. autofunction:: mul
 
-.. rubric:: Returns
+Element-wise multiplication of two tensors or scalars.
 
-tl.tensor
-    The element-wise product of :code:`x` and :code:`y`.
+Parameters
+----------
+x : tensor or scalar
+    The first input operand.
+y : tensor or scalar
+    The second input operand.
+sanitize_overflow : constexpr, optional
+    If True (default), enables overflow sanitization during multiplication.
 
-.. rubric:: Notes
+Returns
+-------
+tensor
+    The element-wise product of ``x`` and ``y``.
 
+Notes
+-----
 This function can also be called as a member function on :py:class:`tensor`,
 as :code:`x.mul(y)` instead of :code:`tl.mul(x, y)`.
 
-For floating-point inputs, this operation follows IEEE 754 semantics.
-For integer inputs, overflow behavior is defined by the underlying hardware
-unless :code:`sanitize_overflow` is enabled.
-
-.. rubric:: Examples
-
+Examples
+--------
 .. code-block:: python
 
+    import triton
+    import triton.language as tl
+
     @triton.jit
-    def kernel(X, Y, Z, BLOCK: tl.constexpr):
-        x = tl.load(X + tl.arange(0, BLOCK))
-        y = tl.load(Y + tl.arange(0, BLOCK))
+    def kernel(x_ptr, y_ptr, z_ptr, BLOCK_SIZE: tl.constexpr):
+        offsets = tl.arange(0, BLOCK_SIZE)
+        x = tl.load(x_ptr + offsets)
+        y = tl.load(y_ptr + offsets)
         z = tl.mul(x, y)
-        tl.store(Z + tl.arange(0, BLOCK), z)
+        tl.store(z_ptr + offsets, z)

@@ -1,0 +1,53 @@
+atomic_max
+==========
+
+.. currentmodule:: triton.experimental.gluon.language
+
+.. function:: atomic_max(pointer, val, mask=None, sem=None, scope=None, _semantic=None)
+
+   Performs an atomic maximum operation at the memory location specified by ``pointer``.
+
+   Returns the data stored at ``pointer`` before the atomic operation.
+
+   Parameters
+   ----------
+   pointer : tensor
+       The memory locations to operate on. Must be a block of ``triton.PointerDType``.
+   val : tensor
+       The values with which to perform the atomic operation. Must be a block of
+       ``pointer.dtype.element_ty``.
+   mask : tensor, optional
+       Boolean mask to control which threads participate in the atomic operation.
+   sem : str, optional
+       Specifies the memory semantics for the operation. Acceptable values are
+       ``"acquire"``, ``"release"``, ``"acq_rel"``, and ``"relaxed"``. Defaults to
+       ``"acq_rel"``.
+   scope : str, optional
+       Defines the scope of threads that observe the synchronizing effect of the
+       atomic operation. Acceptable values are ``"gpu"`` (default), ``"cta"``
+       (cooperative thread array), or ``"sys"`` (system).
+
+   Returns
+   -------
+   tensor
+       The data stored at ``pointer`` before the atomic operation.
+
+   Notes
+   -----
+   This function can also be called as a member function on :py:class:`tensor`,
+   as ``x.atomic_max(...)`` instead of ``atomic_max(x, ...)``.
+
+   The operation performs: ``old = *pointer; *pointer = max(*pointer, val)``.
+
+   Examples
+   --------
+   .. code-block:: python
+
+      import triton.experimental.gluon as gluon
+      import triton.experimental.gluon.language as ttgl
+
+      @gluon.jit
+      def kernel(x_ptr, val, n: tl.constexpr):
+          pid = ttgl.program_id(0)
+          ptr = x_ptr + pid
+          old = ttgl.atomic_max(ptr, val)

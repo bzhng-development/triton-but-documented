@@ -1,0 +1,51 @@
+split
+=====
+
+.. function:: split(a, _semantic=None, _generator=None)
+
+Split a tensor in two along its last dimension.
+
+Parameters
+----------
+a : tensor
+    The tensor to split. The last dimension must have size 2.
+
+Returns
+-------
+tuple[tensor, tensor]
+    A tuple containing two tensors. If the input has rank 1, returns two scalars.
+
+Notes
+-----
+The last dimension of the input tensor must have size 2. For example, given a
+tensor of shape ``(4, 8, 2)``, produces two tensors of shape ``(4, 8)``. Given
+a tensor of shape ``(2,)``, returns two scalars.
+
+To split into more than two pieces, use multiple calls to this function
+(possibly combined with :func:`reshape`). This reflects the constraint in
+Triton that tensors must have power-of-two sizes.
+
+:func:`split` is the inverse of :func:`join`.
+
+This function can also be called as a member function on :class:`tensor`,
+as ``x.split()`` instead of ``split(x)``.
+
+Examples
+--------
+.. code-block:: python
+
+    import triton.experimental.gluon as gluon
+    import triton.experimental.gluon.language as ttgl
+
+    @gluon.jit
+    def kernel():
+        # Split a (4, 8, 2) tensor into two (4, 8) tensors
+        x = ttgl.full((4, 8, 2), 1.0, ttgl.float32)
+        left, right = ttgl.split(x)
+
+        # Split a (2,) tensor into two scalars
+        y = ttgl.full((2,), 2.0, ttgl.float32)
+        a, b = ttgl.split(y)
+
+        # Can also be called as a member function
+        c, d = x.split()

@@ -1,0 +1,38 @@
+cosh
+====
+
+Compute the hyperbolic cosine of each element in the input tensor.
+
+Parameters
+----------
+arg0 : tensor
+    Input tensor. Must have floating-point dtype (fp32 or fp64).
+_semantic : optional
+    Internal semantic argument. Do not set manually.
+
+Returns
+-------
+tensor
+    Element-wise hyperbolic cosine of the input. Same dtype as input.
+
+Notes
+-----
+This function dispatches to CUDA libdevice:
+
+- ``__nv_coshf`` for fp32 inputs
+- ``__nv_cosh`` for fp64 inputs
+
+The operation is pure (no side effects).
+
+Examples
+--------
+.. code-block:: python
+
+    import triton
+    import triton.language as tl
+
+    @triton.jit
+    def kernel(x_ptr, y_ptr, BLOCK: tl.constexpr):
+        x = tl.load(x_ptr + tl.arange(0, BLOCK))
+        y = tl.extra.cuda.libdevice.cosh(x)
+        tl.store(y_ptr + tl.arange(0, BLOCK), y)

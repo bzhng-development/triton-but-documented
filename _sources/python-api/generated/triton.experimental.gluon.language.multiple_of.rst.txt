@@ -1,0 +1,46 @@
+multiple_of
+===========
+
+.. function:: multiple_of(input, values, _semantic=None)
+
+   Inform the compiler that all values in :code:`input` are multiples of specified constants.
+
+   This hint enables the compiler to generate more efficient code by leveraging
+   alignment guarantees.
+
+   Parameters
+   ----------
+   input : tensor
+       The input tensor whose values are guaranteed to be multiples of :code:`values`.
+   values : list of constexpr[int]
+       Compile-time constant divisors. Each element must be a :code:`constexpr`
+       with an integer value.
+   _semantic : GluonSemantic, optional
+       Internal semantic handler. Do not pass explicitly; required for JIT compilation.
+
+   Returns
+   -------
+   tensor
+       The input tensor with alignment metadata attached.
+
+   Notes
+   -----
+   This is a compiler hint that does not modify the tensor values at runtime.
+   All elements in :code:`values` must be :code:`constexpr` integers. Passing
+   non-constexpr values will raise a :code:`TypeError`.
+
+   Examples
+   --------
+   .. code-block:: python
+
+      import triton.experimental.gluon as gluon
+      import triton.experimental.gluon.language as ttgl
+
+      @gluon.jit
+      def kernel(x_ptr, BLOCK: ttgl.constexpr):
+          pid = ttgl.program_id(0)
+          offs = ttgl.arange(0, BLOCK)
+          # Inform compiler that offsets are multiples of 4
+          offs = ttgl.multiple_of(offs, [ttgl.constexpr(4)])
+          x = ttgl.load(x_ptr + offs)
+          # ... rest of kernel

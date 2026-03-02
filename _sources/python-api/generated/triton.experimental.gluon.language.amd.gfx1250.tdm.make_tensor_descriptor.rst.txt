@@ -1,0 +1,59 @@
+make_tensor_descriptor
+======================
+
+.. currentmodule:: triton.experimental.gluon.language.amd.gfx1250.tdm
+
+.. function:: make_tensor_descriptor(base, shape, strides, block_shape, layout)
+
+   Create a tensor descriptor object for TMA (Tensor Memory Accelerator) operations.
+
+   Parameters
+   ----------
+   base : tensor
+      Base pointer of the tensor in global memory. Must be a pointer type.
+   shape : list of constexpr or tensor
+      Shape of the tensor. Each dimension must be 1-5 total dimensions.
+   strides : list of constexpr or tensor
+      Strides of the tensor. Must have same length as ``shape``.
+   block_shape : list of constexpr
+      Block shape of the tensor for TMA operations. Must have same length as ``shape``.
+   layout : PaddedSharedLayout or SwizzledSharedLayout
+      The layout of the tensor in shared memory. For ``SwizzledSharedLayout``, ``max_phase`` must be 1.
+
+   Returns
+   -------
+   tensor_descriptor
+      The created tensor descriptor object for use in TMA load/store operations.
+
+   Notes
+   -----
+   - Number of dimensions must satisfy ``1 <= ndim <= 5``.
+   - ``shape``, ``strides``, and ``block_shape`` must all have the same length.
+   - ``base`` must be a pointer type (``base.dtype`` is ``pointer_type``).
+   - ``layout`` must be either ``PaddedSharedLayout`` or ``SwizzledSharedLayout``.
+   - For ``SwizzledSharedLayout``, ``max_phase`` must equal 1.
+   - Shape values are converted to i32, stride values to i64.
+   - Padding option is set to "zero" by default.
+
+   Examples
+   --------
+   .. code-block:: python
+
+      import triton.experimental.gluon as gluon
+      import triton.experimental.gluon.language as ttgl
+      from triton.experimental.gluon.language.amd.gfx1250.tdm import make_tensor_descriptor
+      from triton.experimental.gluon.language._layouts import PaddedSharedLayout
+
+      @gluon.jit
+      def kernel(base_ptr, shape, strides):
+          # Create a tensor descriptor for TMA operations
+          layout = PaddedSharedLayout(shape=[128, 128], padding=0)
+          desc = make_tensor_descriptor(
+              base=base_ptr,
+              shape=[1024, 1024],
+              strides=[1024, 1],
+              block_shape=[128, 128],
+              layout=layout
+          )
+          # Use descriptor in TMA load/store operations
+          ...

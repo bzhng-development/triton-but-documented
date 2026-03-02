@@ -1,0 +1,59 @@
+max_constancy
+=============
+
+.. currentmodule:: triton.experimental.gluon.language
+
+.. function:: max_constancy(input, values, _semantic=None)
+
+   Inform the compiler that consecutive groups of values in :code:`input` are constant.
+
+   This optimization hint indicates that the input tensor contains repeated values in
+   contiguous blocks, enabling the compiler to generate more efficient code.
+
+   Parameters
+   ----------
+   input : tensor
+       The input tensor whose constancy pattern is being described.
+   values : list of constexpr
+       List of constexpr integers specifying the group sizes. Each element indicates
+       that consecutive groups of that size contain equal values.
+   _semantic : GluonSemantic, optional
+       Internal semantic handler. Do not pass explicitly; this is managed by the
+       :code:`@gluon.jit` decorator.
+
+   Returns
+   -------
+   tensor
+       The input tensor annotated with constancy information.
+
+   Notes
+   -----
+   For each group size :code:`d` in :code:`values`, the compiler assumes that every
+   consecutive block of :code:`d` elements in :code:`input` contains identical values.
+
+   For example, if :code:`values` is :code:`[4]`, then the input should have the
+   pattern :code:`[0, 0, 0, 0, 1, 1, 1, 1, 2, 2, 2, 2, ...]` where each group of 4
+   consecutive elements is constant.
+
+   All elements in :code:`values` must be compile-time constants (:code:`constexpr`).
+   Passing non-constexpr values will raise a :code:`TypeError`.
+
+   Examples
+   --------
+   .. code-block:: python
+
+      import triton.experimental.gluon as gluon
+      import triton.experimental.gluon.language as ttgl
+
+      @gluon.jit
+      def kernel(x_ptr, n):
+          pid = ttgl.program_id(0)
+          offsets = ttgl.arange(0, n)
+          x = ttgl.load(x_ptr + offsets)
+
+          # Inform compiler that every 4 consecutive values are constant
+          x_const = ttgl.max_constancy(x, [ttgl.constexpr(4)])
+
+          # Use x_const for subsequent operations
+          y = x_const * 2.0
+          ttgl.store(x_ptr + offsets, y)

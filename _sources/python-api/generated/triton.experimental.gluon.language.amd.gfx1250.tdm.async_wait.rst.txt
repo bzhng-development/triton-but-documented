@@ -1,0 +1,48 @@
+async_wait
+==========
+
+Wait for outstanding asynchronous tensor data movement (TDM) operations to complete.
+
+Parameters
+----------
+num_outstanding : int, optional
+    Number of outstanding async tensor operations to wait for. Default is 0,
+    which waits for all outstanding operations to complete.
+_semantic : GluonSemantic, optional
+    Internal semantic context passed automatically by the Gluon JIT compiler.
+    Do not set this argument manually.
+
+Returns
+-------
+None
+
+Notes
+-----
+This function is specific to AMD GFX1250 hardware and the TDM (Tensor Data
+Movement) asynchronous execution model. It inserts a hardware wait instruction
+that blocks until the specified number of outstanding async operations have
+completed.
+
+When ``num_outstanding=0``, the wait blocks until all pending async TDM
+operations finish. When set to a positive integer N, it waits until N
+operations remain outstanding (i.e., waits for all but N operations to
+complete).
+
+This is a hardware barrier for async tensor operations and should be used
+to ensure data consistency before accessing results from async loads or
+stores.
+
+Examples
+--------
+.. code-block:: python
+
+    import triton.experimental.gluon as gluon
+    import triton.experimental.gluon.language as ttgl
+
+    @gluon.jit
+    def kernel_async_wait():
+        # Wait for all outstanding async TDM operations to complete
+        ttgl.amd.gfx1250.tdm.async_wait(num_outstanding=0)
+
+        # Wait until only 2 operations remain outstanding
+        ttgl.amd.gfx1250.tdm.async_wait(num_outstanding=2)

@@ -1,0 +1,48 @@
+clz
+===
+
+Count leading zeros.
+
+Counts the number of zero bits preceding the most significant bit in the binary
+representation of the input integer.
+
+Parameters
+----------
+arg0 : tensor
+    Input tensor of integer type. Supported dtypes are ``int32`` and ``int64``.
+
+Returns
+-------
+out : tensor
+    Tensor of ``int32`` dtype containing the count of leading zeros for each
+    element in the input. For each element, the return value is the number of
+    zero bits before the most significant one bit.
+
+Notes
+-----
+This function is a wrapper around CUDA libdevice functions:
+
+- ``__nv_clz`` for ``int32`` inputs
+- ``__nv_clzll`` for ``int64`` inputs
+
+The result is always returned as ``int32`` regardless of input type. For an
+input of zero, the result is the bitwidth of the input type (32 for int32,
+64 for int64).
+
+This is a pure function with no side effects.
+
+Examples
+--------
+.. code-block:: python
+
+    import triton
+    import triton.language as tl
+
+    @triton.jit
+    def kernel(x_ptr, out_ptr, BLOCK: tl.constexpr):
+        x = tl.load(x_ptr + tl.arange(0, BLOCK))
+        leading_zeros = tl.extra.cuda.libdevice.clz(x)
+        tl.store(out_ptr + tl.arange(0, BLOCK), leading_zeros)
+
+    # Example: for int32 value 0x00000001 (binary: 0...01)
+    # clz returns 31 (31 leading zeros before the 1 bit)

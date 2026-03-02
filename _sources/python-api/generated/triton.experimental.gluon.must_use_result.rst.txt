@@ -1,0 +1,79 @@
+must_use_result
+===============
+
+.. currentmodule:: triton.experimental.gluon
+
+.. autofunction:: must_use_result
+
+.. function:: must_use_result(x, s=True)
+
+   Mark a value or function to require its result be used.
+
+   If the result of the decorated function or marked value is unused, an error
+   will be raised at compile time. This helps prevent accidental omission of
+   operations that have no side effects.
+
+   Parameters
+   ----------
+   x : object or str
+       The value to mark, or a string message when used as a decorator factory.
+   s : bool, optional
+       Whether the result must be used (default True).
+
+   Returns
+   -------
+   object
+       The input value with the ``_must_use_result`` attribute set, or a
+       decorator function when ``x`` is a string.
+
+   Notes
+   -----
+   This function supports two usage patterns:
+
+   1. **Direct marking**: Call ``must_use_result(obj)`` to mark an object's
+      result as required.
+
+   2. **Decorator**: Use ``@must_use_result`` or ``@must_use_result("message")``
+      to decorate a function. When a string is provided, it serves as the error
+      message.
+
+   The marker sets the ``_must_use_result`` attribute on the object, which the
+   compiler checks to ensure the result is consumed.
+
+   Examples
+   --------
+   Mark a value to require its result be used:
+
+   .. code-block:: python
+
+      import triton.experimental.gluon as gluon
+
+      @gluon.jit
+      def kernel(ptr):
+          value = gluon.load(ptr)
+          # This will raise an error if the result is unused
+          gluon.must_use_result(value)
+
+   Use as a decorator on a function:
+
+   .. code-block:: python
+
+      import triton.experimental.gluon as gluon
+
+      @gluon.must_use_result
+      @gluon.jit
+      def compute(x):
+          return x * 2
+
+      # Calling compute without using the result will raise an error
+
+   Use with a custom error message:
+
+   .. code-block:: python
+
+      import triton.experimental.gluon as gluon
+
+      @gluon.must_use_result("Result of advance must be assigned")
+      @gluon.jit
+      def move_ptr(ptr, offset):
+          return gluon.advance(ptr, offset)

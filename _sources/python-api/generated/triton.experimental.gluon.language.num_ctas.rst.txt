@@ -1,0 +1,37 @@
+num_ctas
+========
+
+.. py:function:: num_ctas()
+
+   Returns the number of CTAs (Cooperative Thread Arrays) in the current kernel.
+
+   Returns
+   -------
+   int
+      The number of CTAs configured for the current kernel.
+
+   Notes
+   -----
+   This function is only available within Gluon JIT-compiled kernels (decorated with
+   :func:`@gluon.jit <triton.experimental.gluon.jit>`). The ``_semantic`` parameter
+   is internal and should not be provided by users.
+
+   CTAs are the basic execution unit in GPU kernels, analogous to thread blocks in
+   CUDA. Multi-CTA kernels enable cluster-level execution on NVIDIA Hopper and
+   later architectures.
+
+   Examples
+   --------
+   .. code-block:: python
+
+      import triton.experimental.gluon as gluon
+      import triton.experimental.gluon.language as ttgl
+
+      @gluon.jit
+      def kernel():
+          num_ctas = ttgl.num_ctas()
+          cta_id = ttgl.program_id(0)
+          # Use num_ctas for cluster-aware indexing
+          if cta_id < num_ctas:
+              # Process data for this CTA
+              pass

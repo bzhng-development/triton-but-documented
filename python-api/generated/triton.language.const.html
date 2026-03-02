@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>&lt;no title&gt; &mdash; Triton  documentation</title>
+  <title>const &mdash; Triton  documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=03e43079" />
       <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="../../_static/css/custom.css" />
@@ -18,8 +18,8 @@
     <script src="../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
-    <link rel="next" title="class constexpr" href="triton.language.constexpr.html" />
-    <link rel="prev" title="Parameters" href="triton.language.condition.html" /> 
+    <link rel="next" title="constexpr" href="triton.language.constexpr.html" />
+    <link rel="prev" title="class triton.language.condition" href="triton.language.condition.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -51,20 +51,22 @@
 <li class="toctree-l1"><a class="reference internal" href="../triton.html">triton</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="../triton.language.html">triton.language</a><ul class="current">
 <li class="toctree-l2 current"><a class="reference internal" href="../triton.language.html#programming-model">Programming Model</a><ul class="current">
-<li class="toctree-l3"><a class="reference internal" href="triton.language.tensor.html"><code class="docutils literal notranslate"><span class="pre">triton.language.tensor</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.language.tensor.html">class triton.language.tensor</a></li>
 <li class="toctree-l3"><a class="reference internal" href="triton.language.tensor_descriptor.html">tensor_descriptor</a></li>
 <li class="toctree-l3"><a class="reference internal" href="triton.language.program_id.html">program_id</a></li>
-<li class="toctree-l3"><a class="reference internal" href="triton.language.num_programs.html">num_programs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.language.num_programs.html">triton.language.num_programs</a></li>
 <li class="toctree-l3"><a class="reference internal" href="triton.language.block_type.html">block_type</a></li>
-<li class="toctree-l3"><a class="reference internal" href="triton.language.condition.html"><code class="docutils literal notranslate"><span class="pre">triton.language.condition</span></code></a></li>
-<li class="toctree-l3 current"><a class="current reference internal" href="#"><code class="docutils literal notranslate"><span class="pre">triton.language.const</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="triton.language.constexpr.html">class constexpr</a></li>
-<li class="toctree-l3"><a class="reference internal" href="triton.language.constexpr_type.html"><code class="docutils literal notranslate"><span class="pre">constexpr_type</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="triton.language.dtype.html">dtype</a></li>
-<li class="toctree-l3"><a class="reference internal" href="triton.language.pointer_type.html"><code class="docutils literal notranslate"><span class="pre">pointer_type</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.language.condition.html">class triton.language.condition</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">const</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#triton.language.const"><code class="docutils literal notranslate"><span class="pre">const</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="triton.language.constexpr.html">constexpr</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.language.constexpr_type.html">constexpr_type</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.language.dtype.html">class dtype</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.language.pointer_type.html">pointer_type</a></li>
 <li class="toctree-l3"><a class="reference internal" href="triton.language.slice.html">slice</a></li>
-<li class="toctree-l3"><a class="reference internal" href="triton.language.tensor_descriptor_type.html">triton.language.tensor_descriptor_type</a></li>
-<li class="toctree-l3"><a class="reference internal" href="triton.language.tuple.html"><code class="docutils literal notranslate"><span class="pre">triton.language.tuple</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.language.tuple.html">class triton.language.tuple</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../triton.language.html#creation-ops">Creation Ops</a></li>
@@ -86,6 +88,35 @@
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../triton.testing.html">triton.testing</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../triton-semantics.html">Triton Semantics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.language.extra.cuda.html">triton.language.extra.cuda</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.language.extra.cuda.libdevice.html">triton.language.extra.cuda.libdevice</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.runtime.html">triton.runtime</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.tools.html">triton.tools</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Gluon (Experimental) API</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.html">triton.experimental.gluon</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.html">triton.experimental.gluon.language</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.nvidia.ampere.html">triton.experimental.gluon.language.nvidia.ampere</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.nvidia.ampere.async_copy.html">triton.experimental.gluon.language.nvidia.ampere.async_copy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.nvidia.ampere.mbarrier.html">triton.experimental.gluon.language.nvidia.ampere.mbarrier</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.nvidia.hopper.html">triton.experimental.gluon.language.nvidia.hopper</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.nvidia.hopper.tma.html">triton.experimental.gluon.language.nvidia.hopper.tma</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.nvidia.hopper.mbarrier.html">triton.experimental.gluon.language.nvidia.hopper.mbarrier</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.nvidia.hopper.cluster.html">triton.experimental.gluon.language.nvidia.hopper.cluster</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.nvidia.blackwell.html">triton.experimental.gluon.language.nvidia.blackwell</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.nvidia.blackwell.tma.html">triton.experimental.gluon.language.nvidia.blackwell.tma</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.nvidia.blackwell.clc.html">triton.experimental.gluon.language.nvidia.blackwell.clc</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.amd.html">triton.experimental.gluon.language.amd</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.amd.gfx1250.html">triton.experimental.gluon.language.amd.gfx1250</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.amd.gfx1250.async_copy.html">triton.experimental.gluon.language.amd.gfx1250.async_copy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.amd.gfx1250.mbarrier.html">triton.experimental.gluon.language.amd.gfx1250.mbarrier</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.amd.gfx1250.cluster.html">triton.experimental.gluon.language.amd.gfx1250.cluster</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.amd.gfx1250.tdm.html">triton.experimental.gluon.language.amd.gfx1250.tdm</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.amd.cdna3.html">triton.experimental.gluon.language.amd.cdna3</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.amd.cdna4.html">triton.experimental.gluon.language.amd.cdna4</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.amd.rdna3.html">triton.experimental.gluon.language.amd.rdna3</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.amd.rdna4.html">triton.experimental.gluon.language.amd.rdna4</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Triton MLIR Dialects</span></p>
 <ul>
@@ -113,7 +144,7 @@
   <ul class="wy-breadcrumbs">
       <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
           <li class="breadcrumb-item"><a href="../triton.language.html">triton.language</a></li>
-      <li class="breadcrumb-item active">&lt;no title&gt;</li>
+      <li class="breadcrumb-item active">const</li>
       <li class="wy-breadcrumbs-aside">
             <a href="../../_sources/python-api/generated/triton.language.const.rst.txt" rel="nofollow"> View page source</a>
       </li>
@@ -123,41 +154,43 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <dl class="py class">
+  <section id="const">
+<h1>const<a class="headerlink" href="#const" title="Link to this heading">¶</a></h1>
+<dl class="py class">
 <dt class="sig sig-object py" id="triton.language.const">
 <span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">triton.language.</span></span><span class="sig-name descname"><span class="pre">const</span></span><a class="headerlink" href="#triton.language.const" title="Link to this definition">¶</a></dt>
-<dd><p>Type annotation for pointers to constant (read-only) data.</p>
-<p>This class is used exclusively as a type hint to mark pointers referencing
-constant memory. It enforces type consistency: pointers marked with
-<code class="code docutils literal notranslate"><span class="pre">const</span></code> cannot be passed to <a class="reference internal" href="triton.language.store.html#triton.language.store" title="triton.language.store"><code class="xref py py-func docutils literal notranslate"><span class="pre">triton.language.store()</span></code></a>, and
-control flow paths must maintain consistent constness (e.g., a function
-cannot return a constant pointer in one branch and a mutable pointer in
-another).</p>
+<dd><p>Type annotation for pointers to constant data.</p>
+<p>This class is used as a type annotation to mark pointers to constant data.
+The <code class="xref py py-func docutils literal notranslate"><span class="pre">store()</span></code> function cannot be called with a pointer to const.
+Constness is part of the pointer type and the usual Triton type consistency
+rules apply.</p>
 <p class="rubric">Notes</p>
-<p>Constness is part of the pointer type semantics in Triton. Attempting to
-store through a <code class="code docutils literal notranslate"><span class="pre">const</span></code> pointer will result in a compilation error.</p>
+<p>For example, you cannot have a function that returns a constant pointer in
+one return statement and a non-constant pointer in another. The pointer type
+must be consistent throughout the function.</p>
 <p class="rubric">Examples</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">triton</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">triton.language</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">tl</span>
 
 <span class="nd">@triton</span><span class="o">.</span><span class="n">jit</span>
-<span class="k">def</span><span class="w"> </span><span class="nf">load_kernel</span><span class="p">(</span><span class="n">ptr</span><span class="p">:</span> <span class="n">tl</span><span class="o">.</span><span class="n">const_pointer</span><span class="p">,</span> <span class="n">out_ptr</span><span class="p">,</span> <span class="n">BLOCK</span><span class="p">:</span> <span class="n">tl</span><span class="o">.</span><span class="n">constexpr</span><span class="p">):</span>
-    <span class="c1"># Legal: loading from const pointer</span>
-    <span class="n">data</span> <span class="o">=</span> <span class="n">tl</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">ptr</span> <span class="o">+</span> <span class="n">tl</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">BLOCK</span><span class="p">))</span>
-    <span class="c1"># Illegal: storing to const pointer (compile-time error)</span>
-    <span class="c1"># tl.store(ptr, data)  # Error</span>
-    <span class="n">tl</span><span class="o">.</span><span class="n">store</span><span class="p">(</span><span class="n">out_ptr</span><span class="p">,</span> <span class="n">data</span><span class="p">)</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">load_const_kernel</span><span class="p">(</span><span class="n">ptr</span><span class="p">:</span> <span class="n">tl</span><span class="o">.</span><span class="n">const_pointer</span><span class="p">,</span> <span class="n">out_ptr</span><span class="p">,</span> <span class="n">BLOCK</span><span class="p">:</span> <span class="n">tl</span><span class="o">.</span><span class="n">constexpr</span><span class="p">):</span>
+    <span class="c1"># Load from constant pointer (read-only)</span>
+    <span class="n">value</span> <span class="o">=</span> <span class="n">tl</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">ptr</span> <span class="o">+</span> <span class="n">tl</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">BLOCK</span><span class="p">))</span>
+    <span class="c1"># Cannot store to const pointer - this would be a type error</span>
+    <span class="c1"># tl.store(ptr, value)  # ERROR</span>
+    <span class="n">tl</span><span class="o">.</span><span class="n">store</span><span class="p">(</span><span class="n">out_ptr</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
 </pre></div>
 </div>
 </dd></dl>
 
+</section>
 
 
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="triton.language.condition.html" class="btn btn-neutral float-left" title="Parameters" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="triton.language.constexpr.html" class="btn btn-neutral float-right" title="class constexpr" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="triton.language.condition.html" class="btn btn-neutral float-left" title="class triton.language.condition" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="triton.language.constexpr.html" class="btn btn-neutral float-right" title="constexpr" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>

@@ -1,0 +1,49 @@
+triton.language.extra.cuda.libdevice.rnorm3d
+=============================================
+
+.. currentmodule:: triton.language.extra.cuda.libdevice
+
+.. function:: rnorm3d(arg0, arg1, arg2, _semantic=None)
+
+   Computes the reciprocal of the 3D Euclidean norm.
+
+   Parameters
+   ----------
+   arg0 : tl.tensor
+       First coordinate (x).
+   arg1 : tl.tensor
+       Second coordinate (y).
+   arg2 : tl.tensor
+       Third coordinate (z).
+   _semantic : optional
+       Internal semantic argument; do not set manually.
+
+   Returns
+   -------
+   tl.tensor
+       Reciprocal norm :math:`1 / \sqrt{x^2 + y^2 + z^2}`. Same dtype as inputs.
+
+   Notes
+   -----
+   This function dispatches to CUDA libdevice:
+
+   - ``__nv_rnorm3df`` for ``fp32`` inputs
+   - ``__nv_rnorm3d`` for ``fp64`` inputs
+
+   All three arguments must have the same dtype (either all ``fp32`` or all ``fp64``).
+   The operation is pure (no side effects).
+
+   Examples
+   --------
+   .. code-block:: python
+
+       import triton
+       import triton.language as tl
+
+       @triton.jit
+       def kernel(X, Y, Z, Out, BLOCK_SIZE: tl.constexpr):
+           x = tl.load(X + tl.arange(0, BLOCK_SIZE))
+           y = tl.load(Y + tl.arange(0, BLOCK_SIZE))
+           z = tl.load(Z + tl.arange(0, BLOCK_SIZE))
+           rnorm = tl.extra.cuda.libdevice.rnorm3d(x, y, z)
+           tl.store(Out + tl.arange(0, BLOCK_SIZE), rnorm)

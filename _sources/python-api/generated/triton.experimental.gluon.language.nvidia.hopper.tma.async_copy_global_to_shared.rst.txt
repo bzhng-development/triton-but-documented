@@ -1,0 +1,73 @@
+async_copy_global_to_shared
+=============================
+
+.. currentmodule:: triton.experimental.gluon.language.nvidia.hopper.tma
+
+.. function:: async_copy_global_to_shared(tensor_desc, coord, barrier, result, pred=True, multicast=False)
+
+   Copy data from global memory to shared memory using Tensor Memory Accelerator (TMA).
+
+   This function initiates an asynchronous copy operation from global memory to shared
+   memory on NVIDIA Hopper GPUs. The operation uses TMA hardware features for efficient
+   memory transfers and requires proper synchronization via barriers.
+
+   Parameters
+   ----------
+   tensor_desc : TensorDescriptor
+       Tiled tensor descriptor describing the source data in global memory.
+   coord : tensor or sequence of int
+       Coordinates specifying the tile location in the source tensor.
+   barrier : Barrier
+       Synchronization barrier for coordinating async copy completion.
+   result : shared_memory_descriptor
+       Destination shared memory descriptor where data will be copied.
+   pred : bool or tensor, optional
+       Predicate for conditional execution. If False, the copy is skipped.
+       Default is True.
+   multicast : bool, optional
+       Enable multicast mode for copying to multiple destinations.
+       Default is False.
+
+   Notes
+   -----
+   This is a low-level TMA primitive for NVIDIA Hopper architecture. The copy is
+   asynchronous and non-blocking - use the provided barrier to synchronize before
+   accessing the copied data in shared memory.
+
+   The tensor descriptor must be properly aligned according to TMA requirements.
+   When ``enable_iisan`` is enabled, alignment checks are performed automatically.
+
+   Examples
+   --------
+   .. code-block:: python
+
+      import triton.experimental.gluon as gluon
+      import triton.experimental.gluon.language as ttgl
+      from triton.experimental.gluon.language.nvidia.hopper import tma
+
+      @gluon.jit
+      def kernel(...):
+          # Create shared memory descriptor
+          smem = ttgl.allocate_shared_memory(
+              element_ty=ttgl.float16,
+              shape=[128, 128],
+              layout=ttgl.SharedLayout(...)
+          )
+
+          # Create global tensor descriptor
+          desc = tma.make_tensor_descriptor(...)
+
+          # Create barrier for synchronization
+          barrier = tma.barrier_alloc(...)
+
+          # Async copy from global to shared memory
+          coord = ttgl.arange(0, 128, layout=...)
+          tma.async_copy_global_to_shared(
+              tensor_desc=desc,
+              coord=coord,
+              barrier=barrier,
+              result=smem
+          )
+
+          # Wait for copy to complete before using smem
+          tma.barrier_wait(barrier)

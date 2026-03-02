@@ -1,0 +1,38 @@
+sync_cluster_init
+=================
+
+.. py:function:: sync_cluster_init()
+
+   Ensure mbarrier initialization is visible across the CTA cluster.
+
+   Notes
+   -----
+   This function emits a ``fence_init_release_cluster`` followed by a
+   ``cluster.barrier(relaxed=True)``. It is required when initializing
+   mbarriers that are accessed by multiple CTAs within a cluster on
+   NVIDIA Hopper architectures.
+
+   Without this synchronization, mbarrier initialization writes performed
+   by one CTA may not be visible to other CTAs in the cluster, leading to
+   undefined behavior during ``wait`` or ``expect`` operations.
+
+   Examples
+   --------
+   Initialize an mbarrier and synchronize across the cluster:
+
+   .. code-block:: python
+
+      import triton.experimental.gluon as gluon
+      import triton.experimental.gluon.language as ttgl
+
+      @gluon.jit
+      def kernel(...):
+          # Allocate and initialize mbarrier in shared memory
+          mbarrier = ttgl.nvidia.hopper.mbarrier.allocate_mbarrier(...)
+          ttgl.nvidia.hopper.mbarrier.init(mbarrier, ...)
+
+          # Ensure initialization is visible to other CTAs in the cluster
+          ttgl.nvidia.hopper.mbarrier.sync_cluster_init()
+
+          # Proceed with coordinated access
+          ...

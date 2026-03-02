@@ -1,29 +1,33 @@
-Computes the element-wise floor of :code:`x`.
+floor
+=====
 
-.. code-block:: python
+Compute the element-wise floor of the input tensor.
 
-    import triton
-    import triton.language as tl
-
-    @triton.jit
-    def floor_kernel(x_ptr, y_ptr, BLOCK_SIZE: tl.constexpr):
-        offsets = tl.arange(0, BLOCK_SIZE)
-        x = tl.load(x_ptr + offsets)
-        y = tl.floor(x)
-        tl.store(y_ptr + offsets, y)
+For each element :code:`x[i]`, returns the largest integer less than or equal to :code:`x[i]`.
 
 Parameters
 ----------
-x : Block
-    The input tensor. Must be a floating-point type (e.g., :code:`tl.float32`, :code:`tl.float64`).
+x : tl.tensor
+    Input tensor. Must have floating point dtype (:code:`fp32` or :code:`fp64`).
 
 Returns
 -------
-Block
-    A tensor containing the floor of each element in :code:`x`. The result has the same shape and dtype as :code:`x`.
+tl.tensor
+    Tensor of the same shape as :code:`x` containing the floor values.
 
 Notes
 -----
-This function is only supported for floating-point types (:code:`fp32`, :code:`fp64`). It rounds each element to the largest integer value less than or equal to the element.
+This function can also be called as a member function on :py:class:`tensor`,
+as :code:`x.floor()` instead of :code:`tl.floor(x)`.
 
-This function can also be called as a member function on :py:class:`tensor`, as :code:`x.floor()` instead of :code:`tl.floor(x)`.
+Only floating point types are supported (:code:`fp32`, :code:`fp64`).
+
+Examples
+--------
+.. code-block:: python
+
+    @triton.jit
+    def kernel(x_ptr, y_ptr, BLOCK_SIZE: tl.constexpr):
+        x = tl.load(x_ptr + tl.arange(0, BLOCK_SIZE))
+        y = tl.floor(x)
+        tl.store(y_ptr + tl.arange(0, BLOCK_SIZE), y)

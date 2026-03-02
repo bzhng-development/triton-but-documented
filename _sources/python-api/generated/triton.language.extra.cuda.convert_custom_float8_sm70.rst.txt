@@ -1,0 +1,50 @@
+convert_custom_float8_sm70
+==========================
+
+.. py:function:: triton.language.extra.cuda.convert_custom_float8_sm70(arg, dst_ty, fp_downcast_rounding=None)
+
+    Convert a tensor to custom float8 format for SM70 (Compute Capability 7.0) GPUs.
+
+    Parameters
+    ----------
+    arg : tensor
+        The input tensor to convert.
+    dst_ty : tl.dtype
+        The target float8 data type. Supported types include ``fp8e4nv``, ``fp8e4b8``, 
+        ``fp8e4b15``, ``fp8e5``, and ``fp8e5b16``.
+    fp_downcast_rounding : str, optional
+        The rounding mode for downcasting floating-point values. Supported values are 
+        ``"rtne"`` (round to nearest, ties to even) and ``"rtz"`` (round towards zero). 
+        If not specified, defaults to ``"rtne"``.
+
+    Returns
+    -------
+    tensor
+        A tensor with the same shape as ``arg`` but converted to the specified float8 
+        destination type.
+
+    Notes
+    -----
+    This function is specifically designed for NVIDIA GPUs with Compute Capability 7.0 
+    (SM70). It disables the ``has_minx2`` optimization that is available on newer 
+    architectures (SM80+). For SM80 and later, consider using 
+    :py:func:`triton.language.extra.cuda.convert_custom_float8_sm80` instead.
+
+    The conversion follows IEEE 754 rounding rules when ``fp_downcast_rounding`` is 
+    specified. Behavior is undefined if the destination type cannot represent the 
+    input values (e.g., overflow to infinity).
+
+    Examples
+    --------
+    .. code-block:: python
+
+        import triton
+        import triton.language as tl
+
+        @triton.jit
+        def kernel(input_ptr, output_ptr, BLOCK_SIZE: tl.constexpr):
+            offsets = tl.arange(0, BLOCK_SIZE)
+            input = tl.load(input_ptr + offsets)
+            # Convert fp32 to fp8e4nv for SM70 GPUs
+            output = tl.extra.cuda.convert_custom_float8_sm70(input, tl.float8e4nv)
+            tl.store(output_ptr + offsets, output)

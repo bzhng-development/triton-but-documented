@@ -1,29 +1,27 @@
-exp
-===
-
-.. currentmodule:: triton.language
+triton.language.exp
+===================
 
 .. function:: exp(x, _semantic=None)
 
-   Computes the element-wise exponential of :code:`x`.
+   Computes the element-wise natural exponential (e^x) of the input tensor.
 
    Parameters
    ----------
-   x : Block
-      The input tensor. Must be a floating-point type (:code:`fp32` or :code:`fp64`).
+   x : tl.tensor
+       The input tensor. Must be of floating-point type (``fp32`` or ``fp64``).
 
    Returns
    -------
-   Block
-      A tensor containing the exponential of each element in :code:`x`.
+   tl.tensor
+       A tensor of the same shape as ``x`` containing the exponential values.
 
    Notes
    -----
    This function can also be called as a member function on :py:class:`tensor`,
-   as :code:`x.exp()` instead of :code:`tl.exp(x)`.
+   as ``x.exp()`` instead of ``tl.exp(x)``.
 
-   The operation is only supported for floating-point dtypes. Passing integer
-   types will result in a compilation error.
+   The exponential is computed as e^x where e is Euler's number (approximately
+   2.71828). Only floating-point types ``fp32`` and ``fp64`` are supported.
 
    Examples
    --------
@@ -33,9 +31,9 @@ exp
       import triton.language as tl
 
       @triton.jit
-      def exp_kernel(x_ptr, out_ptr, BLOCK_SIZE: tl.constexpr):
+      def exp_kernel(x_ptr, y_ptr, BLOCK_SIZE: tl.constexpr):
           pid = tl.program_id(0)
           offs = pid * BLOCK_SIZE + tl.arange(0, BLOCK_SIZE)
           x = tl.load(x_ptr + offs)
           y = tl.exp(x)
-          tl.store(out_ptr + offs, y)
+          tl.store(y_ptr + offs, y)

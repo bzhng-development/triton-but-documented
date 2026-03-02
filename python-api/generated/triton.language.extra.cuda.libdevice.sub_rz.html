@@ -1,0 +1,417 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>triton.language.extra.cuda.libdevice.sub_rz &mdash; Triton  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=03e43079" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/custom.css" />
+
+  
+      <script src="../../_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="tan" href="triton.language.extra.cuda.libdevice.tan.html" />
+    <link rel="prev" title="sub_ru" href="triton.language.extra.cuda.libdevice.sub_ru.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            Triton
+              <img src="https://cdn.openai.com/triton/assets/triton-logo.png" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../getting-started/installation.html">Installation</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Python API</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../triton.html">triton</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.language.html">triton.language</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.testing.html">triton.testing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton-semantics.html">Triton Semantics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.language.extra.cuda.html">triton.language.extra.cuda</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../triton.language.extra.cuda.libdevice.html">triton.language.extra.cuda.libdevice</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="../triton.language.extra.cuda.libdevice.html#math-functions">Math Functions</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="triton.language.extra.cuda.libdevice.abs.html">triton.language.extra.cuda.libdevice.abs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.language.extra.cuda.libdevice.acos.html">acos</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.language.extra.cuda.libdevice.acosh.html">acosh</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.language.extra.cuda.libdevice.add_rd.html">triton.language.extra.cuda.libdevice.add_rd</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.language.extra.cuda.libdevice.add_rn.html">add_rn</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.language.extra.cuda.libdevice.add_ru.html">triton.language.extra.cuda.libdevice.add_ru</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.language.extra.cuda.libdevice.add_rz.html">add_rz</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.language.extra.cuda.libdevice.asin.html">asin</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.language.extra.cuda.libdevice.asinh.html">triton.language.extra.cuda.libdevice.asinh</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.language.extra.cuda.libdevice.atan.html">triton.language.extra.cuda.libdevice.atan</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.language.extra.cuda.libdevice.atan2.html">triton.language.extra.cuda.libdevice.atan2</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.language.extra.cuda.libdevice.atanh.html">atanh</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.language.extra.cuda.libdevice.brev.html">brev</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.language.extra.cuda.libdevice.byte_perm.html">triton.language.extra.cuda.libdevice.byte_perm</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.language.extra.cuda.libdevice.cbrt.html">cbrt</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.language.extra.cuda.libdevice.ceil.html">ceil</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.language.extra.cuda.libdevice.clz.html">clz</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.language.extra.cuda.libdevice.copysign.html">copysign</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.language.extra.cuda.libdevice.cos.html">triton.language.extra.cuda.libdevice.cos</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.language.extra.cuda.libdevice.cosh.html">cosh</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.language.extra.cuda.libdevice.cospi.html">triton.language.extra.cuda.libdevice.cospi</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.language.extra.cuda.libdevice.cyl_bessel_i0.html">cyl_bessel_i0</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.language.extra.cuda.libdevice.cyl_bessel_i1.html">cyl_bessel_i1</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.language.extra.cuda.libdevice.div_rd.html">div_rd</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.language.extra.cuda.libdevice.div_rn.html">triton.language.extra.cuda.libdevice.div_rn</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.language.extra.cuda.libdevice.div_ru.html">triton.language.extra.cuda.libdevice.div_ru</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.language.extra.cuda.libdevice.div_rz.html">triton.language.extra.cuda.libdevice.div_rz</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.language.extra.cuda.libdevice.double2float_rd.html">double2float_rd</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.language.extra.cuda.libdevice.double2float_rn.html">double2float_rn</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.language.extra.cuda.libdevice.double2float_ru.html">triton.language.extra.cuda.libdevice.double2float_ru</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.language.extra.cuda.libdevice.double2float_rz.html">double2float_rz</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.language.extra.cuda.libdevice.double2hiint.html">triton.language.extra.cuda.libdevice.double2hiint</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.language.extra.cuda.libdevice.double2int_rd.html">double2int_rd</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.language.extra.cuda.libdevice.double2int_rn.html">triton.language.extra.cuda.libdevice.double2int_rn</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.language.extra.cuda.libdevice.double2int_ru.html">triton.language.extra.cuda.libdevice.double2int_ru</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.language.extra.cuda.libdevice.double2int_rz.html">double2int_rz</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.language.extra.cuda.libdevice.double2ll_rd.html">triton.language.extra.cuda.libdevice.double2ll_rd</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.language.extra.cuda.libdevice.double2ll_rn.html">triton.language.extra.cuda.libdevice.double2ll_rn</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.language.extra.cuda.libdevice.double2ll_ru.html">triton.language.extra.cuda.libdevice.double2ll_ru</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.language.extra.cuda.libdevice.double2ll_rz.html">double2ll_rz</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.language.extra.cuda.libdevice.double2loint.html">triton.language.extra.cuda.libdevice.double2loint</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.language.extra.cuda.libdevice.double2uint_rd.html">triton.language.extra.cuda.libdevice.double2uint_rd</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.language.extra.cuda.libdevice.double2uint_rn.html">triton.language.extra.cuda.libdevice.double2uint_rn</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.language.extra.cuda.libdevice.double2uint_ru.html">triton.language.extra.cuda.libdevice.double2uint_ru</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.language.extra.cuda.libdevice.double2uint_rz.html">double2uint_rz</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.language.extra.cuda.libdevice.double2ull_rd.html">double2ull_rd</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.language.extra.cuda.libdevice.double2ull_rn.html">double2ull_rn</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.language.extra.cuda.libdevice.double2ull_ru.html">triton.language.extra.cuda.libdevice.double2ull_ru</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.language.extra.cuda.libdevice.double2ull_rz.html">triton.language.extra.cuda.libdevice.double2ull_rz</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.language.extra.cuda.libdevice.double_as_longlong.html">double_as_longlong</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.language.extra.cuda.libdevice.erf.html">erf</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.language.extra.cuda.libdevice.erfc.html">erfc</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.language.extra.cuda.libdevice.erfcinv.html">erfcinv</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.language.extra.cuda.libdevice.erfcx.html">triton.language.extra.cuda.libdevice.erfcx</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.language.extra.cuda.libdevice.erfinv.html">erfinv</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.language.extra.cuda.libdevice.exp.html">exp</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.language.extra.cuda.libdevice.exp10.html">triton.language.extra.cuda.libdevice.exp10</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.language.extra.cuda.libdevice.exp2.html">exp2</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.language.extra.cuda.libdevice.expm1.html">expm1(arg0, _semantic=None)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.language.extra.cuda.libdevice.fast_cosf.html">fast_cosf</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.language.extra.cuda.libdevice.fast_dividef.html">triton.language.extra.cuda.libdevice.fast_dividef</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.language.extra.cuda.libdevice.fast_exp10f.html">fast_exp10f</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.language.extra.cuda.libdevice.fast_expf.html">fast_expf</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.language.extra.cuda.libdevice.fast_log10f.html">triton.language.extra.cuda.libdevice.fast_log10f</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.language.extra.cuda.libdevice.fast_log2f.html">fast_log2f</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.language.extra.cuda.libdevice.fast_logf.html">fast_logf</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.language.extra.cuda.libdevice.fast_powf.html">fast_powf</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.language.extra.cuda.libdevice.fast_sinf.html">triton.language.extra.cuda.libdevice.fast_sinf</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.language.extra.cuda.libdevice.fast_tanf.html">fast_tanf</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.language.extra.cuda.libdevice.fdim.html">fdim</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.language.extra.cuda.libdevice.ffs.html">ffs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.language.extra.cuda.libdevice.finitef.html">triton.language.extra.cuda.libdevice.finitef</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.language.extra.cuda.libdevice.float2int_rd.html">float2int_rd</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.language.extra.cuda.libdevice.float2int_rn.html">float2int_rn</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.language.extra.cuda.libdevice.float2int_ru.html">triton.language.extra.cuda.libdevice.float2int_ru</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.language.extra.cuda.libdevice.float2int_rz.html">float2int_rz</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.language.extra.cuda.libdevice.float2ll_rd.html">triton.language.extra.cuda.libdevice.float2ll_rd</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.language.extra.cuda.libdevice.float2ll_rn.html">triton.language.extra.cuda.libdevice.float2ll_rn</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.language.extra.cuda.libdevice.float2ll_ru.html">triton.language.extra.cuda.libdevice.float2ll_ru</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.language.extra.cuda.libdevice.float2ll_rz.html">triton.language.extra.cuda.libdevice.float2ll_rz</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.language.extra.cuda.libdevice.float2uint_rd.html">float2uint_rd</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.language.extra.cuda.libdevice.float2uint_rn.html">float2uint_rn</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.language.extra.cuda.libdevice.float2uint_ru.html">triton.language.extra.cuda.libdevice.float2uint_ru</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.language.extra.cuda.libdevice.float2uint_rz.html">triton.language.extra.cuda.libdevice.float2uint_rz</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.language.extra.cuda.libdevice.float2ull_rd.html">float2ull_rd</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.language.extra.cuda.libdevice.float2ull_rn.html">float2ull_rn</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.language.extra.cuda.libdevice.float2ull_ru.html">float2ull_ru</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.language.extra.cuda.libdevice.float2ull_rz.html">float2ull_rz</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.language.extra.cuda.libdevice.float_as_int.html">triton.language.extra.cuda.libdevice.float_as_int</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.language.extra.cuda.libdevice.float_as_uint.html">float_as_uint</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.language.extra.cuda.libdevice.floor.html">triton.language.extra.cuda.libdevice.floor</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.language.extra.cuda.libdevice.fma.html">triton.language.extra.cuda.libdevice.fma</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.language.extra.cuda.libdevice.fma_rd.html">triton.language.extra.cuda.libdevice.fma_rd</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.language.extra.cuda.libdevice.fma_rn.html">fma_rn</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.language.extra.cuda.libdevice.fma_ru.html">triton.language.extra.cuda.libdevice.fma_ru</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.language.extra.cuda.libdevice.fma_rz.html">fma_rz</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.language.extra.cuda.libdevice.fmod.html">triton.language.extra.cuda.libdevice.fmod</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.language.extra.cuda.libdevice.hadd.html">hadd</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.language.extra.cuda.libdevice.hiloint2double.html">hiloint2double</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.language.extra.cuda.libdevice.hypot.html">hypot</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.language.extra.cuda.libdevice.ilogb.html">ilogb</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.language.extra.cuda.libdevice.int2double_rn.html">int2double_rn</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.language.extra.cuda.libdevice.int2float_rd.html">int2float_rd</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.language.extra.cuda.libdevice.int2float_rn.html">triton.language.extra.cuda.libdevice.int2float_rn</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.language.extra.cuda.libdevice.int2float_ru.html">triton.language.extra.cuda.libdevice.int2float_ru</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.language.extra.cuda.libdevice.int2float_rz.html">triton.language.extra.cuda.libdevice.int2float_rz</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.language.extra.cuda.libdevice.int_as_float.html">triton.language.extra.cuda.libdevice.int_as_float</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.language.extra.cuda.libdevice.isfinited.html">isfinited</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.language.extra.cuda.libdevice.isinf.html">isinf</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.language.extra.cuda.libdevice.isnan.html">isnan</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.language.extra.cuda.libdevice.j0.html">triton.language.extra.cuda.libdevice.j0</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.language.extra.cuda.libdevice.j1.html">triton.language.extra.cuda.libdevice.j1</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.language.extra.cuda.libdevice.jn.html">tn.language.extra.cuda.libdevice.jn</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.language.extra.cuda.libdevice.ldexp.html">ldexp</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.language.extra.cuda.libdevice.lgamma.html">lgamma</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.language.extra.cuda.libdevice.ll2double_rd.html">ll2double_rd</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.language.extra.cuda.libdevice.ll2double_rn.html">ll2double_rn(arg0, _semantic=None)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.language.extra.cuda.libdevice.ll2double_ru.html">ll2double_ru</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.language.extra.cuda.libdevice.ll2double_rz.html">ll2double_rz</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.language.extra.cuda.libdevice.ll2float_rd.html">ll2float_rd</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.language.extra.cuda.libdevice.ll2float_rn.html">ll2float_rn</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.language.extra.cuda.libdevice.ll2float_ru.html">ll2float_ru</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.language.extra.cuda.libdevice.ll2float_rz.html">ll2float_rz</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.language.extra.cuda.libdevice.llrint.html">llrint</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.language.extra.cuda.libdevice.llround.html">llround</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.language.extra.cuda.libdevice.log.html">triton.language.extra.cuda.libdevice.log</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.language.extra.cuda.libdevice.log10.html">triton.language.extra.cuda.libdevice.log10</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.language.extra.cuda.libdevice.log1p.html">log1p</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.language.extra.cuda.libdevice.log2.html">log2</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.language.extra.cuda.libdevice.logb.html">triton.language.extra.cuda.libdevice.logb</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.language.extra.cuda.libdevice.longlong_as_double.html">longlong_as_double</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.language.extra.cuda.libdevice.mul24.html">mul24</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.language.extra.cuda.libdevice.mul_rd.html">triton.language.extra.cuda.libdevice.mul_rd</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.language.extra.cuda.libdevice.mul_rn.html">mul_rn</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.language.extra.cuda.libdevice.mul_ru.html">triton.language.extra.cuda.libdevice.mul_ru</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.language.extra.cuda.libdevice.mul_rz.html">triton.language.extra.cuda.libdevice.mul_rz</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.language.extra.cuda.libdevice.mulhi.html">mulhi</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.language.extra.cuda.libdevice.nearbyint.html">nearbyint</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.language.extra.cuda.libdevice.nextafter.html">triton.language.extra.cuda.libdevice.nextafter</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.language.extra.cuda.libdevice.norm3d.html">norm3d</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.language.extra.cuda.libdevice.norm4d.html">norm4d</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.language.extra.cuda.libdevice.normcdf.html">triton.language.extra.cuda.libdevice.normcdf</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.language.extra.cuda.libdevice.normcdfinv.html">normcdfinv</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.language.extra.cuda.libdevice.popc.html">popc</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.language.extra.cuda.libdevice.pow.html">triton.language.extra.cuda.libdevice.pow</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.language.extra.cuda.libdevice.rcbrt.html">rcbrt</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.language.extra.cuda.libdevice.rcp64h.html">rcp64h</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.language.extra.cuda.libdevice.rcp_rd.html">triton.language.extra.cuda.libdevice.rcp_rd</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.language.extra.cuda.libdevice.rcp_rn.html">rcp_rn</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.language.extra.cuda.libdevice.rcp_ru.html">rcp_ru</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.language.extra.cuda.libdevice.rcp_rz.html">rcp_rz</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.language.extra.cuda.libdevice.remainder.html">triton.language.extra.cuda.libdevice.remainder</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.language.extra.cuda.libdevice.rhadd.html">triton.language.extra.cuda.libdevice.rhadd</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.language.extra.cuda.libdevice.rhypot.html">rhypot</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.language.extra.cuda.libdevice.rint.html">triton.language.extra.cuda.libdevice.rint</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.language.extra.cuda.libdevice.rnorm3d.html">triton.language.extra.cuda.libdevice.rnorm3d</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.language.extra.cuda.libdevice.rnorm4d.html">triton.language.extra.cuda.libdevice.rnorm4d</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.language.extra.cuda.libdevice.round.html">triton.language.extra.cuda.libdevice.round</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.language.extra.cuda.libdevice.rsqrt.html">rsqrt</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.language.extra.cuda.libdevice.rsqrt_rn.html">rsqrt_rn</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.language.extra.cuda.libdevice.sad.html">triton.language.extra.cuda.libdevice.sad</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.language.extra.cuda.libdevice.saturatef.html">triton.language.extra.cuda.libdevice.saturatef</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.language.extra.cuda.libdevice.scalbn.html">triton.language.extra.cuda.libdevice.scalbn</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.language.extra.cuda.libdevice.signbit.html">triton.language.extra.cuda.libdevice.signbit</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.language.extra.cuda.libdevice.sin.html">triton.language.extra.cuda.libdevice.sin</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.language.extra.cuda.libdevice.sinh.html">sinh</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.language.extra.cuda.libdevice.sinpi.html">triton.language.extra.cuda.libdevice.sinpi</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.language.extra.cuda.libdevice.sqrt.html">triton.language.extra.cuda.libdevice.sqrt</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.language.extra.cuda.libdevice.sqrt_rd.html">sqrt_rd</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.language.extra.cuda.libdevice.sqrt_rn.html">triton.language.extra.cuda.libdevice.sqrt_rn</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.language.extra.cuda.libdevice.sqrt_ru.html">triton.language.extra.cuda.libdevice.sqrt_ru</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.language.extra.cuda.libdevice.sqrt_rz.html">sqrt_rz</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.language.extra.cuda.libdevice.sub_rd.html">triton.language.extra.cuda.libdevice.sub_rd</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.language.extra.cuda.libdevice.sub_rn.html">sub_rn</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.language.extra.cuda.libdevice.sub_ru.html">sub_ru</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">triton.language.extra.cuda.libdevice.sub_rz</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#triton.language.extra.cuda.libdevice.sub_rz"><code class="docutils literal notranslate"><span class="pre">sub_rz()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="triton.language.extra.cuda.libdevice.tan.html">tan</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.language.extra.cuda.libdevice.tanh.html">tanh</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.language.extra.cuda.libdevice.tgamma.html">tgamma</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.language.extra.cuda.libdevice.trunc.html">trunc</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.language.extra.cuda.libdevice.uint2double_rn.html">uint2double_rn</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.language.extra.cuda.libdevice.uint2float_rd.html">triton.language.extra.cuda.libdevice.uint2float_rd</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.language.extra.cuda.libdevice.uint2float_rn.html">uint2float_rn</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.language.extra.cuda.libdevice.uint2float_ru.html">uint2float_ru</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.language.extra.cuda.libdevice.uint2float_rz.html">uint2float_rz</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.language.extra.cuda.libdevice.uint_as_float.html">uint_as_float</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.language.extra.cuda.libdevice.ull2double_rd.html">ull2double_rd</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.language.extra.cuda.libdevice.ull2double_rn.html">ull2double_rn</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.language.extra.cuda.libdevice.ull2double_ru.html">triton.language.extra.cuda.libdevice.ull2double_ru</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.language.extra.cuda.libdevice.ull2double_rz.html">ull2double_rz</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.language.extra.cuda.libdevice.ull2float_rd.html">ull2float_rd</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.language.extra.cuda.libdevice.ull2float_rn.html">ull2float_rn</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.language.extra.cuda.libdevice.ull2float_ru.html">ull2float_ru</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.language.extra.cuda.libdevice.ull2float_rz.html">ull2float_rz</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.language.extra.cuda.libdevice.y0.html">triton.language.extra.cuda.libdevice.y0</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.language.extra.cuda.libdevice.y1.html">triton.language.extra.cuda.libdevice.y1</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.language.extra.cuda.libdevice.yn.html">yn</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.language.extra.cuda.libdevice.yn.html#id1">yn</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.runtime.html">triton.runtime</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.tools.html">triton.tools</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Gluon (Experimental) API</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.html">triton.experimental.gluon</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.html">triton.experimental.gluon.language</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.nvidia.ampere.html">triton.experimental.gluon.language.nvidia.ampere</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.nvidia.ampere.async_copy.html">triton.experimental.gluon.language.nvidia.ampere.async_copy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.nvidia.ampere.mbarrier.html">triton.experimental.gluon.language.nvidia.ampere.mbarrier</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.nvidia.hopper.html">triton.experimental.gluon.language.nvidia.hopper</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.nvidia.hopper.tma.html">triton.experimental.gluon.language.nvidia.hopper.tma</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.nvidia.hopper.mbarrier.html">triton.experimental.gluon.language.nvidia.hopper.mbarrier</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.nvidia.hopper.cluster.html">triton.experimental.gluon.language.nvidia.hopper.cluster</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.nvidia.blackwell.html">triton.experimental.gluon.language.nvidia.blackwell</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.nvidia.blackwell.tma.html">triton.experimental.gluon.language.nvidia.blackwell.tma</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.nvidia.blackwell.clc.html">triton.experimental.gluon.language.nvidia.blackwell.clc</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.amd.html">triton.experimental.gluon.language.amd</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.amd.gfx1250.html">triton.experimental.gluon.language.amd.gfx1250</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.amd.gfx1250.async_copy.html">triton.experimental.gluon.language.amd.gfx1250.async_copy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.amd.gfx1250.mbarrier.html">triton.experimental.gluon.language.amd.gfx1250.mbarrier</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.amd.gfx1250.cluster.html">triton.experimental.gluon.language.amd.gfx1250.cluster</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.amd.gfx1250.tdm.html">triton.experimental.gluon.language.amd.gfx1250.tdm</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.amd.cdna3.html">triton.experimental.gluon.language.amd.cdna3</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.amd.cdna4.html">triton.experimental.gluon.language.amd.cdna4</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.amd.rdna3.html">triton.experimental.gluon.language.amd.rdna3</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.amd.rdna4.html">triton.experimental.gluon.language.amd.rdna4</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Triton MLIR Dialects</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../dialects/dialects.html">Triton MLIR Dialects and Ops</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Programming Guide</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../programming-guide/chapter-1/introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../programming-guide/chapter-2/related-work.html">Related Work</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../programming-guide/chapter-3/debugging.html">Debugging Triton</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">Triton</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../triton.language.extra.cuda.libdevice.html">triton.language.extra.cuda.libdevice</a></li>
+      <li class="breadcrumb-item active">triton.language.extra.cuda.libdevice.sub_rz</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../_sources/python-api/generated/triton.language.extra.cuda.libdevice.sub_rz.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="triton-language-extra-cuda-libdevice-sub-rz">
+<h1>triton.language.extra.cuda.libdevice.sub_rz<a class="headerlink" href="#triton-language-extra-cuda-libdevice-sub-rz" title="Link to this heading">¶</a></h1>
+<dl class="py function">
+<dt class="sig sig-object py" id="triton.language.extra.cuda.libdevice.sub_rz">
+<span class="sig-prename descclassname"><span class="pre">triton.language.extra.cuda.libdevice.</span></span><span class="sig-name descname"><span class="pre">sub_rz</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">arg0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">arg1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">_semantic</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#triton.language.extra.cuda.libdevice.sub_rz" title="Link to this definition">¶</a></dt>
+<dd><p>Subtract two floating-point values with round-towards-zero rounding mode.</p>
+<p>Performs <code class="docutils literal notranslate"><span class="pre">arg0</span> <span class="pre">-</span> <span class="pre">arg1</span></code> using IEEE floating-point subtraction with the
+round-towards-zero (rz) rounding mode. This is a CUDA libdevice intrinsic
+that maps to <code class="docutils literal notranslate"><span class="pre">__nv_fsub_rz</span></code> for float32 and <code class="docutils literal notranslate"><span class="pre">__nv_dsub_rz</span></code> for float64.</p>
+<section id="parameters">
+<h2>Parameters<a class="headerlink" href="#parameters" title="Link to this heading">¶</a></h2>
+<dl class="simple">
+<dt>arg0<span class="classifier">tl.tensor</span></dt><dd><p>First input tensor. Must be of type <code class="docutils literal notranslate"><span class="pre">tl.float32</span></code> or <code class="docutils literal notranslate"><span class="pre">tl.float64</span></code>.</p>
+</dd>
+<dt>arg1<span class="classifier">tl.tensor</span></dt><dd><p>Second input tensor. Must be of the same dtype as <code class="docutils literal notranslate"><span class="pre">arg0</span></code>.</p>
+</dd>
+<dt>_semantic<span class="classifier">optional</span></dt><dd><p>Internal parameter for Triton semantics. Do not set manually.</p>
+</dd>
+</dl>
+</section>
+<section id="returns">
+<h2>Returns<a class="headerlink" href="#returns" title="Link to this heading">¶</a></h2>
+<dl class="simple">
+<dt>result<span class="classifier">tl.tensor</span></dt><dd><p>Tensor of the same dtype as inputs containing <code class="docutils literal notranslate"><span class="pre">arg0</span> <span class="pre">-</span> <span class="pre">arg1</span></code> computed
+with round-towards-zero rounding.</p>
+</dd>
+</dl>
+</section>
+<section id="notes">
+<h2>Notes<a class="headerlink" href="#notes" title="Link to this heading">¶</a></h2>
+<p>The round-towards-zero (rz) rounding mode truncates results toward zero,
+which differs from the default round-to-nearest-even mode. This can be
+useful for reproducibility or when specific rounding behavior is required.</p>
+<p>Both inputs must have the same floating-point precision (both fp32 or both
+fp64). Mixed precision is not supported.</p>
+<p>This function is pure (no side effects) and can be used in device code
+within <code class="docutils literal notranslate"><span class="pre">&#64;triton.jit</span></code> decorated kernels.</p>
+</section>
+<section id="examples">
+<h2>Examples<a class="headerlink" href="#examples" title="Link to this heading">¶</a></h2>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">triton</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">triton.language</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">tl</span>
+
+<span class="nd">@triton</span><span class="o">.</span><span class="n">jit</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">kernel_sub_rz</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">Y</span><span class="p">,</span> <span class="n">Z</span><span class="p">,</span> <span class="n">BLOCK_SIZE</span><span class="p">:</span> <span class="n">tl</span><span class="o">.</span><span class="n">constexpr</span><span class="p">):</span>
+    <span class="n">pid</span> <span class="o">=</span> <span class="n">tl</span><span class="o">.</span><span class="n">program_id</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+    <span class="n">offs</span> <span class="o">=</span> <span class="n">pid</span> <span class="o">*</span> <span class="n">BLOCK_SIZE</span> <span class="o">+</span> <span class="n">tl</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">BLOCK_SIZE</span><span class="p">)</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="n">tl</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">X</span> <span class="o">+</span> <span class="n">offs</span><span class="p">)</span>
+    <span class="n">y</span> <span class="o">=</span> <span class="n">tl</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">Y</span> <span class="o">+</span> <span class="n">offs</span><span class="p">)</span>
+    <span class="c1"># Subtract with round-towards-zero</span>
+    <span class="n">z</span> <span class="o">=</span> <span class="n">tl</span><span class="o">.</span><span class="n">extra</span><span class="o">.</span><span class="n">cuda</span><span class="o">.</span><span class="n">libdevice</span><span class="o">.</span><span class="n">sub_rz</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+    <span class="n">tl</span><span class="o">.</span><span class="n">store</span><span class="p">(</span><span class="n">Z</span> <span class="o">+</span> <span class="n">offs</span><span class="p">,</span> <span class="n">z</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="triton.language.extra.cuda.libdevice.sub_ru.html" class="btn btn-neutral float-left" title="sub_ru" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="triton.language.extra.cuda.libdevice.tan.html" class="btn btn-neutral float-right" title="tan" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2020, Philippe Tillet.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

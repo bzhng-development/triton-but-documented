@@ -1,0 +1,45 @@
+double2ull_rd
+=============
+
+.. currentmodule:: triton.language.extra.cuda.libdevice
+
+.. function:: double2ull_rd(arg0, _semantic=None)
+
+    Convert double-precision floating-point value to unsigned 64-bit integer with round-down rounding mode.
+
+    Parameters
+    ----------
+    arg0 : tl.tensor
+        Input tensor of double-precision floating-point values (``fp64``).
+
+    Returns
+    -------
+    tl.tensor
+        Tensor of unsigned 64-bit integers (``int64``). Each element is the input value
+        rounded down (towards negative infinity) and converted to unsigned long long.
+
+    Notes
+    -----
+    This function calls the CUDA libdevice intrinsic ``__nv_double2ull_rd`` which
+    performs conversion with round-down (towards negative infinity) rounding mode.
+
+    The behavior for negative input values follows unsigned integer conversion
+    semantics (two's complement representation). Out-of-range values result in
+    undefined behavior.
+
+    This function is pure and has no side effects.
+
+    Examples
+    --------
+    .. code-block:: python
+
+        import triton
+        import triton.language as tl
+
+        @triton.jit
+        def kernel(x_ptr, y_ptr, BLOCK_SIZE: tl.constexpr):
+            pid = tl.program_id(axis=0)
+            offs = pid * BLOCK_SIZE + tl.arange(0, BLOCK_SIZE)
+            x = tl.load(x_ptr + offs).to(tl.float64)
+            y = tl.extra.cuda.libdevice.double2ull_rd(x)
+            tl.store(y_ptr + offs, y)

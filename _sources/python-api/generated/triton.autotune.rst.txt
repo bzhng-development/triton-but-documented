@@ -1,85 +1,86 @@
-.. py:function:: triton.autotune(configs, key, prune_configs_by=None, reset_to_zero=None, restore_value=None, pre_hook=None, post_hook=None, warmup=None, rep=None, use_cuda_graph=False, do_bench=None, cache_results=False)
+triton.autotune
+===============
 
-   Decorator for auto-tuning a :code:`triton.jit`'d function.
+Decorator for auto-tuning a :code:`triton.jit`'d function.
 
-   Evaluates a list of candidate configurations at runtime to select the optimal kernel launch parameters based on input tensor shapes or values. The best configuration is cached per unique combination of :code:`key` arguments.
+Parameters
+----------
 
-   .. code-block:: python
+configs : list[triton.Config]
+    A list of :code:`triton.Config` objects defining the configurations to benchmark.
 
-      @triton.autotune(configs=[
-          triton.Config(kwargs={'BLOCK_SIZE': 128}, num_warps=4),
-          triton.Config(kwargs={'BLOCK_SIZE': 1024}, num_warps=8),
+key : list[str]
+    A list of argument names whose change in value will trigger the evaluation of all provided configs.
+
+prune_configs_by : dict, optional
+    A dict of functions used to prune configs before benchmarking. Fields:
+    
+    - 'perf_model': performance model used to predicate running time with different configs, returns running time
+    - 'top_k': number of configs to bench
+    - 'early_config_prune': a function used to prune configs. It should have the signature
+      :code:`prune_configs_by(configs: List[triton.Config], named_args: Dict[str, Any], **kwargs: Dict[str, Any]) -> List[triton.Config]`
+      and return pruned configs. It should return at least one config.
+
+reset_to_zero : list[str], optional
+    A list of argument names whose value will be reset to zero before evaluating any configs.
+
+restore_value : list[str], optional
+    A list of argument names whose value will be restored after evaluating any configs.
+
+pre_hook : callable, optional
+    A function that will be called before the kernel is called. This overrides the default pre_hook used for 'reset_to_zero' and 'restore_value'. Parameters:
+    
+    - 'kwargs': a dict of all arguments passed to the kernel
+    - 'reset_only': a boolean indicating whether the pre_hook is called to reset the values only, without a corresponding post_hook
+
+post_hook : callable, optional
+    A function that will be called after the kernel is called. This overrides the default post_hook used for 'restore_value'. Parameters:
+    
+    - 'kwargs': a dict of all arguments passed to the kernel
+    - 'exception': the exception raised by the kernel in case of a compilation or runtime error
+
+warmup : int, optional
+    Warmup time (in ms) to pass to benchmarking (deprecated).
+
+rep : int, optional
+    Repetition time (in ms) to pass to benchmarking (deprecated).
+
+do_bench : callable, optional
+    A benchmark function to measure the time of each run. Signature: :code:`lambda fn, quantiles`.
+
+use_cuda_graph : bool, optional
+    Whether to use CUDA graphs for benchmarking. Defaults to False.
+
+cache_results : bool, optional
+    Whether to cache autotune timings to disk. Defaults to False.
+
+Returns
+-------
+
+decorator : callable
+    A decorator that wraps the JIT function with auto-tuning capability.
+
+Notes
+-----
+
+When all configurations are evaluated, the kernel will run multiple times. This means that whatever value the kernel updates will be updated multiple times. To avoid this undesired behavior, use the :code:`reset_to_zero` argument, which resets the value of the provided tensor to zero before running any configuration.
+
+If the environment variable :code:`TRITON_PRINT_AUTOTUNING` is set to :code:`"1"`, Triton will print a message to stdout after autotuning each kernel, including the time spent autotuning and the best configuration.
+
+The :code:`warmup`, :code:`rep`, and :code:`use_cuda_graph` parameters are deprecated.
+
+Examples
+--------
+
+.. code-block:: python
+
+    @triton.autotune(
+        configs=[
+            triton.Config(kwargs={'BLOCK_SIZE': 128}, num_warps=4),
+            triton.Config(kwargs={'BLOCK_SIZE': 1024}, num_warps=8),
         ],
-        key=['x_size']
-      )
-      @triton.jit
-      def kernel(x_ptr, x_size, BLOCK_SIZE: tl.constexpr):
-          ...
-
-   .. note::
-      When all configurations are evaluated, the kernel runs multiple times. If the kernel updates output tensors, these updates will occur repeatedly. To prevent this side effect, use the :code:`reset_to_zero` argument to reset specified tensors to zero before each benchmark run, or use :code:`restore_value` to revert them after benchmarking.
-
-   If the environment variable :code:`TRITON_PRINT_AUTOTUNING` is set to :code:`"1"`, Triton prints autotuning results (time spent and best configuration) to stdout.
-
-   Parameters
-   ----------
-   configs : list[triton.Config]
-       A list of :code:`triton.Config` objects defining candidate kernel configurations (e.g., block sizes, warps, stages).
-   key : list[str]
-       A list of argument names. Re-evaluation of all configs is triggered only when the value or dtype of these arguments changes.
-   prune_configs_by : dict, optional
-       Dictionary containing functions to reduce the search space:
-       
-       * ``perf_model``: Function predicting runtime for a given config.
-       * ``top_k``: Number of configs to benchmark (int or float ratio).
-       * ``early_config_prune``: Function with signature :code:`fn(configs, named_args, **kwargs) -> List[triton.Config]` to filter configs before benchmarking. Must return at least one config.
-   reset_to_zero : list[str], optional
-       List of argument names whose corresponding tensors will be zeroed before running each configuration benchmark.
-   restore_value : list[str], optional
-       List of argument names whose corresponding tensors will be restored to their original values after running each configuration benchmark.
-   pre_hook : callable, optional
-       Custom function called before kernel execution. Overrides default reset/restore logic. Signature: :code:`fn(kwargs, reset_only)`.
-   post_hook : callable, optional
-       Custom function called after kernel execution. Overrides default restore logic. Signature: :code:`fn(kwargs, exception)`.
-   warmup : int, optional
-       Warmup time in milliseconds for benchmarking. **Deprecated**.
-   rep : int, optional
-       Repetition time in milliseconds for benchmarking. **Deprecated**.
-   use_cuda_graph : bool, optional
-       Whether to use CUDA Graphs for benchmarking. **Deprecated**.
-   do_bench : callable, optional
-       Custom benchmarking function with signature :code:`fn(kernel_call, quantiles)`. If not provided, uses the active driver's benchmarker.
-   cache_results : bool, optional
-       If True, caches autotuning results to disk for future runs with identical inputs. Defaults to False.
-
-   Returns
-   -------
-   callable
-       A decorator that wraps the JIT function, returning an :code:`Autotuner` instance.
-
-   Examples
-   --------
-   Basic usage with block size tuning:
-
-   .. code-block:: python
-
-      import triton
-      import triton.language as tl
-
-      @triton.autotune(
-          configs=[
-              triton.Config(kwargs={'BLOCK_SIZE': 128}, num_warps=4),
-              triton.Config(kwargs={'BLOCK_SIZE': 256}, num_warps=8),
-              triton.Config(kwargs={'BLOCK_SIZE': 512}, num_warps=16),
-          ],
-          key=['N']
-      )
-      @triton.jit
-      def vector_add_kernel(x_ptr, y_ptr, out_ptr, N, BLOCK_SIZE: tl.constexpr):
-          pid = tl.program_id(0)
-          block_start = pid * BLOCK_SIZE
-          offsets = block_start + tl.arange(0, BLOCK_SIZE)
-          mask = offsets < N
-          x = tl.load(x_ptr + offsets, mask=mask)
-          y = tl.load(y_ptr + offsets, mask=mask)
-          tl.store(out_ptr + offsets, x + y, mask=mask)
+        key=['x_size']  # configs will be evaluated when x_size changes
+    )
+    @triton.jit
+    def kernel(x_ptr, x_size, BLOCK_SIZE: tl.constexpr):
+        ...

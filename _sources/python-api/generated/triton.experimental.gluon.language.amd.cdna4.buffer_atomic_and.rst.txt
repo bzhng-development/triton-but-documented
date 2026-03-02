@@ -1,0 +1,57 @@
+buffer_atomic_and
+=================
+
+.. currentmodule:: triton.experimental.gluon.language.amd.cdna4
+
+.. function:: buffer_atomic_and(ptr, offsets, value, mask=None, sem=None, scope=None)
+
+    Perform an atomic bitwise AND operation on AMD CDNA4 buffer memory.
+
+    This function atomically reads a value from buffer memory, performs a bitwise
+    AND with the provided value, and writes the result back. Returns the original
+    value from memory before the operation.
+
+    Parameters
+    ----------
+    ptr : pointer
+        Pointer to the buffer memory location.
+    offsets : tensor
+        Tensor of offsets specifying which memory locations to operate on.
+    value : tensor
+        Tensor of values to AND with the memory contents.
+    mask : tensor, optional
+        Boolean tensor mask. Elements are only updated where mask is True.
+    sem : str, optional
+        Memory semantics for the atomic operation. Options include 'acquire',
+        'release', 'acq_rel', or 'relaxed'.
+    scope : str, optional
+        Scope of the atomic operation. Options include 'cta', 'cluster', or 'gpu'.
+
+    Returns
+    -------
+    tensor
+        Tensor containing the original values from memory before the AND operation.
+
+    Notes
+    -----
+    This operation is specific to AMD CDNA4 architecture and uses buffer atomic
+    instructions. The operation computes::
+
+        old_value = memory[offset]
+        memory[offset] = old_value & value
+        return old_value
+
+    Only integer types are supported for buffer atomic AND operations.
+
+    Examples
+    --------
+    .. code-block:: python
+
+        import triton.experimental.gluon as gluon
+        import triton.experimental.gluon.language as ttgl
+
+        @gluon.jit
+        def kernel(ptr, offsets, value):
+            # Perform atomic AND on buffer memory
+            old = ttgl.amd.cdna4.buffer_atomic_and(ptr, offsets, value)
+            return old

@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>class KernelInterface &mdash; Triton  documentation</title>
+  <title>triton.KernelInterface &mdash; Triton  documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=03e43079" />
       <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="../../_static/css/custom.css" />
@@ -18,7 +18,7 @@
     <script src="../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
-    <link rel="next" title="Parameters" href="triton.FutureKernel.html" />
+    <link rel="next" title="FutureKernel" href="triton.FutureKernel.html" />
     <link rel="prev" title="JITFunction" href="triton.JITFunction.html" /> 
 </head>
 
@@ -50,30 +50,24 @@
 <ul class="current">
 <li class="toctree-l1 current"><a class="reference internal" href="../triton.html">triton</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="triton.jit.html">triton.jit</a></li>
-<li class="toctree-l2"><a class="reference internal" href="triton.autotune.html"><code class="docutils literal notranslate"><span class="pre">triton.autotune()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="triton.heuristics.html">Parameters</a></li>
-<li class="toctree-l2"><a class="reference internal" href="triton.heuristics.html#returns">Returns</a></li>
-<li class="toctree-l2"><a class="reference internal" href="triton.heuristics.html#notes">Notes</a></li>
-<li class="toctree-l2"><a class="reference internal" href="triton.heuristics.html#examples">Examples</a></li>
-<li class="toctree-l2"><a class="reference internal" href="triton.Config.html">class triton.Config</a></li>
+<li class="toctree-l2"><a class="reference internal" href="triton.autotune.html">triton.autotune</a></li>
+<li class="toctree-l2"><a class="reference internal" href="triton.heuristics.html">triton.heuristics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="triton.Config.html">triton.Config</a></li>
 <li class="toctree-l2 current"><a class="reference internal" href="../triton.html#runtime-and-compiler">Runtime and Compiler</a><ul class="current">
 <li class="toctree-l3"><a class="reference internal" href="triton.AsyncCompileMode.html">AsyncCompileMode</a></li>
 <li class="toctree-l3"><a class="reference internal" href="triton.CompilationError.html">CompilationError</a></li>
-<li class="toctree-l3"><a class="reference internal" href="triton.InterpreterError.html">triton.InterpreterError</a></li>
-<li class="toctree-l3"><a class="reference internal" href="triton.TritonError.html">triton.TritonError</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.InterpreterError.html">InterpreterError</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.TritonError.html">TritonError</a></li>
 <li class="toctree-l3"><a class="reference internal" href="triton.OutOfResources.html">OutOfResources</a></li>
 <li class="toctree-l3"><a class="reference internal" href="triton.JITFunction.html">JITFunction</a></li>
-<li class="toctree-l3 current"><a class="current reference internal" href="#">class KernelInterface</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="#triton.KernelInterface"><code class="docutils literal notranslate"><span class="pre">KernelInterface</span></code></a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">triton.KernelInterface</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#triton.KernelInterface"><code class="docutils literal notranslate"><span class="pre">triton.KernelInterface</span></code></a></li>
 </ul>
 </li>
-<li class="toctree-l3"><a class="reference internal" href="triton.FutureKernel.html"><code class="docutils literal notranslate"><span class="pre">FutureKernel</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="triton.MockTensor.html">MockTensor</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.FutureKernel.html">FutureKernel</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.MockTensor.html">class triton.MockTensor</a></li>
 <li class="toctree-l3"><a class="reference internal" href="triton.TensorWrapper.html">TensorWrapper</a></li>
-<li class="toctree-l3"><a class="reference internal" href="triton.compile.html">Parameters</a></li>
-<li class="toctree-l3"><a class="reference internal" href="triton.compile.html#returns">Returns</a></li>
-<li class="toctree-l3"><a class="reference internal" href="triton.compile.html#notes">Notes</a></li>
-<li class="toctree-l3"><a class="reference internal" href="triton.compile.html#examples">Examples</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.compile.html">compile</a></li>
 <li class="toctree-l3"><a class="reference internal" href="triton.constexpr_function.html">constexpr_function</a></li>
 <li class="toctree-l3"><a class="reference internal" href="triton.must_use_result.html">must_use_result</a></li>
 <li class="toctree-l3"><a class="reference internal" href="triton.reinterpret.html">reinterpret</a></li>
@@ -87,6 +81,35 @@
 <li class="toctree-l1"><a class="reference internal" href="../triton.language.html">triton.language</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../triton.testing.html">triton.testing</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../triton-semantics.html">Triton Semantics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.language.extra.cuda.html">triton.language.extra.cuda</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.language.extra.cuda.libdevice.html">triton.language.extra.cuda.libdevice</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.runtime.html">triton.runtime</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.tools.html">triton.tools</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Gluon (Experimental) API</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.html">triton.experimental.gluon</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.html">triton.experimental.gluon.language</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.nvidia.ampere.html">triton.experimental.gluon.language.nvidia.ampere</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.nvidia.ampere.async_copy.html">triton.experimental.gluon.language.nvidia.ampere.async_copy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.nvidia.ampere.mbarrier.html">triton.experimental.gluon.language.nvidia.ampere.mbarrier</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.nvidia.hopper.html">triton.experimental.gluon.language.nvidia.hopper</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.nvidia.hopper.tma.html">triton.experimental.gluon.language.nvidia.hopper.tma</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.nvidia.hopper.mbarrier.html">triton.experimental.gluon.language.nvidia.hopper.mbarrier</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.nvidia.hopper.cluster.html">triton.experimental.gluon.language.nvidia.hopper.cluster</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.nvidia.blackwell.html">triton.experimental.gluon.language.nvidia.blackwell</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.nvidia.blackwell.tma.html">triton.experimental.gluon.language.nvidia.blackwell.tma</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.nvidia.blackwell.clc.html">triton.experimental.gluon.language.nvidia.blackwell.clc</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.amd.html">triton.experimental.gluon.language.amd</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.amd.gfx1250.html">triton.experimental.gluon.language.amd.gfx1250</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.amd.gfx1250.async_copy.html">triton.experimental.gluon.language.amd.gfx1250.async_copy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.amd.gfx1250.mbarrier.html">triton.experimental.gluon.language.amd.gfx1250.mbarrier</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.amd.gfx1250.cluster.html">triton.experimental.gluon.language.amd.gfx1250.cluster</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.amd.gfx1250.tdm.html">triton.experimental.gluon.language.amd.gfx1250.tdm</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.amd.cdna3.html">triton.experimental.gluon.language.amd.cdna3</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.amd.cdna4.html">triton.experimental.gluon.language.amd.cdna4</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.amd.rdna3.html">triton.experimental.gluon.language.amd.rdna3</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.amd.rdna4.html">triton.experimental.gluon.language.amd.rdna4</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Triton MLIR Dialects</span></p>
 <ul>
@@ -114,7 +137,7 @@
   <ul class="wy-breadcrumbs">
       <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
           <li class="breadcrumb-item"><a href="../triton.html">triton</a></li>
-      <li class="breadcrumb-item active">class KernelInterface</li>
+      <li class="breadcrumb-item active">triton.KernelInterface</li>
       <li class="wy-breadcrumbs-aside">
             <a href="../../_sources/python-api/generated/triton.KernelInterface.rst.txt" rel="nofollow"> View page source</a>
       </li>
@@ -124,69 +147,82 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <section id="class-kernelinterface">
-<h1>class KernelInterface<a class="headerlink" href="#class-kernelinterface" title="Link to this heading">¶</a></h1>
+  <section id="triton-kernelinterface">
+<h1>triton.KernelInterface<a class="headerlink" href="#triton-kernelinterface" title="Link to this heading">¶</a></h1>
 <dl class="py class">
 <dt class="sig sig-object py" id="triton.KernelInterface">
 <span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">triton.</span></span><span class="sig-name descname"><span class="pre">KernelInterface</span></span><a class="headerlink" href="#triton.KernelInterface" title="Link to this definition">¶</a></dt>
-<dd><p>Abstract base class for generic Triton kernel types.</p>
-<p>This class defines the interface for JIT-compiled kernel functions. It
-provides the mechanism to bind a launch grid to a kernel via the
-<code class="docutils literal notranslate"><span class="pre">__getitem__</span></code> method, enabling the standard launch syntax
-<code class="docutils literal notranslate"><span class="pre">kernel[grid](*args,</span> <span class="pre">**kwargs)</span></code>.</p>
+<dd><p>Abstract base class for Triton kernel callable interface.</p>
+<p>This class provides the interface for JIT-compiled Triton kernels, enabling
+kernel launch with grid specification via the <code class="docutils literal notranslate"><span class="pre">fn[grid](*args)</span></code> syntax.
+It is typically not instantiated directly but inherited by <code class="docutils literal notranslate"><span class="pre">JITFunction</span></code>
+objects returned from <code class="docutils literal notranslate"><span class="pre">&#64;triton.jit</span></code> decorated functions.</p>
 <section id="parameters">
 <h2>Parameters<a class="headerlink" href="#parameters" title="Link to this heading">¶</a></h2>
 <dl class="simple">
-<dt>None</dt><dd><p>This is an abstract base class and is not instantiated directly.</p>
+<dt>None</dt><dd><p>This is an abstract base class and should not be instantiated directly.</p>
 </dd>
 </dl>
 </section>
 <section id="attributes">
 <h2>Attributes<a class="headerlink" href="#attributes" title="Link to this heading">¶</a></h2>
 <dl class="simple">
-<dt>run<span class="classifier">T</span></dt><dd><p>Abstract method representing the underlying execution logic. Must be
-implemented by subclasses (e.g., <a class="reference internal" href="triton.JITFunction.html#triton.JITFunction" title="triton.JITFunction"><code class="xref py py-class docutils literal notranslate"><span class="pre">triton.JITFunction</span></code></a>).</p>
+<dt>run<span class="classifier">T</span></dt><dd><p>Abstract method that executes the kernel. Must be implemented by subclasses.</p>
 </dd>
 </dl>
 </section>
 <section id="methods">
 <h2>Methods<a class="headerlink" href="#methods" title="Link to this heading">¶</a></h2>
 <dl class="simple">
-<dt>warmup(<a href="#id1"><span class="problematic" id="id2">*</span></a>args, grid, <a href="#id3"><span class="problematic" id="id4">**</span></a>kwargs)</dt><dd><p>Runs the kernel in warmup mode to trigger compilation without
-executing the full launch logic. Converts arguments to mock tensors
-if necessary.</p>
+<dt>warmup(<a href="#id1"><span class="problematic" id="id2">*</span></a>args, grid, <a href="#id3"><span class="problematic" id="id4">**</span></a>kwargs)</dt><dd><p>Warmup the kernel by running it once with the given grid and arguments.
+Useful for profiling or initialization.</p>
 </dd>
-<dt>__getitem__(grid)</dt><dd><p>Returns a callable proxy that memorizes the specified <code class="docutils literal notranslate"><span class="pre">grid</span></code>.
-Calling this proxy executes the kernel with the bound grid.</p>
+<dt>run(<a href="#id5"><span class="problematic" id="id6">*</span></a>args, grid, warmup, <a href="#id7"><span class="problematic" id="id8">**</span></a>kwargs)</dt><dd><p>Execute the kernel with the specified grid configuration.
+Abstract method that must be implemented by subclasses.</p>
+</dd>
+<dt>__getitem__(grid)</dt><dd><p>Return a callable proxy that memorizes the grid configuration.
+Enables the <code class="docutils literal notranslate"><span class="pre">kernel[grid](*args)</span></code> launch syntax.</p>
 </dd>
 </dl>
 </section>
 <section id="notes">
 <h2>Notes<a class="headerlink" href="#notes" title="Link to this heading">¶</a></h2>
-<p>Users typically interact with instances of <a class="reference internal" href="triton.JITFunction.html#triton.JITFunction" title="triton.JITFunction"><code class="xref py py-class docutils literal notranslate"><span class="pre">triton.JITFunction</span></code></a>,
-which inherits from <code class="docutils literal notranslate"><span class="pre">KernelInterface</span></code>. Direct instantiation of
-<code class="docutils literal notranslate"><span class="pre">KernelInterface</span></code> is not supported.</p>
-<p>The launch workflow involves two steps:
-1. Bind the grid: <code class="docutils literal notranslate"><span class="pre">proxy</span> <span class="pre">=</span> <span class="pre">kernel[grid]</span></code>
-2. Execute: <code class="docutils literal notranslate"><span class="pre">proxy(*args,</span> <span class="pre">**kwargs)</span></code></p>
+<p>The <code class="docutils literal notranslate"><span class="pre">KernelInterface</span></code> is designed to work with Python’s generic type system.
+On Python 3.12+, generic classes can declare type parameters directly in the
+class definition. On older versions, explicit inheritance from <code class="docutils literal notranslate"><span class="pre">Generic</span></code> is
+required.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">__getitem__</span></code> method returns a lambda that captures the grid and calls
+<code class="docutils literal notranslate"><span class="pre">run</span></code> with <code class="docutils literal notranslate"><span class="pre">warmup=False</span></code>, enabling the convenient kernel launch pattern:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">kernel</span><span class="p">[</span><span class="n">grid</span><span class="p">](</span><span class="n">arg1</span><span class="p">,</span> <span class="n">arg2</span><span class="p">,</span> <span class="o">...</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>This class is abstract - the <code class="docutils literal notranslate"><span class="pre">run</span></code> method raises <code class="docutils literal notranslate"><span class="pre">NotImplementedError</span></code> and
+must be overridden by concrete implementations like <code class="docutils literal notranslate"><span class="pre">JITFunction</span></code>.</p>
 </section>
 <section id="examples">
 <h2>Examples<a class="headerlink" href="#examples" title="Link to this heading">¶</a></h2>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span><span class="w"> </span><span class="nn">triton</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span><span class="w"> </span><span class="nn">triton.language</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">tl</span>
-<span class="gp">&gt;&gt;&gt;</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="nd">@triton</span><span class="o">.</span><span class="n">jit</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="k">def</span><span class="w"> </span><span class="nf">add_kernel</span><span class="p">(</span><span class="n">x_ptr</span><span class="p">,</span> <span class="n">y_ptr</span><span class="p">,</span> <span class="n">output_ptr</span><span class="p">,</span> <span class="n">n</span><span class="p">):</span>
-<span class="gp">&gt;&gt;&gt; </span>    <span class="n">pid</span> <span class="o">=</span> <span class="n">tl</span><span class="o">.</span><span class="n">program_id</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span>    <span class="k">if</span> <span class="n">pid</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">:</span>
-<span class="gp">&gt;&gt;&gt; </span>        <span class="n">tl</span><span class="o">.</span><span class="n">store</span><span class="p">(</span><span class="n">output_ptr</span> <span class="o">+</span> <span class="n">pid</span><span class="p">,</span> <span class="n">tl</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">x_ptr</span> <span class="o">+</span> <span class="n">pid</span><span class="p">)</span> <span class="o">+</span> <span class="n">tl</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">y_ptr</span> <span class="o">+</span> <span class="n">pid</span><span class="p">))</span>
-<span class="gp">&gt;&gt;&gt;</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="c1"># Define the grid (e.g., 1D grid of size 1024)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">grid</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1024</span><span class="p">,)</span>
-<span class="gp">&gt;&gt;&gt;</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="c1"># Launch the kernel using the KernelInterface syntax</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="c1"># kernel[grid] returns a callable that executes the kernel</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">add_kernel</span><span class="p">[</span><span class="n">grid</span><span class="p">](</span><span class="n">x_ptr</span><span class="p">,</span> <span class="n">y_ptr</span><span class="p">,</span> <span class="n">output_ptr</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="mi">1024</span><span class="p">)</span>
+<p>Typical usage through <code class="docutils literal notranslate"><span class="pre">&#64;triton.jit</span></code> decorator:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">triton</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">triton.language</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">tl</span>
+
+<span class="nd">@triton</span><span class="o">.</span><span class="n">jit</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">add_kernel</span><span class="p">(</span><span class="n">x_ptr</span><span class="p">,</span> <span class="n">y_ptr</span><span class="p">,</span> <span class="n">output_ptr</span><span class="p">,</span> <span class="n">n</span><span class="p">):</span>
+    <span class="n">pid</span> <span class="o">=</span> <span class="n">tl</span><span class="o">.</span><span class="n">program_id</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">pid</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">:</span>
+        <span class="n">tl</span><span class="o">.</span><span class="n">store</span><span class="p">(</span><span class="n">output_ptr</span> <span class="o">+</span> <span class="n">pid</span><span class="p">,</span> <span class="n">tl</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">x_ptr</span> <span class="o">+</span> <span class="n">pid</span><span class="p">)</span> <span class="o">+</span> <span class="n">tl</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">y_ptr</span> <span class="o">+</span> <span class="n">pid</span><span class="p">))</span>
+
+<span class="c1"># Launch kernel with grid specification</span>
+<span class="n">grid</span> <span class="o">=</span> <span class="p">(</span><span class="n">triton</span><span class="o">.</span><span class="n">cdiv</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="mi">256</span><span class="p">),)</span>
+<span class="n">add_kernel</span><span class="p">[</span><span class="n">grid</span><span class="p">](</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">output</span><span class="p">,</span> <span class="n">n</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Direct interaction with the interface (advanced usage):</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Access the run method directly</span>
+<span class="n">kernel</span> <span class="o">=</span> <span class="n">add_kernel</span>
+<span class="n">kernel</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="n">grid</span><span class="o">=</span><span class="n">grid</span><span class="p">,</span> <span class="n">warmup</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+<span class="c1"># Warmup the kernel for profiling</span>
+<span class="n">kernel</span><span class="o">.</span><span class="n">warmup</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="n">grid</span><span class="o">=</span><span class="n">grid</span><span class="p">)</span>
 </pre></div>
 </div>
 </section>
@@ -199,7 +235,7 @@ which inherits from <code class="docutils literal notranslate"><span class="pre"
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
         <a href="triton.JITFunction.html" class="btn btn-neutral float-left" title="JITFunction" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="triton.FutureKernel.html" class="btn btn-neutral float-right" title="Parameters" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="triton.FutureKernel.html" class="btn btn-neutral float-right" title="FutureKernel" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>

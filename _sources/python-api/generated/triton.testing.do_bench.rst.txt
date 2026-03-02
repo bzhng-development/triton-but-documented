@@ -1,77 +1,60 @@
-.. function:: triton.testing.do_bench(fn, warmup=25, rep=100, grad_to_none=None, quantiles=None, return_mode='mean')
+do_bench
+========
 
-   Benchmark the runtime of the provided function.
+Benchmark the runtime of a GPU kernel or function.
 
-   By default, returns the median runtime of ``fn`` along with the 20th and 80th
-   performance percentiles if ``quantiles`` is not specified. The function
-   automatically estimates the kernel execution time to determine the number of
-   warmup and repetition iterations required to meet the ``warmup`` and ``rep``
-   duration targets (in milliseconds). It clears the L2 cache before each
-   repetition to ensure consistent benchmarking conditions.
+Performs multiple repetitions of the function with warmup iterations,
+clearing GPU cache between runs to ensure accurate timing measurements.
 
-   Parameters
-   ----------
-   fn : callable
-       Function to benchmark. Typically a Triton kernel launch or a callable
-       containing GPU operations.
-   warmup : int, optional
-       Total warmup time in milliseconds. The number of warmup iterations is
-       calculated based on the estimated kernel runtime. Default is 25.
-   rep : int, optional
-       Total repetition time in milliseconds for the actual benchmarking phase.
-       The number of repetitions is calculated based on the estimated kernel
-       runtime. Default is 100.
-   grad_to_none : list of torch.Tensor, optional
-       List of tensors whose gradients should be reset to ``None`` before each
-       repetition. This prevents gradient accumulation if ``fn`` includes
-       backward passes.
-   quantiles : list of float, optional
-       List of quantiles to compute (e.g., ``[0.2, 0.8]``). If provided, returns
-       the computed quantile values instead of the statistic defined by
-       ``return_mode``.
-   return_mode : str, optional
-       The statistical measure to return when ``quantiles`` is None. Options are:
-       ``"min"``, ``"max"``, ``"mean"``, ``"median"``, or ``"all"`` (returns the
-       full list of measured times). Default is ``"mean"``.
+Parameters
+----------
+fn : callable
+    Function to benchmark. Should be a GPU kernel or function that can be
+    timed using CUDA events.
+warmup : int, optional
+    Warmup time in milliseconds (default is 25). The function will be
+    executed multiple times during warmup to ensure GPU is ready.
+rep : int, optional
+    Repetition time in milliseconds (default is 100). Determines how many
+    benchmark iterations to run based on estimated function runtime.
+grad_to_none : list of torch.Tensor, optional
+    List of tensors whose gradients should be reset to None before each
+    benchmark iteration. Useful when benchmarking functions that include
+    backward passes.
+quantiles : list of float, optional
+    Performance percentiles to return (e.g., [0.2, 0.8] for 20th and 80th
+    percentiles). If provided, overrides return_mode.
+return_mode : str, optional
+    Statistical measure to return. Options are "min", "max", "mean",
+    "median", or "all" (default is "mean").
 
-   Returns
-   -------
-   float or list of float
-       The benchmark result. If ``quantiles`` is provided, returns the quantile
-       values (scalar if single quantile, list otherwise). If ``return_mode`` is
-       ``"all"``, returns a list of all measured execution times in milliseconds.
-       Otherwise, returns the specified statistical measure (float).
+Returns
+-------
+float or list of float
+    Benchmark timing results. Returns a single float based on return_mode,
+    or a list of floats if quantiles is specified or return_mode is "all".
 
-   Notes
-   -----
-   The function performs an initial dry run to estimate kernel latency, then
-   dynamically computes the number of iterations needed to satisfy the ``warmup``
-   and ``rep`` time constraints. L2 cache is flushed before every timed iteration
-   to minimize interference from cache hits.
+Notes
+-----
+The function automatically estimates the runtime of ``fn`` to determine
+appropriate warmup and repetition counts. GPU L2 cache is cleared before
+each benchmark iteration to ensure consistent measurements.
 
-   Examples
-   --------
-   >>> import triton
-   >>> import triton.language as tl
-   >>> import torch
-   >>>
-   >>> @triton.jit
-   >>> def kernel_fn(X, Y, BLOCK_SIZE: tl.constexpr):
-   ...     pid = tl.program_id(0)
-   ...     x = tl.load(X + pid * BLOCK_SIZE)
-   ...     tl.store(Y + pid * BLOCK_SIZE, x * 2)
-   >>>
-   >>> x = torch.ones((1024,), device="cuda")
-   >>> y = torch.zeros((1024,), device="cuda")
-   >>>
-   >>> # Benchmark with default settings (mean time)
-   >>> mean_time = triton.testing.do_bench(lambda: kernel_fn[(1,)](x, y, 1024))
-   >>>
-   >>> # Benchmark returning min, max, and median
-   >>> min_time = triton.testing.do_bench(lambda: kernel_fn[(1,)](x, y, 1024), return_mode="min")
-   >>>
-   >>> # Benchmark with custom quantiles (20th and 80th percentile)
-   >>> p20, p80 = triton.testing.do_bench(
-   ...     lambda: kernel_fn[(1,)](x, y, 1024),
-   ...     quantiles=[0.2, 0.8]
-   ... )
+Examples
+--------
+.. code-block:: python
+
+    >>> import triton
+    >>> import triton.testing
+    >>> import torch
+    >>> @triton.jit
+    ... def kernel_fn(...):
+    ...     pass
+    >>> # Benchmark with default settings
+    >>> result = triton.testing.do_bench(lambda: kernel_fn[grid](...))
+    >>> # Benchmark with custom quantiles
+    >>> result = triton.testing.do_bench(lambda: kernel_fn[grid](...),
+    ...                                  quantiles=[0.2, 0.5, 0.8])
+    >>> # Get all timing measurements
+    >>> all_times = triton.testing.do_bench(lambda: kernel_fn[grid](...),
+    ...                                     return_mode="all")

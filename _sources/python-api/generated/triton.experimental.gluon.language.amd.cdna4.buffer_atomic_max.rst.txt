@@ -1,0 +1,42 @@
+buffer_atomic_max
+=================
+
+Perform an atomic maximum operation on AMD CDNA4 buffer memory.
+
+Parameters
+----------
+ptr : ttgl.pointer_type
+    Pointer to the global memory location.
+offsets : ttgl.tensor
+    Offset indices for the buffer access.
+value : ttgl.tensor
+    The value to compare against.
+mask : ttgl.tensor, optional
+    Boolean mask to predicate the operation.
+sem : ttgl.semantics, optional
+    Memory semantics (e.g., ACQ_REL, RELAXED).
+scope : ttgl.scope, optional
+    Memory scope (e.g., CTA, SYSTEM).
+
+Returns
+-------
+ttgl.tensor
+    The original value(s) at the memory location before the update.
+
+Notes
+-----
+This operation is specific to AMD CDNA4 architectures. It requires a Gluon JIT
+context (:func:`@gluon.jit <triton.experimental.gluon.jit>`).
+
+Examples
+--------
+.. code-block:: python
+
+    import triton.experimental.gluon as gluon
+    import triton.experimental.gluon.language as ttgl
+    import triton.experimental.gluon.language.amd.cdna4 as cdna4
+
+    @gluon.jit
+    def kernel(ptr, offsets, value):
+        old_val = cdna4.buffer_atomic_max(ptr, offsets, value)
+        # Use old_val for subsequent computations

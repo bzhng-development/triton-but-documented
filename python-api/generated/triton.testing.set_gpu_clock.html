@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Parameters &mdash; Triton  documentation</title>
+  <title>triton.testing.set_gpu_clock &mdash; Triton  documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=03e43079" />
       <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="../../_static/css/custom.css" />
@@ -52,27 +52,55 @@
 <li class="toctree-l1"><a class="reference internal" href="../triton.language.html">triton.language</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="../triton.testing.html">triton.testing</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="triton.testing.Benchmark.html">class triton.testing.Benchmark</a></li>
-<li class="toctree-l2"><a class="reference internal" href="triton.testing.do_bench.html"><code class="docutils literal notranslate"><span class="pre">triton.testing.do_bench()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="triton.testing.do_bench_cudagraph.html"><code class="docutils literal notranslate"><span class="pre">triton.testing.do_bench_cudagraph()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="triton.testing.do_bench.html">do_bench</a></li>
+<li class="toctree-l2"><a class="reference internal" href="triton.testing.do_bench_cudagraph.html">triton.testing.do_bench_cudagraph</a></li>
 <li class="toctree-l2"><a class="reference internal" href="triton.testing.perf_report.html">perf_report</a></li>
-<li class="toctree-l2"><a class="reference internal" href="triton.testing.assert_close.html">assert_close</a></li>
+<li class="toctree-l2"><a class="reference internal" href="triton.testing.assert_close.html">triton.testing.assert_close</a></li>
 <li class="toctree-l2 current"><a class="reference internal" href="../triton.testing.html#utilities">Utilities</a><ul class="current">
-<li class="toctree-l3"><a class="reference internal" href="triton.testing.Mark.html">class Mark</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.testing.Mark.html">class triton.testing.Mark</a></li>
 <li class="toctree-l3"><a class="reference internal" href="triton.testing.cuda_memcheck.html">cuda_memcheck</a></li>
-<li class="toctree-l3"><a class="reference internal" href="triton.testing.get_dram_gbps.html">get_dram_gbps</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.testing.get_dram_gbps.html">triton.testing.get_dram_gbps</a></li>
 <li class="toctree-l3"><a class="reference internal" href="triton.testing.get_max_simd_tflops.html">get_max_simd_tflops</a></li>
 <li class="toctree-l3"><a class="reference internal" href="triton.testing.get_max_tensorcore_tflops.html">get_max_tensorcore_tflops</a></li>
 <li class="toctree-l3"><a class="reference internal" href="triton.testing.nvsmi.html">nvsmi</a></li>
-<li class="toctree-l3 current"><a class="current reference internal" href="#">Parameters</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#yields">Yields</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#raises">Raises</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#notes">Notes</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#examples">Examples</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">triton.testing.set_gpu_clock</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#triton.testing.set_gpu_clock"><code class="docutils literal notranslate"><span class="pre">triton.testing.set_gpu_clock()</span></code></a></li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../triton-semantics.html">Triton Semantics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.language.extra.cuda.html">triton.language.extra.cuda</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.language.extra.cuda.libdevice.html">triton.language.extra.cuda.libdevice</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.runtime.html">triton.runtime</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.tools.html">triton.tools</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Gluon (Experimental) API</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.html">triton.experimental.gluon</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.html">triton.experimental.gluon.language</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.nvidia.ampere.html">triton.experimental.gluon.language.nvidia.ampere</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.nvidia.ampere.async_copy.html">triton.experimental.gluon.language.nvidia.ampere.async_copy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.nvidia.ampere.mbarrier.html">triton.experimental.gluon.language.nvidia.ampere.mbarrier</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.nvidia.hopper.html">triton.experimental.gluon.language.nvidia.hopper</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.nvidia.hopper.tma.html">triton.experimental.gluon.language.nvidia.hopper.tma</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.nvidia.hopper.mbarrier.html">triton.experimental.gluon.language.nvidia.hopper.mbarrier</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.nvidia.hopper.cluster.html">triton.experimental.gluon.language.nvidia.hopper.cluster</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.nvidia.blackwell.html">triton.experimental.gluon.language.nvidia.blackwell</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.nvidia.blackwell.tma.html">triton.experimental.gluon.language.nvidia.blackwell.tma</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.nvidia.blackwell.clc.html">triton.experimental.gluon.language.nvidia.blackwell.clc</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.amd.html">triton.experimental.gluon.language.amd</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.amd.gfx1250.html">triton.experimental.gluon.language.amd.gfx1250</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.amd.gfx1250.async_copy.html">triton.experimental.gluon.language.amd.gfx1250.async_copy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.amd.gfx1250.mbarrier.html">triton.experimental.gluon.language.amd.gfx1250.mbarrier</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.amd.gfx1250.cluster.html">triton.experimental.gluon.language.amd.gfx1250.cluster</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.amd.gfx1250.tdm.html">triton.experimental.gluon.language.amd.gfx1250.tdm</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.amd.cdna3.html">triton.experimental.gluon.language.amd.cdna3</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.amd.cdna4.html">triton.experimental.gluon.language.amd.cdna4</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.amd.rdna3.html">triton.experimental.gluon.language.amd.rdna3</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.amd.rdna4.html">triton.experimental.gluon.language.amd.rdna4</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Triton MLIR Dialects</span></p>
 <ul>
@@ -100,7 +128,7 @@
   <ul class="wy-breadcrumbs">
       <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
           <li class="breadcrumb-item"><a href="../triton.testing.html">triton.testing</a></li>
-      <li class="breadcrumb-item active">Parameters</li>
+      <li class="breadcrumb-item active">triton.testing.set_gpu_clock</li>
       <li class="wy-breadcrumbs-aside">
             <a href="../../_sources/python-api/generated/triton.testing.set_gpu_clock.rst.txt" rel="nofollow"> View page source</a>
       </li>
@@ -110,16 +138,18 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <p>Set GPU clock frequencies for benchmarking.</p>
-<p>This context manager locks the GPU SM and memory clocks to specified values
-using <code class="docutils literal notranslate"><span class="pre">nvidia-smi</span></code>, validates the settings, and yields theoretical
-compute (TFLOPS) and memory bandwidth (GBPS) estimates based on the
-locked frequencies. Upon exit, it restores the GPU to default clock
-settings.</p>
-<p>Requires <code class="docutils literal notranslate"><span class="pre">nvidia-smi</span></code> in PATH and appropriate permissions to modify
-GPU clocks. Targets GPU 0 by default.</p>
+  <section id="triton-testing-set-gpu-clock">
+<h1>triton.testing.set_gpu_clock<a class="headerlink" href="#triton-testing-set-gpu-clock" title="Link to this heading">¶</a></h1>
+<dl class="py function">
+<dt class="sig sig-object py" id="triton.testing.set_gpu_clock">
+<span class="sig-prename descclassname"><span class="pre">triton.testing.</span></span><span class="sig-name descname"><span class="pre">set_gpu_clock</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ref_sm_clock</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1350</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ref_mem_clock</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1215</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#triton.testing.set_gpu_clock" title="Link to this definition">¶</a></dt>
+<dd><p>Context manager that locks GPU SM and memory clocks to specified frequencies
+for benchmarking.</p>
+<p>Sets the GPU clocks using <code class="docutils literal notranslate"><span class="pre">nvidia-smi</span></code>, verifies the settings, and yields
+theoretical compute throughput (TFLOPS) and memory bandwidth (GBPS). Restores
+default clock settings on exit.</p>
 <section id="parameters">
-<h1>Parameters<a class="headerlink" href="#parameters" title="Link to this heading">¶</a></h1>
+<h2>Parameters<a class="headerlink" href="#parameters" title="Link to this heading">¶</a></h2>
 <dl class="simple">
 <dt>ref_sm_clock<span class="classifier">int, optional</span></dt><dd><p>Reference SM clock frequency in MHz. Default is 1350.</p>
 </dd>
@@ -128,48 +158,46 @@ GPU clocks. Targets GPU 0 by default.</p>
 </dl>
 </section>
 <section id="yields">
-<h1>Yields<a class="headerlink" href="#yields" title="Link to this heading">¶</a></h1>
+<h2>Yields<a class="headerlink" href="#yields" title="Link to this heading">¶</a></h2>
 <dl class="simple">
-<dt>tflops<span class="classifier">float</span></dt><dd><p>Theoretical peak compute performance in TFLOPS, calculated based on
-the locked SM clock and assumed hardware parameters (e.g., 108 SMs,
-256 CUDA cores per SM, 4 operations per cycle).</p>
+<dt>tflops<span class="classifier">float</span></dt><dd><p>Theoretical tensor core throughput in TFLOPS.</p>
 </dd>
-<dt>gbps<span class="classifier">float</span></dt><dd><p>Theoretical peak memory bandwidth in GBPS, calculated based on the
-locked memory clock and assumed bus width (e.g., 640-bit interface).</p>
+<dt>gbps<span class="classifier">float</span></dt><dd><p>Theoretical memory bandwidth in GBPS.</p>
 </dd>
 </dl>
 </section>
 <section id="raises">
-<h1>Raises<a class="headerlink" href="#raises" title="Link to this heading">¶</a></h1>
+<h2>Raises<a class="headerlink" href="#raises" title="Link to this heading">¶</a></h2>
 <dl class="simple">
-<dt>AssertionError</dt><dd><p>If the actual GPU clocks do not match the requested frequencies
-within a 10 MHz tolerance.</p>
-</dd>
-<dt>subprocess.CalledProcessError</dt><dd><p>If <code class="docutils literal notranslate"><span class="pre">nvidia-smi</span></code> commands fail.</p>
+<dt>AssertionError</dt><dd><p>If GPU clocks cannot be set to the specified frequencies within
+10 MHz tolerance.</p>
 </dd>
 </dl>
 </section>
 <section id="notes">
-<h1>Notes<a class="headerlink" href="#notes" title="Link to this heading">¶</a></h1>
-<p>The performance estimates assume specific hardware configurations
-(Ampere-like: 108 SMs, 256 cores/SM, 640-bit memory bus). Adjust
-calculations if targeting different GPU architectures.</p>
-<p>Clock locking persists only within the <code class="docutils literal notranslate"><span class="pre">with</span></code> block. Automatic reset
-occurs on context exit, even if an exception is raised.</p>
+<h2>Notes<a class="headerlink" href="#notes" title="Link to this heading">¶</a></h2>
+<p>This context manager requires <code class="docutils literal notranslate"><span class="pre">nvidia-smi</span></code> to be available in PATH and
+sufficient permissions to modify GPU clock settings. Only GPU 0 is configured.</p>
+<p>TFLOPS calculation assumes: 108 SMs, 4 tensor cores per SM, 256 FMA ops per
+cycle, 2 operations per FMA.</p>
+<p>GBPS calculation assumes: 640-bit memory interface, DDR (2x) transfer rate.</p>
+<p>Clock settings are automatically reset when exiting the context.</p>
 </section>
 <section id="examples">
-<h1>Examples<a class="headerlink" href="#examples" title="Link to this heading">¶</a></h1>
+<h2>Examples<a class="headerlink" href="#examples" title="Link to this heading">¶</a></h2>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">triton.testing</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">tt</span>
 
-<span class="c1"># Lock clocks and retrieve theoretical performance metrics</span>
-<span class="k">with</span> <span class="n">tt</span><span class="o">.</span><span class="n">set_gpu_clock</span><span class="p">(</span><span class="n">ref_sm_clock</span><span class="o">=</span><span class="mi">1400</span><span class="p">,</span> <span class="n">ref_mem_clock</span><span class="o">=</span><span class="mi">1200</span><span class="p">)</span> <span class="k">as</span> <span class="p">(</span><span class="n">tflops</span><span class="p">,</span> <span class="n">gbps</span><span class="p">):</span>
-    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Peak TFLOPS: </span><span class="si">{</span><span class="n">tflops</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Peak GBPS: </span><span class="si">{</span><span class="n">gbps</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-    <span class="c1"># Run benchmarks here with deterministic clock speeds</span>
+<span class="k">with</span> <span class="n">tt</span><span class="o">.</span><span class="n">set_gpu_clock</span><span class="p">(</span><span class="n">ref_sm_clock</span><span class="o">=</span><span class="mi">1350</span><span class="p">,</span> <span class="n">ref_mem_clock</span><span class="o">=</span><span class="mi">1215</span><span class="p">)</span> <span class="k">as</span> <span class="p">(</span><span class="n">tflops</span><span class="p">,</span> <span class="n">gbps</span><span class="p">):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Theoretical TFLOPS: </span><span class="si">{</span><span class="n">tflops</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Theoretical GBPS: </span><span class="si">{</span><span class="n">gbps</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="c1"># Run benchmarks here with fixed clock speeds</span>
 
-<span class="c1"># Clocks are automatically reset to default after the block</span>
+<span class="c1"># GPU clocks are automatically restored after context exits</span>
 </pre></div>
 </div>
+</section>
+</dd></dl>
+
 </section>
 
 

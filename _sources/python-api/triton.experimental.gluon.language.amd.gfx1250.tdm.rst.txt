@@ -1,0 +1,19 @@
+triton.experimental.gluon.language.amd.gfx1250.tdm
+==================================================
+
+.. currentmodule:: triton.experimental.gluon.language.amd.gfx1250.tdm
+
+TDM
+---
+
+.. autosummary::
+    :toctree: generated
+    :nosignatures:
+
+    async_load
+    async_scatter
+    async_wait
+    make_tensor_descriptor
+    prefetch
+    tensor_descriptor
+    tensor_descriptor_type

@@ -1,0 +1,39 @@
+rcp_ru
+======
+
+Compute reciprocal with round-up rounding mode.
+
+Parameters
+----------
+arg0 : tensor
+    Input tensor of floating-point values. Supported dtypes are fp32 and fp64.
+_semantic : optional
+    Internal parameter for semantic propagation. Do not set manually.
+
+Returns
+-------
+result : tensor
+    Tensor containing reciprocals (1.0 / arg0) computed with round-up
+    rounding mode. Same dtype as input.
+
+Notes
+-----
+This function dispatches to CUDA libdevice intrinsic functions:
+``__nv_frcp_ru`` for fp32 inputs and ``__nv_drcp_ru`` for fp64 inputs.
+The "ru" suffix indicates IEEE 754 round-up (toward positive infinity)
+rounding mode.
+
+This is a pure function with no side effects.
+
+Examples
+--------
+.. code-block:: python
+
+    import triton
+    import triton.language as tl
+
+    @triton.jit
+    def kernel(x_ptr, y_ptr, BLOCK: tl.constexpr):
+        x = tl.load(x_ptr + tl.arange(0, BLOCK))
+        y = tl.extra.cuda.libdevice.rcp_ru(x)
+        tl.store(y_ptr + tl.arange(0, BLOCK), y)

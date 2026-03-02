@@ -1,0 +1,35 @@
+erfc
+====
+
+Compute the complementary error function element-wise.
+
+Calculates :math:`1 - \text{erf}(x)` for each element in the input tensor.
+
+Parameters
+----------
+arg0 : tensor
+    Input tensor of floating point type. Supports :code:`fp32` and :code:`fp64`.
+
+Returns
+-------
+tensor
+    Output tensor of the same type as :code:`arg0`.
+
+Notes
+-----
+This function is only available on CUDA targets. It invokes the CUDA
+libdevice functions :code:`__nv_erfcf` for :code:`fp32` inputs and
+:code:`__nv_erfc` for :code:`fp64` inputs.
+
+Examples
+--------
+.. code-block:: python
+
+    @triton.jit
+    def kernel(x_ptr, y_ptr, n, BLOCK: tl.constexpr):
+        pid = tl.program_id(0)
+        offs = pid * BLOCK + tl.arange(0, BLOCK)
+        mask = offs < n
+        x = tl.load(x_ptr + offs, mask=mask)
+        y = tl.extra.cuda.libdevice.erfc(x)
+        tl.store(y_ptr + offs, y, mask=mask)

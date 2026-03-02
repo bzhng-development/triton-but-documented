@@ -1,0 +1,53 @@
+init
+====
+
+.. py:function:: init(mbarrier, count)
+
+   Initialize a memory barrier (:code:`mbarrier`) in shared memory with a specified arrival count.
+
+   An mbarrier consists of an init count, a pending count, and a phase. At initialization, the init count and pending count are set to the given :code:`count`, and the phase is initialized to 0. This operation is specific to AMD GFX1250 hardware.
+
+   Parameters
+   ----------
+   mbarrier : shared_memory_descriptor
+       The shared memory object representing the barrier to initialize.
+   count : int
+       The initial count for the barrier. Must be a positive integer representing
+       the expected number of arrivals to trigger the barrier.
+
+   Returns
+   -------
+   None
+
+   Notes
+   -----
+   This API is hardware-specific to AMD GFX1250 (RDNA3/CDNA3 class) GPUs.
+   The barrier state is stored in shared memory and must be accessed by
+   threads within the same workgroup. The phase bit toggles upon barrier
+   arrival completion to support multiple usage rounds.
+
+   Examples
+   --------
+   Initialize a barrier in shared memory and use it to synchronize threads:
+
+   .. code-block:: python
+
+      import triton.experimental.gluon as gluon
+      import triton.experimental.gluon.language as ttgl
+      from ttgl.amd import gfx1250
+
+      @gluon.jit
+      def kernel(X, stride):
+          # Allocate shared memory for the barrier (size depends on hardware spec)
+          mbarrier = ttgl.allocate_shared_memory(ttgl.int32, [1], ttgl.SharedLayout())
+
+          # Initialize the barrier with expected thread count (e.g., 128)
+          gfx1250.mbarrier.init(mbarrier, 128)
+
+          # ... perform work ...
+
+          # Arrive at the barrier
+          gfx1250.mbarrier.arrive(mbarrier)
+
+          # Wait for all threads to arrive
+          gfx1250.mbarrier.wait(mbarrier, 0)

@@ -1,0 +1,325 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>triton.runtime.Autotuner &mdash; Triton  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=03e43079" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/custom.css" />
+
+  
+      <script src="../../_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="class Config" href="triton.runtime.Config.html" />
+    <link rel="prev" title="triton.runtime" href="../triton.runtime.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            Triton
+              <img src="https://cdn.openai.com/triton/assets/triton-logo.png" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../getting-started/installation.html">Installation</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Python API</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../triton.html">triton</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.language.html">triton.language</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.testing.html">triton.testing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton-semantics.html">Triton Semantics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.language.extra.cuda.html">triton.language.extra.cuda</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.language.extra.cuda.libdevice.html">triton.language.extra.cuda.libdevice</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../triton.runtime.html">triton.runtime</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="../triton.runtime.html#runtime">Runtime</a><ul class="current">
+<li class="toctree-l3 current"><a class="current reference internal" href="#">triton.runtime.Autotuner</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#triton.runtime.Autotuner"><code class="docutils literal notranslate"><span class="pre">triton.runtime.Autotuner</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="triton.runtime.Config.html">class Config</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.runtime.Heuristics.html">class triton.runtime.Heuristics</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.runtime.InterpreterError.html">InterpreterError</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.runtime.JITFunction.html">JITFunction</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.runtime.KernelInterface.html">triton.runtime.KernelInterface</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.runtime.MockTensor.html">class triton.runtime.MockTensor</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.runtime.OutOfResources.html">OutOfResources</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.runtime.RedisRemoteCacheBackend.html">RedisRemoteCacheBackend</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.runtime.RemoteCacheBackend.html">RemoteCacheBackend</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.runtime.TensorWrapper.html">class TensorWrapper</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.runtime.autotune.html">triton.runtime.autotune</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.runtime.driver.html">driver</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.runtime.heuristics.html">heuristics</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.runtime.reinterpret.html">reinterpret</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.tools.html">triton.tools</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Gluon (Experimental) API</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.html">triton.experimental.gluon</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.html">triton.experimental.gluon.language</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.nvidia.ampere.html">triton.experimental.gluon.language.nvidia.ampere</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.nvidia.ampere.async_copy.html">triton.experimental.gluon.language.nvidia.ampere.async_copy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.nvidia.ampere.mbarrier.html">triton.experimental.gluon.language.nvidia.ampere.mbarrier</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.nvidia.hopper.html">triton.experimental.gluon.language.nvidia.hopper</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.nvidia.hopper.tma.html">triton.experimental.gluon.language.nvidia.hopper.tma</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.nvidia.hopper.mbarrier.html">triton.experimental.gluon.language.nvidia.hopper.mbarrier</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.nvidia.hopper.cluster.html">triton.experimental.gluon.language.nvidia.hopper.cluster</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.nvidia.blackwell.html">triton.experimental.gluon.language.nvidia.blackwell</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.nvidia.blackwell.tma.html">triton.experimental.gluon.language.nvidia.blackwell.tma</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.nvidia.blackwell.clc.html">triton.experimental.gluon.language.nvidia.blackwell.clc</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.amd.html">triton.experimental.gluon.language.amd</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.amd.gfx1250.html">triton.experimental.gluon.language.amd.gfx1250</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.amd.gfx1250.async_copy.html">triton.experimental.gluon.language.amd.gfx1250.async_copy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.amd.gfx1250.mbarrier.html">triton.experimental.gluon.language.amd.gfx1250.mbarrier</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.amd.gfx1250.cluster.html">triton.experimental.gluon.language.amd.gfx1250.cluster</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.amd.gfx1250.tdm.html">triton.experimental.gluon.language.amd.gfx1250.tdm</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.amd.cdna3.html">triton.experimental.gluon.language.amd.cdna3</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.amd.cdna4.html">triton.experimental.gluon.language.amd.cdna4</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.amd.rdna3.html">triton.experimental.gluon.language.amd.rdna3</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.amd.rdna4.html">triton.experimental.gluon.language.amd.rdna4</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Triton MLIR Dialects</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../dialects/dialects.html">Triton MLIR Dialects and Ops</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Programming Guide</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../programming-guide/chapter-1/introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../programming-guide/chapter-2/related-work.html">Related Work</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../programming-guide/chapter-3/debugging.html">Debugging Triton</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">Triton</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../triton.runtime.html">triton.runtime</a></li>
+      <li class="breadcrumb-item active">triton.runtime.Autotuner</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../_sources/python-api/generated/triton.runtime.Autotuner.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="triton-runtime-autotuner">
+<h1>triton.runtime.Autotuner<a class="headerlink" href="#triton-runtime-autotuner" title="Link to this heading">¶</a></h1>
+<dl class="py class">
+<dt class="sig sig-object py" id="triton.runtime.Autotuner">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">triton.runtime.</span></span><span class="sig-name descname"><span class="pre">Autotuner</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fn</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">arg_names</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">configs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">key</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reset_to_zero</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">restore_value</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pre_hook</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">post_hook</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prune_configs_by</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">warmup</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rep</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_cuda_graph</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">do_bench</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cache_results</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#triton.runtime.Autotuner" title="Link to this definition">¶</a></dt>
+<dd><p>Auto-tuner wrapper for Triton JIT kernels that benchmarks multiple configurations
+to find the optimal one at runtime.</p>
+<p>The autotuner evaluates different kernel configurations (e.g., block sizes,
+num_warps, num_stages) and caches the best performing configuration based on
+tuning keys. Subsequent calls with the same key values reuse the cached result.</p>
+<section id="parameters">
+<h2>Parameters<a class="headerlink" href="#parameters" title="Link to this heading">¶</a></h2>
+<dl>
+<dt>fn<span class="classifier">triton.JITFunction</span></dt><dd><p>The JIT-compiled kernel function to auto-tune.</p>
+</dd>
+<dt>arg_names<span class="classifier">list of str</span></dt><dd><p>List of argument names for the kernel function.</p>
+</dd>
+<dt>configs<span class="classifier">list of triton.Config</span></dt><dd><p>List of configurations to benchmark. Each config specifies meta-parameters
+like BLOCK_SIZE, num_warps, num_stages, etc.</p>
+</dd>
+<dt>key<span class="classifier">list of str</span></dt><dd><p>Argument names that form the tuning key. When these argument values change,
+all configs are re-evaluated.</p>
+</dd>
+<dt>reset_to_zero<span class="classifier">list of str, optional</span></dt><dd><p>Argument names whose corresponding tensors will be zeroed before running
+each configuration. Prevents side effects from multiple kernel executions.</p>
+</dd>
+<dt>restore_value<span class="classifier">list of str, optional</span></dt><dd><p>Argument names whose corresponding tensors will be restored to their
+original values after benchmarking completes.</p>
+</dd>
+<dt>pre_hook<span class="classifier">callable, optional</span></dt><dd><p>Function called before kernel execution. Signature:
+<code class="docutils literal notranslate"><span class="pre">pre_hook(kwargs,</span> <span class="pre">reset_only=False)</span></code>. Overrides default reset/restore hooks.</p>
+</dd>
+<dt>post_hook<span class="classifier">callable, optional</span></dt><dd><p>Function called after kernel execution. Signature:
+<code class="docutils literal notranslate"><span class="pre">post_hook(kwargs,</span> <span class="pre">exception)</span></code>. Overrides default restore hooks.</p>
+</dd>
+<dt>prune_configs_by<span class="classifier">dict, optional</span></dt><dd><p>Dictionary for config pruning with optional fields:</p>
+<ul class="simple">
+<li><p>‘perf_model’: callable that predicts runtime for configs</p></li>
+<li><p>‘top_k’: number of configs to benchmark (int or float &lt;= 1.0)</p></li>
+<li><p>‘early_config_prune’: callable to filter configs before benchmarking</p></li>
+</ul>
+<p>The early_config_prune function signature:
+<code class="docutils literal notranslate"><span class="pre">early_config_prune(configs,</span> <span class="pre">named_args,</span> <span class="pre">**kwargs)</span> <span class="pre">-&gt;</span> <span class="pre">list</span> <span class="pre">of</span> <span class="pre">Config</span></code></p>
+</dd>
+<dt>warmup<span class="classifier">int, optional</span></dt><dd><p>Warmup time in milliseconds for benchmarking (deprecated).</p>
+</dd>
+<dt>rep<span class="classifier">int, optional</span></dt><dd><p>Repetition count for benchmarking (deprecated).</p>
+</dd>
+<dt>use_cuda_graph<span class="classifier">bool, default False</span></dt><dd><p>Whether to use CUDA graphs for benchmarking (deprecated).</p>
+</dd>
+<dt>do_bench<span class="classifier">callable, optional</span></dt><dd><p>Custom benchmark function. Signature: <code class="docutils literal notranslate"><span class="pre">do_bench(kernel_call,</span> <span class="pre">quantiles)</span></code>.
+Defaults to Triton’s internal benchmarker.</p>
+</dd>
+<dt>cache_results<span class="classifier">bool, default False</span></dt><dd><p>Whether to persist autotuning results to disk cache.</p>
+</dd>
+</dl>
+</section>
+<section id="attributes">
+<h2>Attributes<a class="headerlink" href="#attributes" title="Link to this heading">¶</a></h2>
+<dl class="simple">
+<dt>configs<span class="classifier">list of triton.Config</span></dt><dd><p>List of configurations to evaluate.</p>
+</dd>
+<dt>keys<span class="classifier">tuple of str</span></dt><dd><p>Tuning key argument names.</p>
+</dd>
+<dt>cache<span class="classifier">dict</span></dt><dd><p>Runtime cache mapping tuning keys to best configurations.</p>
+</dd>
+<dt>arg_names<span class="classifier">list of str</span></dt><dd><p>Kernel argument names.</p>
+</dd>
+<dt>best_config<span class="classifier">triton.Config</span></dt><dd><p>The best configuration found during autotuning.</p>
+</dd>
+</dl>
+</section>
+<section id="methods">
+<h2>Methods<a class="headerlink" href="#methods" title="Link to this heading">¶</a></h2>
+<dl class="simple">
+<dt>run(<a href="#id1"><span class="problematic" id="id2">*</span></a>args, <a href="#id3"><span class="problematic" id="id4">**</span></a>kwargs)</dt><dd><p>Execute the kernel with the best configuration for the given arguments.</p>
+</dd>
+<dt>prune_configs(kwargs)</dt><dd><p>Filter configurations using perf_model and early_config_prune.</p>
+</dd>
+<dt>warmup(<a href="#id5"><span class="problematic" id="id6">*</span></a>args, <a href="#id7"><span class="problematic" id="id8">**</span></a>kwargs)</dt><dd><p>Warmup the kernel for all pruned configurations.</p>
+</dd>
+</dl>
+</section>
+<section id="notes">
+<h2>Notes<a class="headerlink" href="#notes" title="Link to this heading">¶</a></h2>
+<p>When multiple configurations are provided, the autotuner benchmarks each one
+and caches the fastest. The tuning key determines when to re-benchmark:
+if key argument values change, all configs are evaluated again.</p>
+<p>If <code class="docutils literal notranslate"><span class="pre">reset_to_zero</span></code> or <code class="docutils literal notranslate"><span class="pre">restore_value</span></code> are specified, default pre/post hooks
+are installed to manage tensor state. Custom hooks override this behavior.</p>
+<p>Disk caching (when <code class="docutils literal notranslate"><span class="pre">cache_results=True</span></code>) persists tuning results across
+runs. Cache invalidation considers Triton version, backend hash, kernel IR,
+environment variables, and tuning key.</p>
+<p>The environment variable <code class="docutils literal notranslate"><span class="pre">TRITON_PRINT_AUTOTUNING=1</span></code> enables verbose output
+showing autotuning time and selected configuration.</p>
+<p>Deprecated parameters (warmup, rep, use_cuda_graph) trigger warnings and use
+legacy benchmarking paths. Prefer <code class="docutils literal notranslate"><span class="pre">do_bench</span></code> for custom benchmarking.</p>
+</section>
+<section id="examples">
+<h2>Examples<a class="headerlink" href="#examples" title="Link to this heading">¶</a></h2>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">triton</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">triton.language</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">tl</span>
+
+<span class="nd">@triton</span><span class="o">.</span><span class="n">autotune</span><span class="p">(</span>
+    <span class="n">configs</span><span class="o">=</span><span class="p">[</span>
+        <span class="n">triton</span><span class="o">.</span><span class="n">Config</span><span class="p">(</span><span class="n">kwargs</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;BLOCK_SIZE&#39;</span><span class="p">:</span> <span class="mi">128</span><span class="p">},</span> <span class="n">num_warps</span><span class="o">=</span><span class="mi">4</span><span class="p">),</span>
+        <span class="n">triton</span><span class="o">.</span><span class="n">Config</span><span class="p">(</span><span class="n">kwargs</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;BLOCK_SIZE&#39;</span><span class="p">:</span> <span class="mi">256</span><span class="p">},</span> <span class="n">num_warps</span><span class="o">=</span><span class="mi">8</span><span class="p">),</span>
+        <span class="n">triton</span><span class="o">.</span><span class="n">Config</span><span class="p">(</span><span class="n">kwargs</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;BLOCK_SIZE&#39;</span><span class="p">:</span> <span class="mi">512</span><span class="p">},</span> <span class="n">num_warps</span><span class="o">=</span><span class="mi">8</span><span class="p">),</span>
+    <span class="p">],</span>
+    <span class="n">key</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;x_size&#39;</span><span class="p">],</span>
+    <span class="n">reset_to_zero</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;output_ptr&#39;</span><span class="p">],</span>
+<span class="p">)</span>
+<span class="nd">@triton</span><span class="o">.</span><span class="n">jit</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">kernel</span><span class="p">(</span><span class="n">x_ptr</span><span class="p">,</span> <span class="n">output_ptr</span><span class="p">,</span> <span class="n">x_size</span><span class="p">,</span> <span class="n">BLOCK_SIZE</span><span class="p">:</span> <span class="n">tl</span><span class="o">.</span><span class="n">constexpr</span><span class="p">):</span>
+    <span class="n">pid</span> <span class="o">=</span> <span class="n">tl</span><span class="o">.</span><span class="n">program_id</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+    <span class="n">offs</span> <span class="o">=</span> <span class="n">pid</span> <span class="o">*</span> <span class="n">BLOCK_SIZE</span> <span class="o">+</span> <span class="n">tl</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">BLOCK_SIZE</span><span class="p">)</span>
+    <span class="n">mask</span> <span class="o">=</span> <span class="n">offs</span> <span class="o">&lt;</span> <span class="n">x_size</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="n">tl</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">x_ptr</span> <span class="o">+</span> <span class="n">offs</span><span class="p">,</span> <span class="n">mask</span><span class="o">=</span><span class="n">mask</span><span class="p">)</span>
+    <span class="n">tl</span><span class="o">.</span><span class="n">store</span><span class="p">(</span><span class="n">output_ptr</span> <span class="o">+</span> <span class="n">offs</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">mask</span><span class="o">=</span><span class="n">mask</span><span class="p">)</span>
+
+<span class="c1"># First call triggers autotuning</span>
+<span class="n">kernel</span><span class="p">[</span><span class="n">x_grid</span><span class="p">,</span> <span class="n">y_grid</span><span class="p">](</span><span class="n">x_ptr</span><span class="p">,</span> <span class="n">output_ptr</span><span class="p">,</span> <span class="n">x_size</span><span class="o">=</span><span class="mi">1024</span><span class="p">)</span>
+
+<span class="c1"># Subsequent calls with same x_size use cached best config</span>
+<span class="n">kernel</span><span class="p">[</span><span class="n">x_grid</span><span class="p">,</span> <span class="n">y_grid</span><span class="p">](</span><span class="n">x_ptr</span><span class="p">,</span> <span class="n">output_ptr</span><span class="p">,</span> <span class="n">x_size</span><span class="o">=</span><span class="mi">1024</span><span class="p">)</span>
+
+<span class="c1"># Different x_size triggers re-benchmarking</span>
+<span class="n">kernel</span><span class="p">[</span><span class="n">x_grid</span><span class="p">,</span> <span class="n">y_grid</span><span class="p">](</span><span class="n">x_ptr</span><span class="p">,</span> <span class="n">output_ptr</span><span class="p">,</span> <span class="n">x_size</span><span class="o">=</span><span class="mi">2048</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Advanced usage with config pruning</span>
+<span class="nd">@triton</span><span class="o">.</span><span class="n">autotune</span><span class="p">(</span>
+    <span class="n">configs</span><span class="o">=</span><span class="p">[</span><span class="o">...</span><span class="p">],</span>
+    <span class="n">key</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;M&#39;</span><span class="p">,</span> <span class="s1">&#39;N&#39;</span><span class="p">,</span> <span class="s1">&#39;K&#39;</span><span class="p">],</span>
+    <span class="n">prune_configs_by</span><span class="o">=</span><span class="p">{</span>
+        <span class="s1">&#39;perf_model&#39;</span><span class="p">:</span> <span class="k">lambda</span> <span class="n">M</span><span class="p">,</span> <span class="n">N</span><span class="p">,</span> <span class="n">K</span><span class="p">,</span> <span class="n">BLOCK_SIZE</span><span class="p">:</span> <span class="o">...</span><span class="p">,</span>
+        <span class="s1">&#39;top_k&#39;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span>  <span class="c1"># Only benchmark top 3 configs</span>
+    <span class="p">},</span>
+    <span class="n">cache_results</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>  <span class="c1"># Persist results to disk</span>
+<span class="p">)</span>
+<span class="nd">@triton</span><span class="o">.</span><span class="n">jit</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">matmul_kernel</span><span class="p">(</span><span class="o">...</span><span class="p">):</span>
+    <span class="o">...</span>
+</pre></div>
+</div>
+</section>
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="../triton.runtime.html" class="btn btn-neutral float-left" title="triton.runtime" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="triton.runtime.Config.html" class="btn btn-neutral float-right" title="class Config" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2020, Philippe Tillet.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

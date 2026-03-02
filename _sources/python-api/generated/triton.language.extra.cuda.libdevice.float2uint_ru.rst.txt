@@ -1,0 +1,47 @@
+triton.language.extra.cuda.libdevice.float2uint_ru
+===================================================
+
+.. currentmodule:: triton.language.extra.cuda.libdevice
+
+.. function:: float2uint_ru(arg0, _semantic=None)
+
+   Convert 32-bit floating-point values to 32-bit unsigned integers using round-to-nearest-even rounding.
+
+   Calls the CUDA libdevice function ``__nv_float2uint_ru`` which converts float32 to int32 with rounding toward nearest unsigned integer.
+
+   Parameters
+   ----------
+   arg0 : tensor
+       Input tensor of 32-bit floating-point values (``tl.float32``).
+
+   _semantic : optional
+       Internal semantic parameter. Do not set manually.
+
+   Returns
+   -------
+   tensor
+       Tensor of 32-bit signed integers (``tl.int32``) containing the converted values.
+
+   Notes
+   -----
+   This function is a thin wrapper around CUDA's libdevice intrinsic. It is only available on CUDA targets.
+
+   The ``ru`` suffix indicates round-to-nearest-even rounding mode for unsigned conversion.
+
+   This operation is pure (no side effects) and can be safely used in device code.
+
+   Examples
+   --------
+   .. code-block:: python
+
+      import triton
+      import triton.language as tl
+      from triton.language.extra.cuda import libdevice
+
+      @triton.jit
+      def kernel(x_ptr, out_ptr, BLOCK_SIZE: tl.constexpr):
+          offsets = tl.arange(0, BLOCK_SIZE)
+          x = tl.load(x_ptr + offsets)
+          # Convert float32 to int32 with rounding
+          out = libdevice.float2uint_ru(x)
+          tl.store(out_ptr + offsets, out)

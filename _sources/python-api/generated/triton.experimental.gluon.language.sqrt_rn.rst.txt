@@ -1,0 +1,39 @@
+sqrt_rn
+=======
+
+.. currentmodule:: triton.experimental.gluon.language
+
+.. function:: sqrt_rn(x, _semantic=None)
+
+   Computes the element-wise precise square root (rounding to nearest per IEEE 754 standard) of :code:`x`.
+
+   Parameters
+   ----------
+   x : tensor
+       The input tensor. Must have ``fp32`` dtype.
+   _semantic : GluonSemantic, optional
+       Internal semantic context. Do not pass explicitly; this is handled automatically by the ``@gluon.jit`` decorator.
+
+   Returns
+   -------
+   tensor
+       A tensor containing the precise square root of each element in :code:`x`. Same shape and dtype as input.
+
+   Notes
+   -----
+   This operation uses the precise square root instruction (``sqrt.rn``) which rounds to nearest according to the IEEE 754 floating-point standard. Only ``fp32`` dtype is supported.
+
+   Examples
+   --------
+   .. code-block:: python
+
+      import triton.experimental.gluon as gluon
+      import triton.experimental.gluon.language as ttgl
+
+      @gluon.jit
+      def kernel(x_ptr, y_ptr, BLOCK_SIZE: ttgl.constexpr):
+          pid = ttgl.program_id(0)
+          offsets = pid * BLOCK_SIZE + ttgl.arange(0, BLOCK_SIZE)
+          x = ttgl.load(x_ptr + offsets)
+          y = ttgl.sqrt_rn(x)
+          ttgl.store(y_ptr + offsets, y)

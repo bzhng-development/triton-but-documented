@@ -1,0 +1,54 @@
+fma_rn
+======
+
+.. currentmodule:: triton.language.extra.cuda.libdevice
+
+.. function:: fma_rn(arg0, arg1, arg2, _semantic=None)
+
+    Compute fused multiply-add with round-to-nearest rounding mode.
+
+    Computes :code:`arg0 * arg1 + arg2` with a single rounding operation,
+    providing better numerical accuracy and performance than separate
+    multiply and add operations.
+
+    Parameters
+    ----------
+    arg0 : tensor
+        First input tensor (multiplicand). Must be fp32 or fp64 dtype.
+    arg1 : tensor
+        Second input tensor (multiplier). Must be fp32 or fp64 dtype.
+    arg2 : tensor
+        Third input tensor (addend). Must be fp32 or fp64 dtype.
+    _semantic : optional
+        Internal parameter, do not set manually.
+
+    Returns
+    -------
+    result : tensor
+        Tensor of the same dtype as inputs containing :code:`arg0 * arg1 + arg2`.
+
+    Notes
+    -----
+    This function maps to CUDA libdevice functions:
+    
+    - :code:`__nv_fmaf_rn` for fp32 inputs
+    - :code:`__nv_fma_rn` for fp64 inputs
+    
+    All three inputs must have the same dtype (either all fp32 or all fp64).
+    The operation is performed with round-to-nearest rounding mode.
+
+    Examples
+    --------
+    .. code-block:: python
+
+        import triton
+        import triton.language as tl
+
+        @triton.jit
+        def kernel(x_ptr, y_ptr, z_ptr, out_ptr, BLOCK_SIZE: tl.constexpr):
+            x = tl.load(x_ptr + tl.arange(0, BLOCK_SIZE))
+            y = tl.load(y_ptr + tl.arange(0, BLOCK_SIZE))
+            z = tl.load(z_ptr + tl.arange(0, BLOCK_SIZE))
+            # Compute x * y + z with fused multiply-add
+            result = tl.extra.cuda.libdevice.fma_rn(x, y, z)
+            tl.store(out_ptr + tl.arange(0, BLOCK_SIZE), result)

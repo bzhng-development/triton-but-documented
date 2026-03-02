@@ -1,0 +1,49 @@
+triton.language.extra.cuda.libdevice.floor
+==========================================
+
+.. currentmodule:: triton.language.extra.cuda.libdevice
+
+.. function:: floor(arg0, _semantic=None)
+
+    Compute the floor of the input element-wise.
+
+    Returns the largest integer value less than or equal to each element of
+    :code:`arg0`. This function dispatches to CUDA libdevice intrinsics
+    (:code:`__nv_floorf` for :code:`fp32`, :code:`__nv_floor` for :code:`fp64`).
+
+    Parameters
+    ----------
+    arg0 : tl.tensor
+        Input tensor of floating-point values. Must have dtype :code:`fp32` or
+        :code:`fp64`.
+    _semantic : optional
+        Internal parameter for Triton semantic analysis. Do not set manually.
+
+    Returns
+    -------
+    out : tl.tensor
+        Tensor of the same dtype as :code:`arg0` containing the floor values.
+
+    Notes
+    -----
+    This is an external function that compiles to CUDA libdevice calls. The
+    operation is pure (no side effects) and supports the following dtypes:
+
+    - :code:`fp32` → :code:`__nv_floorf`
+    - :code:`fp64` → :code:`__nv_floor`
+
+    Examples
+    --------
+    .. code-block:: python
+
+        import triton
+        import triton.language as tl
+
+        @triton.jit
+        def floor_kernel(x_ptr, out_ptr, BLOCK: tl.constexpr):
+            x = tl.load(x_ptr + tl.arange(0, BLOCK))
+            out = tl.extra.cuda.libdevice.floor(x)
+            tl.store(out_ptr + tl.arange(0, BLOCK), out)
+
+        # Input: [1.7, 2.3, -0.5, 3.9]
+        # Output: [1.0, 2.0, -1.0, 3.0]

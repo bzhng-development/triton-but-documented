@@ -1,0 +1,49 @@
+triton.language.extra.cuda.libdevice.sqrt_rn
+==============================================
+
+.. currentmodule:: triton.language.extra.cuda.libdevice
+
+.. function:: sqrt_rn(arg0, _semantic=None)
+
+    Compute the square root of :code:`arg0` with round-to-nearest rounding mode.
+
+    This function calls the CUDA libdevice functions :code:`__nv_fsqrt_rn` for
+    32-bit floats and :code:`__nv_dsqrt_rn` for 64-bit floats.
+
+    Parameters
+    ----------
+    arg0 : tl.tensor
+        Input tensor. Must be of type :code:`fp32` or :code:`fp64`.
+    _semantic : optional
+        Internal parameter for Triton semantic handling. Do not set manually.
+
+    Returns
+    -------
+    result : tl.tensor
+        Tensor of the same dtype as :code:`arg0` containing the square root
+        of each element with round-to-nearest rounding.
+
+    Notes
+    -----
+    This is a low-level libdevice function that provides precise control over
+    rounding mode. For most use cases, prefer :py:func:`tl.sqrt` which provides
+    a higher-level interface.
+
+    The function is pure (no side effects) and supports both 32-bit and 64-bit
+    floating-point types.
+
+    Examples
+    --------
+    .. code-block:: python
+
+        import triton
+        import triton.language as tl
+
+        @triton.jit
+        def kernel(x_ptr, y_ptr, BLOCK_SIZE: tl.constexpr):
+            pid = tl.program_id(0)
+            offsets = pid * BLOCK_SIZE + tl.arange(0, BLOCK_SIZE)
+            x = tl.load(x_ptr + offsets)
+            # Compute square root with round-to-nearest
+            y = tl.libdevice.sqrt_rn(x)
+            tl.store(y_ptr + offsets, y)

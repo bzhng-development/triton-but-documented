@@ -1,0 +1,61 @@
+warp_specialize
+===============
+
+Create a warp-specialized execution region that partitions work across warps.
+
+Forks the current execution into a "default partition" and arbitrary number of
+"worker partitions". The default partition executes in the same ``num_warps`` as
+the parent region and may accept tensor arguments and return tensors. Worker
+partitions execute in additional warps that sit idle during parent region
+execution.
+
+Parameters
+----------
+functions_and_args : List[Tuple[Callable, Any]]
+    List of functions and arguments for each partition. The first tuple specifies
+    the default partition function and its arguments.
+worker_num_warps : List[int]
+    Number of warps allocated to each worker partition.
+worker_num_regs : List[int], optional
+    Number of registers for each worker partition. If provided, used by the
+    backend for dynamic register reallocation.
+
+Returns
+-------
+Tuple[Any, ...]
+    Results returned from the default partition.
+
+Notes
+-----
+Recursive calls to ``warp_specialize`` are not supported. Worker partitions
+execute concurrently with the default partition, enabling overlapping of
+compute and memory operations across warp groups.
+
+Examples
+--------
+.. code-block:: python
+
+    import triton.experimental.gluon as gluon
+    import triton.experimental.gluon.language as ttgl
+
+    @gluon.jit
+    def worker_kernel(x, y):
+        # Worker partition logic
+        return x + y
+
+    @gluon.jit
+    def default_kernel(x):
+        # Default partition logic
+        return x * 2
+
+    @gluon.jit
+    def kernel(ptrs):
+        # Warp-specialize: default runs in main warps, worker runs in additional warps
+        result = ttgl.warp_specialize(
+            functions_and_args=[
+                (default_kernel, [ptrs]),
+                (worker_kernel, [ptrs, ptrs]),
+            ],
+            worker_num_warps=[4],  # 4 warps for worker partition
+        )
+        return result

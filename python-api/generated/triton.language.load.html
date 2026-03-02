@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Parameters &mdash; Triton  documentation</title>
+  <title>load &mdash; Triton  documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=03e43079" />
       <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="../../_static/css/custom.css" />
@@ -18,8 +18,8 @@
     <script src="../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
-    <link rel="next" title="Parameters" href="triton.language.store.html" />
-    <link rel="prev" title="Parameters" href="triton.language.dot_scaled.html" /> 
+    <link rel="next" title="store" href="triton.language.store.html" />
+    <link rel="prev" title="triton.language.dot_scaled" href="triton.language.dot_scaled.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -55,14 +55,20 @@
 <li class="toctree-l2"><a class="reference internal" href="../triton.language.html#shape-manipulation-ops">Shape Manipulation Ops</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../triton.language.html#linear-algebra-ops">Linear Algebra Ops</a></li>
 <li class="toctree-l2 current"><a class="reference internal" href="../triton.language.html#memory-pointer-ops">Memory/Pointer Ops</a><ul class="current">
-<li class="toctree-l3 current"><a class="current reference internal" href="#"><code class="docutils literal notranslate"><span class="pre">triton.language.load()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="triton.language.store.html"><code class="docutils literal notranslate"><span class="pre">triton.language.store()</span></code></a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">load</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#parameters">Parameters</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#returns">Returns</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#notes">Notes</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#examples">Examples</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="triton.language.store.html">store</a></li>
 <li class="toctree-l3"><a class="reference internal" href="triton.language.make_tensor_descriptor.html">make_tensor_descriptor</a></li>
 <li class="toctree-l3"><a class="reference internal" href="triton.language.load_tensor_descriptor.html">load_tensor_descriptor</a></li>
 <li class="toctree-l3"><a class="reference internal" href="triton.language.store_tensor_descriptor.html">store_tensor_descriptor</a></li>
-<li class="toctree-l3"><a class="reference internal" href="triton.language.make_block_ptr.html"><code class="docutils literal notranslate"><span class="pre">triton.language.make_block_ptr()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="triton.language.advance.html">advance</a></li>
-<li class="toctree-l3"><a class="reference internal" href="triton.language.pi32_t.html">triton.language.pi32_t</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.language.make_block_ptr.html">make_block_ptr</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.language.advance.html">triton.language.advance</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.language.pi32_t.html">pi32_t</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../triton.language.html#indexing-ops">Indexing Ops</a></li>
@@ -80,6 +86,35 @@
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../triton.testing.html">triton.testing</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../triton-semantics.html">Triton Semantics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.language.extra.cuda.html">triton.language.extra.cuda</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.language.extra.cuda.libdevice.html">triton.language.extra.cuda.libdevice</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.runtime.html">triton.runtime</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.tools.html">triton.tools</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Gluon (Experimental) API</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.html">triton.experimental.gluon</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.html">triton.experimental.gluon.language</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.nvidia.ampere.html">triton.experimental.gluon.language.nvidia.ampere</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.nvidia.ampere.async_copy.html">triton.experimental.gluon.language.nvidia.ampere.async_copy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.nvidia.ampere.mbarrier.html">triton.experimental.gluon.language.nvidia.ampere.mbarrier</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.nvidia.hopper.html">triton.experimental.gluon.language.nvidia.hopper</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.nvidia.hopper.tma.html">triton.experimental.gluon.language.nvidia.hopper.tma</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.nvidia.hopper.mbarrier.html">triton.experimental.gluon.language.nvidia.hopper.mbarrier</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.nvidia.hopper.cluster.html">triton.experimental.gluon.language.nvidia.hopper.cluster</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.nvidia.blackwell.html">triton.experimental.gluon.language.nvidia.blackwell</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.nvidia.blackwell.tma.html">triton.experimental.gluon.language.nvidia.blackwell.tma</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.nvidia.blackwell.clc.html">triton.experimental.gluon.language.nvidia.blackwell.clc</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.amd.html">triton.experimental.gluon.language.amd</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.amd.gfx1250.html">triton.experimental.gluon.language.amd.gfx1250</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.amd.gfx1250.async_copy.html">triton.experimental.gluon.language.amd.gfx1250.async_copy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.amd.gfx1250.mbarrier.html">triton.experimental.gluon.language.amd.gfx1250.mbarrier</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.amd.gfx1250.cluster.html">triton.experimental.gluon.language.amd.gfx1250.cluster</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.amd.gfx1250.tdm.html">triton.experimental.gluon.language.amd.gfx1250.tdm</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.amd.cdna3.html">triton.experimental.gluon.language.amd.cdna3</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.amd.cdna4.html">triton.experimental.gluon.language.amd.cdna4</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.amd.rdna3.html">triton.experimental.gluon.language.amd.rdna3</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.amd.rdna4.html">triton.experimental.gluon.language.amd.rdna4</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Triton MLIR Dialects</span></p>
 <ul>
@@ -107,7 +142,7 @@
   <ul class="wy-breadcrumbs">
       <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
           <li class="breadcrumb-item"><a href="../triton.language.html">triton.language</a></li>
-      <li class="breadcrumb-item active">Parameters</li>
+      <li class="breadcrumb-item active">load</li>
       <li class="wy-breadcrumbs-aside">
             <a href="../../_sources/python-api/generated/triton.language.load.rst.txt" rel="nofollow"> View page source</a>
       </li>
@@ -117,75 +152,96 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <dl class="py function">
-<dt class="sig sig-object py" id="triton.language.load">
-<span class="sig-prename descclassname"><span class="pre">triton.language.</span></span><span class="sig-name descname"><span class="pre">load</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pointer</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mask</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">other</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">boundary_check</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">()</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">padding_option</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cache_modifier</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">eviction_policy</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">volatile</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#triton.language.load" title="Link to this definition">¶</a></dt>
-<dd><p>Load data from memory into a tensor.</p>
-<p>The behavior depends on the type of <cite>pointer</cite>:</p>
-<ol class="arabic simple">
-<li><p><strong>Single element pointer</strong>: Loads a scalar. <cite>mask</cite> and <cite>other</cite> must be scalars; <cite>boundary_check</cite> and <cite>padding_option</cite> must be empty.</p></li>
-<li><p><strong>Tensor of pointers</strong>: Loads an N-dimensional tensor. <cite>mask</cite> and <cite>other</cite> are broadcast to <cite>pointer.shape</cite>; <cite>boundary_check</cite> and <cite>padding_option</cite> must be empty.</p></li>
-<li><p><strong>Block pointer</strong> (from <a class="reference internal" href="triton.language.make_block_ptr.html#triton.language.make_block_ptr" title="triton.language.make_block_ptr"><code class="xref py py-func docutils literal notranslate"><span class="pre">make_block_ptr()</span></code></a>): Loads a tensor. <cite>mask</cite> and <cite>other</cite> must be <cite>None</cite>; <cite>boundary_check</cite> and <cite>padding_option</cite> control out-of-bounds access.</p></li>
-</ol>
+  <section id="load">
+<h1>load<a class="headerlink" href="#load" title="Link to this heading">¶</a></h1>
+<p>Load data from memory at location defined by pointer.</p>
 <section id="parameters">
-<h1>Parameters<a class="headerlink" href="#parameters" title="Link to this heading">¶</a></h1>
+<h2>Parameters<a class="headerlink" href="#parameters" title="Link to this heading">¶</a></h2>
 <dl class="simple">
-<dt>pointer<span class="classifier">triton.PointerType or tensor of triton.PointerType</span></dt><dd><p>Pointer(s) to the data to be loaded.</p>
+<dt>pointer<span class="classifier">triton.PointerType or block of triton.PointerType</span></dt><dd><p>Pointer to the data to be loaded.</p>
 </dd>
-<dt>mask<span class="classifier">tensor of triton.int1, optional</span></dt><dd><p>If <code class="docutils literal notranslate"><span class="pre">mask[idx]</span></code> is false, do not load data at <code class="docutils literal notranslate"><span class="pre">pointer[idx]</span></code>. Must be <code class="docutils literal notranslate"><span class="pre">None</span></code> when using block pointers.</p>
+<dt>mask<span class="classifier">block of triton.int1, optional</span></dt><dd><p>If <code class="docutils literal notranslate"><span class="pre">mask[idx]</span></code> is false, do not load the data at address <code class="docutils literal notranslate"><span class="pre">pointer[idx]</span></code>.
+Must be <code class="docutils literal notranslate"><span class="pre">None</span></code> with block pointers.</p>
 </dd>
-<dt>other<span class="classifier">tensor or scalar, optional</span></dt><dd><p>Value to return if <code class="docutils literal notranslate"><span class="pre">mask[idx]</span></code> is false. Implicitly typecast to <code class="docutils literal notranslate"><span class="pre">pointer.dtype.element_ty</span></code>.</p>
+<dt>other<span class="classifier">block, optional</span></dt><dd><p>If <code class="docutils literal notranslate"><span class="pre">mask[idx]</span></code> is false, return <code class="docutils literal notranslate"><span class="pre">other[idx]</span></code>.</p>
 </dd>
-<dt>boundary_check<span class="classifier">tuple of ints, optional</span></dt><dd><p>Dimensions on which to perform boundary checks. Only valid with block pointers.</p>
+<dt>boundary_check<span class="classifier">tuple of ints, optional</span></dt><dd><p>Tuple of integers indicating the dimensions which should do the boundary check.</p>
 </dd>
-<dt>padding_option<span class="classifier">str, optional</span></dt><dd><p>Padding value for out-of-bounds access. Options: <code class="docutils literal notranslate"><span class="pre">&quot;&quot;</span></code> (undefined), <code class="docutils literal notranslate"><span class="pre">&quot;zero&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;nan&quot;</span></code>.</p>
+<dt>padding_option<span class="classifier">str, optional</span></dt><dd><p>Should be one of {“”, “zero”, “nan”}. The padding value to use while out of bounds.
+“” means an undefined value.</p>
 </dd>
-<dt>cache_modifier<span class="classifier">str, optional</span></dt><dd><p>PTX cache operator. Options: <code class="docutils literal notranslate"><span class="pre">&quot;&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;.ca&quot;</span></code> (cache at all levels), <code class="docutils literal notranslate"><span class="pre">&quot;.cg&quot;</span></code> (cache at global/L2), <code class="docutils literal notranslate"><span class="pre">&quot;.cv&quot;</span></code> (fetch without caching). See <a class="reference external" href="https://docs.nvidia.com/cuda/parallel-thread-execution/index.html#cache-operators">NVIDIA PTX Cache Operators</a>.</p>
+<dt>cache_modifier<span class="classifier">str, optional</span></dt><dd><p>Changes cache option in NVIDIA PTX. Should be one of {“”, “.ca”, “.cg”, “.cv”},
+where “.ca” stands for cache at all levels, “.cg” stands for cache at global
+level (cache in L2 and below, not L1), and “.cv” means don’t cache and fetch
+again. See <a class="reference external" href="https://docs.nvidia.com/cuda/parallel-thread-execution/index.html#cache-operators">cache operator</a>
+for more details.</p>
 </dd>
-<dt>eviction_policy<span class="classifier">str, optional</span></dt><dd><p>PTX eviction policy.</p>
+<dt>eviction_policy<span class="classifier">str, optional</span></dt><dd><p>Changes eviction policy in NVIDIA PTX.</p>
 </dd>
-<dt>volatile<span class="classifier">bool, optional</span></dt><dd><p>If True, marks the load as volatile in PTX.</p>
+<dt>volatile<span class="classifier">bool, optional</span></dt><dd><p>Changes volatile option in NVIDIA PTX.</p>
 </dd>
 </dl>
 </section>
 <section id="returns">
-<h1>Returns<a class="headerlink" href="#returns" title="Link to this heading">¶</a></h1>
+<h2>Returns<a class="headerlink" href="#returns" title="Link to this heading">¶</a></h2>
 <dl class="simple">
-<dt>tensor</dt><dd><p>The loaded data.</p>
+<dt>tensor</dt><dd><p>A tensor of data whose values are loaded from memory.</p>
 </dd>
 </dl>
 </section>
+<section id="notes">
+<h2>Notes<a class="headerlink" href="#notes" title="Link to this heading">¶</a></h2>
+<p>The behavior depends on the type of <code class="docutils literal notranslate"><span class="pre">pointer</span></code>:</p>
+<ol class="arabic simple">
+<li><p>Single element pointer: loads a scalar. <code class="docutils literal notranslate"><span class="pre">mask</span></code> and <code class="docutils literal notranslate"><span class="pre">other</span></code> must be scalars,
+<code class="docutils literal notranslate"><span class="pre">other</span></code> is implicitly typecast to <code class="docutils literal notranslate"><span class="pre">pointer.dtype.element_ty</span></code>, and
+<code class="docutils literal notranslate"><span class="pre">boundary_check</span></code> and <code class="docutils literal notranslate"><span class="pre">padding_option</span></code> must be empty.</p></li>
+<li><p>N-dimensional tensor of pointers: loads an N-dimensional tensor. <code class="docutils literal notranslate"><span class="pre">mask</span></code> and
+<code class="docutils literal notranslate"><span class="pre">other</span></code> are implicitly broadcast to <code class="docutils literal notranslate"><span class="pre">pointer.shape</span></code>, <code class="docutils literal notranslate"><span class="pre">other</span></code> is implicitly
+typecast to <code class="docutils literal notranslate"><span class="pre">pointer.dtype.element_ty</span></code>, and <code class="docutils literal notranslate"><span class="pre">boundary_check</span></code> and
+<code class="docutils literal notranslate"><span class="pre">padding_option</span></code> must be empty.</p></li>
+<li><p>Block pointer (from <code class="docutils literal notranslate"><span class="pre">make_block_ptr</span></code>): loads a tensor. <code class="docutils literal notranslate"><span class="pre">mask</span></code> and <code class="docutils literal notranslate"><span class="pre">other</span></code>
+must be <code class="docutils literal notranslate"><span class="pre">None</span></code>, and <code class="docutils literal notranslate"><span class="pre">boundary_check</span></code> and <code class="docutils literal notranslate"><span class="pre">padding_option</span></code> can be specified
+to control out-of-bound access behavior.</p></li>
+</ol>
+</section>
 <section id="examples">
-<h1>Examples<a class="headerlink" href="#examples" title="Link to this heading">¶</a></h1>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">triton</span>
-<span class="kn">import</span><span class="w"> </span><span class="nn">triton.language</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">tl</span>
-
-<span class="nd">@triton</span><span class="o">.</span><span class="n">jit</span>
-<span class="k">def</span><span class="w"> </span><span class="nf">kernel</span><span class="p">(</span><span class="n">ptr</span><span class="p">,</span> <span class="n">mask_ptr</span><span class="p">,</span> <span class="n">BLOCK</span><span class="p">:</span> <span class="n">tl</span><span class="o">.</span><span class="n">constexpr</span><span class="p">):</span>
-    <span class="c1"># Load a block of data</span>
-    <span class="n">offsets</span> <span class="o">=</span> <span class="n">tl</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">BLOCK</span><span class="p">)</span>
-    <span class="n">data</span> <span class="o">=</span> <span class="n">tl</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">ptr</span> <span class="o">+</span> <span class="n">offsets</span><span class="p">)</span>
-
-    <span class="c1"># Load with masking</span>
-    <span class="n">mask</span> <span class="o">=</span> <span class="n">tl</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">mask_ptr</span> <span class="o">+</span> <span class="n">offsets</span><span class="p">)</span>
-    <span class="n">masked_data</span> <span class="o">=</span> <span class="n">tl</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">ptr</span> <span class="o">+</span> <span class="n">offsets</span><span class="p">,</span> <span class="n">mask</span><span class="o">=</span><span class="n">mask</span><span class="p">,</span> <span class="n">other</span><span class="o">=</span><span class="mf">0.0</span><span class="p">)</span>
-
-    <span class="c1"># Load using a block pointer (requires make_block_ptr)</span>
-    <span class="c1"># block_ptr = tl.make_block_ptr(base=ptr, shape=(M, N), strides=(N, 1),</span>
-    <span class="c1">#                               offsets=(0, 0), block_shape=(BLOCK, BLOCK), order=(0, 1))</span>
-    <span class="c1"># blocked_data = tl.load(block_ptr, boundary_check=(0, 1), padding_option=&quot;zero&quot;)</span>
+<h2>Examples<a class="headerlink" href="#examples" title="Link to this heading">¶</a></h2>
+<p>Load a single element:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nd">@triton</span><span class="o">.</span><span class="n">jit</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">kernel</span><span class="p">(</span><span class="n">ptr</span><span class="p">):</span>
+    <span class="n">value</span> <span class="o">=</span> <span class="n">tl</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">ptr</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Load with masking:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nd">@triton</span><span class="o">.</span><span class="n">jit</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">kernel</span><span class="p">(</span><span class="n">ptr</span><span class="p">,</span> <span class="n">mask</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+    <span class="n">value</span> <span class="o">=</span> <span class="n">tl</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">ptr</span><span class="p">,</span> <span class="n">mask</span><span class="o">=</span><span class="n">mask</span><span class="p">,</span> <span class="n">other</span><span class="o">=</span><span class="n">other</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Load using block pointer:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nd">@triton</span><span class="o">.</span><span class="n">jit</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">kernel</span><span class="p">(</span><span class="n">base_ptr</span><span class="p">,</span> <span class="n">shape</span><span class="p">,</span> <span class="n">strides</span><span class="p">):</span>
+    <span class="n">block_ptr</span> <span class="o">=</span> <span class="n">tl</span><span class="o">.</span><span class="n">make_block_ptr</span><span class="p">(</span>
+        <span class="n">base_ptr</span><span class="p">,</span>
+        <span class="n">shape</span><span class="o">=</span><span class="n">shape</span><span class="p">,</span>
+        <span class="n">strides</span><span class="o">=</span><span class="n">strides</span><span class="p">,</span>
+        <span class="n">offsets</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span>
+        <span class="n">block_shape</span><span class="o">=</span><span class="p">(</span><span class="mi">16</span><span class="p">,</span> <span class="mi">16</span><span class="p">),</span>
+        <span class="n">order</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="p">)</span>
+    <span class="n">value</span> <span class="o">=</span> <span class="n">tl</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">block_ptr</span><span class="p">)</span>
 </pre></div>
 </div>
 </section>
-</dd></dl>
-
+</section>
 
 
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="triton.language.dot_scaled.html" class="btn btn-neutral float-left" title="Parameters" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="triton.language.store.html" class="btn btn-neutral float-right" title="Parameters" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="triton.language.dot_scaled.html" class="btn btn-neutral float-left" title="triton.language.dot_scaled" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="triton.language.store.html" class="btn btn-neutral float-right" title="store" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>

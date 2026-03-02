@@ -5,61 +5,54 @@ get_max_simd_tflops
 
 .. autofunction:: get_max_simd_tflops
 
-Calculate the theoretical peak SIMD (single-issue scalar) performance in TFLOPS for a given CUDA device and data type.
+.. function:: get_max_simd_tflops(dtype, clock_rate, device=None)
 
-This function computes the maximum floating-point throughput based on the number of streaming multiprocessors (SMs), the GPU clock rate, and the number of operations per sub-core supported by the hardware architecture for the specified dtype.
+    Calculate the maximum theoretical SIMD TFLOPS for a GPU device.
 
-Parameters
-----------
-dtype : torch.dtype
-    The data type for which to calculate performance. Supported types are ``torch.float32``, ``torch.float16``, and ``torch.bfloat16``.
-clock_rate : float
-    The GPU clock frequency in MHz.
-device : int, optional
-    The CUDA device ID. If ``None``, defaults to the currently active device (``torch.cuda.current_device()``).
+    Computes peak floating-point performance based on the number of streaming
+    multiprocessors, clock rate, and operations per sub-core for the given
+    data type and GPU compute capability.
 
-Returns
--------
-tflops : float
-    The theoretical peak performance in tera-floating-point operations per second (TFLOPS).
+    Parameters
+    ----------
+    dtype : torch.dtype
+        Data type for computation. Supported types depend on compute capability:
+        ``torch.float32``, ``torch.float16``, or ``torch.bfloat16``.
+    clock_rate : float
+        GPU clock rate in MHz.
+    device : int, optional
+        CUDA device ID. Defaults to current device if not specified.
 
-Raises
-------
-RuntimeError
-    If the provided ``dtype`` is not supported for the device's compute capability.
+    Returns
+    -------
+    tflops : float
+        Maximum theoretical TFLOPS (tera floating-point operations per second).
 
-Notes
------
-The calculation distinguishes between GPU architectures based on compute capability:
+    Raises
+    ------
+    RuntimeError
+        If the dtype is not supported for the device's compute capability.
 
-- **Compute Capability < 8.0 (Volta, Turing, Ampere consumer):**
-  - ``float32``: 32 operations per sub-core.
-  - ``float16``: 64 operations per sub-core.
-- **Compute Capability >= 8.0 (Ampere datacenter, Hopper, Blackwell):**
-  - ``float32``: 32 operations per sub-core.
-  - ``float16``, ``bfloat16``: 64 operations per sub-core.
+    Notes
+    -----
+    The calculation uses the formula:
 
-The formula used is:
-:math:`\text{TFLOPS} = \text{num\_subcores} \times \text{clock\_rate} \times \text{ops\_per\_sub\_core} \times 10^{-9}`
+    ``tflops = num_subcores * clock_rate * ops_per_sub_core * 1e-9``
 
-where ``num_subcores`` is derived from ``multiprocessor_count * 4``.
+    where ``num_subcores = multiprocessor_count * 4``.
 
-Examples
---------
-.. code-block:: python
+    Operations per sub-core vary by compute capability and dtype:
 
-    import torch
-    import triton.testing
+    - Compute capability < 8.0: float32 = 32 ops, float16 = 64 ops
+    - Compute capability >= 8.0: float32 = 32 ops, float16/bfloat16 = 64 ops
 
-    # Get current device properties
-    device = torch.cuda.current_device()
-    props = torch.cuda.get_device_properties(device)
-    clock_rate_mhz = props.clock_rate / 1000.0  # Convert kHz to MHz
+    Examples
+    --------
+    >>> import torch
+    >>> import triton.testing as tt
+    >>> # Calculate max SIMD TFLOPS for float32 at 1400 MHz
+    >>> tflops = tt.get_max_simd_tflops(torch.float32, 1400)
+    >>> print(f"Peak performance: {tflops:.2f} TFLOPS")
 
-    # Calculate peak FP32 performance
-    fp32_tflops = triton.testing.get_max_simd_tflops(torch.float32, clock_rate_mhz, device)
-    print(f"Peak FP32 SIMD performance: {fp32_tflops:.2f} TFLOPS")
-
-    # Calculate peak FP16 performance
-    fp16_tflops = triton.testing.get_max_simd_tflops(torch.float16, clock_rate_mhz, device)
-    print(f"Peak FP16 SIMD performance: {fp16_tflops:.2f} TFLOPS")
+    >>> # Specify device explicitly
+    >>> tflops = tt.get_max_simd_tflops(torch.float16, 1200, device=0)

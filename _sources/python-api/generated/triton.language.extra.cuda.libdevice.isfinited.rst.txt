@@ -1,0 +1,45 @@
+isfinited
+=========
+
+.. currentmodule:: triton.language.extra.cuda.libdevice
+
+.. function:: isfinited(arg0, _semantic=None)
+
+    Test element-wise for finiteness (not infinity or Not a Number).
+
+    Parameters
+    ----------
+    arg0 : tl.tensor
+        Input tensor of float64 (fp64) values.
+
+    Returns
+    -------
+    out : tl.tensor
+        Boolean tensor (int1 dtype). Element-wise True where the input is finite
+        (neither NaN nor infinity), False otherwise.
+
+    Notes
+    -----
+    This function wraps the CUDA libdevice function ``__nv_isfinited``.
+    It operates element-wise on 64-bit floating-point values only.
+
+    The function is pure and has no side effects.
+
+    Examples
+    --------
+    .. code-block:: python
+
+        import triton
+        import triton.language as tl
+
+        @triton.jit
+        def kernel(x_ptr, out_ptr, BLOCK_SIZE: tl.constexpr):
+            x = tl.load(x_ptr + tl.arange(0, BLOCK_SIZE))
+            finite = tl.extra.cuda.libdevice.isfinited(x)
+            tl.store(out_ptr + tl.arange(0, BLOCK_SIZE), finite)
+
+    See Also
+    --------
+    isnand : Test element-wise for Not a Number (float64)
+    isinfd : Test element-wise for positive or negative infinity (float64)
+    isfinite : Test element-wise for finiteness (general floating types)

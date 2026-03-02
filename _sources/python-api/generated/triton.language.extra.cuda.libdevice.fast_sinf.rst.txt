@@ -1,0 +1,46 @@
+triton.language.extra.cuda.libdevice.fast_sinf
+===============================================
+
+.. currentmodule:: triton.language.extra.cuda.libdevice
+
+.. autofunction:: fast_sinf
+
+Compute the sine of the input element-wise (fast approximation).
+
+This function calls the CUDA libdevice ``__nv_fast_sinf`` intrinsic, which provides
+a fast approximation of the sine function with reduced precision compared to the
+standard ``sin`` operation.
+
+Parameters
+----------
+arg0 : tl.tensor
+    Input tensor of type ``tl.float32``. The sine is computed element-wise.
+_semantic : optional
+    Internal semantic argument used by Triton compiler. Do not set manually.
+
+Returns
+-------
+result : tl.tensor
+    Tensor of type ``tl.float32`` containing the sine of each input element.
+
+Notes
+-----
+This is a fast approximation of the sine function. For higher precision, use
+:py:func:`triton.language.sin` instead. The input must be of type ``fp32``.
+
+This function is pure (has no side effects) and can be safely used in
+constant expressions and compiler optimizations.
+
+Examples
+--------
+.. code-block:: python
+
+    import triton
+    import triton.language as tl
+
+    @triton.jit
+    def kernel(x_ptr, y_ptr, BLOCK_SIZE: tl.constexpr):
+        offsets = tl.arange(0, BLOCK_SIZE)
+        x = tl.load(x_ptr + offsets)
+        y = tl.extra.cuda.libdevice.fast_sinf(x)
+        tl.store(y_ptr + offsets, y)

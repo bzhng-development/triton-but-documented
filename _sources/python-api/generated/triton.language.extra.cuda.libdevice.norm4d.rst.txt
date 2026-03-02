@@ -1,0 +1,59 @@
+norm4d
+======
+
+.. currentmodule:: triton.language.extra.cuda.libdevice
+
+.. function:: norm4d(arg0, arg1, arg2, arg3, _semantic=None)
+
+   Compute the Euclidean norm (L2 norm) of a 4-dimensional vector.
+
+   Computes :math:`\sqrt{arg0^2 + arg1^2 + arg2^2 + arg3^2}` element-wise.
+
+   Parameters
+   ----------
+   arg0 : tl.tensor
+       First component of the 4D vector. Must be fp32 or fp64.
+   arg1 : tl.tensor
+       Second component of the 4D vector. Must have same dtype as arg0.
+   arg2 : tl.tensor
+       Third component of the 4D vector. Must have same dtype as arg0.
+   arg3 : tl.tensor
+       Fourth component of the 4D vector. Must have same dtype as arg0.
+   _semantic : optional
+       Internal parameter, do not set manually.
+
+   Returns
+   -------
+   result : tl.tensor
+       The Euclidean norm of the 4D vector. Has the same dtype as the
+       input arguments (fp32 or fp64).
+
+   Notes
+   -----
+   This function dispatches to CUDA libdevice intrinsics:
+
+   - ``__nv_norm4df`` for float32 inputs
+   - ``__nv_norm4d`` for float64 inputs
+
+   All input arguments must have the same dtype. Mixed precision is not
+   supported. The function is pure (no side effects).
+
+   Examples
+   --------
+   .. code-block:: python
+
+      import triton
+      import triton.language as tl
+
+      @triton.jit
+      def normalize_4d_kernel(x_ptr, y_ptr, z_ptr, w_ptr, out_ptr, BLOCK: tl.constexpr):
+          x = tl.load(x_ptr + tl.arange(0, BLOCK))
+          y = tl.load(y_ptr + tl.arange(0, BLOCK))
+          z = tl.load(z_ptr + tl.arange(0, BLOCK))
+          w = tl.load(w_ptr + tl.arange(0, BLOCK))
+          norm = tl.extra.cuda.libdevice.norm4d(x, y, z, w)
+          tl.store(out_ptr + tl.arange(0, BLOCK), norm)
+
+      # Launch kernel
+      BLOCK = 1024
+      normalize_4d_kernel[(1,)](x_ptr, y_ptr, z_ptr, w_ptr, out_ptr, BLOCK=BLOCK)

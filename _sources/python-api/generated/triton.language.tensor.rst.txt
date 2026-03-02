@@ -1,263 +1,68 @@
-.. py:class:: triton.language.tensor(handle, type: dtype)
-
-   Represents an N-dimensional array of values or pointers.
-
-   :code:`tensor` is the fundamental data structure in Triton programs. Most
-   functions in :py:mod:`triton.language` operate on and return tensors.
-
-   Most of the named member functions here are duplicates of the free functions
-   in :code:`triton.language`. For example, :code:`triton.language.sqrt(x)` is
-   equivalent to :code:`x.sqrt()`.
-
-   :code:`tensor` also defines most of the magic/dunder methods, so you can
-   write :code:`x+y`, :code:`x << 2`, etc.
-
-   .. rubric:: Constructors
-
-   .. py:method:: __init__(handle, type: dtype)
-
-      Not called by user code. Tensors are typically created via helper functions
-      such as :py:func:`triton.language.full`, :py:func:`triton.language.arange`,
-      or by loading data from memory using :py:func:`triton.language.load`.
-
-   .. rubric:: Attributes
-
-   .. py:attribute:: dtype
-
-      The scalar data type of the tensor elements (e.g., :code:`tl.float32`).
-
-   .. py:attribute:: shape
-
-      A tuple of :code:`constexpr` integers representing the dimensions of the tensor.
-
-   .. py:attribute:: numel
-
-      The total number of elements in the tensor.
-
-   .. py:attribute:: type
-
-      The full tensor type, which may include block shape information.
-
-   .. py:attribute:: T
-
-      Property that returns a transposed view of a 2D tensor. Transposition is
-      handled by the AST visitor; direct access raises an error.
-
-   .. rubric:: Operations
-
-   The :code:`tensor` class supports standard Python arithmetic, bitwise, and
-   comparison operators, which are lowered to GPU instructions:
-
-   - Arithmetic: :code:`+`, :code:`-`, :code:`*`, :code:`/`, :code:`//`, :code:`%`
-   - Bitwise: :code:`&`, :code:`|`, :code:`^`, :code:`<<`, :code:`>>`, :code:`~`
-   - Comparison: :code:`==`, :code:`!=`, :code:`<`, :code:`<=`, :code:`>`, :code:`>=`
-   - Unary: :code:`-`, :code:`not`
-
-   .. rubric:: Member Functions
-
-   The following methods are available as members of :code:`tensor`. They are
-   equivalent to the free functions in :py:mod:`triton.language` with the tensor
-   passed as the first argument.
-
-   .. py:method:: broadcast_to(*shape)
-
-      Broadcasts the tensor to the specified shape.
-
-   .. py:method:: trans(*dims)
-
-      Permutes the dimensions. If no arguments are provided, swaps the last two
-      dimensions (2D transpose).
-
-   .. py:method:: permute(*dims)
-
-      Permutes the dimensions according to the provided order.
-
-   .. py:method:: split()
-
-      Splits the tensor in two along the last dimension (which must have size 2).
-
-   .. py:method:: view(*shape)
-
-      Returns a tensor with the same elements but a different shape. Deprecated;
-      use :py:meth:`reshape` instead.
-
-   .. py:method:: reshape(*shape, can_reorder=False)
-
-      Returns a tensor with the same number of elements but a new shape.
-
-   .. py:method:: expand_dims(axis)
-
-      Inserts a new length-1 dimension at the specified axis.
-
-   .. py:method:: cast(dtype, fp_downcast_rounding=None, bitcast=False)
-
-      Casts the tensor to the specified data type.
-
-   .. py:method:: to(dtype, fp_downcast_rounding=None, bitcast=False)
-
-      Alias for :py:meth:`cast`.
-
-   .. py:method:: store(pointer, value, mask=None, boundary_check=(), cache_modifier="", eviction_policy="")
-
-      Stores the tensor to memory at the given pointer.
-
-   .. py:method:: advance(offsets)
-
-      Advances a block pointer by the given offsets.
-
-   .. py:method:: atomic_cas(cmp, val, sem=None, scope=None)
-
-      Performs an atomic compare-and-swap.
-
-   .. py:method:: atomic_xchg(val, mask=None, sem=None, scope=None)
-
-      Performs an atomic exchange.
-
-   .. py:method:: atomic_add(val, mask=None, sem=None, scope=None)
-
-      Performs an atomic add.
-
-   .. py:method:: atomic_max(val, mask=None, sem=None, scope=None)
-
-      Performs an atomic max.
-
-   .. py:method:: atomic_min(val, mask=None, sem=None, scope=None)
-
-      Performs an atomic min.
-
-   .. py:method:: atomic_and(val, mask=None, sem=None, scope=None)
-
-      Performs an atomic bitwise AND.
-
-   .. py:method:: atomic_or(val, mask=None, sem=None, scope=None)
-
-      Performs an atomic bitwise OR.
-
-   .. py:method:: atomic_xor(val, mask=None, sem=None, scope=None)
-
-      Performs an atomic bitwise XOR.
-
-   .. py:method:: exp()
-
-      Computes the exponential of each element.
-
-   .. py:method:: log()
-
-      Computes the natural logarithm of each element.
-
-   .. py:method:: cos()
-
-      Computes the cosine of each element.
-
-   .. py:method:: sin()
-
-      Computes the sine of each element.
-
-   .. py:method:: sqrt()
-
-      Computes the square root of each element.
-
-   .. py:method:: rsqrt()
-
-      Computes the reciprocal square root of each element.
-
-   .. py:method:: abs()
-
-      Computes the absolute value of each element.
-
-   .. py:method:: reduce(axis, combine_fn, keep_dims=False)
-
-      Reduces the tensor along an axis using a custom combine function.
-
-   .. py:method:: associative_scan(axis, combine_fn, reverse=False)
-
-      Performs an associative scan (prefix sum/product) along an axis.
-
-   .. py:method:: gather(indices, axis)
-
-      Gathers slices from the tensor along an axis.
-
-   .. py:method:: histogram(num_bins)
-
-      Computes a histogram of the tensor values.
-
-   .. py:method:: cdiv(div)
-
-      Computes ceiling division.
-
-   .. py:method:: sigmoid()
-
-      Computes the sigmoid function.
-
-   .. py:method:: softmax(dim=None, keep_dims=False, ieee_rounding=False)
-
-      Computes the softmax along a dimension.
-
-   .. py:method:: ravel()
-
-      Flattens the tensor to 1D.
-
-   .. py:method:: max(axis=None, return_indices=False, return_indices_tie_break_left=True, keep_dims=False)
-
-      Computes the maximum value along an axis.
-
-   .. py:method:: argmax(axis, tie_break_left=True, keep_dims=False)
-
-      Returns the indices of the maximum value.
-
-   .. py:method:: min(axis=None, return_indices=False, return_indices_tie_break_left=True, keep_dims=False)
-
-      Computes the minimum value along an axis.
-
-   .. py:method:: argmin(axis, tie_break_left=True, keep_dims=False)
-
-      Returns the indices of the minimum value.
-
-   .. py:method:: sum(axis=None, keep_dims=False, dtype=None)
-
-      Computes the sum of elements along an axis.
-
-   .. py:method:: xor_sum(axis=None, keep_dims=False)
-
-      Computes the bitwise XOR sum along an axis.
-
-   .. py:method:: reduce_or(axis=None, keep_dims=False)
-
-      Computes the bitwise OR reduction along an axis.
-
-   .. py:method:: cumsum(axis=0, reverse=False)
-
-      Computes the cumulative sum along an axis.
-
-   .. py:method:: cumprod(axis=0, reverse=False)
-
-      Computes the cumulative product along an axis.
-
-   .. py:method:: sort(dim=None, descending=False)
-
-      Sorts the tensor along a dimension.
-
-   .. py:method:: flip(dim=None)
-
-      Reverses the order of elements along a dimension.
-
-   .. rubric:: Examples
-
-   .. code-block:: python
-
-      import triton
-      import triton.language as tl
-
-      @triton.jit
-      def kernel(x_ptr, y_ptr, BLOCK_SIZE: tl.constexpr):
-          # Load a block of data into a tensor
-          x = tl.load(x_ptr + tl.arange(0, BLOCK_SIZE))
-
-          # Perform element-wise operations using tensor methods
-          y = x.sqrt() * 2.0
-
-          # Reduce the tensor to a single value
-          sum_x = tl.sum(x, axis=0)
-
-          # Store the result
-          tl.store(y_ptr + tl.arange(0, BLOCK_SIZE), y)
+class triton.language.tensor
+==============================
+
+Represents an N-dimensional array of values or pointers.
+
+The ``tensor`` is the fundamental data structure in Triton programs. Most
+functions in :py:mod:`triton.language` operate on and return tensors.
+
+Parameters
+----------
+handle : ir.value
+    Internal IR handle (not typically passed by user code)
+type : dtype
+    Tensor type, which can be a scalar dtype or block_type
+
+Attributes
+----------
+dtype : dtype
+    The scalar data type of the tensor elements
+shape : tuple of constexpr
+    The shape of the tensor (empty tuple for scalars)
+numel : constexpr
+    Total number of elements in the tensor
+type : dtype
+    The full tensor type (may be block_type)
+handle : ir.value
+    Internal IR handle
+
+Notes
+-----
+Tensors are typically created through Triton operations rather than direct
+construction. User code should use functions like :py:func:`triton.language.load`,
+:py:func:`triton.language.arange`, or :py:func:`triton.language.full` to create
+tensors.
+
+Most named member functions are duplicates of free functions in
+:py:mod:`triton.language`. For example, ``triton.language.sqrt(x)`` is
+equivalent to ``x.sqrt()``.
+
+The ``tensor`` class defines magic/dunder methods for operator overloading,
+supporting expressions like ``x + y``, ``x << 2``, ``x == y``, etc.
+
+Member functions added via the ``_tensor_member_fn`` decorator include
+operations for shape manipulation (``reshape``, ``broadcast_to``, ``trans``),
+reductions (``sum``, ``max``, ``min``), atomic operations (``atomic_add``,
+``atomic_cas``), and mathematical functions (``exp``, ``log``, ``sqrt``).
+
+Examples
+--------
+.. code-block:: python
+
+    @triton.jit
+    def kernel(x_ptr, y_ptr, BLOCK: tl.constexpr):
+        pid = tl.program_id(0)
+        offsets = pid * BLOCK + tl.arange(0, BLOCK)
+        x = tl.load(x_ptr + offsets)  # x is a tensor
+        y = tl.sqrt(x)                # Returns a tensor
+        tl.store(y_ptr + offsets, y)
+
+    @triton.jit
+    def matmul_kernel(a_ptr, b_ptr, c_ptr, M, N, K, BLOCK_M, BLOCK_N, BLOCK_K):
+        pid_m = tl.program_id(0)
+        pid_n = tl.program_id(1)
+        offs_m = pid_m * BLOCK_M + tl.arange(0, BLOCK_M)
+        offs_n = pid_n * BLOCK_N + tl.arange(0, BLOCK_N)
+        a = tl.load(a_ptr + offs_m[:, None] * K + offs_n[None, :])  # 2D tensor
+        b = tl.load(b_ptr + offs_m[:, None] * K + offs_n[None, :])  # 2D tensor
+        c = tl.dot(a, b)                                           # Matrix product tensor

@@ -1,0 +1,47 @@
+fast_log2f
+============
+
+.. currentmodule:: triton.language.extra.cuda.libdevice
+
+.. function:: fast_log2f(arg0, _semantic=None)
+
+    Compute the base-2 logarithm of the input element-wise.
+
+    This is a fast approximation of :math:`log_2` using CUDA libdevice.
+
+    Parameters
+    ----------
+    arg0 : tensor
+        Input tensor of floating-point values. Must be ``fp32`` dtype.
+
+    Returns
+    -------
+    tensor
+        Tensor of the same shape as ``arg0`` containing the base-2 logarithm
+        of each element. Returns ``fp32`` dtype.
+
+    Notes
+    -----
+    This function calls the CUDA libdevice function ``__nv_fast_log2f`` which
+    provides a faster but less accurate approximation compared to the standard
+    ``log2`` function.
+
+    The function is pure (no side effects) and operates element-wise.
+
+    Only ``fp32`` input dtype is supported.
+
+    Examples
+    --------
+    .. code-block:: python
+
+        import triton
+        import triton.language as tl
+
+        @triton.jit
+        def log2_kernel(x_ptr, y_ptr, n, BLOCK: tl.constexpr):
+            pid = tl.program_id(0)
+            offset = pid * BLOCK + tl.arange(0, BLOCK)
+            mask = offset < n
+            x = tl.load(x_ptr + offset, mask=mask)
+            y = tl.extra.cuda.libdevice.fast_log2f(x)
+            tl.store(y_ptr + offset, y, mask=mask)

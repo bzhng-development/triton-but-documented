@@ -1,0 +1,45 @@
+cyl_bessel_i0
+==============
+
+Compute the modified Bessel function of the first kind of order 0.
+
+Parameters
+----------
+arg0 : tensor
+    Input tensor of floating-point values. Must be ``fp32`` or ``fp64`` dtype.
+_semantic : optional
+    Internal semantic argument. Do not set manually.
+
+Returns
+-------
+result : tensor
+    Tensor of the same dtype as ``arg0`` containing the computed I0 values.
+
+Notes
+-----
+This function is an extern operation that maps to CUDA libdevice functions:
+``__nv_cyl_bessel_i0f`` for ``fp32`` and ``__nv_cyl_bessel_i0`` for ``fp64``.
+
+The modified Bessel function of the first kind of order 0 is defined as:
+
+.. math::
+
+    I_0(x) = \sum_{k=0}^{\infty} \frac{(x/2)^{2k}}{(k!)^2}
+
+This function is pure (no side effects) and supports elementwise computation
+on tensors.
+
+Examples
+--------
+.. code-block:: python
+
+    import triton
+    import triton.language as tl
+
+    @triton.jit
+    def kernel(x_ptr, y_ptr, BLOCK_SIZE: tl.constexpr):
+        pid = tl.program_id(0)
+        offsets = pid * BLOCK_SIZE + tl.arange(0, BLOCK_SIZE)
+        x = tl.load(x_ptr + offsets)
+        y = tl.extra.cuda.libdevice.cyl_bessel_i0(x)
+        tl.store(y_ptr + offsets, y)

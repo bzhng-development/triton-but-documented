@@ -1,0 +1,48 @@
+triton.language.extra.cuda.libdevice.sqrt_ru
+=============================================
+
+.. currentmodule:: triton.language.extra.cuda.libdevice
+
+.. autofunction:: sqrt_ru
+
+Compute the square root of each element in :code:`arg0` with round-up rounding mode.
+
+Parameters
+----------
+arg0 : tensor
+    Input tensor of floating-point values. Supported dtypes are :code:`fp32` and :code:`fp64`.
+_semantic : optional
+    Internal parameter used by Triton compiler. Do not set manually.
+
+Returns
+-------
+tensor
+    Tensor of the same dtype as :code:`arg0` containing the square root of each element,
+    rounded upward according to IEEE 754 round-up rounding mode.
+
+Notes
+-----
+This function calls CUDA libdevice functions :code:`__nv_fsqrt_ru` (for :code:`fp32`) and
+:code:`__nv_dsqrt_ru` (for :code:`fp64`). The "ru" suffix indicates round-up rounding mode,
+which rounds results toward positive infinity.
+
+This is a pure function with no side effects. Results may differ from standard
+:py:func:`triton.language.sqrt` due to the explicit rounding mode.
+
+Only available on CUDA targets with libdevice support.
+
+Examples
+--------
+.. code-block:: python
+
+    import triton
+    import triton.language as tl
+
+    @triton.jit
+    def sqrt_ru_kernel(x_ptr, y_ptr, n):
+        pid = tl.program_id(0)
+        offset = pid * tl.constexpr(256) + tl.arange(0, 256)
+        mask = offset < n
+        x = tl.load(x_ptr + offset, mask=mask)
+        y = tl.extra.cuda.libdevice.sqrt_ru(x)
+        tl.store(y_ptr + offset, y, mask=mask)

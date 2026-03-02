@@ -1,0 +1,44 @@
+fast_cosf
+=========
+
+Compute the cosine of the input element-wise using a fast approximation.
+
+This function invokes CUDA libdevice's ``__nv_fast_cosf`` intrinsic, providing
+a faster but less accurate alternative to :py:func:`tl.cos`.
+
+Parameters
+----------
+arg0 : tensor
+    Input tensor of float32 values.
+
+Returns
+-------
+out : tensor
+    Tensor of float32 values containing the cosine of each element in ``arg0``.
+    The output has the same shape as the input.
+
+Notes
+-----
+This function is only available on CUDA targets. The input must be of type
+float32; other dtypes are not supported. The fast cosine approximation may
+have reduced precision compared to :py:func:`tl.cos` but can offer better
+performance on some GPU architectures.
+
+The function is pure (has no side effects) and can be safely used in
+compiler optimizations.
+
+Examples
+--------
+.. code-block:: python
+
+    import triton
+    import triton.language as tl
+    from triton.language.extra.cuda import libdevice
+
+    @triton.jit
+    def kernel(x_ptr, y_ptr, BLOCK_SIZE: tl.constexpr):
+        offsets = tl.arange(0, BLOCK_SIZE)
+        x = tl.load(x_ptr + offsets)
+        # Compute fast cosine
+        y = libdevice.fast_cosf(x)
+        tl.store(y_ptr + offsets, y)

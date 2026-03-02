@@ -1,0 +1,61 @@
+triton.language.extra.cuda.libdevice.fma_rd
+===========================================
+
+.. currentmodule:: triton.language.extra.cuda.libdevice
+
+.. autofunction:: fma_rd
+
+.. function:: fma_rd(arg0, arg1, arg2, _semantic=None)
+
+   Compute fused multiply-add with round-down rounding mode.
+
+   Computes :code:`arg0 * arg1 + arg2` with round-down (toward negative infinity)
+   rounding applied to the intermediate result. This operation is performed with
+   a single rounding step, providing higher precision than separate multiply and
+   add operations.
+
+   Parameters
+   ----------
+   arg0 : tl.tensor
+       First input tensor (multiplicand). Must be floating-point type (fp32 or fp64).
+   arg1 : tl.tensor
+       Second input tensor (multiplicand). Must be floating-point type (fp32 or fp64).
+   arg2 : tl.tensor
+       Third input tensor (addend). Must be floating-point type (fp32 or fp64).
+   _semantic : optional
+       Internal parameter for Triton semantics. Do not set manually.
+
+   Returns
+   -------
+   result : tl.tensor
+       Tensor of the same dtype as inputs containing :code:`arg0 * arg1 + arg2`
+       computed with round-down rounding mode.
+
+   Notes
+   -----
+   This function dispatches to CUDA libdevice intrinsic functions:
+
+   - :code:`__nv_fmaf_rd` for fp32 inputs
+   - :code:`__nv_fma_rd` for fp64 inputs
+
+   Round-down rounding mode rounds the result toward negative infinity. This is
+   useful for interval arithmetic and reproducible numerical computations.
+
+   All input tensors must have the same dtype (either all fp32 or all fp64).
+   Tensors are broadcast to a common shape if necessary.
+
+   Examples
+   --------
+   .. code-block:: python
+
+       import triton
+       import triton.language as tl
+       from triton.language.extra.cuda import libdevice
+
+       @triton.jit
+       def kernel(x_ptr, y_ptr, z_ptr, out_ptr, BLOCK_SIZE: tl.constexpr):
+           x = tl.load(x_ptr + tl.arange(0, BLOCK_SIZE))
+           y = tl.load(y_ptr + tl.arange(0, BLOCK_SIZE))
+           z = tl.load(z_ptr + tl.arange(0, BLOCK_SIZE))
+           result = libdevice.fma_rd(x, y, z)
+           tl.store(out_ptr + tl.arange(0, BLOCK_SIZE), result)

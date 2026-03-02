@@ -1,0 +1,58 @@
+triton.language.extra.cuda.libdevice.sad
+========================================
+
+.. currentmodule:: triton.language.extra.cuda.libdevice
+
+.. function:: sad(arg0, arg1, arg2, _semantic=None)
+
+    Computes the sum of absolute differences (SAD) plus an accumulator.
+
+    Computes :code:`abs(arg0 - arg1) + arg2` using CUDA libdevice intrinsics.
+    Supports both signed and unsigned 32-bit integer operations.
+
+    Parameters
+    ----------
+    arg0 : tl.tensor
+        First input tensor. Must be of type :code:`tl.int32` or :code:`tl.uint32`.
+    arg1 : tl.tensor
+        Second input tensor. Must match the type of :code:`arg0`.
+    arg2 : tl.tensor
+        Accumulator tensor. Must be of type :code:`tl.uint32`.
+    _semantic : optional
+        Internal parameter for type semantics. Do not set directly.
+
+    Returns
+    -------
+    result : tl.tensor
+        Tensor of type :code:`tl.int32` if inputs are signed, or :code:`tl.uint32`
+        if inputs are unsigned. Contains :code:`abs(arg0 - arg1) + arg2` for each
+        element.
+
+    Notes
+    -----
+    This function maps to CUDA libdevice intrinsics:
+
+    - :code:`__nv_sad` for signed 32-bit integers (:code:`int32`, :code:`int32`, :code:`uint32`)
+    - :code:`__nv_usad` for unsigned 32-bit integers (:code:`uint32`, :code:`uint32`, :code:`uint32`)
+
+    The operation is commonly used in computer vision for block matching and
+    template matching algorithms.
+
+    All input tensors are broadcasted to a common shape before the operation.
+
+    Examples
+    --------
+    .. code-block:: python
+
+        import triton
+        import triton.language as tl
+
+        @triton.jit
+        def sad_kernel(x_ptr, y_ptr, acc_ptr, out_ptr, BLOCK: tl.constexpr):
+            pid = tl.program_id(0)
+            offsets = pid * BLOCK + tl.arange(0, BLOCK)
+            x = tl.load(x_ptr + offsets)
+            y = tl.load(y_ptr + offsets)
+            acc = tl.load(acc_ptr + offsets)
+            result = tl.extra.cuda.libdevice.sad(x, y, acc)
+            tl.store(out_ptr + offsets, result)

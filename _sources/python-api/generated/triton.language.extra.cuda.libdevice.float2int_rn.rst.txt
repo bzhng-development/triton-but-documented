@@ -1,0 +1,49 @@
+float2int_rn
+============
+
+.. currentmodule:: triton.language.extra.cuda.libdevice
+
+.. autofunction:: float2int_rn
+
+Converts floating-point values to signed integers using round-to-nearest-even rounding mode.
+
+Parameters
+----------
+arg0 : tl.tensor
+    Input tensor of floating-point values. Must have dtype ``tl.float32``.
+
+_semantic : optional
+    Internal semantic argument. Do not set manually.
+
+Returns
+-------
+out : tl.tensor
+    Tensor of signed 32-bit integers (``tl.int32``). Each element is the input
+    value rounded to the nearest integer, with ties rounded to even.
+
+Notes
+-----
+This function wraps the CUDA libdevice intrinsic ``__nv_float2int_rn``. The
+rounding behavior follows IEEE 754 round-to-nearest-even semantics:
+
+- Values are rounded to the nearest representable integer
+- When exactly halfway between two integers, the even integer is chosen
+- Values outside the representable int32 range produce undefined behavior
+
+This operation is pure (no side effects) and can be safely used in
+device-side computations.
+
+Examples
+--------
+.. code-block:: python
+
+    import triton
+    import triton.language as tl
+
+    @triton.jit
+    def kernel(x_ptr, out_ptr, BLOCK_SIZE: tl.constexpr):
+        offsets = tl.arange(0, BLOCK_SIZE)
+        x = tl.load(x_ptr + offsets)
+        # Convert float32 to int32 with round-to-nearest
+        out = tl.extra.cuda.libdevice.float2int_rn(x)
+        tl.store(out_ptr + offsets, out)

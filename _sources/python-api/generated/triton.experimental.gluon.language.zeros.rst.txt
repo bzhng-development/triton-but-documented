@@ -1,0 +1,31 @@
+zeros
+=====
+
+.. py:function:: triton.experimental.gluon.language.zeros(shape, dtype, layout=None)
+
+   Create a tensor filled with zeros.
+
+   Parameters
+   ----------
+   shape : Sequence[int]
+       The shape of the tensor.
+   dtype : dtype
+       The data type for the tensor.
+   layout : DistributedLayout, optional
+       The distributed layout of the tensor. Defaults to automatic layout selection.
+
+   Returns
+   -------
+   tensor
+       A tensor where every element is zero.
+
+   Examples
+   --------
+   .. code-block:: python
+
+       import triton.experimental.gluon as gluon
+       import triton.experimental.gluon.language as ttgl
+
+       @gluon.jit
+       def kernel():
+           z = ttgl.zeros((128, 128), ttgl.float16)

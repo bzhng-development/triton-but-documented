@@ -1,0 +1,52 @@
+atomic_or
+=========
+
+.. currentmodule:: triton.experimental.gluon.language
+
+.. function:: atomic_or(pointer, val, mask=None, sem=None, scope=None, _semantic=None)
+
+   Performs an atomic logical OR at the memory location specified by ``pointer``.
+
+   Returns the data stored at ``pointer`` before the atomic operation.
+
+   Parameters
+   ----------
+   pointer : tensor
+       The memory locations to operate on. Must be a block of ``triton.PointerDType``.
+   val : tensor
+       The values with which to perform the atomic operation. Must be a block of
+       ``pointer.dtype.element_ty``.
+   mask : tensor, optional
+       Boolean mask to control which elements are updated. If ``None``, all elements
+       are updated.
+   sem : str, optional
+       Specifies the memory semantics for the operation. Acceptable values are
+       ``"acquire"``, ``"release"``, ``"acq_rel"`` (stands for "ACQUIRE_RELEASE"),
+       and ``"relaxed"``. Defaults to ``"acq_rel"``.
+   scope : str, optional
+       Defines the scope of threads that observe the synchronizing effect of the
+       atomic operation. Acceptable values are ``"gpu"`` (default), ``"cta"``
+       (cooperative thread array, thread block), or ``"sys"`` (stands for "SYSTEM").
+       Defaults to ``"gpu"``.
+
+   Returns
+   -------
+   tensor
+       The data stored at ``pointer`` before the atomic operation.
+
+   Notes
+   -----
+   This function can also be called as a member function on :py:class:`tensor`,
+   as ``x.atomic_or(...)`` instead of ``atomic_or(x, ...)``.
+
+   Examples
+   --------
+   .. code-block:: python
+
+      import triton.experimental.gluon as gluon
+      import triton.experimental.gluon.language as ttgl
+
+      @gluon.jit
+      def kernel(ptr, val):
+          old_val = ttgl.atomic_or(ptr, val)
+          # old_val contains the value before the OR operation

@@ -1,0 +1,30 @@
+wait_group
+==========
+
+Wait for outstanding async copy commit groups.
+
+Blocks until the number of outstanding commit groups is less than or equal to
+``num_outstanding``. Uncommitted async operations are waited upon even if
+``num_outstanding`` is 0.
+
+Parameters
+----------
+num_outstanding : int, optional
+    The number of outstanding commit groups to wait for. Defaults to 0.
+
+Notes
+-----
+This function is specific to AMD GFX1250 hardware async copy mechanisms.
+It ensures synchronization of asynchronous memory operations before proceeding.
+
+Examples
+--------
+.. code-block:: python
+
+    import triton.experimental.gluon as gluon
+    import triton.experimental.gluon.language.amd.gfx1250.async_copy as async_copy
+
+    @gluon.jit
+    def kernel(...):
+        async_copy.copy(...)
+        async_copy.wait_group(num_outstanding=0)

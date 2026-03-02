@@ -1,0 +1,14 @@
+triton.experimental.gluon.language.amd.gfx1250.cluster
+======================================================
+
+.. currentmodule:: triton.experimental.gluon.language.amd.gfx1250.cluster
+
+Cluster
+-------
+
+.. autosummary::
+    :toctree: generated
+    :nosignatures:
+
+    arrive
+    wait

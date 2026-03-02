@@ -1,0 +1,64 @@
+AMD Scaled WMMA Operation
+=========================
+
+.. py:function:: triton.experimental.gluon.language.amd.gfx1250.wmma_scaled(a, a_scale, a_format, b, b_scale, b_format, acc, _semantic=None)
+
+   Perform scaled matrix multiply-accumulate using AMD WMMA instructions with microscaling formats.
+
+   Computes :math:`c = (a \times a\_scale) @ (b \times b\_scale) + acc`.
+
+   Parameters
+   ----------
+   a : tensor
+       The left-hand operand A to be multiplied. Must use a microscaling format.
+   a_scale : tensor, optional
+       Scale factor for operand A.
+   a_format : str
+       Format of operand A. Available formats: ``'e2m1'``, ``'e4m3'``, ``'e5m2'``.
+   b : tensor
+       The right-hand operand B to be multiplied. Must use a microscaling format.
+   b_scale : tensor, optional
+       Scale factor for operand B.
+   b_format : str
+       Format of operand B. Available formats: ``'e2m1'``, ``'e4m3'``, ``'e5m2'``.
+   acc : tensor
+       Accumulator tensor. Must have layout shape ``[16, 16, 128]``.
+   _semantic : GluonSemantic, optional
+       Internal semantic handler. Do not set manually.
+
+   Returns
+   -------
+   tensor
+       Result of the scaled matrix multiply-accumulate operation.
+
+   Notes
+   -----
+   Operand formats ``a`` and ``b`` use microscaling formats described in the
+   `OCP Microscaling Formats (MX) Specification`_:
+
+   .. _OCP Microscaling Formats (MX) Specification: https://www.opencompute.org/documents/ocp-microscaling-formats-mx-v1-0-spec-final-pdf
+
+   Layout requirements:
+
+   - Accumulator tensor must have ``AM DWMMALayout`` with ``instr_shape = [16, 16, 128]``.
+   - When ``a_format`` or ``b_format`` is ``'e2m1'``, the corresponding operand must have
+     ``instr_shape = [16, 16, 64]``.
+
+   This function is AMD GFX1250-specific and requires appropriate hardware support.
+
+   Examples
+   --------
+   .. code-block:: python
+
+      import triton.experimental.gluon as gluon
+      import triton.experimental.gluon.language as ttgl
+      from triton.experimental.gluon.language.amd import gfx1250
+
+      @gluon.jit
+      def kernel(...):
+          # Assume a, b, acc are properly laid out tensors
+          result = gfx1250.wmma_scaled(
+              a, a_scale, "e4m3",
+              b, b_scale, "e4m3",
+              acc
+          )

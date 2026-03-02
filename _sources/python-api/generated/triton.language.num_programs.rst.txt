@@ -1,5 +1,5 @@
-num_programs
-============
+triton.language.num_programs
+============================
 
 .. currentmodule:: triton.language
 
@@ -15,12 +15,13 @@ axis : int
 Returns
 -------
 int
-    The number of programs along the specified axis.
+    The number of programs launched along the specified axis.
 
 Notes
 -----
-This function is typically used to compute grid dimensions or bounds within a kernel.
-It corresponds to the grid size specified in the kernel launch configuration.
+This function is typically used within JIT-compiled Triton kernels to query
+the grid dimensions. It returns a compile-time constant when the axis is
+known at compile time.
 
 Examples
 --------
@@ -30,11 +31,22 @@ Examples
     import triton.language as tl
 
     @triton.jit
-    def kernel(X, stride):
-        # Get the total number of programs in the z-dimension
-        n_z = tl.num_programs(2)
-        pid_z = tl.program_id(2)
+    def kernel(
+        output_ptr,
+        M,
+        N,
+        BLOCK_SIZE_M: tl.constexpr,
+        BLOCK_SIZE_N: tl.constexpr,
+    ):
+        # Get the number of program instances along axis 0
+        num_programs_m = tl.num_programs(0)
         
-        # Use num_programs to calculate bounds or offsets
-        offset = pid_z * stride
-        # ...
+        # Get the number of program instances along axis 1
+        num_programs_n = tl.num_programs(1)
+        
+        # Compute total number of programs
+        total_programs = num_programs_m * num_programs_n
+        
+        # Use program_id to determine which block this instance handles
+        pid_m = tl.program_id(0)
+        pid_n = tl.program_id(1)

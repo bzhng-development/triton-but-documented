@@ -1,0 +1,22 @@
+uint32
+======
+
+.. py:data:: triton.experimental.gluon.language.uint32
+
+    32-bit unsigned integer data type.
+
+    This instance represents the unsigned 32-bit integer type within the Gluon type system. It is used to define tensor element types, kernel argument signatures, and shared memory allocations in ``@gluon.jit`` decorated functions.
+
+    Notes
+    -----
+    ``uint32`` adheres to standard IEEE 754 integer semantics for unsigned operations. It is commonly required for indexing, pointer arithmetic, and interacting with hardware features such as TMA descriptors or barrier indices on NVIDIA Hopper/Blackwell and AMD CDNA/RDNA architectures.
+
+    Examples
+    --------
+    >>> import triton.experimental.gluon as gluon
+    >>> import triton.experimental.gluon.language as ttgl
+    >>> @gluon.jit
+    ... def kernel(ptr: ttgl.pointer_type[ttgl.uint32]):
+    ...     val = ttgl.load(ptr)
+    ...     # val has type uint32
+    ...     pass

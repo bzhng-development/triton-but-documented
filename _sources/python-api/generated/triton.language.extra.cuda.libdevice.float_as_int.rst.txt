@@ -1,0 +1,47 @@
+triton.language.extra.cuda.libdevice.float_as_int
+===================================================
+
+.. currentmodule:: triton.language.extra.cuda.libdevice
+
+.. function:: float_as_int(arg0, _semantic=None)
+
+   Reinterpret the bit pattern of a 32-bit floating-point value as a 32-bit signed integer.
+
+   Parameters
+   ----------
+   arg0 : tl.tensor
+       Input tensor of float32 values.
+
+   _semantic : optional
+       Internal semantic argument (do not pass explicitly).
+
+   Returns
+   -------
+   tl.tensor
+       Tensor of int32 values with the same bit pattern as the input floats.
+
+   Notes
+   -----
+   This function performs a type punning operation equivalent to CUDA's
+   ``__nv_float_as_int`` libdevice intrinsic. It reinterprets the IEEE 754
+   binary representation without numerical conversion.
+
+   For example, the float value ``1.0`` (bit pattern ``0x3f800000``) becomes
+   the integer ``1065353216``.
+
+   This operation is pure and has no side effects.
+
+   Examples
+   --------
+   .. code-block:: python
+
+       import triton
+       import triton.language as tl
+
+       @triton.jit
+       def kernel(x_ptr, y_ptr, BLOCK_SIZE: tl.constexpr):
+           pid = tl.program_id(0)
+           offsets = pid * BLOCK_SIZE + tl.arange(0, BLOCK_SIZE)
+           float_vals = tl.load(x_ptr + offsets)
+           int_vals = tl.extra.cuda.libdevice.float_as_int(float_vals)
+           tl.store(y_ptr + offsets, int_vals)

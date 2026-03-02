@@ -1,0 +1,48 @@
+triton.language.extra.cuda.libdevice.log10
+==========================================
+
+.. currentmodule:: triton.language.extra.cuda.libdevice
+
+Compute the base-10 logarithm of the input element-wise.
+
+.. code-block:: python
+
+    log10(arg0, _semantic=None)
+
+Parameters
+----------
+arg0 : tensor
+    Input tensor or scalar. Must be of floating-point type (``fp32`` or ``fp64``).
+_semantic : optional
+    Internal semantic argument. Do not pass explicitly.
+
+Returns
+-------
+out : tensor
+    Element-wise base-10 logarithm of ``arg0``. Same dtype as input.
+
+Notes
+-----
+This function dispatches to CUDA libdevice implementations:
+
+- ``__nv_log10f`` for ``fp32`` inputs
+- ``__nv_log10`` for ``fp64`` inputs
+
+The operation is pure (no side effects). Results are undefined for negative
+inputs. ``log10(0)`` returns ``-inf``.
+
+Examples
+--------
+.. code-block:: python
+
+    import triton
+    import triton.language as tl
+
+    @triton.jit
+    def log10_kernel(x_ptr, out_ptr, n, BLOCK_SIZE: tl.constexpr):
+        pid = tl.program_id(0)
+        offs = pid * BLOCK_SIZE + tl.arange(0, BLOCK_SIZE)
+        mask = offs < n
+        x = tl.load(x_ptr + offs, mask=mask)
+        out = tl.extra.cuda.libdevice.log10(x)
+        tl.store(out_ptr + offs, out, mask=mask)

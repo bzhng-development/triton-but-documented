@@ -1,21 +1,28 @@
-.. py:function:: triton.language.exp2(x, _semantic=None)
+exp2
+====
+
+.. currentmodule:: triton.language
+
+.. function:: exp2(x, _semantic=None)
 
    Computes the element-wise exponential (base 2) of :code:`x`.
 
    Parameters
    ----------
-   x : triton.language.tensor
-       The input values. Must be a floating-point tensor (fp32 or fp64).
+   x : Block
+       The input tensor. Must have floating-point dtype (:code:`fp32` or :code:`fp64`).
 
    Returns
    -------
-   triton.language.tensor
-       A tensor containing :math:`2^x` for each element in :code:`x`.
+   Block
+       A tensor of the same shape as :code:`x` containing :code:`2^x` for each element.
 
    Notes
    -----
    This function is only supported for floating-point types (:code:`fp32`, :code:`fp64`).
-   It can also be called as a member function on a tensor: :code:`x.exp2()`.
+
+   This function can also be called as a member function on :py:class:`tensor`,
+   as :code:`x.exp2()` instead of :code:`exp2(x)`.
 
    Examples
    --------
@@ -25,9 +32,8 @@
       import triton.language as tl
 
       @triton.jit
-      def kernel(x_ptr, y_ptr, BLOCK_SIZE: tl.constexpr):
-          pid = tl.program_id(0)
-          offs = pid * BLOCK_SIZE + tl.arange(0, BLOCK_SIZE)
-          x = tl.load(x_ptr + offs)
-          y = tl.exp2(x)  # Computes 2^x
-          tl.store(y_ptr + offs, y)
+      def kernel(X, Y, BLOCK_SIZE: tl.constexpr):
+          offsets = tl.arange(0, BLOCK_SIZE)
+          x = tl.load(X + offsets)
+          y = tl.exp2(x)  # Compute 2^x element-wise
+          tl.store(Y + offsets, y)

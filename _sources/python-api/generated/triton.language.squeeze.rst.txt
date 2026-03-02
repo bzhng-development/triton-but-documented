@@ -5,36 +5,37 @@ Remove a dimension of size 1 from a tensor.
 
 Parameters
 ----------
-x : triton.language.tensor
-    The input tensor.
-dim : core.constexpr
-    The dimension to remove. Must correspond to a dimension of size 1.
+
+x : Tensor
+    Input tensor.
+dim : constexpr
+    Dimension to squeeze. Must have size 1.
 
 Returns
 -------
-triton.language.tensor
-    The output tensor with the specified dimension removed.
+
+Tensor
+    Output tensor with the specified dimension removed.
 
 Notes
 -----
-This operation is equivalent to ``x.reshape`` with the target shape excluding
-the specified dimension. A compile-time assertion ensures that the size of
-the dimension being squeezed is exactly 1.
+
+This operation requires that ``x.shape[dim] == 1``. If the dimension
+does not have size 1, compilation will fail with a static assertion error.
+
+The ``dim`` parameter must be a compile-time constant (``constexpr``).
 
 Examples
 --------
+
 .. code-block:: python
 
-    import triton
     import triton.language as tl
 
-    @triton.jit
-    def kernel(X_ptr, Y_ptr, BLOCK_SIZE: tl.constexpr):
-        # Load a tensor of shape [BLOCK_SIZE, 1]
-        x = tl.load(X_ptr + tl.arange(0, BLOCK_SIZE)[:, None])
-        
-        # Remove the second dimension (size 1)
-        y = tl.squeeze(x, 1)
-        
-        # y now has shape [BLOCK_SIZE]
-        tl.store(Y_ptr + tl.arange(0, BLOCK_SIZE), y)
+    # Remove dimension 1 from a tensor of shape (4, 1, 8)
+    x = tl.zeros([4, 1, 8], dtype=tl.float32)
+    y = tl.squeeze(x, 1)  # y has shape (4, 8)
+
+    # Squeeze the last dimension
+    z = tl.zeros([4, 8, 1], dtype=tl.float32)
+    w = tl.squeeze(z, 2)  # w has shape (4, 8)

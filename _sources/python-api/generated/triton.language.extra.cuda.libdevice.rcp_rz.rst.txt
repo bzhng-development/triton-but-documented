@@ -1,0 +1,44 @@
+rcp_rz
+======
+
+.. currentmodule:: triton.language.extra.cuda.libdevice
+
+.. function:: rcp_rz(arg0, _semantic=None)
+
+    Compute the reciprocal of :code:`arg0` with round-toward-zero rounding mode.
+
+    Parameters
+    ----------
+    arg0 : tl.tensor
+        Input tensor. Must be of type :code:`tl.float32` or :code:`tl.float64`.
+
+    Returns
+    -------
+    out : tl.tensor
+        Reciprocal of :code:`arg0` (1.0 / arg0) with round-toward-zero rounding.
+        Same dtype as input.
+
+    Notes
+    -----
+    This function calls CUDA libdevice functions:
+
+    - :code:`__nv_frcp_rz` for :code:`fp32` inputs
+    - :code:`__nv_drcp_rz` for :code:`fp64` inputs
+
+    The round-toward-zero (rz) rounding mode truncates the result towards zero.
+    This differs from the default round-to-nearest-even rounding mode.
+
+    Examples
+    --------
+    .. code-block:: python
+
+        import triton
+        import triton.language as tl
+
+        @triton.jit
+        def kernel(x_ptr, y_ptr, BLOCK_SIZE: tl.constexpr):
+            pid = tl.program_id(0)
+            offsets = pid * BLOCK_SIZE + tl.arange(0, BLOCK_SIZE)
+            x = tl.load(x_ptr + offsets)
+            y = tl.extra.cuda.libdevice.rcp_rz(x)
+            tl.store(y_ptr + offsets, y)

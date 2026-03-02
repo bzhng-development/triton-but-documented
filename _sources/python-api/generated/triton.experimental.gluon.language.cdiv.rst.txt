@@ -1,0 +1,44 @@
+cdiv
+====
+
+.. py:function:: ttgl.cdiv(x, div)
+
+   Computes the ceiling division of :code:`x` by :code:`div`.
+
+   Parameters
+   ----------
+   x : ttgl.Block
+       The input number or tensor.
+   div : ttgl.Block
+       The divisor.
+
+   Returns
+   -------
+   ttgl.Block
+       The result of ceiling division.
+
+   Notes
+   -----
+   This function computes :code:`(x + div - 1) // div` element-wise.
+
+   It can also be called as a member function on :code:`ttgl.Block`,
+   as :code:`x.cdiv(div)` instead of :code:`ttgl.cdiv(x, div)`.
+
+   Examples
+   --------
+   .. code-block:: python
+
+      import triton.experimental.gluon as gluon
+      import triton.experimental.gluon.language as ttgl
+
+      @gluon.jit
+      def kernel(x_ptr, div_ptr, out_ptr, BLOCK_SIZE: ttgl.constexpr):
+          pid = ttgl.program_id(0)
+          offset = pid * BLOCK_SIZE
+          x = ttgl.load(x_ptr + offset)
+          div = ttgl.load(div_ptr + offset)
+          # Functional style
+          out = ttgl.cdiv(x, div)
+          # Member style
+          out = x.cdiv(div)
+          ttgl.store(out_ptr + offset, out)

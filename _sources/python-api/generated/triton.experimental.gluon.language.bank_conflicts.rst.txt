@@ -1,0 +1,58 @@
+bank_conflicts
+==============
+
+Count bank conflicts per wavefront for shared memory access instructions.
+
+.. code-block:: python
+
+    bank_conflicts(distr_ty, shared_ty, _semantic=None) -> int
+
+Count the bank conflicts per wavefront of each instruction generated when reading/writing the distributed tensor from/to the shared memory descriptor using ``ld.shared``/``st.shared`` instructions.
+
+A bank conflict of N is defined as the excess number of memory accesses that each wavefront needs to access the shared memory descriptor. When no load/store vectorization is used, this equals the number of excess memory accesses per instruction.
+
+Parameters
+----------
+distr_ty : distributed_type
+    The distributed tensor type describing the layout and shape of data in registers.
+shared_ty : shared_memory_descriptor_type
+    The shared memory descriptor type describing the layout and shape of data in shared memory.
+_semantic : GluonSemantic, optional
+    Internal semantic handler. Do not pass explicitly; this is managed by the ``@gluon.jit`` decorator.
+
+Returns
+-------
+int
+    The number of bank conflicts per wavefront for the given tensor and shared memory layout combination.
+
+Notes
+-----
+This is a compile-time analysis function that operates on type descriptors, not runtime tensor values. It helps users evaluate the efficiency of different layout combinations for shared memory transfers.
+
+Bank conflicts occur when multiple threads in a wavefront access the same shared memory bank simultaneously. Lower bank conflict counts indicate more efficient memory access patterns.
+
+This function is typically used during kernel development to compare different layout configurations and optimize shared memory access patterns.
+
+Examples
+--------
+.. code-block:: python
+
+    import triton.experimental.gluon as gluon
+    import triton.experimental.gluon.language as ttgl
+    from triton.experimental.gluon.language._layouts import BlockedLayout, SwizzledSharedLayout
+
+    @gluon.jit
+    def kernel():
+        # Define a distributed layout for registers
+        distr_layout = BlockedLayout([1, 4], [16, 32], [1, 1], [0, 1])
+        distr_ty = ttgl.distributed_type(ttgl.float16, [16, 32], distr_layout)
+
+        # Define a shared memory layout
+        shared_layout = SwizzledSharedLayout([1, 4], [16, 32], 4)
+        shared_ty = ttgl.shared_memory_descriptor_type(
+            ttgl.float16, [16, 32], shared_layout, [16, 32]
+        )
+
+        # Count bank conflicts for this layout combination
+        conflicts = ttgl.bank_conflicts(distr_ty, shared_ty)
+        ttgl.static_print("Bank conflicts:", conflicts)

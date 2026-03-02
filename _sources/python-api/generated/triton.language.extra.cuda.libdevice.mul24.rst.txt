@@ -1,0 +1,42 @@
+mul24
+=====
+
+mul24(arg0, arg1, _semantic=None)
+
+Multiply two 32-bit integers and return the lower 24 bits of the product.
+
+Parameters
+----------
+arg0 : tensor
+    First input tensor. Must have dtype ``int32`` or ``uint32``.
+arg1 : tensor
+    Second input tensor. Must have dtype ``int32`` or ``uint32``.
+_semantic : optional
+    Internal parameter, do not set.
+
+Returns
+-------
+tensor
+    Tensor containing the lower 24 bits of the product. Returns ``int32`` if
+    inputs are ``int32``, ``uint32`` if inputs are ``uint32``.
+
+Notes
+-----
+This function calls the CUDA libdevice functions ``__nv_mul24`` for signed
+integers and ``__nv_umul24`` for unsigned integers. Only the lower 24 bits of
+the 32-bit product are returned. This is useful when you need 24-bit precision
+multiplication on CUDA devices.
+
+Examples
+--------
+.. code-block:: python
+
+    import triton
+    import triton.language as tl
+
+    @triton.jit
+    def kernel(x_ptr, y_ptr, out_ptr, BLOCK: tl.constexpr):
+        x = tl.load(x_ptr + tl.arange(0, BLOCK))
+        y = tl.load(y_ptr + tl.arange(0, BLOCK))
+        result = tl.extra.cuda.libdevice.mul24(x, y)
+        tl.store(out_ptr + tl.arange(0, BLOCK), result)

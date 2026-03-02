@@ -1,46 +1,62 @@
-.. py:function:: triton.language.atomic_xor(pointer, val, mask=None, sem=None, scope=None)
+atomic_xor
+==========
 
-   Performs an atomic logical xor at the memory location specified by ``pointer``.
+.. currentmodule:: triton.language
 
-   Return the data stored at ``pointer`` before the atomic operation.
+.. function:: atomic_xor(pointer, val, mask=None, sem=None, scope=None)
+
+   Performs an atomic logical XOR at the memory location specified by ``pointer``.
+
+   Returns the data stored at ``pointer`` before the atomic operation.
 
    Parameters
    ----------
-   pointer : triton.PointerType
-       The memory locations to operate on.
-   val : triton.tensor
+   pointer : tensor
+       The memory locations to operate on. Must be a block of pointer type.
+   val : tensor
        The values with which to perform the atomic operation. Must have the same
        dtype as ``pointer.dtype.element_ty``.
-   mask : triton.tensor, optional
-       If ``mask[idx]`` is false, do not perform the atomic operation at ``pointer[idx]``.
+   mask : tensor, optional
+       If ``mask[idx]`` is false, do not perform the atomic operation at
+       ``pointer[idx]``.
    sem : str, optional
        Specifies the memory semantics for the operation. Acceptable values are
-       ``"acquire"``, ``"release"``, ``"acq_rel"``, and ``"relaxed"``. Defaults to
-       ``"acq_rel"``.
+       ``"acquire"``, ``"release"``, ``"acq_rel"`` (stands for "ACQUIRE_RELEASE"),
+       and ``"relaxed"``. If not provided, defaults to ``"acq_rel"``.
    scope : str, optional
        Defines the scope of threads that observe the synchronizing effect of the
-       atomic operation. Acceptable values are ``"gpu"``, ``"cta"``, or ``"sys"``.
-       Defaults to ``"gpu"``.
+       atomic operation. Acceptable values are ``"gpu"`` (default), ``"cta"``
+       (cooperative thread array, thread block), or ``"sys"`` (stands for
+       "SYSTEM").
 
    Returns
    -------
-   triton.tensor
+   tensor
        The data stored at ``pointer`` before the atomic operation.
 
    Notes
    -----
-   This function can also be called as a member function on :py:class:`triton.language.tensor`,
+   This function can also be called as a member function on :py:class:`tensor`,
    as ``x.atomic_xor(...)`` instead of ``atomic_xor(x, ...)``.
+
+   The atomic XOR operation computes ``*pointer = *pointer ^ val`` atomically.
+   This is useful for implementing concurrent bit manipulation operations.
 
    Examples
    --------
    .. code-block:: python
 
+      import triton
+      import triton.language as tl
+
       @triton.jit
-      def kernel(x_ptr, y_ptr, BLOCK_SIZE: tl.constexpr):
-          pid = tl.program_id(axis=0)
-          offset = pid * BLOCK_SIZE + tl.arange(0, BLOCK_SIZE)
-          mask = offset < N
-          x = tl.load(x_ptr + offset, mask=mask)
-          y = tl.load(y_ptr + offset, mask=mask)
-          old_val = tl.atomic_xor(x_ptr + offset, y, mask=mask)
+      def atomic_xor_kernel(ptr, val, BLOCK_SIZE: tl.constexpr):
+          offsets = tl.arange(0, BLOCK_SIZE)
+          old_val = tl.atomic_xor(ptr + offsets, val)
+          # old_val contains the value before XOR
+
+      @triton.jit
+      def atomic_xor_masked_kernel(ptr, val, mask, BLOCK_SIZE: tl.constexpr):
+          offsets = tl.arange(0, BLOCK_SIZE)
+          old_val = tl.atomic_xor(ptr + offsets, val, mask=mask)
+          # Only performs XOR where mask is true

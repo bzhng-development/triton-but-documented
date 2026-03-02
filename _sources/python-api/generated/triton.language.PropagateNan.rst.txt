@@ -1,41 +1,25 @@
-triton.language.PropagateNan
-============================
+PropagateNan
+============
 
-Enum controlling NaN propagation behavior in floating-point operations.
-
-This enumeration specifies whether NaN inputs should propagate to outputs
-for specific Triton language operations.
+Enumeration controlling NaN propagation behavior in floating-point operations.
 
 Attributes
 ----------
-
 NONE
-    Do not propagate NaNs; return a defined value (typically zero) if any
-    input is NaN.
-
+    Do not propagate NaNs. NaN inputs may produce non-NaN outputs.
 ALL
-    Propagate NaNs; if any input is NaN, the output will be NaN.
+    Propagate NaNs according to IEEE 754. Any NaN input produces a NaN output.
 
 Notes
 -----
-This enum is typically passed to the ``propagate_nan`` argument in
-floating-point reduction or arithmetic operations to control IEEE 754
-compliance behavior.
+Pass this enumeration to operations such as :func:`triton.language.reduce` to
+control floating-point semantics.
 
 Examples
 --------
-
 .. code-block:: python
 
-    import triton
     import triton.language as tl
 
-    @triton.jit
-    def kernel(x_ptr, y_ptr, out_ptr, n: tl.constexpr):
-        pid = tl.program_id(0)
-        x = tl.load(x_ptr + pid)
-        y = tl.load(y_ptr + pid)
-        
-        # Force NaN propagation if any input is NaN
-        out = tl.sqrt(x, propagate_nan=tl.PropagateNan.ALL)
-        tl.store(out_ptr + pid, out)
+    # Configure reduction to propagate NaNs
+    tl.reduce(x, axis=0, combine_fn=fn, propagate_nan=tl.PropagateNan.ALL)

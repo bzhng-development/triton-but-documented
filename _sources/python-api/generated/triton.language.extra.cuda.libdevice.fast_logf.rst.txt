@@ -1,0 +1,43 @@
+fast_logf
+=========
+
+Compute the natural logarithm of each element in the input tensor using a fast
+approximation.
+
+Parameters
+----------
+arg0 : tensor
+    Input tensor of type ``tl.float32``.
+_semantic :
+    Internal parameter, do not use.
+
+Returns
+-------
+tensor
+    Output tensor of type ``tl.float32`` containing the natural logarithm
+    of each element in ``arg0``.
+
+Notes
+-----
+This function maps to the ``__nv_fast_logf`` PTX instruction from the CUDA
+libdevice library. It provides a fast approximation of the natural logarithm
+for 32-bit floating-point values.
+
+Only ``fp32`` input and output types are supported. This function is pure
+(no side effects).
+
+For higher precision logarithm computation, consider using ``tl.log`` instead.
+
+Examples
+--------
+.. code-block:: python
+
+    import triton
+    import triton.language as tl
+
+    @triton.jit
+    def log_kernel(x_ptr, y_ptr, BLOCK_SIZE: tl.constexpr):
+        offsets = tl.arange(0, BLOCK_SIZE)
+        x = tl.load(x_ptr + offsets)
+        y = tl.extra.cuda.libdevice.fast_logf(x)
+        tl.store(y_ptr + offsets, y)

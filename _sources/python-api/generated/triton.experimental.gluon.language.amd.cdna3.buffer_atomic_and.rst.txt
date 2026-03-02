@@ -1,0 +1,54 @@
+buffer_atomic_and
+=================
+
+.. currentmodule:: triton.experimental.gluon.language.amd.cdna3
+
+.. function:: buffer_atomic_and(ptr, offsets, value, mask=None, sem=None, scope=None, _semantic=None)
+
+    Perform an atomic bitwise AND operation on AMD CDNA3 buffer memory.
+
+    Executes ``memory = memory & value`` atomically using AMD CDNA3 buffer
+    atomic instructions. Returns the original value from memory before the
+    operation.
+
+    Parameters
+    ----------
+    ptr : pointer
+        Pointer to the buffer memory location.
+    offsets : tensor
+        Offsets into the buffer memory.
+    value : tensor
+        Value to AND with the memory location.
+    mask : tensor, optional
+        Boolean mask to control which elements participate in the atomic
+        operation.
+    sem : str, optional
+        Memory semantics. One of ``'acquire'``, ``'release'``, ``'acq_rel'``,
+        or ``'relaxed'``.
+    scope : str, optional
+        Memory scope. One of ``'cta'``, ``'cluster'``, or ``'gpu'``.
+    _semantic : GluonSemantic, optional
+        Internal semantic handler. Do not set manually.
+
+    Returns
+    -------
+    tensor
+        The original value at the memory location before the atomic operation.
+
+    Notes
+    -----
+    This function is specific to AMD CDNA3 architecture and requires buffer
+    memory operations. The atomic operation is performed element-wise for
+    tensor inputs.
+
+    Examples
+    --------
+    .. code-block:: python
+
+        import triton.experimental.gluon as gluon
+        import triton.experimental.gluon.language as ttgl
+        from triton.experimental.gluon.language.amd import cdna3
+
+        @gluon.jit
+        def kernel(ptr, offsets, value):
+            old_value = cdna3.buffer_atomic_and(ptr, offsets, value)

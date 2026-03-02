@@ -1,0 +1,45 @@
+exp2
+====
+
+Compute the element-wise exponential (base 2) of a tensor.
+
+.. function:: triton.experimental.gluon.language.exp2(x, _semantic=None)
+
+   Computes :math:`2^x` element-wise for the input tensor.
+
+   Parameters
+   ----------
+   x : tensor
+       The input tensor. Must have floating-point dtype (``fp32`` or ``fp64``).
+   _semantic : GluonSemantic, optional
+       Internal parameter. Do not set manually.
+
+   Returns
+   -------
+   tensor
+       A tensor containing :math:`2^x` computed element-wise. Has the same shape
+       and dtype as ``x``.
+
+   Notes
+   -----
+   This function is only supported for floating-point dtypes (``fp32``, ``fp64``).
+   It is decorated as a builtin and can be called as a tensor member function
+   (e.g., ``x.exp2()``).
+
+   The operation is performed on the GPU and is optimized for Gluon kernels
+   decorated with ``@gluon.jit``.
+
+   Examples
+   --------
+   .. code-block:: python
+
+      import triton.experimental.gluon as gluon
+      import triton.experimental.gluon.language as ttgl
+
+      @gluon.jit
+      def kernel(x_ptr, y_ptr, BLOCK_SIZE: tl.constexpr):
+          pid = ttgl.program_id(0)
+          offs = pid * BLOCK_SIZE + ttgl.arange(0, BLOCK_SIZE)
+          x = ttgl.load(x_ptr + offs)
+          y = ttgl.exp2(x)
+          ttgl.store(y_ptr + offs, y)

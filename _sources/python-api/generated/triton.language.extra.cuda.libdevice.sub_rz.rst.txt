@@ -1,0 +1,56 @@
+triton.language.extra.cuda.libdevice.sub_rz
+===========================================
+
+.. currentmodule:: triton.language.extra.cuda.libdevice
+
+.. function:: sub_rz(arg0, arg1, _semantic=None)
+
+    Subtract two floating-point values with round-towards-zero rounding mode.
+
+    Performs ``arg0 - arg1`` using IEEE floating-point subtraction with the
+    round-towards-zero (rz) rounding mode. This is a CUDA libdevice intrinsic
+    that maps to ``__nv_fsub_rz`` for float32 and ``__nv_dsub_rz`` for float64.
+
+    Parameters
+    ----------
+    arg0 : tl.tensor
+        First input tensor. Must be of type ``tl.float32`` or ``tl.float64``.
+    arg1 : tl.tensor
+        Second input tensor. Must be of the same dtype as ``arg0``.
+    _semantic : optional
+        Internal parameter for Triton semantics. Do not set manually.
+
+    Returns
+    -------
+    result : tl.tensor
+        Tensor of the same dtype as inputs containing ``arg0 - arg1`` computed
+        with round-towards-zero rounding.
+
+    Notes
+    -----
+    The round-towards-zero (rz) rounding mode truncates results toward zero,
+    which differs from the default round-to-nearest-even mode. This can be
+    useful for reproducibility or when specific rounding behavior is required.
+
+    Both inputs must have the same floating-point precision (both fp32 or both
+    fp64). Mixed precision is not supported.
+
+    This function is pure (no side effects) and can be used in device code
+    within ``@triton.jit`` decorated kernels.
+
+    Examples
+    --------
+    .. code-block:: python
+
+        import triton
+        import triton.language as tl
+
+        @triton.jit
+        def kernel_sub_rz(X, Y, Z, BLOCK_SIZE: tl.constexpr):
+            pid = tl.program_id(0)
+            offs = pid * BLOCK_SIZE + tl.arange(0, BLOCK_SIZE)
+            x = tl.load(X + offs)
+            y = tl.load(Y + offs)
+            # Subtract with round-towards-zero
+            z = tl.extra.cuda.libdevice.sub_rz(x, y)
+            tl.store(Z + offs, z)

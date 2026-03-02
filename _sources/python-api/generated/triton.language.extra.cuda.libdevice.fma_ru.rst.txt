@@ -1,0 +1,52 @@
+triton.language.extra.cuda.libdevice.fma_ru
+============================================
+
+.. currentmodule:: triton.language.extra.cuda.libdevice
+
+.. autofunction:: fma_ru
+
+Fused multiply-add with round-up rounding mode.
+
+Computes :code:`(arg0 * arg1) + arg2` with round-up rounding semantics.
+
+Parameters
+----------
+arg0 : tl.tensor
+    First input tensor. Must be fp32 or fp64.
+arg1 : tl.tensor
+    Second input tensor. Must be fp32 or fp64.
+arg2 : tl.tensor
+    Third input tensor. Must be fp32 or fp64.
+
+Returns
+-------
+result : tl.tensor
+    Tensor of the same dtype as inputs containing the fused multiply-add result
+    with round-up rounding.
+
+Notes
+-----
+This function calls CUDA libdevice functions :code:`__nv_fmaf_ru` for fp32
+and :code:`__nv_fma_ru` for fp64. The "ru" suffix indicates round-up
+(round toward positive infinity) rounding mode.
+
+All input tensors must have the same dtype (either all fp32 or all fp64).
+The operation is performed element-wise on tensors.
+
+Examples
+--------
+.. code-block:: python
+
+    import triton
+    import triton.language as tl
+
+    @triton.jit
+    def kernel(x_ptr, y_ptr, z_ptr, out_ptr, n, BLOCK: tl.constexpr):
+        pid = tl.program_id(0)
+        offs = pid * BLOCK + tl.arange(0, BLOCK)
+        mask = offs < n
+        x = tl.load(x_ptr + offs, mask=mask)
+        y = tl.load(y_ptr + offs, mask=mask)
+        z = tl.load(z_ptr + offs, mask=mask)
+        result = tl.extra.cuda.libdevice.fma_ru(x, y, z)
+        tl.store(out_ptr + offs, result, mask=mask)

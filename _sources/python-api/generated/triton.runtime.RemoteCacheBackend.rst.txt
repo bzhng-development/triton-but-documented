@@ -1,0 +1,72 @@
+RemoteCacheBackend
+==================
+
+.. class:: triton.runtime.RemoteCacheBackend(key)
+
+   A backend implementation for accessing a remote/distributed cache.
+
+   This abstract base class defines the interface for remote cache backends.
+   Concrete implementations (e.g., Redis) provide distributed caching
+   capabilities for Triton compiled kernels across multiple nodes or sessions.
+
+   Parameters
+   ----------
+   key : str
+       Unique identifier for the cache namespace. Used to isolate cache
+       entries between different compilation contexts or users.
+
+   Notes
+   -----
+   This is an abstract base class. Concrete implementations must override
+   the :meth:`get` and :meth:`put` methods. The class is typically used
+   internally by :class:`RemoteCacheManager` to handle remote cache
+   operations.
+
+   Remote cache backends enable distributed caching scenarios where:
+
+   - Multiple machines share compiled kernel artifacts
+   - Cache persistence survives local disk cleanup
+   - LRU accounting works correctly across distributed systems
+
+   Examples
+   --------
+   Creating a Redis-based remote cache backend:
+
+   .. code-block:: python
+
+      from triton.runtime.cache import RedisRemoteCacheBackend
+
+      # Initialize with a unique cache key
+      backend = RedisRemoteCacheBackend(key="triton_cache_v1")
+
+      # Store compiled kernel data
+      backend.put("kernel_hash_abc", compiled_bytes)
+
+      # Retrieve cached data
+      results = backend.get(["kernel_hash_abc", "kernel_hash_xyz"])
+
+   Implementing a custom remote cache backend:
+
+   .. code-block:: python
+
+      from triton.runtime.cache import RemoteCacheBackend
+      from typing import Dict, List
+
+      class MyCacheBackend(RemoteCacheBackend):
+          def __init__(self, key: str):
+              super().__init__(key)
+              # Initialize custom backend (e.g., database connection)
+
+          def get(self, filenames: List[str]) -> Dict[str, bytes]:
+              # Fetch multiple files from remote storage
+              pass
+
+          def put(self, filename: str, data: bytes):
+              # Store file to remote storage
+              pass
+
+   See Also
+   --------
+   RemoteCacheManager : Manager class that uses RemoteCacheBackend
+   FileCacheManager : Local file-based cache implementation
+   RedisRemoteCacheBackend : Redis-based remote cache implementation

@@ -1,0 +1,46 @@
+sin
+===
+
+.. currentmodule:: triton.experimental.gluon.language
+
+Computes the element-wise sine of a tensor.
+
+.. function:: sin(x, _semantic=None)
+
+   Computes the sine of each element in the input tensor :code:`x`.
+
+   Parameters
+   ----------
+   x : Block
+       The input tensor. Must have floating-point dtype (``fp32`` or ``fp64``).
+   _semantic : GluonSemantic, optional
+       Internal semantic context. Do not set manually.
+
+   Returns
+   -------
+   Block
+       A tensor containing the element-wise sine values. Has the same shape
+       and dtype as :code:`x`.
+
+   Notes
+   -----
+   This function is only supported for ``fp32`` and ``fp64`` dtypes. Calling
+   with other dtypes will raise an error.
+
+   The operation is computed as :math:`\sin(x)` for each element.
+
+   Examples
+   --------
+   .. code-block:: python
+
+      import triton.experimental.gluon as gluon
+      import triton.experimental.gluon.language as ttgl
+
+      @gluon.jit
+      def kernel(x_ptr, y_ptr, n: ttgl.constexpr):
+          pid = ttgl.program_id(0)
+          offs = ttgl.arange(0, n)
+          mask = offs < n
+          x = ttgl.load(x_ptr + offs, mask=mask)
+          y = ttgl.sin(x)
+          ttgl.store(y_ptr + offs, y, mask=mask)

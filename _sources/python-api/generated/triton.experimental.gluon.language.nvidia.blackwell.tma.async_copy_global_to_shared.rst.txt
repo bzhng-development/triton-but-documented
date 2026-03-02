@@ -1,0 +1,72 @@
+async_copy_global_to_shared
+=============================
+
+.. currentmodule:: triton.experimental.gluon.language.nvidia.blackwell.tma
+
+.. function:: async_copy_global_to_shared(tensor_desc, coord, barrier, result, pred=True, multicast=False)
+
+   Asynchronously copy data from global memory to shared memory using Tensor Memory Accelerator (TMA).
+
+   This operation initiates an async copy from a global memory tensor descriptor to a shared memory descriptor. The copy is non-blocking and synchronizes via the provided barrier. Available on NVIDIA Blackwell architectures.
+
+   Parameters
+   ----------
+   tensor_desc : tensor_descriptor
+       Tiled tensor descriptor for the source data in global memory.
+   coord : tensor or sequence of int
+       Coordinates specifying the tile location in the source tensor. Each coordinate corresponds to a dimension of the tensor descriptor.
+   barrier : barrier
+       Barrier object for synchronization. The barrier tracks completion of the async copy operation.
+   result : shared_memory_descriptor
+       Destination shared memory descriptor where data will be copied.
+   pred : tensor or bool, optional
+       Predicate for conditional execution. If False, the copy is not performed. Default is True.
+   multicast : bool, optional
+       Enable multicast mode for copying to multiple CTAs. Default is False.
+
+   Returns
+   -------
+   None
+
+   Notes
+   -----
+   This is a low-level TMA primitive that requires explicit management of synchronization via barriers. The operation returns immediately without waiting for completion; use :func:`barrier_wait` or related primitives to ensure the copy completes before accessing the shared memory.
+
+   When ``multicast=True``, the copy operation can target multiple CTAs within a cluster, enabling efficient data distribution.
+
+   Coordinate values must be aligned to the tensor descriptor's tile shape. Misaligned coordinates may result in undefined behavior.
+
+   This function is only available on NVIDIA Blackwell GPUs (compute capability >= 90) with TMA support enabled.
+
+   Examples
+   --------
+   >>> import triton.experimental.gluon as gluon
+   >>> import triton.experimental.gluon.language as ttgl
+   >>> from triton.experimental.gluon.language.nvidia.blackwell import tma
+   >>>
+   >>> @gluon.jit
+   >>> def kernel(
+   >>>     global_desc,
+   >>>     shared_mem,
+   >>>     barrier,
+   >>>     BLOCK_M: tl.constexpr,
+   >>>     BLOCK_N: tl.constexpr,
+   >>> ):
+   >>>     # Create coordinate tensor for tile position
+   >>>     coord = ttgl.arange(0, 2, layout=ttgl.AutoLayout())
+   >>>     coord = ttgl.expand_dims(coord, axis=0)
+   >>>     coord = coord + ttgl.full((1, 2), [0, 0], dtype=ttgl.int32)
+   >>>
+   >>>     # Initiate async copy from global to shared memory
+   >>>     tma.async_copy_global_to_shared(
+   >>>         global_desc,
+   >>>         coord,
+   >>>         barrier,
+   >>>         shared_mem,
+   >>>     )
+   >>>
+   >>>     # Wait for copy completion before accessing shared_mem
+   >>>     barrier.wait()
+   >>>
+   >>>     # Now safe to use shared_mem
+   >>>     data = shared_mem.load(layout=ttgl.BlockedLayout(...))

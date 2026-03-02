@@ -1,0 +1,36 @@
+clc_result
+==========
+
+.. py:class:: clc_result(handle)
+
+   CLC response loaded into registers.
+
+   Represents the result of a Cluster Launch Control (CLC) operation on NVIDIA
+   Blackwell GPUs. The response is loaded directly into registers, allowing
+   efficient querying of cancellation status and program IDs without re-reading
+   shared memory.
+
+   Parameters
+   ----------
+   handle : ir.value
+       Internal IR handle representing the CLC result value. Typically obtained
+       via :func:`triton.experimental.gluon.language.nvidia.blackwell.clc.load_result`.
+
+   Notes
+   -----
+   Only supported on NVIDIA Blackwell architectures (SM100+). This class provides
+   methods to inspect the outcome of a :func:`try_cancel` operation.
+
+   Examples
+   --------
+   .. code-block:: python
+
+      import triton.experimental.gluon as gluon
+      import triton.experimental.gluon.language as ttgl
+
+      @gluon.jit
+      def kernel(...):
+          # Assume shared_mem_ptr is a shared_memory_descriptor
+          result = ttgl.nvidia.blackwell.clc.load_result(shared_mem_ptr)
+          if result.is_canceled():
+              pid_x = result.program_id(0)

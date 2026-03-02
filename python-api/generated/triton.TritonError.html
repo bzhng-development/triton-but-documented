@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>triton.TritonError &mdash; Triton  documentation</title>
+  <title>TritonError &mdash; Triton  documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=03e43079" />
       <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="../../_static/css/custom.css" />
@@ -19,7 +19,7 @@
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
     <link rel="next" title="OutOfResources" href="triton.OutOfResources.html" />
-    <link rel="prev" title="triton.InterpreterError" href="triton.InterpreterError.html" /> 
+    <link rel="prev" title="InterpreterError" href="triton.InterpreterError.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -50,30 +50,24 @@
 <ul class="current">
 <li class="toctree-l1 current"><a class="reference internal" href="../triton.html">triton</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="triton.jit.html">triton.jit</a></li>
-<li class="toctree-l2"><a class="reference internal" href="triton.autotune.html"><code class="docutils literal notranslate"><span class="pre">triton.autotune()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="triton.heuristics.html">Parameters</a></li>
-<li class="toctree-l2"><a class="reference internal" href="triton.heuristics.html#returns">Returns</a></li>
-<li class="toctree-l2"><a class="reference internal" href="triton.heuristics.html#notes">Notes</a></li>
-<li class="toctree-l2"><a class="reference internal" href="triton.heuristics.html#examples">Examples</a></li>
-<li class="toctree-l2"><a class="reference internal" href="triton.Config.html">class triton.Config</a></li>
+<li class="toctree-l2"><a class="reference internal" href="triton.autotune.html">triton.autotune</a></li>
+<li class="toctree-l2"><a class="reference internal" href="triton.heuristics.html">triton.heuristics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="triton.Config.html">triton.Config</a></li>
 <li class="toctree-l2 current"><a class="reference internal" href="../triton.html#runtime-and-compiler">Runtime and Compiler</a><ul class="current">
 <li class="toctree-l3"><a class="reference internal" href="triton.AsyncCompileMode.html">AsyncCompileMode</a></li>
 <li class="toctree-l3"><a class="reference internal" href="triton.CompilationError.html">CompilationError</a></li>
-<li class="toctree-l3"><a class="reference internal" href="triton.InterpreterError.html">triton.InterpreterError</a></li>
-<li class="toctree-l3 current"><a class="current reference internal" href="#">triton.TritonError</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="#triton.TritonError"><code class="docutils literal notranslate"><span class="pre">triton.TritonError</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.InterpreterError.html">InterpreterError</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">TritonError</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#TritonError"><code class="docutils literal notranslate"><span class="pre">TritonError</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="triton.OutOfResources.html">OutOfResources</a></li>
 <li class="toctree-l3"><a class="reference internal" href="triton.JITFunction.html">JITFunction</a></li>
-<li class="toctree-l3"><a class="reference internal" href="triton.KernelInterface.html">class KernelInterface</a></li>
-<li class="toctree-l3"><a class="reference internal" href="triton.FutureKernel.html"><code class="docutils literal notranslate"><span class="pre">FutureKernel</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="triton.MockTensor.html">MockTensor</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.KernelInterface.html">triton.KernelInterface</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.FutureKernel.html">FutureKernel</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.MockTensor.html">class triton.MockTensor</a></li>
 <li class="toctree-l3"><a class="reference internal" href="triton.TensorWrapper.html">TensorWrapper</a></li>
-<li class="toctree-l3"><a class="reference internal" href="triton.compile.html">Parameters</a></li>
-<li class="toctree-l3"><a class="reference internal" href="triton.compile.html#returns">Returns</a></li>
-<li class="toctree-l3"><a class="reference internal" href="triton.compile.html#notes">Notes</a></li>
-<li class="toctree-l3"><a class="reference internal" href="triton.compile.html#examples">Examples</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.compile.html">compile</a></li>
 <li class="toctree-l3"><a class="reference internal" href="triton.constexpr_function.html">constexpr_function</a></li>
 <li class="toctree-l3"><a class="reference internal" href="triton.must_use_result.html">must_use_result</a></li>
 <li class="toctree-l3"><a class="reference internal" href="triton.reinterpret.html">reinterpret</a></li>
@@ -87,6 +81,35 @@
 <li class="toctree-l1"><a class="reference internal" href="../triton.language.html">triton.language</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../triton.testing.html">triton.testing</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../triton-semantics.html">Triton Semantics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.language.extra.cuda.html">triton.language.extra.cuda</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.language.extra.cuda.libdevice.html">triton.language.extra.cuda.libdevice</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.runtime.html">triton.runtime</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.tools.html">triton.tools</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Gluon (Experimental) API</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.html">triton.experimental.gluon</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.html">triton.experimental.gluon.language</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.nvidia.ampere.html">triton.experimental.gluon.language.nvidia.ampere</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.nvidia.ampere.async_copy.html">triton.experimental.gluon.language.nvidia.ampere.async_copy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.nvidia.ampere.mbarrier.html">triton.experimental.gluon.language.nvidia.ampere.mbarrier</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.nvidia.hopper.html">triton.experimental.gluon.language.nvidia.hopper</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.nvidia.hopper.tma.html">triton.experimental.gluon.language.nvidia.hopper.tma</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.nvidia.hopper.mbarrier.html">triton.experimental.gluon.language.nvidia.hopper.mbarrier</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.nvidia.hopper.cluster.html">triton.experimental.gluon.language.nvidia.hopper.cluster</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.nvidia.blackwell.html">triton.experimental.gluon.language.nvidia.blackwell</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.nvidia.blackwell.tma.html">triton.experimental.gluon.language.nvidia.blackwell.tma</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.nvidia.blackwell.clc.html">triton.experimental.gluon.language.nvidia.blackwell.clc</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.amd.html">triton.experimental.gluon.language.amd</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.amd.gfx1250.html">triton.experimental.gluon.language.amd.gfx1250</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.amd.gfx1250.async_copy.html">triton.experimental.gluon.language.amd.gfx1250.async_copy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.amd.gfx1250.mbarrier.html">triton.experimental.gluon.language.amd.gfx1250.mbarrier</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.amd.gfx1250.cluster.html">triton.experimental.gluon.language.amd.gfx1250.cluster</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.amd.gfx1250.tdm.html">triton.experimental.gluon.language.amd.gfx1250.tdm</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.amd.cdna3.html">triton.experimental.gluon.language.amd.cdna3</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.amd.cdna4.html">triton.experimental.gluon.language.amd.cdna4</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.amd.rdna3.html">triton.experimental.gluon.language.amd.rdna3</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.amd.rdna4.html">triton.experimental.gluon.language.amd.rdna4</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Triton MLIR Dialects</span></p>
 <ul>
@@ -114,7 +137,7 @@
   <ul class="wy-breadcrumbs">
       <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
           <li class="breadcrumb-item"><a href="../triton.html">triton</a></li>
-      <li class="breadcrumb-item active">triton.TritonError</li>
+      <li class="breadcrumb-item active">TritonError</li>
       <li class="wy-breadcrumbs-aside">
             <a href="../../_sources/python-api/generated/triton.TritonError.rst.txt" rel="nofollow"> View page source</a>
       </li>
@@ -124,30 +147,33 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <section id="triton-tritonerror">
-<h1>triton.TritonError<a class="headerlink" href="#triton-tritonerror" title="Link to this heading">¶</a></h1>
+  <section id="tritonerror">
+<h1>TritonError<a class="headerlink" href="#tritonerror" title="Link to this heading">¶</a></h1>
 <dl class="py class">
-<dt class="sig sig-object py" id="triton.TritonError">
-<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">triton.</span></span><span class="sig-name descname"><span class="pre">TritonError</span></span><a class="headerlink" href="#triton.TritonError" title="Link to this definition">¶</a></dt>
-<dd><p>Base class for all exceptions raised by the Triton compiler and runtime.</p>
-<p>This class serves as the common parent for all non-exit exceptions specific
-to Triton, allowing users to catch Triton-specific errors distinctly from
-standard Python exceptions.</p>
+<dt class="sig sig-object py" id="TritonError">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">TritonError</span></span><a class="headerlink" href="#TritonError" title="Link to this definition">¶</a></dt>
+<dd><p>Base class for all Triton-specific exceptions.</p>
 <section id="parameters">
 <h2>Parameters<a class="headerlink" href="#parameters" title="Link to this heading">¶</a></h2>
 <dl class="simple">
-<dt>message<span class="classifier">str, optional</span></dt><dd><p>Optional error message describing the exception.</p>
+<dt><a href="#id1"><span class="problematic" id="id2">*</span></a>args<span class="classifier">tuple</span></dt><dd><p>Arguments passed to the base <code class="xref py py-class docutils literal notranslate"><span class="pre">Exception</span></code> class.</p>
 </dd>
 </dl>
 </section>
+<section id="notes">
+<h2>Notes<a class="headerlink" href="#notes" title="Link to this heading">¶</a></h2>
+<p>Subclasses of this error indicate specific failure conditions within
+the Triton compiler or runtime. Catch this exception to distinguish
+Triton errors from standard Python exceptions.</p>
+</section>
 <section id="examples">
 <h2>Examples<a class="headerlink" href="#examples" title="Link to this heading">¶</a></h2>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span><span class="w"> </span><span class="nn">triton</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="k">try</span><span class="p">:</span>
-<span class="gp">... </span>    <span class="k">raise</span> <span class="n">triton</span><span class="o">.</span><span class="n">TritonError</span><span class="p">(</span><span class="s2">&quot;Compilation failed&quot;</span><span class="p">)</span>
-<span class="gp">... </span><span class="k">except</span> <span class="n">triton</span><span class="o">.</span><span class="n">TritonError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
-<span class="gp">... </span>    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Caught Triton error: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-<span class="go">Caught Triton error: Compilation failed</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">triton</span>
+
+<span class="k">try</span><span class="p">:</span>
+    <span class="k">raise</span> <span class="n">triton</span><span class="o">.</span><span class="n">TritonError</span><span class="p">(</span><span class="s2">&quot;Compilation failed&quot;</span><span class="p">)</span>
+<span class="k">except</span> <span class="n">triton</span><span class="o">.</span><span class="n">TritonError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Caught Triton error: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
 </section>
@@ -159,7 +185,7 @@ standard Python exceptions.</p>
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="triton.InterpreterError.html" class="btn btn-neutral float-left" title="triton.InterpreterError" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="triton.InterpreterError.html" class="btn btn-neutral float-left" title="InterpreterError" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
         <a href="triton.OutOfResources.html" class="btn btn-neutral float-right" title="OutOfResources" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 

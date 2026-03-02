@@ -1,0 +1,43 @@
+norm3d
+======
+
+norm3d(arg0, arg1, arg2, _semantic=None)
+
+    Compute the 3D Euclidean norm :math:`\sqrt{x^2 + y^2 + z^2}`.
+
+    Parameters
+    ----------
+    arg0 : tl.tensor
+        First component of the 3D vector. Must be floating-point (fp32 or fp64).
+    arg1 : tl.tensor
+        Second component of the 3D vector. Must be floating-point (fp32 or fp64).
+    arg2 : tl.tensor
+        Third component of the 3D vector. Must be floating-point (fp32 or fp64).
+    _semantic : optional
+        Internal parameter, do not use directly.
+
+    Returns
+    -------
+    result : tl.tensor
+        The Euclidean norm of the 3D vector. Has the same dtype as inputs.
+
+    Notes
+    -----
+    This function calls CUDA libdevice functions ``__nv_norm3df`` for fp32 inputs
+    and ``__nv_norm3d`` for fp64 inputs. All three arguments must have the same
+    dtype. The operation is pure (no side effects).
+
+    Examples
+    --------
+    .. code-block:: python
+
+        import triton
+        import triton.language as tl
+
+        @triton.jit
+        def norm_kernel(x_ptr, y_ptr, z_ptr, out_ptr, BLOCK: tl.constexpr):
+            x = tl.load(x_ptr + tl.arange(0, BLOCK))
+            y = tl.load(y_ptr + tl.arange(0, BLOCK))
+            z = tl.load(z_ptr + tl.arange(0, BLOCK))
+            norm = tl.extra.cuda.libdevice.norm3d(x, y, z)
+            tl.store(out_ptr + tl.arange(0, BLOCK), norm)

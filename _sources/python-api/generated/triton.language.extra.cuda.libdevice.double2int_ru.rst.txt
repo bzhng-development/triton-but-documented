@@ -1,0 +1,50 @@
+triton.language.extra.cuda.libdevice.double2int_ru
+===================================================
+
+.. currentmodule:: triton.language.extra.cuda.libdevice
+
+.. function:: double2int_ru(arg0, _semantic=None)
+
+    Convert a double-precision floating-point value to a 32-bit integer using round-up rounding mode.
+
+    This function invokes the CUDA libdevice intrinsic ``__nv_double2int_ru``, which rounds the input
+    toward positive infinity (round-up) before converting to integer.
+
+    Parameters
+    ----------
+    arg0 : tl.tensor
+        Input tensor of double-precision floating-point values (``tl.float64``).
+
+    _semantic : optional
+        Internal semantic argument; do not set manually.
+
+    Returns
+    -------
+    result : tl.tensor
+        Tensor of 32-bit signed integers (``tl.int32``) with the same shape as ``arg0``.
+
+    Notes
+    -----
+    The rounding mode "ru" stands for "round up" (toward positive infinity). For example:
+
+    - ``3.2`` rounds to ``4``
+    - ``-3.2`` rounds to ``-3``
+    - ``3.0`` rounds to ``3``
+
+    This function is only available on CUDA targets and requires the input to be ``float64`` dtype.
+    The operation is pure (no side effects).
+
+    Examples
+    --------
+    .. code-block:: python
+
+        import triton
+        import triton.language as tl
+
+        @triton.jit
+        def kernel(x_ptr, y_ptr, BLOCK_SIZE: tl.constexpr):
+            pid = tl.program_id(0)
+            offs = pid * BLOCK_SIZE + tl.arange(0, BLOCK_SIZE)
+            x = tl.load(x_ptr + offs).to(tl.float64)
+            y = tl.extra.cuda.libdevice.double2int_ru(x)
+            tl.store(y_ptr + offs, y)

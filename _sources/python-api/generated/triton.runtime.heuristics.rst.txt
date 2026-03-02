@@ -1,0 +1,33 @@
+heuristics
+==========
+
+Decorator for specifying how the values of certain meta-parameters may be computed.
+
+This is useful for cases where auto-tuning is prohibitively expensive, or just not applicable.
+
+Parameters
+----------
+values : dict[str, Callable[[dict[str, Any]], Any]]
+    A dictionary mapping meta-parameter names to functions that compute their values.
+    Each function accepts a dictionary of kernel arguments and returns the computed
+    value.
+
+Returns
+-------
+decorator : Callable
+    A decorator that wraps the JIT function, returning a ``Heuristics`` object.
+
+Notes
+-----
+The heuristic functions are invoked at kernel launch time with a dictionary containing
+all positional and keyword arguments passed to the kernel.
+
+Examples
+--------
+.. code-block:: python
+
+    # smallest power-of-two >= x_size
+    @triton.heuristics(values={'BLOCK_SIZE': lambda args: triton.next_power_of_2(args['x_size'])})
+    @triton.jit
+    def kernel(x_ptr, x_size, BLOCK_SIZE: tl.constexpr):
+        ...

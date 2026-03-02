@@ -1,0 +1,38 @@
+log
+===
+
+.. currentmodule:: triton.experimental.gluon.language
+
+.. function:: log(x, _semantic=None)
+
+   Computes the element-wise natural logarithm of :code:`x`.
+
+   Parameters
+   ----------
+   x : Block
+      The input tensor. Must be floating point (fp32 or fp64).
+
+   Returns
+   -------
+   Block
+      A tensor containing the natural logarithm of each element in :code:`x`.
+
+   Notes
+   -----
+   This function is only supported for floating point dtypes (fp32, fp64).
+
+   Examples
+   --------
+   .. code-block:: python
+
+      import triton.experimental.gluon as gluon
+      import triton.experimental.gluon.language as ttgl
+
+      @gluon.jit
+      def kernel(x_ptr, y_ptr, n: tl.constexpr):
+          pid = ttgl.program_id(0)
+          offs = ttgl.arange(0, n)
+          mask = offs < n
+          x = ttgl.load(x_ptr + offs, mask=mask)
+          y = ttgl.log(x)
+          ttgl.store(y_ptr + offs, y, mask=mask)

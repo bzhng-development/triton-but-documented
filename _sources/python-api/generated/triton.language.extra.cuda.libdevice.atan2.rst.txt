@@ -1,0 +1,50 @@
+triton.language.extra.cuda.libdevice.atan2
+==========================================
+
+.. currentmodule:: triton.language.extra.cuda.libdevice
+
+.. function:: atan2(arg0, arg1, _semantic=None)
+
+    Compute the element-wise arc tangent of :code:`arg0 / arg1` using the signs of both arguments to determine the correct quadrant.
+
+    Parameters
+    ----------
+    arg0 : tl.tensor
+        First input tensor (y-coordinate). Must be floating-point type (fp32 or fp64).
+    arg1 : tl.tensor
+        Second input tensor (x-coordinate). Must be floating-point type (fp32 or fp64).
+    _semantic : optional
+        Internal semantic argument. Do not set manually.
+
+    Returns
+    -------
+    result : tl.tensor
+        Tensor of angles in radians. Has the same dtype as inputs (fp32 or fp64).
+
+    Notes
+    -----
+    This function is a wrapper around CUDA libdevice's :code:`__nv_atan2f` (fp32) and :code:`__nv_atan2` (fp64) intrinsics.
+
+    The result is in the range :code:`[-pi, pi]`. Unlike :code:`arctan(arg0 / arg1)`, :code:`atan2` correctly handles all quadrants and the case where :code:`arg1` is zero.
+
+    Special cases:
+    - :code:`atan2(0, 0)` returns :code:`0`
+    - :code:`atan2(+0, -0)` returns :code:`pi`
+    - :code:`atan2(-0, -0)` returns :code:`-pi`
+    - :code:`atan2(+inf, +inf)` returns :code:`pi/4`
+    - :code:`atan2(+inf, -inf)` returns :code:`3*pi/4`
+
+    Examples
+    --------
+    .. code-block:: python
+
+        import triton
+        import triton.language as tl
+
+        @triton.jit
+        def kernel(x_ptr, y_ptr, out_ptr, n):
+            pid = tl.program_id(0)
+            x = tl.load(x_ptr + pid)
+            y = tl.load(y_ptr + pid)
+            angle = tl.extra.cuda.libdevice.atan2(y, x)
+            tl.store(out_ptr + pid, angle)

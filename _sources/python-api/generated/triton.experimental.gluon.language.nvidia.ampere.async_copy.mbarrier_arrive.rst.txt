@@ -1,0 +1,55 @@
+mbarrier_arrive
+===============
+
+.. currentmodule:: triton.experimental.gluon.language.nvidia.ampere.async_copy
+
+.. function:: mbarrier_arrive(mbarrier, increment_count=True, _semantic=None)
+
+    Arrive on the mbarrier once all outstanding async copies are complete.
+
+    Signals completion of async copy operations to the specified memory barrier.
+    This synchronization primitive is used with NVIDIA Ampere and later GPU
+    architectures for coordinating asynchronous memory transfers.
+
+    Parameters
+    ----------
+    mbarrier : shared_memory_descriptor
+        Barrier object to arrive on. Must be a shared memory descriptor
+        allocated with :func:`allocate_shared_memory`.
+    increment_count : bool, optional
+        Whether to increment the arrival count. Defaults to ``True``.
+        If ``False``, signals arrival without incrementing the counter.
+    _semantic : GluonSemantic, optional
+        Internal semantic handler. Do not set manually; this is provided
+        automatically by the ``@gluon.jit`` decorator.
+
+    Returns
+    -------
+    None
+
+    Notes
+    -----
+    This function is part of the async copy API for NVIDIA Ampere+ GPUs.
+    It must be called after initiating async copy operations to signal
+    their completion to other warps or threads waiting on the barrier.
+
+    The mbarrier must be properly initialized before use. Typical usage
+    involves pairing :func:`mbarrier_arrive` with :func:`mbarrier_wait`
+    for synchronization between producer and consumer warps.
+
+    This operation is only available when using ``@gluon.jit`` decorated
+    kernels, not standard ``@triton.jit`` kernels.
+
+    Examples
+    --------
+    >>> import triton.experimental.gluon as gluon
+    >>> import triton.experimental.gluon.language as ttgl
+    >>> from triton.experimental.gluon.language.nvidia.ampere.async_copy import mbarrier_arrive
+    >>>
+    >>> @gluon.jit
+    ... def kernel(
+    ...     mbarrier: ttgl.shared_memory_descriptor,
+    ... ):
+    ...     # Signal completion of async copies
+    ...     mbarrier_arrive(mbarrier, increment_count=True)
+    ...     # Other synchronization logic follows

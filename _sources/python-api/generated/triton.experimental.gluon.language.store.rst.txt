@@ -1,0 +1,102 @@
+store
+=====
+
+.. currentmodule:: triton.experimental.gluon.language
+
+.. function:: store(pointer, value, mask=None, boundary_check=(), cache_modifier='', eviction_policy='', _semantic=None)
+
+   Store a tensor of data into memory locations defined by ``pointer``.
+
+   Parameters
+   ----------
+   pointer : PointerType or block of PointerType
+       The memory location where the elements of ``value`` are stored. Can be a
+       single element pointer, an N-dimensional tensor of pointers, or a block
+       pointer defined by :func:`make_block_ptr`.
+   value : Block
+       The tensor of elements to be stored. Implicitly broadcast to
+       ``pointer.shape`` and typecast to ``pointer.dtype.element_ty``.
+   mask : Block of int1, optional
+       If ``mask[idx]`` is false, do not store ``value[idx]`` at ``pointer[idx]``.
+       Must be scalar if ``pointer`` is a single element pointer. Must be None
+       if ``pointer`` is a block pointer.
+   boundary_check : tuple of ints, optional
+       Tuple of integers indicating the dimensions which should perform boundary
+       checks. Only valid when ``pointer`` is a block pointer.
+   cache_modifier : str, optional
+       Changes cache option in NVIDIA PTX. Should be one of ``""``, ``".wb"``,
+       ``".cg"``, ``".cs"``, ``".wt"``, where ``".wb"`` stands for cache
+       write-back all coherent levels, ``".cg"`` stands for cache global,
+       ``".cs"`` stands for cache streaming, ``".wt"`` stands for cache
+       write-through. See `cache operator
+       <https://docs.nvidia.com/cuda/parallel-thread-execution/index.html#cache-operators>`_
+       for more details.
+   eviction_policy : str, optional
+       Changes eviction policy in NVIDIA PTX. Should be one of ``""``,
+       ``"evict_first"``, ``"evict_last"``.
+
+   Returns
+   -------
+   None
+
+   Notes
+   -----
+   The behavior depends on the type of ``pointer``:
+
+   (1) If ``pointer`` is a single element pointer, a scalar is stored. In this
+       case:
+
+       - ``mask`` must also be scalar
+       - ``boundary_check`` must be empty
+
+   (2) If ``pointer`` is an N-dimensional tensor of pointers, an N-dimensional
+       block is stored. In this case:
+
+       - ``mask`` is implicitly broadcast to ``pointer.shape``
+       - ``boundary_check`` must be empty
+
+   (3) If ``pointer`` is a block pointer defined by :func:`make_block_ptr`, a
+       block of data is stored. In this case:
+
+       - ``mask`` must be None
+       - ``boundary_check`` can be specified to control out-of-bound access
+
+   This function can also be called as a member function on :class:`tensor`,
+   as ``x.store(...)`` instead of ``store(x, ...)``.
+
+   Examples
+   --------
+   Store a scalar value to a single memory location:
+
+   .. code-block:: python
+
+      import triton.experimental.gluon as gluon
+      import triton.experimental.gluon.language as ttgl
+
+      @gluon.jit
+      def kernel(ptr, val):
+          ttgl.store(ptr, val)
+
+   Store a tensor to multiple memory locations with a mask:
+
+   .. code-block:: python
+
+      @gluon.jit
+      def kernel(ptrs, vals, mask):
+          ttgl.store(ptrs, vals, mask=mask)
+
+   Store a block using a block pointer with boundary checking:
+
+   .. code-block:: python
+
+      @gluon.jit
+      def kernel(base_ptr, vals):
+          block_ptr = ttgl.make_block_ptr(
+              base_ptr,
+              shape=(128, 128),
+              strides=(128, 1),
+              offsets=(0, 0),
+              block_shape=(32, 32),
+              order=(1, 0)
+          )
+          ttgl.store(block_ptr, vals, boundary_check=(0, 1))

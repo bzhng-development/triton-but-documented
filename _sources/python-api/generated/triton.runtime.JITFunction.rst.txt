@@ -1,0 +1,110 @@
+JITFunction
+===========
+
+.. class:: triton.runtime.JITFunction(fn, version=None, do_not_specialize=None, do_not_specialize_on_alignment=None, debug=None, noinline=None, repr=None, launch_metadata=None)
+
+   Represent a JIT-compiled Triton kernel function.
+
+   This class wraps a Python function decorated with ``@triton.jit`` and
+   manages compilation, caching, and launch of GPU kernels. Instances are
+   typically created via the :func:`triton.jit` decorator rather than
+   directly instantiated.
+
+   Parameters
+   ----------
+   fn : callable
+      The Python function to be JIT-compiled. This function should contain
+      Triton kernel code using ``triton.language`` operations.
+   version : int, optional
+      Version number for the kernel. Used for cache invalidation when
+      kernel implementation changes.
+   do_not_specialize : iterable of int or str, optional
+      Parameter indices or names that should not be specialized during
+      compilation. Specialization allows generating optimized code for
+      specific argument values.
+   do_not_specialize_on_alignment : iterable of int or str, optional
+      Parameter indices or names that should not be specialized based on
+      memory alignment.
+   debug : bool, optional
+      Enable debug mode for the kernel. When True, additional debugging
+      information is preserved.
+   noinline : bool, optional
+      Prevent inlining of this function when called from other kernels.
+   repr : callable, optional
+      Custom function to generate string representation of the kernel.
+   launch_metadata : callable, optional
+      Function to generate metadata for kernel launches.
+
+   Attributes
+   ----------
+   fn : callable
+      The original Python function.
+   module : str
+      Module name where the function is defined.
+   signature : inspect.Signature
+      Function signature information.
+   params : list of KernelParam
+      Parameter metadata including specialization settings.
+   device_caches : dict
+      Per-device cache of compiled kernels.
+   arg_names : list of str
+      Names of all function arguments.
+   constexprs : list of int
+      Indices of constexpr parameters.
+
+   Methods
+   -------
+   run(*args, grid, warmup, **kwargs)
+      Execute the kernel with given arguments and grid configuration.
+   warmup(*args, grid, **kwargs)
+      Warmup the kernel by compiling without execution.
+   __getitem__(grid)
+      Return a callable that launches the kernel with specified grid.
+   add_pre_run_hook(hook)
+      Add a hook to be executed before kernel run.
+   preload(specialization_data)
+      Load pre-compiled kernel from serialized specialization data.
+
+   Notes
+   -----
+   JITFunction objects are not meant to be called directly. Instead, use
+   the grid syntax ``kernel[grid](*args)`` to launch the kernel on the GPU.
+   The first call with a given argument signature triggers compilation;
+   subsequent calls with the same signature use the cached compiled kernel.
+
+   Arguments with ``.data_ptr()`` and ``.dtype`` attributes (e.g., PyTorch
+   tensors) are implicitly converted to pointers. Global variables captured
+   at compile time are checked at launch time to ensure consistency.
+
+   Examples
+   --------
+   .. code-block:: python
+
+      import triton
+      import triton.language as tl
+
+      @triton.jit
+      def add_kernel(x_ptr, y_ptr, out_ptr, n,
+                     BLOCK_SIZE: tl.constexpr = 1024):
+          pid = tl.program_id(axis=0)
+          block_start = pid * BLOCK_SIZE
+          offsets = block_start + tl.arange(0, BLOCK_SIZE)
+          mask = offsets < n
+          x = tl.load(x_ptr + offsets, mask=mask)
+          y = tl.load(y_ptr + offsets, mask=mask)
+          out = x + y
+          tl.store(out_ptr + offsets, out, mask=mask)
+
+      # Launch kernel with grid configuration
+      grid = (triton.cdiv(n, BLOCK_SIZE),)
+      add_kernel[grid](x, y, out, n)
+
+      # Access JITFunction properties
+      print(add_kernel.arg_names)  # ['x_ptr', 'y_ptr', 'out_ptr', 'n', 'BLOCK_SIZE']
+      print(add_kernel.constexprs)  # [4] (BLOCK_SIZE is constexpr)
+
+   See Also
+   --------
+   triton.jit : Decorator to create JITFunction instances
+   KernelInterface : Base class for kernel launch interface
+   JITCallable : Base class for JIT-compiled callables

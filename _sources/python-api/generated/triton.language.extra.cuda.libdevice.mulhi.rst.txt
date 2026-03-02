@@ -1,0 +1,54 @@
+mulhi
+=====
+
+.. currentmodule:: triton.language.extra.cuda.libdevice
+
+.. function:: mulhi(arg0, arg1, _semantic=None)
+
+    Returns the high bits of the product of two integers.
+
+    Computes the upper portion of a full multiplication (arg0 * arg1). For 32-bit
+    inputs, returns the high 32 bits of the 64-bit product. For 64-bit inputs,
+    returns the high 64 bits of the 128-bit product.
+
+    Parameters
+    ----------
+    arg0 : tensor
+        First input tensor. Must be int32, uint32, int64, or uint64.
+    arg1 : tensor
+        Second input tensor. Must have the same dtype as arg0.
+    _semantic : optional
+        Internal parameter, do not set manually.
+
+    Returns
+    -------
+    result : tensor
+        Tensor containing the high bits of the multiplication. Same dtype as
+        inputs.
+
+    Notes
+    -----
+    This function maps to CUDA libdevice functions:
+
+    - ``__nv_mulhi`` for int32
+    - ``__nv_umulhi`` for uint32
+    - ``__nv_mul64hi`` for int64
+    - ``__nv_umul64hi`` for uint64
+
+    The operation is pure (no side effects). Both arguments must have matching
+    dtypes.
+
+    Examples
+    --------
+    .. code-block:: python
+
+        import triton
+        import triton.language as tl
+
+        @triton.jit
+        def kernel(x_ptr, y_ptr, out_ptr, BLOCK: tl.constexpr):
+            x = tl.load(x_ptr + tl.arange(0, BLOCK))
+            y = tl.load(y_ptr + tl.arange(0, BLOCK))
+            # Get high bits of multiplication
+            hi = tl.extra.cuda.libdevice.mulhi(x, y)
+            tl.store(out_ptr + tl.arange(0, BLOCK), hi)

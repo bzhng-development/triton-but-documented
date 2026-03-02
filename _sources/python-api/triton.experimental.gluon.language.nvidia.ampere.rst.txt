@@ -1,0 +1,13 @@
+triton.experimental.gluon.language.nvidia.ampere
+================================================
+
+.. currentmodule:: triton.experimental.gluon.language.nvidia.ampere
+
+NVIDIA Ampere
+-------------
+
+.. autosummary::
+    :toctree: generated
+    :nosignatures:
+
+    mma_v2

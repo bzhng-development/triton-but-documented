@@ -1,0 +1,52 @@
+normcdfinv
+==========
+
+Compute the inverse of the standard normal cumulative distribution function (quantile function).
+
+Parameters
+----------
+arg0 : tensor
+    Input tensor containing probabilities. Values must be in the open interval 
+    (0, 1). Supports ``fp32`` and ``fp64`` dtypes.
+
+Returns
+-------
+tensor
+    Tensor containing z-scores (quantiles) corresponding to the input 
+    probabilities. Has the same dtype as ``arg0``.
+
+Notes
+-----
+This function computes the quantile function (percent point function) of the 
+standard normal distribution. For a given probability :math:`p`, it returns 
+the value :math:`z` such that :math:`P(Z \leq z) = p` where :math:`Z` is a 
+standard normal random variable.
+
+The function is undefined for probabilities outside the open interval (0, 1). 
+As probabilities approach 0 or 1, the result approaches negative or positive 
+infinity respectively.
+
+This operation is implemented using CUDA libdevice functions:
+- ``__nv_normcdfinvf`` for ``fp32`` inputs
+- ``__nv_normcdfinv`` for ``fp64`` inputs
+
+The function is pure (no side effects) and can be safely used in any context.
+
+Examples
+--------
+.. code-block:: python
+
+    import triton
+    import triton.language as tl
+
+    @triton.jit
+    def normcdfinv_kernel(x_ptr, y_ptr, BLOCK_SIZE: tl.constexpr):
+        pid = tl.program_id(0)
+        offsets = pid * BLOCK_SIZE + tl.arange(0, BLOCK_SIZE)
+        probs = tl.load(x_ptr + offsets)
+        z_scores = tl.extra.cuda.libdevice.normcdfinv(probs)
+        tl.store(y_ptr + offsets, z_scores)
+
+    # Example: convert probabilities to z-scores
+    # prob = 0.5 -> z_score = 0.0
+    # prob = 0.975 -> z_score ≈ 1.96

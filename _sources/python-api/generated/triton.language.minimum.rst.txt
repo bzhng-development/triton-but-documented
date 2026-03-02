@@ -1,45 +1,58 @@
-minimum
-=======
+triton.language.minimum
+======================
 
 .. currentmodule:: triton.language
 
-.. function:: minimum(x, y, propagate_nan=tl.PropagateNan.NONE)
+.. function:: minimum(x, y, propagate_nan=PropagateNan.NONE)
 
-   Computes the element-wise minimum of :code:`x` and :code:`y`.
+   Computes the element-wise minimum of two tensors.
 
    Parameters
    ----------
    x : Block
-      The first input tensor.
+       The first input tensor.
    y : Block
-      The second input tensor.
+       The second input tensor.
    propagate_nan : tl.PropagateNan, optional
-      Whether to propagate NaN values. Defaults to :code:`tl.PropagateNan.NONE`.
-      If set to :code:`tl.PropagateNan.ALL`, NaN inputs will produce NaN outputs.
+       Whether to propagate NaN values. Default is ``PropagateNan.NONE``.
+       Use ``PropagateNan.ALL`` to propagate NaNs from either input.
 
    Returns
    -------
    Block
-      A tensor containing the element-wise minimum values.
+       A tensor containing the element-wise minimum values. For each element,
+       returns ``x`` if ``x < y``, otherwise ``y``. NaN handling depends on
+       ``propagate_nan``.
 
    Notes
    -----
-   Inputs of type :code:`tl.bfloat16` are automatically promoted to :code:`tl.float32`
-   before the operation is performed, as hardware support for bfloat16 min/max is limited.
+   bfloat16 inputs are automatically promoted to float32 before comparison,
+   as hardware does not support FMIN for bfloat16.
 
-   See Also
-   --------
-   maximum, clamp, tl.PropagateNan
+   When ``propagate_nan=PropagateNan.NONE`` (default), NaN values are treated
+   as greater than any finite value. When ``propagate_nan=PropagateNan.ALL``,
+   if either input is NaN, the output is NaN.
+
+   .. seealso:: :class:`triton.language.PropagateNan`
 
    Examples
    --------
    .. code-block:: python
 
+      import triton
+      import triton.language as tl
+
       @triton.jit
-      def kernel(X_ptr, Y_ptr, Z_ptr, BLOCK_SIZE: tl.constexpr):
-          pid = tl.program_id(0)
-          offsets = pid * BLOCK_SIZE + tl.arange(0, BLOCK_SIZE)
-          x = tl.load(X_ptr + offsets)
-          y = tl.load(Y_ptr + offsets)
-          z = tl.minimum(x, y)
-          tl.store(Z_ptr + offsets, z)
+      def kernel(x_ptr, y_ptr, out_ptr, BLOCK: tl.constexpr):
+          x = tl.load(x_ptr + tl.arange(0, BLOCK))
+          y = tl.load(y_ptr + tl.arange(0, BLOCK))
+          out = tl.minimum(x, y)
+          tl.store(out_ptr + tl.arange(0, BLOCK), out)
+
+      # With NaN propagation
+      @triton.jit
+      def kernel_nan(x_ptr, y_ptr, out_ptr, BLOCK: tl.constexpr):
+          x = tl.load(x_ptr + tl.arange(0, BLOCK))
+          y = tl.load(y_ptr + tl.arange(0, BLOCK))
+          out = tl.minimum(x, y, propagate_nan=tl.PropagateNan.ALL)
+          tl.store(out_ptr + tl.arange(0, BLOCK), out)

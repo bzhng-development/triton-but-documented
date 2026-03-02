@@ -1,0 +1,45 @@
+triton.language.extra.cuda.libdevice.float2ll_rd
+==================================================
+
+Convert a 32-bit floating-point value to a 64-bit signed integer with round-down rounding mode.
+
+Parameters
+----------
+arg0 : tl.tensor
+    Input tensor of 32-bit floating-point values (``tl.float32``).
+
+_semantic : optional
+    Internal semantic argument; do not set manually.
+
+Returns
+-------
+tl.tensor
+    Tensor of 64-bit signed integers (``tl.int64``) with the same shape as ``arg0``.
+
+Notes
+-----
+This function wraps the CUDA libdevice intrinsic ``__nv_float2ll_rd``, which converts
+floating-point values to signed 64-bit integers using round-down (toward negative
+infinity) rounding mode.
+
+The function is pure (no side effects) and operates elementwise on the input tensor.
+
+Behavior for special values:
+- NaN inputs produce undefined results
+- Infinity inputs produce undefined results
+- Values outside the int64 representable range produce undefined results
+
+Examples
+--------
+.. code-block:: python
+
+    import triton
+    import triton.language as tl
+
+    @triton.jit
+    def kernel(x_ptr, y_ptr, BLOCK_SIZE: tl.constexpr):
+        pid = tl.program_id(0)
+        offsets = pid * BLOCK_SIZE + tl.arange(0, BLOCK_SIZE)
+        x = tl.load(x_ptr + offsets)
+        y = tl.extra.cuda.libdevice.float2ll_rd(x)
+        tl.store(y_ptr + offsets, y)

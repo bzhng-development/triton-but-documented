@@ -1,34 +1,24 @@
-triton.InterpreterError
-=======================
+InterpreterError
+================
 
-Exception raised when an error occurs during Triton kernel interpretation.
+.. class:: triton.InterpreterError(error_message=None)
+
+Exception raised when an error occurs during Triton interpreter execution.
 
 Parameters
 ----------
 error_message : str, optional
-    Descriptive message explaining the interpretation failure. Defaults to None.
+    The error message describing the failure.
 
 Notes
 -----
-This exception inherits from ``TritonError`` and is specifically used to signal
-failures in the Triton interpreter mode (e.g., when running kernels with
-``mode="interpret"``). If no message is provided, the string representation
-of the exception will be an empty string.
+Inherits from :class:`triton.TritonError`.
 
 Examples
 --------
 .. code-block:: python
 
-    import triton
-    import triton.language as tl
-
-    @triton.jit
-    def kernel_fn(x_ptr, n):
-        # Logic that might trigger an interpreter error
-        pass
-
     try:
-        # Running in interpret mode may raise InterpreterError
-        triton.run(kernel_fn, mode="interpret")
+        raise triton.InterpreterError("Interpreter execution failed")
     except triton.InterpreterError as e:
-        print(f"Interpretation failed: {e}")
+        print(e)

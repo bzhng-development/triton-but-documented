@@ -1,37 +1,41 @@
 zeros_like
-============
+==========
 
 .. currentmodule:: triton.language
 
 .. function:: zeros_like(input)
 
-   Returns a tensor of zeros with the same shape and data type as the input tensor.
+   Returns a tensor of zeros with the same shape and dtype as the input tensor.
 
    Parameters
    ----------
-   input : tl.tensor
-       Input tensor whose shape and dtype are used to create the output.
+   input : Tensor
+       Input tensor whose shape and dtype determine the output tensor properties.
 
    Returns
    -------
-   tl.tensor
+   Tensor
        Tensor filled with zeros, having the same shape and dtype as ``input``.
 
-   Notes
-   -----
-   This function is equivalent to ``tl.zeros(input.shape, input.dtype)``.
+   See Also
+   --------
+   zeros : Create a tensor filled with zeros given explicit shape and dtype.
+   ones_like : Create a tensor of ones with the same shape and dtype as input.
+   full : Create a tensor filled with a given scalar value.
 
    Examples
    --------
    .. code-block:: python
 
-      import triton
       import triton.language as tl
 
       @triton.jit
       def kernel(x_ptr, out_ptr, BLOCK_SIZE: tl.constexpr):
-          pid = tl.program_id(0)
-          offs = pid * BLOCK_SIZE + tl.arange(0, BLOCK_SIZE)
-          x = tl.load(x_ptr + offs)
+          # Load input tensor
+          x = tl.load(x_ptr + tl.arange(0, BLOCK_SIZE))
+          
+          # Create zeros tensor with same shape as x
           zeros = tl.zeros_like(x)
-          tl.store(out_ptr + offs, zeros)
+          
+          # Store result
+          tl.store(out_ptr + tl.arange(0, BLOCK_SIZE), zeros)

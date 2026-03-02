@@ -1,0 +1,46 @@
+ull2float_rn
+============
+
+.. currentmodule:: triton.language.extra.cuda.libdevice
+
+.. autofunction:: ull2float_rn
+
+Convert an unsigned 64-bit integer to a 32-bit float with round-to-nearest rounding.
+
+Parameters
+----------
+arg0 : tensor of uint64
+    Input tensor containing unsigned 64-bit integers to convert.
+_semantic : optional
+    Internal Triton semantic argument (do not set manually).
+
+Returns
+-------
+tensor of fp32
+    Tensor containing the converted 32-bit floating-point values.
+
+Notes
+-----
+This function calls the NVIDIA libdevice function ``__nv_ull2float_rn``.
+The ``rn`` suffix indicates round-to-nearest-even rounding mode.
+Values that cannot be exactly represented in fp32 will be rounded.
+Large uint64 values may lose precision when converted to fp32 due to
+the smaller mantissa width (23 bits for fp32 vs 64 bits for uint64).
+
+This function is only available on CUDA targets.
+
+Examples
+--------
+.. code-block:: python
+
+    import triton
+    import triton.language as tl
+
+    @triton.jit
+    def convert_kernel(x_ptr, y_ptr, n):
+        pid = tl.program_id(0)
+        offsets = pid * 4 + tl.arange(0, 4)
+        mask = offsets < n
+        uint64_vals = tl.load(x_ptr + offsets, mask=mask)
+        float32_vals = tl.extra.cuda.libdevice.ull2float_rn(uint64_vals)
+        tl.store(y_ptr + offsets, float32_vals, mask=mask)

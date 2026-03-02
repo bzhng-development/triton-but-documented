@@ -1,0 +1,46 @@
+triton.language.extra.cuda.libdevice.sqrt
+=========================================
+
+.. currentmodule:: triton.language.extra.cuda.libdevice
+
+.. function:: sqrt(arg0, _semantic=None)
+
+    Compute the element-wise square root of a floating-point tensor.
+
+    Parameters
+    ----------
+    arg0 : tl.tensor
+        Input tensor of floating-point values. Must be of type ``fp32`` or ``fp64``.
+    _semantic : optional
+        Internal parameter for semantic propagation. Do not set manually.
+
+    Returns
+    -------
+    tl.tensor
+        Tensor containing the square root of each element in ``arg0``. The dtype
+        matches the input dtype (``fp32`` or ``fp64``).
+
+    Notes
+    -----
+    This function wraps CUDA libdevice ``__nv_sqrtf`` (for ``fp32``) and
+    ``__nv_sqrt`` (for ``fp64``). It is a pure elementwise operation with no
+    side effects.
+
+    The function is only available on CUDA targets. For portable code, consider
+    using :func:`triton.language.sqrt` instead.
+
+    Examples
+    --------
+    .. code-block:: python
+
+        import triton
+        import triton.language as tl
+
+        @triton.jit
+        def sqrt_kernel(x_ptr, y_ptr, n, BLOCK: tl.constexpr):
+            pid = tl.program_id(0)
+            offset = pid * BLOCK + tl.arange(0, BLOCK)
+            mask = offset < n
+            x = tl.load(x_ptr + offset, mask=mask)
+            y = tl.extra.cuda.libdevice.sqrt(x)
+            tl.store(y_ptr + offset, y, mask=mask)

@@ -1,0 +1,46 @@
+double2int_rz
+=============
+
+.. currentmodule:: triton.language.extra.cuda.libdevice
+
+.. function:: double2int_rz(arg0, _semantic=None)
+
+   Convert double-precision floating-point value to 32-bit signed integer with round-towards-zero.
+
+   Parameters
+   ----------
+   arg0 : tl.tensor
+       Input tensor of double-precision floating-point values (``fp64``).
+   _semantic : optional
+       Internal semantic argument used by the Triton compiler. Do not pass manually.
+
+   Returns
+   -------
+   result : tl.tensor
+       Tensor of 32-bit signed integers (``int32``).
+
+   Notes
+   -----
+   This function invokes the CUDA libdevice function ``__nv_double2int_rz``.
+
+   The rounding mode is round-towards-zero (truncation), which rounds positive
+   values down and negative values up towards zero. This differs from the
+   default round-to-nearest-even mode used by standard type casting.
+
+   This function is only available on CUDA targets. The input must be of type
+   ``fp64`` and the output will be ``int32``.
+
+   Examples
+   --------
+   .. code-block:: python
+
+      import triton
+      import triton.language as tl
+
+      @triton.jit
+      def kernel(x_ptr, y_ptr, BLOCK_SIZE: tl.constexpr):
+          offsets = tl.arange(0, BLOCK_SIZE)
+          x = tl.load(x_ptr + offsets).to(tl.float64)
+          # Convert fp64 to int32 with round-towards-zero
+          y = tl.extra.cuda.libdevice.double2int_rz(x)
+          tl.store(y_ptr + offsets, y)

@@ -1,0 +1,51 @@
+rsqrt
+=====
+
+.. currentmodule:: triton.language.extra.cuda.libdevice
+
+.. function:: rsqrt(arg0, _semantic=None)
+
+    Compute the reciprocal square root :math:`1/\sqrt{x}` element-wise.
+
+    Parameters
+    ----------
+    arg0 : tl.tensor
+        Input tensor of floating-point values. Must be ``fp32`` or ``fp64`` dtype.
+    _semantic : optional
+        Internal parameter. Do not set manually.
+
+    Returns
+    -------
+    result : tl.tensor
+        Tensor containing reciprocal square root values. Same dtype as ``arg0``.
+
+    Notes
+    -----
+    This function is an extern wrapper around CUDA libdevice reciprocal square root
+    operations. It dispatches to the following PTX functions based on input dtype:
+
+    - ``__nv_rsqrtf`` for 32-bit floating-point (``fp32``)
+    - ``__nv_rsqrt`` for 64-bit floating-point (``fp64``)
+
+    The operation is marked as pure (no side effects). Behavior for negative inputs
+    and zero follows IEEE-754 standards (returns NaN for negative, inf for zero).
+
+    Examples
+    --------
+    .. code-block:: python
+
+        import triton
+        import triton.language as tl
+        from triton.language.extra.cuda import libdevice
+
+        @triton.jit
+        def kernel(x_ptr, y_ptr, BLOCK_SIZE: tl.constexpr):
+            offsets = tl.arange(0, BLOCK_SIZE)
+            x = tl.load(x_ptr + offsets)
+            y = libdevice.rsqrt(x)
+            tl.store(y_ptr + offsets, y)
+
+    See Also
+    --------
+    tl.sqrt : Compute square root
+    tl.libdevice.sqrt : CUDA libdevice square root

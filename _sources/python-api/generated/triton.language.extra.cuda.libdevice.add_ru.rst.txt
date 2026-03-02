@@ -1,0 +1,52 @@
+triton.language.extra.cuda.libdevice.add_ru
+===========================================
+
+.. currentmodule:: triton.language.extra.cuda.libdevice
+
+.. function:: add_ru(arg0, arg1, _semantic=None)
+
+    Adds two floating-point values with round-up rounding mode.
+
+    Parameters
+    ----------
+    arg0 : tl.tensor
+        First input tensor. Must be of type ``fp32`` or ``fp64``.
+    arg1 : tl.tensor
+        Second input tensor. Must be of type ``fp32`` or ``fp64``.
+    _semantic : optional
+        Internal semantic argument. Do not set manually.
+
+    Returns
+    -------
+    result : tl.tensor
+        Tensor containing the element-wise sum of ``arg0`` and ``arg1`` with
+        round-up rounding mode. Same dtype as inputs.
+
+    Notes
+    -----
+    This function calls CUDA libdevice functions:
+
+    - ``__nv_fadd_ru`` for ``fp32`` inputs
+    - ``__nv_dadd_ru`` for ``fp64`` inputs
+
+    Round-up rounding mode rounds results toward positive infinity. This is
+    useful for interval arithmetic and error bound calculations.
+
+    Both inputs must have the same dtype. Mixed precision is not supported.
+
+    Examples
+    --------
+    .. code-block:: python
+
+        import triton
+        import triton.language as tl
+
+        @triton.jit
+        def kernel(x_ptr, y_ptr, out_ptr, BLOCK_SIZE: tl.constexpr):
+            pid = tl.program_id(0)
+            offs = pid * BLOCK_SIZE + tl.arange(0, BLOCK_SIZE)
+            x = tl.load(x_ptr + offs)
+            y = tl.load(y_ptr + offs)
+            # Add with round-up rounding mode
+            result = tl.extra.cuda.libdevice.add_ru(x, y)
+            tl.store(out_ptr + offs, result)

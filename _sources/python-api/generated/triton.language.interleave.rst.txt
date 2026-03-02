@@ -1,47 +1,35 @@
 interleave
-============
+==========
 
-.. currentmodule:: triton.language
+Interleaves the values of two tensors along their last dimension.
 
-.. function:: interleave(a, b)
+The two input tensors must have the same shape. The resulting tensor contains
+elements from ``a`` and ``b`` alternating along the last axis.
 
-   Interleaves the values of two tensors along their last dimension.
+Parameters
+----------
+a : tl.tensor
+    The first input tensor.
+b : tl.tensor
+    The second input tensor. Must have the same shape as ``a``.
 
-   Takes two tensors of identical shape and returns a new tensor where elements
-   from ``a`` and ``b`` are alternated along the last axis. The output shape
-   matches the input shape except the last dimension is doubled.
+Returns
+-------
+tl.tensor
+    A tensor containing interleaved values. The last dimension size is twice
+    the size of the input tensors' last dimension.
 
-   Parameters
-   ----------
-   a : tensor
-       The first input tensor.
-   b : tensor
-       The second input tensor. Must have the same shape as ``a``.
+Notes
+-----
+This operation is equivalent to ``tl.join(a, b).reshape(a.shape[:-1] + [2 * a.shape[-1]])``.
 
-   Returns
-   -------
-   tensor
-       A tensor containing interleaved values. If inputs have shape ``[..., N]``,
-       the output has shape ``[..., 2*N]``.
+Examples
+--------
+.. code-block:: python
 
-   Notes
-   -----
-   This operation is equivalent to ``tl.join(a, b).reshape(a.shape[:-1] + [2 * a.shape[-1]])``.
-   Both input tensors must have the same shape. For 1D inputs (scalars), the
-   function returns a 1D tensor of length 2.
+    import triton.language as tl
 
-   Examples
-   --------
-   .. code-block:: python
-
-       import triton.language as tl
-
-       # Interleave two 1D tensors
-       a = tl.arange(0, 4)  # [0, 1, 2, 3]
-       b = tl.arange(4, 8)  # [4, 5, 6, 7]
-       c = tl.interleave(a, b)  # [0, 4, 1, 5, 2, 6, 3, 7]
-
-       # Interleave two 2D tensors
-       a = tl.reshape(tl.arange(0, 8), (2, 4))
-       b = tl.reshape(tl.arange(8, 16), (2, 4))
-       c = tl.interleave(a, b)  # Shape: (2, 8)
+    # Interleave two 1D tensors
+    a = tl.arange(0, 4)  # [0, 1, 2, 3]
+    b = tl.arange(4, 8)  # [4, 5, 6, 7]
+    c = tl.interleave(a, b)  # [0, 4, 1, 5, 2, 6, 3, 7]

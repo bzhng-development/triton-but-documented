@@ -1,0 +1,57 @@
+double2int_rd
+=============
+
+.. currentmodule:: triton.language.extra.cuda.libdevice
+
+.. function:: double2int_rd(arg0, _semantic=None)
+
+   Convert double-precision floating-point value to 32-bit integer with round-down rounding.
+
+   Parameters
+   ----------
+   arg0 : tl.tensor
+      Input tensor of float64 (fp64) values.
+   _semantic : optional
+      Internal parameter, do not set manually.
+
+   Returns
+   -------
+   out : tl.tensor
+      Tensor of int32 values, rounded toward negative infinity.
+
+   Notes
+   -----
+   This function calls the CUDA libdevice function ``__nv_double2int_rd`` which
+   converts double-precision floating-point values to 32-bit signed integers
+   using round-down (toward negative infinity) rounding mode.
+
+   The rounding behavior differs from standard truncation for negative non-integer
+   values. For example, ``-3.7`` becomes ``-4`` (not ``-3``).
+
+   This function is CUDA-specific and requires the NVIDIA GPU backend. The operation
+   is pure and elementwise, operating independently on each element of the input
+   tensor.
+
+   Only ``fp64`` input type is supported.
+
+   Examples
+   --------
+   .. code-block:: python
+
+      import triton
+      import triton.language as tl
+      import torch
+
+      @triton.jit
+      def convert_kernel(x_ptr, y_ptr, BLOCK_SIZE: tl.constexpr):
+          pid = tl.program_id(0)
+          offsets = pid * BLOCK_SIZE + tl.arange(0, BLOCK_SIZE)
+          x = tl.load(x_ptr + offsets).to(tl.float64)
+          y = tl.extra.cuda.libdevice.double2int_rd(x)
+          tl.store(y_ptr + offsets, y)
+
+      # Example usage
+      x = torch.tensor([3.7, -3.7, 0.0, -0.0], dtype=torch.float64, device='cuda')
+      y = torch.empty_like(x, dtype=torch.int32)
+      convert_kernel[(1,)](x, y, BLOCK_SIZE=4)
+      # y will be [3, -4, 0, 0]

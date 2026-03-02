@@ -1,0 +1,34 @@
+isinf
+=====
+
+.. currentmodule:: triton.language.extra.cuda.libdevice
+
+.. function:: isinf(arg0, _semantic=None)
+
+    Test element-wise for positive or negative infinity.
+
+    Parameters
+    ----------
+    arg0 : tl.tensor
+        Input tensor. Must be of floating-point type (fp32 or fp64).
+
+    Returns
+    -------
+    out : tl.tensor
+        Boolean tensor of type int1. Values are 1 where ``arg0`` is infinity
+        (positive or negative), and 0 otherwise.
+
+    Notes
+    -----
+    Calls CUDA libdevice functions ``__nv_isinff`` for float32 inputs and
+    ``__nv_isinfd`` for float64 inputs. The operation is pure (no side effects).
+
+    Examples
+    --------
+    .. code-block:: python
+
+        @triton.jit
+        def kernel(x_ptr, out_ptr, BLOCK: tl.constexpr):
+            x = tl.load(x_ptr + tl.arange(0, BLOCK))
+            inf_mask = tl.extra.cuda.libdevice.isinf(x)
+            tl.store(out_ptr + tl.arange(0, BLOCK), inf_mask)

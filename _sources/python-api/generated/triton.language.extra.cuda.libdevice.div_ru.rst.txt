@@ -1,0 +1,52 @@
+triton.language.extra.cuda.libdevice.div_ru
+===========================================
+
+.. currentmodule:: triton.language.extra.cuda.libdevice
+
+.. function:: div_ru(arg0, arg1, _semantic=None)
+
+    Divide ``arg0`` by ``arg1`` and round the result towards positive infinity.
+
+    Parameters
+    ----------
+    arg0 : tl.tensor
+        Numerator. Must be floating-point type (``fp32`` or ``fp64``).
+    arg1 : tl.tensor
+        Denominator. Must be floating-point type (``fp32`` or ``fp64``).
+        Must have the same dtype as ``arg0``.
+    _semantic : optional
+        Internal parameter. Do not set manually.
+
+    Returns
+    -------
+    tl.tensor
+        Tensor of the same dtype as inputs containing ``arg0 / arg1`` rounded
+        towards positive infinity.
+
+    Notes
+    -----
+    This function calls CUDA libdevice functions:
+
+    - ``__nv_fdiv_ru`` for ``fp32`` inputs
+    - ``__nv_ddiv_ru`` for ``fp64`` inputs
+
+    The rounding mode is "round up" (towards +inf). For example, ``div_ru(2.5, 1.0)``
+    returns ``3.0``.
+
+    Only ``fp32`` and ``fp64`` dtypes are supported. Both arguments must have
+    the same dtype.
+
+    Examples
+    --------
+    .. code-block:: python
+
+        import triton
+        import triton.language as tl
+
+        @triton.jit
+        def kernel(X, Y, Z, BLOCK: tl.constexpr):
+            offsets = tl.arange(0, BLOCK)
+            x = tl.load(X + offsets)
+            y = tl.load(Y + offsets)
+            z = tl.extra.cuda.libdevice.div_ru(x, y)
+            tl.store(Z + offsets, z)

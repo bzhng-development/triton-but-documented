@@ -1,55 +1,85 @@
-.. py:function:: triton.language.load(pointer, mask=None, other=None, boundary_check=(), padding_option='', cache_modifier='', eviction_policy='', volatile=False)
+load
+====
 
-   Load data from memory into a tensor.
+Load data from memory at location defined by pointer.
 
-   The behavior depends on the type of `pointer`:
+Parameters
+----------
+pointer : triton.PointerType or block of triton.PointerType
+    Pointer to the data to be loaded.
+mask : block of triton.int1, optional
+    If ``mask[idx]`` is false, do not load the data at address ``pointer[idx]``.
+    Must be ``None`` with block pointers.
+other : block, optional
+    If ``mask[idx]`` is false, return ``other[idx]``.
+boundary_check : tuple of ints, optional
+    Tuple of integers indicating the dimensions which should do the boundary check.
+padding_option : str, optional
+    Should be one of {"", "zero", "nan"}. The padding value to use while out of bounds.
+    "" means an undefined value.
+cache_modifier : str, optional
+    Changes cache option in NVIDIA PTX. Should be one of {"", ".ca", ".cg", ".cv"},
+    where ".ca" stands for cache at all levels, ".cg" stands for cache at global
+    level (cache in L2 and below, not L1), and ".cv" means don't cache and fetch
+    again. See `cache operator <https://docs.nvidia.com/cuda/parallel-thread-execution/index.html#cache-operators>`_
+    for more details.
+eviction_policy : str, optional
+    Changes eviction policy in NVIDIA PTX.
+volatile : bool, optional
+    Changes volatile option in NVIDIA PTX.
 
-   1. **Single element pointer**: Loads a scalar. `mask` and `other` must be scalars; `boundary_check` and `padding_option` must be empty.
-   2. **Tensor of pointers**: Loads an N-dimensional tensor. `mask` and `other` are broadcast to `pointer.shape`; `boundary_check` and `padding_option` must be empty.
-   3. **Block pointer** (from :py:func:`make_block_ptr`): Loads a tensor. `mask` and `other` must be `None`; `boundary_check` and `padding_option` control out-of-bounds access.
+Returns
+-------
+tensor
+    A tensor of data whose values are loaded from memory.
 
-   Parameters
-   ----------
-   pointer : triton.PointerType or tensor of triton.PointerType
-       Pointer(s) to the data to be loaded.
-   mask : tensor of triton.int1, optional
-       If ``mask[idx]`` is false, do not load data at ``pointer[idx]``. Must be ``None`` when using block pointers.
-   other : tensor or scalar, optional
-       Value to return if ``mask[idx]`` is false. Implicitly typecast to ``pointer.dtype.element_ty``.
-   boundary_check : tuple of ints, optional
-       Dimensions on which to perform boundary checks. Only valid with block pointers.
-   padding_option : str, optional
-       Padding value for out-of-bounds access. Options: ``""`` (undefined), ``"zero"``, ``"nan"``.
-   cache_modifier : str, optional
-       PTX cache operator. Options: ``""``, ``".ca"`` (cache at all levels), ``".cg"`` (cache at global/L2), ``".cv"`` (fetch without caching). See `NVIDIA PTX Cache Operators <https://docs.nvidia.com/cuda/parallel-thread-execution/index.html#cache-operators>`_.
-   eviction_policy : str, optional
-       PTX eviction policy.
-   volatile : bool, optional
-       If True, marks the load as volatile in PTX.
+Notes
+-----
+The behavior depends on the type of ``pointer``:
 
-   Returns
-   -------
-   tensor
-       The loaded data.
+1. Single element pointer: loads a scalar. ``mask`` and ``other`` must be scalars,
+   ``other`` is implicitly typecast to ``pointer.dtype.element_ty``, and
+   ``boundary_check`` and ``padding_option`` must be empty.
 
-   Examples
-   --------
-   .. code-block:: python
+2. N-dimensional tensor of pointers: loads an N-dimensional tensor. ``mask`` and
+   ``other`` are implicitly broadcast to ``pointer.shape``, ``other`` is implicitly
+   typecast to ``pointer.dtype.element_ty``, and ``boundary_check`` and
+   ``padding_option`` must be empty.
 
-       import triton
-       import triton.language as tl
+3. Block pointer (from ``make_block_ptr``): loads a tensor. ``mask`` and ``other``
+   must be ``None``, and ``boundary_check`` and ``padding_option`` can be specified
+   to control out-of-bound access behavior.
 
-       @triton.jit
-       def kernel(ptr, mask_ptr, BLOCK: tl.constexpr):
-           # Load a block of data
-           offsets = tl.arange(0, BLOCK)
-           data = tl.load(ptr + offsets)
+Examples
+--------
+Load a single element:
 
-           # Load with masking
-           mask = tl.load(mask_ptr + offsets)
-           masked_data = tl.load(ptr + offsets, mask=mask, other=0.0)
+.. code-block:: python
 
-           # Load using a block pointer (requires make_block_ptr)
-           # block_ptr = tl.make_block_ptr(base=ptr, shape=(M, N), strides=(N, 1),
-           #                               offsets=(0, 0), block_shape=(BLOCK, BLOCK), order=(0, 1))
-           # blocked_data = tl.load(block_ptr, boundary_check=(0, 1), padding_option="zero")
+    @triton.jit
+    def kernel(ptr):
+        value = tl.load(ptr)
+
+Load with masking:
+
+.. code-block:: python
+
+    @triton.jit
+    def kernel(ptr, mask, other):
+        value = tl.load(ptr, mask=mask, other=other)
+
+Load using block pointer:
+
+.. code-block:: python
+
+    @triton.jit
+    def kernel(base_ptr, shape, strides):
+        block_ptr = tl.make_block_ptr(
+            base_ptr,
+            shape=shape,
+            strides=strides,
+            offsets=(0, 0),
+            block_shape=(16, 16),
+            order=(0, 1)
+        )
+        value = tl.load(block_ptr)

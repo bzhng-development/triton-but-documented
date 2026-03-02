@@ -1,44 +1,32 @@
 unsqueeze
-===========
+=========
 
-Insert a singleton dimension into a tensor.
-
-.. code-block:: python
-
-    unsqueeze(x, dim)
+Insert a new axis of size 1 at the specified dimension.
 
 Parameters
 ----------
 x : Block
-    Input tensor.
+    The input tensor.
 dim : constexpr
-    Index at which to insert the singleton dimension. Must be a compile-time constant.
+    The dimension at which to insert the new axis. Must be a compile-time constant.
 
 Returns
 -------
 Block
-    Tensor with an additional dimension of size 1 at the specified index.
+    A view of the input tensor with an additional dimension of size 1 inserted at :code:`dim`.
 
 Notes
 -----
-This operation is equivalent to ``x.reshape(x.shape[:dim] + (1,) + x.shape[dim:])``.
-The ``dim`` argument must be a ``constexpr`` (compile-time constant).
+This operation is equivalent to inserting a dimension of size 1 into the shape tuple at position :code:`dim`. The total number of elements remains unchanged.
 
 Examples
 --------
 .. code-block:: python
 
-    import triton
     import triton.language as tl
 
     @triton.jit
-    def kernel(X_PTR, Y_PTR, stride_x, stride_y, N: tl.constexpr, M: tl.constexpr):
-        # Load a 1D block of size N
-        pid = tl.program_id(0)
-        x = tl.load(X_PTR + pid * stride_x + tl.arange(0, N))
-        
-        # Unsqueeze to add a dimension at index 1, making shape (N, 1)
-        x_expanded = tl.unsqueeze(x, 1)
-        
-        # Store result (conceptually 2D)
-        tl.store(Y_PTR + pid * stride_y + tl.arange(0, N) * stride_y, x_expanded)
+    def kernel(X_ptr, Y_ptr, BLOCK_SIZE: tl.constexpr):
+        x = tl.arange(0, BLOCK_SIZE)  # shape: (BLOCK_SIZE,)
+        y = tl.unsqueeze(x, 0)        # shape: (1, BLOCK_SIZE)
+        z = tl.unsqueeze(x, 1)        # shape: (BLOCK_SIZE, 1)

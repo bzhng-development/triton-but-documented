@@ -1,0 +1,41 @@
+float8e5
+========
+
+``float8e5`` is a data type instance representing the FP8 E5M2 floating-point format.
+
+This type defines an 8-bit floating-point representation consisting of 1 sign bit,
+5 exponent bits, and 2 mantissa bits. It is optimized for deep learning workloads
+on NVIDIA Hopper (H100) and Blackwell GPU architectures.
+
+Notes
+-----
+The ``float8e5`` (E5M2) format provides a wider dynamic range compared to
+``float8e4`` (E4M3), making it suitable for activations and gradients with
+high variance. However, it offers lower mantissa precision (2 bits vs 3 bits).
+
+Hardware support requires compute capability >= 9.0. When using this type,
+ensure pointers are explicitly cast to ``float8e5`` to enable Tensor Core
+accumulation paths where supported.
+
+Examples
+--------
+The following example demonstrates loading data as ``float8e5`` and converting
+it to ``float32`` for accumulation:
+
+.. code-block:: python
+
+    import triton.experimental.gluon as gluon
+    import triton.experimental.gluon.language as ttgl
+
+    @gluon.jit
+    def fp8_load_kernel(in_ptr, out_ptr, BLOCK_SIZE: ttgl.constexpr):
+        offs = ttgl.arange(0, BLOCK_SIZE)
+        mask = offs < BLOCK_SIZE
+
+        # Load data explicitly as float8e5 (E5M2)
+        x = ttgl.load(in_ptr + offs, mask=mask, dtype=ttgl.float8e5)
+
+        # Convert to float32 for computation
+        y = x.to(ttgl.float32)
+
+        ttgl.store(out_ptr + offs, y, mask=mask)

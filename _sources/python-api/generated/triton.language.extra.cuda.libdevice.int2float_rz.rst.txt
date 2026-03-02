@@ -1,0 +1,45 @@
+triton.language.extra.cuda.libdevice.int2float_rz
+==================================================
+
+.. currentmodule:: triton.language.extra.cuda.libdevice
+
+.. function:: int2float_rz(arg0, _semantic=None)
+
+    Convert signed 32-bit integer to 32-bit float with round-toward-zero rounding.
+
+    Parameters
+    ----------
+    arg0 : tensor of int32
+        Input tensor containing signed 32-bit integers to convert.
+    _semantic : optional
+        Internal parameter for Triton semantics. Do not set manually.
+
+    Returns
+    -------
+    tensor of fp32
+        Tensor containing the converted floating-point values.
+
+    Notes
+    -----
+    This function uses the CUDA libdevice intrinsic ``__nv_int2float_rz`` which
+    performs integer-to-float conversion with round-toward-zero (RTZ) rounding
+    mode. This differs from the default round-to-nearest-even rounding used by
+    standard type casting.
+
+    The function is pure (no side effects) and operates element-wise on tensors.
+
+    This function is only available on CUDA targets.
+
+    Examples
+    --------
+    .. code-block:: python
+
+        import triton
+        import triton.language as tl
+
+        @triton.jit
+        def kernel(input_ptr, output_ptr, BLOCK: tl.constexpr):
+            offsets = tl.arange(0, BLOCK)
+            int_vals = tl.load(input_ptr + offsets)
+            float_vals = tl.extra.cuda.libdevice.int2float_rz(int_vals)
+            tl.store(output_ptr + offsets, float_vals)

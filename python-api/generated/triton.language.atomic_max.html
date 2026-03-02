@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Parameters &mdash; Triton  documentation</title>
+  <title>atomic_max &mdash; Triton  documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=03e43079" />
       <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="../../_static/css/custom.css" />
@@ -19,7 +19,7 @@
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
     <link rel="next" title="atomic_min" href="triton.language.atomic_min.html" />
-    <link rel="prev" title="Parameters" href="triton.language.atomic_cas.html" /> 
+    <link rel="prev" title="atomic_cas" href="triton.language.atomic_cas.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -62,12 +62,15 @@
 <li class="toctree-l2 current"><a class="reference internal" href="../triton.language.html#atomic-ops">Atomic Ops</a><ul class="current">
 <li class="toctree-l3"><a class="reference internal" href="triton.language.atomic_add.html">atomic_add</a></li>
 <li class="toctree-l3"><a class="reference internal" href="triton.language.atomic_and.html">atomic_and</a></li>
-<li class="toctree-l3"><a class="reference internal" href="triton.language.atomic_cas.html"><code class="docutils literal notranslate"><span class="pre">atomic_cas()</span></code></a></li>
-<li class="toctree-l3 current"><a class="current reference internal" href="#"><code class="docutils literal notranslate"><span class="pre">triton.language.atomic_max()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.language.atomic_cas.html">atomic_cas</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">atomic_max</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#triton.language.atomic_max"><code class="docutils literal notranslate"><span class="pre">atomic_max()</span></code></a></li>
+</ul>
+</li>
 <li class="toctree-l3"><a class="reference internal" href="triton.language.atomic_min.html">atomic_min</a></li>
-<li class="toctree-l3"><a class="reference internal" href="triton.language.atomic_or.html"><code class="docutils literal notranslate"><span class="pre">triton.language.atomic_or()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.language.atomic_or.html">atomic_or</a></li>
 <li class="toctree-l3"><a class="reference internal" href="triton.language.atomic_xchg.html">atomic_xchg</a></li>
-<li class="toctree-l3"><a class="reference internal" href="triton.language.atomic_xor.html"><code class="docutils literal notranslate"><span class="pre">triton.language.atomic_xor()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.language.atomic_xor.html">atomic_xor</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../triton.language.html#random-number-generation">Random Number Generation</a></li>
@@ -80,6 +83,35 @@
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../triton.testing.html">triton.testing</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../triton-semantics.html">Triton Semantics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.language.extra.cuda.html">triton.language.extra.cuda</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.language.extra.cuda.libdevice.html">triton.language.extra.cuda.libdevice</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.runtime.html">triton.runtime</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.tools.html">triton.tools</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Gluon (Experimental) API</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.html">triton.experimental.gluon</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.html">triton.experimental.gluon.language</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.nvidia.ampere.html">triton.experimental.gluon.language.nvidia.ampere</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.nvidia.ampere.async_copy.html">triton.experimental.gluon.language.nvidia.ampere.async_copy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.nvidia.ampere.mbarrier.html">triton.experimental.gluon.language.nvidia.ampere.mbarrier</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.nvidia.hopper.html">triton.experimental.gluon.language.nvidia.hopper</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.nvidia.hopper.tma.html">triton.experimental.gluon.language.nvidia.hopper.tma</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.nvidia.hopper.mbarrier.html">triton.experimental.gluon.language.nvidia.hopper.mbarrier</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.nvidia.hopper.cluster.html">triton.experimental.gluon.language.nvidia.hopper.cluster</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.nvidia.blackwell.html">triton.experimental.gluon.language.nvidia.blackwell</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.nvidia.blackwell.tma.html">triton.experimental.gluon.language.nvidia.blackwell.tma</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.nvidia.blackwell.clc.html">triton.experimental.gluon.language.nvidia.blackwell.clc</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.amd.html">triton.experimental.gluon.language.amd</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.amd.gfx1250.html">triton.experimental.gluon.language.amd.gfx1250</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.amd.gfx1250.async_copy.html">triton.experimental.gluon.language.amd.gfx1250.async_copy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.amd.gfx1250.mbarrier.html">triton.experimental.gluon.language.amd.gfx1250.mbarrier</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.amd.gfx1250.cluster.html">triton.experimental.gluon.language.amd.gfx1250.cluster</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.amd.gfx1250.tdm.html">triton.experimental.gluon.language.amd.gfx1250.tdm</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.amd.cdna3.html">triton.experimental.gluon.language.amd.cdna3</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.amd.cdna4.html">triton.experimental.gluon.language.amd.cdna4</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.amd.rdna3.html">triton.experimental.gluon.language.amd.rdna3</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.amd.rdna4.html">triton.experimental.gluon.language.amd.rdna4</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Triton MLIR Dialects</span></p>
 <ul>
@@ -107,7 +139,7 @@
   <ul class="wy-breadcrumbs">
       <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
           <li class="breadcrumb-item"><a href="../triton.language.html">triton.language</a></li>
-      <li class="breadcrumb-item active">Parameters</li>
+      <li class="breadcrumb-item active">atomic_max</li>
       <li class="wy-breadcrumbs-aside">
             <a href="../../_sources/python-api/generated/triton.language.atomic_max.rst.txt" rel="nofollow"> View page source</a>
       </li>
@@ -117,61 +149,67 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <dl class="py function">
+  <section id="atomic-max">
+<h1>atomic_max<a class="headerlink" href="#atomic-max" title="Link to this heading">¶</a></h1>
+<dl class="py function">
 <dt class="sig sig-object py" id="triton.language.atomic_max">
 <span class="sig-prename descclassname"><span class="pre">triton.language.</span></span><span class="sig-name descname"><span class="pre">atomic_max</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pointer</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">val</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mask</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sem</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scope</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#triton.language.atomic_max" title="Link to this definition">¶</a></dt>
 <dd><p>Performs an atomic maximum operation at the memory location specified by <code class="docutils literal notranslate"><span class="pre">pointer</span></code>.</p>
 <p>Returns the data stored at <code class="docutils literal notranslate"><span class="pre">pointer</span></code> before the atomic operation.</p>
 <section id="parameters">
-<h1>Parameters<a class="headerlink" href="#parameters" title="Link to this heading">¶</a></h1>
+<h2>Parameters<a class="headerlink" href="#parameters" title="Link to this heading">¶</a></h2>
 <dl class="simple">
-<dt>pointer<span class="classifier">triton.PointerType or block of pointer</span></dt><dd><p>The memory locations to operate on.</p>
+<dt>pointer<span class="classifier">tensor</span></dt><dd><p>The memory locations to operate on. Must be a block of pointer type.</p>
 </dd>
-<dt>val<span class="classifier">block of scalar</span></dt><dd><p>The values with which to perform the atomic operation. Must have the same
+<dt>val<span class="classifier">tensor</span></dt><dd><p>The values with which to perform the atomic operation. Must have the same
 dtype as <code class="docutils literal notranslate"><span class="pre">pointer.dtype.element_ty</span></code>.</p>
 </dd>
-<dt>mask<span class="classifier">block of bool, optional</span></dt><dd><p>If <code class="docutils literal notranslate"><span class="pre">mask[idx]</span></code> is false, do not perform the atomic operation at
-<code class="docutils literal notranslate"><span class="pre">pointer[idx]</span></code>.</p>
+<dt>mask<span class="classifier">tensor, optional</span></dt><dd><p>If <code class="docutils literal notranslate"><span class="pre">mask[idx]</span></code> is false, do not perform the atomic operation at
+<code class="docutils literal notranslate"><span class="pre">pointer[idx]</span></code>. Must be a block of <code class="docutils literal notranslate"><span class="pre">triton.int1</span></code>.</p>
 </dd>
 <dt>sem<span class="classifier">str, optional</span></dt><dd><p>Specifies the memory semantics for the operation. Acceptable values are
-<code class="docutils literal notranslate"><span class="pre">&quot;acquire&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;release&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;acq_rel&quot;</span></code>, and <code class="docutils literal notranslate"><span class="pre">&quot;relaxed&quot;</span></code>. If not
-provided, defaults to <code class="docutils literal notranslate"><span class="pre">&quot;acq_rel&quot;</span></code>.</p>
+<code class="docutils literal notranslate"><span class="pre">&quot;acquire&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;release&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;acq_rel&quot;</span></code> (ACQUIRE_RELEASE), and
+<code class="docutils literal notranslate"><span class="pre">&quot;relaxed&quot;</span></code>. Defaults to <code class="docutils literal notranslate"><span class="pre">&quot;acq_rel&quot;</span></code>.</p>
 </dd>
 <dt>scope<span class="classifier">str, optional</span></dt><dd><p>Defines the scope of threads that observe the synchronizing effect of the
-atomic operation. Acceptable values are <code class="docutils literal notranslate"><span class="pre">&quot;gpu&quot;</span></code> (default), <code class="docutils literal notranslate"><span class="pre">&quot;cta&quot;</span></code>,
-or <code class="docutils literal notranslate"><span class="pre">&quot;sys&quot;</span></code>.</p>
+atomic operation. Acceptable values are <code class="docutils literal notranslate"><span class="pre">&quot;gpu&quot;</span></code> (default), <code class="docutils literal notranslate"><span class="pre">&quot;cta&quot;</span></code>
+(cooperative thread array, thread block), or <code class="docutils literal notranslate"><span class="pre">&quot;sys&quot;</span></code> (SYSTEM).</p>
 </dd>
 </dl>
 </section>
 <section id="returns">
-<h1>Returns<a class="headerlink" href="#returns" title="Link to this heading">¶</a></h1>
+<h2>Returns<a class="headerlink" href="#returns" title="Link to this heading">¶</a></h2>
 <dl class="simple">
-<dt>block of scalar</dt><dd><p>The data stored at <code class="docutils literal notranslate"><span class="pre">pointer</span></code> before the atomic operation.</p>
+<dt>tensor</dt><dd><p>The data stored at <code class="docutils literal notranslate"><span class="pre">pointer</span></code> before the atomic operation.</p>
 </dd>
 </dl>
 </section>
 <section id="notes">
-<h1>Notes<a class="headerlink" href="#notes" title="Link to this heading">¶</a></h1>
-<p>This function can also be called as a member function on <a class="reference internal" href="triton.language.tensor.html#triton.language.tensor" title="triton.language.tensor"><code class="xref py py-class docutils literal notranslate"><span class="pre">tensor</span></code></a>,
+<h2>Notes<a class="headerlink" href="#notes" title="Link to this heading">¶</a></h2>
+<p>This function can also be called as a member function on <code class="xref py py-class docutils literal notranslate"><span class="pre">tensor</span></code>,
 as <code class="docutils literal notranslate"><span class="pre">x.atomic_max(...)</span></code> instead of <code class="docutils literal notranslate"><span class="pre">atomic_max(x,</span> <span class="pre">...)</span></code>.</p>
+<p>The atomic maximum operation computes <code class="docutils literal notranslate"><span class="pre">max(*pointer,</span> <span class="pre">val)</span></code> and stores the
+result back to <code class="docutils literal notranslate"><span class="pre">*pointer</span></code> atomically.</p>
 </section>
 <section id="examples">
-<h1>Examples<a class="headerlink" href="#examples" title="Link to this heading">¶</a></h1>
+<h2>Examples<a class="headerlink" href="#examples" title="Link to this heading">¶</a></h2>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nd">@triton</span><span class="o">.</span><span class="n">jit</span>
-<span class="k">def</span><span class="w"> </span><span class="nf">kernel</span><span class="p">(</span><span class="n">ptr</span><span class="p">,</span> <span class="n">val</span><span class="p">,</span> <span class="n">BLOCK</span><span class="p">:</span> <span class="n">tl</span><span class="o">.</span><span class="n">constexpr</span><span class="p">):</span>
-    <span class="n">offs</span> <span class="o">=</span> <span class="n">tl</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">BLOCK</span><span class="p">)</span>
-    <span class="n">old_val</span> <span class="o">=</span> <span class="n">tl</span><span class="o">.</span><span class="n">atomic_max</span><span class="p">(</span><span class="n">ptr</span> <span class="o">+</span> <span class="n">offs</span><span class="p">,</span> <span class="n">val</span><span class="p">)</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">kernel</span><span class="p">(</span><span class="n">ptr</span><span class="p">,</span> <span class="n">vals</span><span class="p">,</span> <span class="n">BLOCK_SIZE</span><span class="p">:</span> <span class="n">tl</span><span class="o">.</span><span class="n">constexpr</span><span class="p">):</span>
+    <span class="n">pid</span> <span class="o">=</span> <span class="n">tl</span><span class="o">.</span><span class="n">program_id</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+    <span class="n">offset</span> <span class="o">=</span> <span class="n">pid</span> <span class="o">*</span> <span class="n">BLOCK_SIZE</span> <span class="o">+</span> <span class="n">tl</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">BLOCK_SIZE</span><span class="p">)</span>
+    <span class="n">old_vals</span> <span class="o">=</span> <span class="n">tl</span><span class="o">.</span><span class="n">atomic_max</span><span class="p">(</span><span class="n">ptr</span> <span class="o">+</span> <span class="n">offset</span><span class="p">,</span> <span class="n">vals</span><span class="p">)</span>
 </pre></div>
 </div>
 </section>
 </dd></dl>
 
+</section>
 
 
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="triton.language.atomic_cas.html" class="btn btn-neutral float-left" title="Parameters" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="triton.language.atomic_cas.html" class="btn btn-neutral float-left" title="atomic_cas" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
         <a href="triton.language.atomic_min.html" class="btn btn-neutral float-right" title="atomic_min" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 

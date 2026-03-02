@@ -1,44 +1,50 @@
-assume
-======
+triton.language.assume
+======================
 
 .. currentmodule:: triton.language
 
-.. autofunction:: assume
+.. function:: assume(cond, _semantic=None)
 
-Allow the compiler to assume a condition is true, enabling downstream optimizations.
+    Allow the compiler to assume a condition is true.
 
-Parameters
-----------
-cond : tensor
-    The condition to assume is true. Must be a boolean tensor.
+    This function inserts a compiler hint that the given condition :code:`cond`
+    always evaluates to true at runtime. This can enable additional optimizations
+    in the generated GPU code by eliminating unreachable control flow paths.
 
-Returns
--------
-None
-    This function returns no value; it acts as a compiler hint.
+    Parameters
+    ----------
+    cond : tensor or bool
+        The condition to assume is true. Must evaluate to a boolean value.
+    _semantic : optional
+        Internal parameter for semantic analysis. Do not set manually.
 
-Notes
------
-This operation inserts an LLVM ``assume`` intrinsic into the generated IR.
-It is useful for guiding the compiler's control flow analysis and dead code
-elimination when the programmer knows a specific predicate holds at a
-program point.
+    Returns
+    -------
+    None
+        This function has no runtime effect and returns nothing. It only
+        provides a hint to the compiler.
 
-If ``cond`` is a scalar, it is automatically converted to a tensor.
-The behavior is undefined if the assumption is violated at runtime.
+    Notes
+    -----
+    This is equivalent to LLVM's :code:`assume` intrinsic. The condition is
+    not checked at runtime; if the assumption is violated, behavior is
+    undefined. Use only when you can guarantee the condition holds.
 
-Examples
---------
-.. code-block:: python
+    This function must be called within a :code:`@triton.jit` decorated kernel.
 
-    import triton
-    import triton.language as tl
+    Examples
+    --------
+    .. code-block:: python
 
-    @triton.jit
-    def kernel(ptr, n, BLOCK_SIZE: tl.constexpr):
-        pid = tl.program_id(0)
-        offset = pid * BLOCK_SIZE
-        # Assume offset is always less than n to enable loop hoisting
-        tl.assume(offset < n)
-        data = tl.load(ptr + offset)
-        tl.store(ptr + offset, data + 1.0)
+        import triton
+        import triton.language as tl
+
+        @triton.jit
+        def kernel(ptr, n, BLOCK: tl.constexpr):
+            pid = tl.program_id(0)
+            offset = pid * BLOCK
+            # Assume offset is always within bounds
+            tlassume(offset < n)
+            # Compiler can optimize knowing offset < n is true
+            val = tl.load(ptr + offset)
+            tl.store(ptr + offset, val * 2)

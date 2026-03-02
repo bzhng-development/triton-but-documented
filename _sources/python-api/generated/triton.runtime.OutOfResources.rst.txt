@@ -1,0 +1,33 @@
+OutOfResources
+==============
+
+.. class:: triton.runtime.OutOfResources(required, limit, name)
+
+   Exception raised when a kernel requires more hardware resources than available.
+
+   Parameters
+   ----------
+   required : int
+       The amount of resource required by the kernel.
+   limit : int
+       The hardware limit available for the resource.
+   name : str
+       The name of the resource (e.g., ``"shared memory"``, ``"registers"``).
+
+   Notes
+   -----
+   Inherits from :class:`triton.errors.TritonError`. This exception indicates
+   that the kernel configuration exceeds hardware constraints. Reducing block
+   sizes or ``num_stages`` may resolve the issue.
+
+   Examples
+   --------
+   Catching the exception during kernel compilation or launch:
+
+   .. code-block:: python
+
+       try:
+           kernel[grid](args)
+       except triton.runtime.OutOfResources as e:
+           print(e)
+           # Adjust block sizes or num_stages

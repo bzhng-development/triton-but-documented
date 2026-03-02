@@ -1,0 +1,39 @@
+cbrt
+====
+
+Compute the cube root of the input tensor.
+
+Parameters
+----------
+arg0 : tensor
+    Input tensor of floating-point type (``fp32`` or ``fp64``).
+_semantic :
+    Internal parameter, do not use directly.
+
+Returns
+-------
+tensor
+    Tensor of the same dtype as ``arg0`` containing the cube root of each element.
+
+Notes
+-----
+This function calls the CUDA libdevice functions ``__nv_cbrtf`` for ``fp32`` and
+``__nv_cbrt`` for ``fp64``. The operation is element-wise and pure (no side effects).
+
+Only ``fp32`` and ``fp64`` dtypes are supported.
+
+Examples
+--------
+.. code-block:: python
+
+    import triton
+    import triton.language as tl
+
+    @triton.jit
+    def cbrt_kernel(input_ptr, output_ptr, n_elements, BLOCK_SIZE: tl.constexpr):
+        pid = tl.program_id(axis=0)
+        offsets = pid * BLOCK_SIZE + tl.arange(0, BLOCK_SIZE)
+        mask = offsets < n_elements
+        x = tl.load(input_ptr + offsets, mask=mask)
+        y = tl.extra.cuda.libdevice.cbrt(x)
+        tl.store(output_ptr + offsets, y, mask=mask)

@@ -1,0 +1,42 @@
+acosh
+=====
+
+Compute the inverse hyperbolic cosine of the input element-wise.
+
+Parameters
+----------
+arg0 : tensor
+    Input tensor. Must be of floating-point type (``fp32`` or ``fp64``).
+_semantic : optional
+    Internal semantic parameter. Do not set manually.
+
+Returns
+-------
+tensor
+    Output tensor of the same shape as ``arg0``. Contains the inverse
+    hyperbolic cosine of each element. Returns ``fp32`` for ``fp32``
+    input, ``fp64`` for ``fp64`` input.
+
+Notes
+-----
+This function calls NVIDIA libdevice's ``__nv_acoshf`` (for ``fp32``) or
+``__nv_acosh`` (for ``fp64``) intrinsics. The input values must be
+greater than or equal to 1.0 for the result to be defined in the real
+number domain.
+
+This function is marked as pure (has no side effects).
+
+Examples
+--------
+.. code-block:: python
+
+    import triton
+    import triton.language as tl
+
+    @triton.jit
+    def kernel(x_ptr, y_ptr, BLOCK_SIZE: tl.constexpr):
+        pid = tl.program_id(0)
+        offs = pid * BLOCK_SIZE + tl.arange(0, BLOCK_SIZE)
+        x = tl.load(x_ptr + offs)
+        y = tl.acosh(x)
+        tl.store(y_ptr + offs, y)

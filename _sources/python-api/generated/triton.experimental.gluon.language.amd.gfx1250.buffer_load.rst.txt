@@ -1,0 +1,64 @@
+buffer_load
+===========
+
+AMD buffer load from global memory via a scalar base pointer and tensor of offsets.
+
+This operation loads data directly from global memory into registers using AMD's
+buffer load instruction on GFX1250 architecture. Unlike pointer-based loads, this
+uses a single base pointer with per-element offsets.
+
+Parameters
+----------
+ptr : pointer to scalar
+    Global memory scalar base pointer to load from.
+offsets : tensor
+    Tensor of byte offsets relative to ``ptr``. Each element specifies the
+    offset for the corresponding load operation.
+mask : tensor, optional
+    Boolean mask tensor for predicated loads. Elements where mask is False
+    will not perform the load. Defaults to None.
+other : tensor or scalar, optional
+    Default values for masked elements. When ``mask`` is provided, elements
+    where mask is False will receive values from ``other``. Defaults to None.
+cache : str, optional
+    Cache modifier specifier controlling cache behavior (e.g., "ca", "cg",
+    "lu", "cv"). Defaults to None (no cache modifier).
+
+Returns
+-------
+tensor
+    A Gluon tensor containing the loaded data. The tensor has the same shape
+    as ``offsets`` and element type matching ``ptr``'s pointee type.
+
+Notes
+-----
+This is an AMD GFX1250-specific operation. The buffer load instruction
+provides more efficient memory access patterns compared to traditional
+pointer-based loads on supported hardware.
+
+The ``offsets`` tensor determines the memory addresses accessed: each
+address is computed as ``ptr + offsets[i]``.
+
+When using ``mask``, ensure ``other`` is provided to define values for
+masked-out elements, otherwise behavior is undefined.
+
+Examples
+--------
+.. code-block:: python
+
+    import triton.experimental.gluon as gluon
+    import triton.experimental.gluon.language as ttgl
+
+    @gluon.jit
+    def kernel(ptr, offsets, BLOCK: ttgl.constexpr):
+        # Load 128 elements from global memory using buffer load
+        offsets = ttgl.arange(0, BLOCK, layout=...)
+        data = ttgl.amd.gfx1250.buffer_load(ptr, offsets)
+
+    @gluon.jit
+    def kernel_masked(ptr, offsets, mask, BLOCK: ttgl.constexpr):
+        # Predicated load with default value for masked elements
+        offsets = ttgl.arange(0, BLOCK, layout=...)
+        data = ttgl.amd.gfx1250.buffer_load(
+            ptr, offsets, mask=mask, other=0.0
+        )

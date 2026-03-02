@@ -1,0 +1,32 @@
+float8e4b15
+===========
+
+8-bit floating point data type with 4 exponent bits and bias 15.
+
+``float8e4b15`` is a predefined dtype instance representing the FP8
+E4M3 format. It enables memory-efficient storage and compute for
+deep learning workloads on supported hardware accelerators.
+
+Notes
+-----
+Hardware support includes NVIDIA Hopper (H100), Blackwell (B200),
+and AMD CDNA3 (MI300X). This dtype is distinct from
+``float8e4m3`` or ``float8e5m2`` depending on the backend
+implementation details regarding NaN propagation and infinity
+support.
+
+Examples
+--------
+Specify the data type for a kernel argument or shared memory
+allocation:
+
+.. code-block:: python
+
+    import triton.experimental.gluon as gluon
+    import triton.experimental.gluon.language as ttgl
+
+    @gluon.jit
+    def fp8_kernel(x_ptr: ttgl.pointer[ttgl.float8e4b15], size: int):
+        # Load FP8 data from global memory
+        data = ttgl.load(x_ptr)
+        ...

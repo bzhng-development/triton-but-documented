@@ -1,0 +1,81 @@
+class triton.experimental.gluon.language.SwizzledSharedLayout
+==============================================================
+
+Represents a generic swizzled shared memory layout.
+
+Swizzled layouts reorder shared memory accesses to avoid bank conflicts by
+applying a swizzle function based on address bits. This layout provides
+explicit control over swizzling parameters for fine-grained memory access
+optimization.
+
+Parameters
+----------
+vec : int
+    Vector width for swizzling. Determines the granularity of vectorized
+    memory operations.
+per_phase : int
+    Number of elements per swizzle phase. Controls how elements are
+    distributed across swizzle phases.
+max_phase : int
+    Maximum number of swizzle phases. Defines the swizzle pattern period.
+order : List[int]
+    Dimension ordering for swizzling. Specifies which tensor dimensions
+    participate in the swizzle computation.
+cga_layout : List[List[int]], optional
+    Bases describing CTA (Cooperative Thread Array) tiling. Each inner
+    list represents a basis vector for block-level memory partitioning.
+    Default is empty list (no CGA layout).
+
+Notes
+-----
+This layout is hardware-agnostic and works across NVIDIA (Hopper/Blackwell)
+and AMD (CDNA/RDNA) GPU architectures. The swizzle parameters must be
+chosen to match the target hardware's shared memory bank structure.
+
+All parameters are unwrapped from constexpr types during initialization
+via ``__post_init__``.
+
+The layout implements ``_to_ir`` for Gluon IR code generation, ``mangle``
+for unique string representation, and ``__hash__`` for use in dictionaries.
+
+Examples
+--------
+Create a basic swizzled shared layout:
+
+.. code-block:: python
+
+    import triton.experimental.gluon as gluon
+    import triton.experimental.gluon.language as ttgl
+
+    # Simple 1D swizzle layout
+    layout = ttgl.SwizzledSharedLayout(
+        vec=8,
+        per_phase=4,
+        max_phase=8,
+        order=[0]
+    )
+
+    # 2D layout with CGA tiling
+    layout_2d = ttgl.SwizzledSharedLayout(
+        vec=16,
+        per_phase=8,
+        max_phase=16,
+        order=[0, 1],
+        cga_layout=[[1, 0], [0, 1]]
+    )
+
+    # Use in a kernel with shared memory allocation
+    @gluon.jit
+    def kernel(X, Y, BLOCK_SIZE: tl.constexpr):
+        sm_ptr = ttgl.alloc(
+            shape=[BLOCK_SIZE],
+            layout=layout,
+            dtype=tl.float32
+        )
+        # ... kernel implementation
+
+See Also
+--------
+NVMMASharedLayout : NVIDIA-specific shared memory layout for MMA operations
+PaddedSharedLayout : Layout with padding to avoid bank conflicts
+SharedLinearLayout : Explicit linear layout for shared memory

@@ -1,0 +1,53 @@
+expand_dims
+===========
+
+.. currentmodule:: triton.experimental.gluon.language
+
+.. function:: expand_dims(input, axis, _semantic=None)
+
+Expand the shape of a tensor by inserting new length-1 dimensions.
+
+Axis indices are with respect to the resulting tensor, so ``result.shape[axis]`` will be 1 for each specified axis.
+
+Parameters
+----------
+input : tl.tensor
+    The input tensor to expand.
+axis : int or Sequence[int]
+    The axis or axes along which to insert new dimensions. Indices refer to the output tensor shape.
+_semantic : GluonSemantic, optional
+    Internal semantic argument. Do not provide explicitly.
+
+Returns
+-------
+tl.tensor
+    A tensor with the same data as ``input`` but with additional length-1 dimensions inserted.
+
+Notes
+-----
+This function can also be called as a member function on :py:class:`tensor`, as ``x.expand_dims(...)`` instead of ``expand_dims(x, ...)``.
+
+Duplicate axes will raise a ``ValueError``. Negative axis indices are supported and normalized relative to the output tensor rank.
+
+Examples
+--------
+.. code-block:: python
+
+    import triton.experimental.gluon as gluon
+    import triton.experimental.gluon.language as ttgl
+
+    @gluon.jit
+    def kernel(x_ptr, y_ptr, BLOCK: ttgl.constexpr):
+        x = ttgl.load(x_ptr)
+        # x shape: [BLOCK]
+        y = ttgl.expand_dims(x, axis=0)
+        # y shape: [1, BLOCK]
+        ttgl.store(y_ptr, y)
+
+    @gluon.jit
+    def kernel_multi_axis(x_ptr, z_ptr, BLOCK: ttgl.constexpr):
+        x = ttgl.load(x_ptr)
+        # x shape: [BLOCK]
+        z = ttgl.expand_dims(x, axis=[0, 2])
+        # z shape: [1, BLOCK, 1]
+        ttgl.store(z_ptr, z)

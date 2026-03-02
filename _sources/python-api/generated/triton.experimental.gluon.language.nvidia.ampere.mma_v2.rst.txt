@@ -1,0 +1,64 @@
+mma_v2
+======
+
+.. currentmodule:: triton.experimental.gluon.language.nvidia.ampere
+
+.. function:: mma_v2(a, b, acc, input_precision=None, _semantic=None)
+
+   Perform a matrix multiply-accumulate operation using NVIDIA Ampere MMA version 2.0.
+
+   This function executes a low-level tensor core MMA instruction on Ampere GPUs.
+   Input tensors must have layouts compatible with the accumulator's MMA layout.
+
+   Parameters
+   ----------
+   a : tensor
+       First operand tensor with ``DotOperandLayout``. Must have operand index 0
+       and parent layout matching ``acc``'s MMA layout.
+   b : tensor
+       Second operand tensor with ``DotOperandLayout``. Must have operand index 1
+       and parent layout matching ``acc``'s MMA layout.
+   acc : tensor
+       Accumulator tensor with ``NVMMADistributedLayout`` version 2.0. The output
+       tensor will have the same type as ``acc``.
+   input_precision : dtype, optional
+       Precision for intermediate computation. If None, uses default precision.
+   _semantic : GluonSemantic, optional
+       Internal semantic handler. Must be provided by the JIT compiler.
+
+   Returns
+   -------
+   tensor
+       Result tensor with the same type and layout as ``acc``.
+
+   Raises
+   ------
+   AssertionError
+       If tensor layouts do not meet MMA version 2.0 requirements.
+
+   Notes
+   -----
+   This is a low-level primitive for explicit control over tensor core operations.
+   Users should typically construct compatible layouts using Gluon layout APIs
+   before calling this function.
+
+   The MMA layout version must be exactly ``[2, 0]`` for Ampere tensor cores.
+   Operand ``a`` must have operand index 0, and operand ``b`` must have operand
+   index 1.
+
+   Examples
+   --------
+   .. code-block:: python
+
+      import triton.experimental.gluon as gluon
+      import triton.experimental.gluon.language as ttgl
+      from triton.experimental.gluon.language.nvidia.ampere import mma_v2
+
+      @gluon.jit
+      def kernel(...):
+          # Create tensors with compatible MMA layouts
+          a = ...  # tensor with DotOperandLayout, operand_index=0
+          b = ...  # tensor with DotOperandLayout, operand_index=1
+          acc = ...  # tensor with NVMMADistributedLayout version 2.0
+
+          result = mma_v2(a, b, acc)

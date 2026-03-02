@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>zeros &mdash; Triton  documentation</title>
+  <title>triton.language.zeros &mdash; Triton  documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=03e43079" />
       <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="../../_static/css/custom.css" />
@@ -19,7 +19,7 @@
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
     <link rel="next" title="zeros_like" href="triton.language.zeros_like.html" />
-    <link rel="prev" title="full" href="triton.language.full.html" /> 
+    <link rel="prev" title="triton.language.full" href="triton.language.full.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -52,21 +52,15 @@
 <li class="toctree-l1 current"><a class="reference internal" href="../triton.language.html">triton.language</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="../triton.language.html#programming-model">Programming Model</a></li>
 <li class="toctree-l2 current"><a class="reference internal" href="../triton.language.html#creation-ops">Creation Ops</a><ul class="current">
-<li class="toctree-l3"><a class="reference internal" href="triton.language.arange.html">Parameters</a></li>
-<li class="toctree-l3"><a class="reference internal" href="triton.language.arange.html#returns">Returns</a></li>
-<li class="toctree-l3"><a class="reference internal" href="triton.language.arange.html#notes">Notes</a></li>
-<li class="toctree-l3"><a class="reference internal" href="triton.language.arange.html#examples">Examples</a></li>
-<li class="toctree-l3"><a class="reference internal" href="triton.language.cat.html">Parameters</a></li>
-<li class="toctree-l3"><a class="reference internal" href="triton.language.cat.html#returns">Returns</a></li>
-<li class="toctree-l3"><a class="reference internal" href="triton.language.cat.html#notes">Notes</a></li>
-<li class="toctree-l3"><a class="reference internal" href="triton.language.cat.html#examples">Examples</a></li>
-<li class="toctree-l3"><a class="reference internal" href="triton.language.full.html">full</a></li>
-<li class="toctree-l3 current"><a class="current reference internal" href="#">zeros</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="#triton.language.zeros"><code class="docutils literal notranslate"><span class="pre">zeros()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.language.arange.html">triton.language.arange</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.language.cat.html">tl.cat</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.language.full.html">triton.language.full</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">triton.language.zeros</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#triton.language.zeros"><code class="docutils literal notranslate"><span class="pre">triton.language.zeros()</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="triton.language.zeros_like.html">zeros_like</a></li>
-<li class="toctree-l3"><a class="reference internal" href="triton.language.cast.html"><code class="docutils literal notranslate"><span class="pre">triton.language.cast()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.language.cast.html">triton.language.cast</a></li>
 <li class="toctree-l3"><a class="reference internal" href="triton.language.to_tensor.html">to_tensor</a></li>
 </ul>
 </li>
@@ -88,6 +82,35 @@
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../triton.testing.html">triton.testing</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../triton-semantics.html">Triton Semantics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.language.extra.cuda.html">triton.language.extra.cuda</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.language.extra.cuda.libdevice.html">triton.language.extra.cuda.libdevice</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.runtime.html">triton.runtime</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.tools.html">triton.tools</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Gluon (Experimental) API</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.html">triton.experimental.gluon</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.html">triton.experimental.gluon.language</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.nvidia.ampere.html">triton.experimental.gluon.language.nvidia.ampere</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.nvidia.ampere.async_copy.html">triton.experimental.gluon.language.nvidia.ampere.async_copy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.nvidia.ampere.mbarrier.html">triton.experimental.gluon.language.nvidia.ampere.mbarrier</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.nvidia.hopper.html">triton.experimental.gluon.language.nvidia.hopper</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.nvidia.hopper.tma.html">triton.experimental.gluon.language.nvidia.hopper.tma</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.nvidia.hopper.mbarrier.html">triton.experimental.gluon.language.nvidia.hopper.mbarrier</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.nvidia.hopper.cluster.html">triton.experimental.gluon.language.nvidia.hopper.cluster</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.nvidia.blackwell.html">triton.experimental.gluon.language.nvidia.blackwell</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.nvidia.blackwell.tma.html">triton.experimental.gluon.language.nvidia.blackwell.tma</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.nvidia.blackwell.clc.html">triton.experimental.gluon.language.nvidia.blackwell.clc</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.amd.html">triton.experimental.gluon.language.amd</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.amd.gfx1250.html">triton.experimental.gluon.language.amd.gfx1250</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.amd.gfx1250.async_copy.html">triton.experimental.gluon.language.amd.gfx1250.async_copy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.amd.gfx1250.mbarrier.html">triton.experimental.gluon.language.amd.gfx1250.mbarrier</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.amd.gfx1250.cluster.html">triton.experimental.gluon.language.amd.gfx1250.cluster</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.amd.gfx1250.tdm.html">triton.experimental.gluon.language.amd.gfx1250.tdm</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.amd.cdna3.html">triton.experimental.gluon.language.amd.cdna3</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.amd.cdna4.html">triton.experimental.gluon.language.amd.cdna4</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.amd.rdna3.html">triton.experimental.gluon.language.amd.rdna3</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.amd.rdna4.html">triton.experimental.gluon.language.amd.rdna4</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Triton MLIR Dialects</span></p>
 <ul>
@@ -115,7 +138,7 @@
   <ul class="wy-breadcrumbs">
       <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
           <li class="breadcrumb-item"><a href="../triton.language.html">triton.language</a></li>
-      <li class="breadcrumb-item active">zeros</li>
+      <li class="breadcrumb-item active">triton.language.zeros</li>
       <li class="wy-breadcrumbs-aside">
             <a href="../../_sources/python-api/generated/triton.language.zeros.rst.txt" rel="nofollow"> View page source</a>
       </li>
@@ -125,41 +148,37 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <section id="zeros">
-<h1>zeros<a class="headerlink" href="#zeros" title="Link to this heading">¶</a></h1>
+  <section id="triton-language-zeros">
+<h1>triton.language.zeros<a class="headerlink" href="#triton-language-zeros" title="Link to this heading">¶</a></h1>
 <dl class="py function">
 <dt class="sig sig-object py" id="triton.language.zeros">
 <span class="sig-prename descclassname"><span class="pre">triton.language.</span></span><span class="sig-name descname"><span class="pre">zeros</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">shape</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dtype</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#triton.language.zeros" title="Link to this definition">¶</a></dt>
-<dd><p>Returns a tensor filled with the scalar value 0 for the given <code class="docutils literal notranslate"><span class="pre">shape</span></code> and <code class="docutils literal notranslate"><span class="pre">dtype</span></code>.</p>
+<dd><p>Returns a tensor filled with the scalar value 0.</p>
 <section id="parameters">
 <h2>Parameters<a class="headerlink" href="#parameters" title="Link to this heading">¶</a></h2>
 <dl class="simple">
 <dt>shape<span class="classifier">tuple of ints</span></dt><dd><p>Shape of the new array, e.g., <code class="docutils literal notranslate"><span class="pre">(8,</span> <span class="pre">16)</span></code> or <code class="docutils literal notranslate"><span class="pre">(8,)</span></code>.</p>
 </dd>
-<dt>dtype<span class="classifier">DType</span></dt><dd><p>Data-type of the new array, e.g., <code class="docutils literal notranslate"><span class="pre">tl.float16</span></code>.</p>
+<dt>dtype<span class="classifier">DType</span></dt><dd><p>Data-type of the new array, e.g., <code class="code docutils literal notranslate"><span class="pre">tl.float16</span></code>.</p>
 </dd>
 </dl>
 </section>
 <section id="returns">
 <h2>Returns<a class="headerlink" href="#returns" title="Link to this heading">¶</a></h2>
 <dl class="simple">
-<dt>Tensor</dt><dd><p>A tensor of zeros with the specified shape and dtype.</p>
+<dt>Tensor</dt><dd><p>A tensor filled with zeros of the specified shape and dtype.</p>
 </dd>
 </dl>
-</section>
-<section id="notes">
-<h2>Notes<a class="headerlink" href="#notes" title="Link to this heading">¶</a></h2>
-<p>This function is equivalent to <code class="docutils literal notranslate"><span class="pre">tl.full(shape,</span> <span class="pre">0,</span> <span class="pre">dtype)</span></code>.</p>
 </section>
 <section id="examples">
 <h2>Examples<a class="headerlink" href="#examples" title="Link to this heading">¶</a></h2>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">triton.language</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">tl</span>
 
-<span class="c1"># Create a 1D tensor of 8 zeros with float16 dtype</span>
-<span class="n">z1</span> <span class="o">=</span> <span class="n">tl</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="mi">8</span><span class="p">,),</span> <span class="n">tl</span><span class="o">.</span><span class="n">float16</span><span class="p">)</span>
+<span class="c1"># Create a 1D tensor of 8 zeros</span>
+<span class="n">z1</span> <span class="o">=</span> <span class="n">tl</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="mi">8</span><span class="p">,),</span> <span class="n">tl</span><span class="o">.</span><span class="n">int32</span><span class="p">)</span>
 
-<span class="c1"># Create a 2D tensor of 4x4 zeros with int32 dtype</span>
-<span class="n">z2</span> <span class="o">=</span> <span class="n">tl</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="mi">4</span><span class="p">,</span> <span class="mi">4</span><span class="p">),</span> <span class="n">tl</span><span class="o">.</span><span class="n">int32</span><span class="p">)</span>
+<span class="c1"># Create a 2D tensor of 8x16 zeros</span>
+<span class="n">z2</span> <span class="o">=</span> <span class="n">tl</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="mi">8</span><span class="p">,</span> <span class="mi">16</span><span class="p">),</span> <span class="n">tl</span><span class="o">.</span><span class="n">float16</span><span class="p">)</span>
 </pre></div>
 </div>
 </section>
@@ -171,7 +190,7 @@
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="triton.language.full.html" class="btn btn-neutral float-left" title="full" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="triton.language.full.html" class="btn btn-neutral float-left" title="triton.language.full" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
         <a href="triton.language.zeros_like.html" class="btn btn-neutral float-right" title="zeros_like" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 

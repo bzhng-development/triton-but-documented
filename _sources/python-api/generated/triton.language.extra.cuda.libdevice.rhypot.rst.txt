@@ -1,0 +1,42 @@
+rhypot
+======
+
+Compute the reciprocal hypotenuse :math:`1 / \sqrt{arg0^2 + arg1^2}` of two arguments.
+
+Parameters
+----------
+arg0 : tensor
+    First input tensor. Must be floating-point type (``fp32`` or ``fp64``).
+arg1 : tensor
+    Second input tensor. Must be floating-point type (``fp32`` or ``fp64``).
+    Must have the same dtype as ``arg0``.
+_semantic : optional
+    Internal semantic parameter. Do not set manually.
+
+Returns
+-------
+tensor
+    Reciprocal hypotenuse of the inputs. Returns ``fp32`` for ``fp32`` inputs,
+    ``fp64`` for ``fp64`` inputs.
+
+Notes
+-----
+This function dispatches to CUDA libdevice functions ``__nv_rhypotf`` (for ``fp32``)
+or ``__nv_rhypot`` (for ``fp64``). The operation is pure (no side effects).
+
+More numerically stable than computing ``1 / tl.sqrt(arg0 * arg0 + arg1 * arg1)``
+for large input values.
+
+Examples
+--------
+.. code-block:: python
+
+    import triton
+    import triton.language as tl
+
+    @triton.jit
+    def reciprocal_hypot_kernel(X, Y, Z, BLOCK: tl.constexpr):
+        x = tl.load(X + tl.arange(0, BLOCK))
+        y = tl.load(Y + tl.arange(0, BLOCK))
+        z = tl.libdevice.rhypot(x, y)
+        tl.store(Z + tl.arange(0, BLOCK), z)

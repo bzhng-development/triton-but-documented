@@ -1,0 +1,101 @@
+tuple_type
+==========
+
+.. currentmodule:: triton.experimental.gluon.language
+
+.. class:: tuple_type(types, fields=None)
+
+   Composite type representing an ordered collection of element types.
+
+   ``tuple_type`` defines a structured type composed of multiple constituent
+   types, optionally with named fields. It is used to represent tuple values
+   in Triton IR, enabling structured data passing between kernel operations
+   and low-level hardware features like TMA descriptors and warpgroup MMA.
+
+   Parameters
+   ----------
+   types : list of dtype
+       List of element types comprising the tuple. Each element must be a
+       valid Triton type (e.g., ``tl.int32``, ``tl.float16``, ``pointer_type``).
+   fields : list of str, optional
+       Optional field names for each element. If provided, ``len(fields)``
+       must equal ``len(types)``. Enables attribute-style access via
+       ``tuple.field_name``.
+
+   Attributes
+   ----------
+   types : list of dtype
+       The constituent types of the tuple.
+   fields : list of str or None
+       Field names if provided at construction, otherwise ``None``.
+   name : str
+       String representation of the tuple type (cached property).
+
+   Methods
+   -------
+   __getitem__(index)
+       Access element type by integer index.
+   __iter__()
+       Iterate over constituent types.
+   __eq__(other)
+       Compare equality with another ``tuple_type``.
+   mangle()
+       Return mangled type name for kernel compilation.
+   _flatten_ir_types(builder, out)
+       Flatten types into IR type list.
+   _unflatten_ir(handles, cursor)
+       Reconstruct tuple value from IR handles.
+
+   Notes
+   -----
+   ``tuple_type`` is a low-level type constructor used primarily in Gluon
+   kernels for explicit memory layout control. It supports both positional
+   tuples (anonymous fields) and named tuples (struct-like access).
+
+   The mangled name format is ``T<type1_mangle>_<type2_mangle>...T`` for
+   kernel compilation and caching.
+
+   Tuple types are immutable after construction. Equality requires matching
+   types, fields, and order.
+
+   Examples
+   --------
+   Create a simple tuple type with two elements:
+
+   .. code-block:: python
+
+      import triton.experimental.gluon as gluon
+      import triton.experimental.gluon.language as ttgl
+
+      # Positional tuple: (int32, float16)
+      simple_tuple = ttgl.tuple_type([ttlgl.int32, ttlgl.float16])
+      print(simple_tuple.name)  # [int32,float16]
+
+   Create a named tuple type for structured access:
+
+   .. code-block:: python
+
+      # Named tuple: {x: int32, y: float16}
+      named_tuple = ttgl.tuple_type([ttlgl.int32, ttlgl.float16], fields=['x', 'y'])
+      print(named_tuple.name)  # [x:int32,y:float16]
+
+   Access element types by index:
+
+   .. code-block:: python
+
+      first_type = simple_tuple[0]  # int32
+      second_type = simple_tuple[1]  # float16
+
+   Use in kernel type annotations:
+
+   .. code-block:: python
+
+      @gluon.jit
+      def kernel(ptr: ttgl.pointer_type, desc: ttgl.tuple_type([...])):
+          # Kernel implementation
+          pass
+
+   See Also
+   --------
+   tensor_descriptor_type : Tensor descriptor with shape and stride tuples
+   aggregate : User-defined aggregate types with field annotations

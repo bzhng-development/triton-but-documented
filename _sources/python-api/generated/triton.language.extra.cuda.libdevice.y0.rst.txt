@@ -1,0 +1,41 @@
+triton.language.extra.cuda.libdevice.y0
+========================================
+
+Compute the Bessel function of the second kind of order 0.
+
+Parameters
+----------
+arg0 : tl.tensor
+    Input tensor of floating-point values. Must be ``fp32`` or ``fp64`` dtype.
+
+Returns
+-------
+result : tl.tensor
+    Tensor of the same dtype as ``arg0`` containing the Y0 Bessel function
+    values. For ``fp32`` input, returns ``fp32``; for ``fp64`` input, returns
+    ``fp64``.
+
+Notes
+-----
+This function is a wrapper around CUDA libdevice intrinsics. It dispatches to
+``__nv_y0f`` for ``fp32`` inputs and ``__nv_y0`` for ``fp64`` inputs.
+
+The Bessel function of the second kind Y0(x) is singular at x=0 (approaches
+negative infinity) and oscillates with decaying amplitude for x>0. The function
+is undefined for x<0.
+
+This is an external elementwise operation marked as pure (no side effects).
+
+Examples
+--------
+.. code-block:: python
+
+    import triton
+    import triton.language as tl
+
+    @triton.jit
+    def bessel_y0_kernel(x_ptr, y_ptr, BLOCK_SIZE: tl.constexpr):
+        offsets = tl.arange(0, BLOCK_SIZE)
+        x = tl.load(x_ptr + offsets)
+        y = tl.extra.cuda.libdevice.y0(x)
+        tl.store(y_ptr + offsets, y)

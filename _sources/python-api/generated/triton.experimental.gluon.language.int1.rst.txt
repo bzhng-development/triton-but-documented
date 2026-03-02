@@ -1,0 +1,22 @@
+int1
+====
+
+.. py:data:: triton.experimental.gluon.language.int1
+
+   1-bit signed integer data type.
+
+   Represents a single-bit integer value. In Gluon kernels, this type is primarily used for predicates, boolean masks, or bit-packed memory layouts where minimal storage occupancy is required.
+
+   Notes
+   -----
+   Operations involving ``int1`` are typically lowered to predicate registers or bit-wise logic instructions depending on the target architecture (e.g., NVIDIA Hopper/Blackwell, AMD CDNA3/RDNA3). While semantically equivalent to boolean values, ``int1`` exposes explicit integer representation for low-level memory control.
+
+   Examples
+   --------
+   >>> import triton.experimental.gluon as gluon
+   >>> import triton.experimental.gluon.language as ttgl
+   >>> @gluon.jit
+   ... def kernel(ptr, size):
+   ...     mask = ttgl.full((size,), 1, dtype=ttgl.int1)
+   ...     # Use mask for predicate logic
+   ...     pass

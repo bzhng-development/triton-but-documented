@@ -1,0 +1,89 @@
+inline_asm_elementwise
+======================
+
+.. currentmodule:: triton.experimental.gluon.language
+
+.. autofunction:: inline_asm_elementwise
+
+Execute inline assembly over a tensor, applying the assembly function elementwise.
+
+Parameters
+----------
+asm : str
+    Assembly code to execute. Must match the target's assembly format (e.g., PTX for NVIDIA GPUs).
+constraints : str
+    Inline assembly constraints in `LLVM format <https://llvm.org/docs/LangRef.html#inline-asm-constraint-string>`_.
+args : Sequence[tensor]
+    Input tensors whose values are passed to the assembly block. Tensors are implicitly broadcasted to the same shape.
+dtype : dtype or Sequence[dtype]
+    Element type(s) of the returned tensor(s). Can be a single dtype or a tuple of dtypes for multiple outputs.
+is_pure : bool
+    If True, the compiler assumes the assembly block has no side-effects and may optimize accordingly.
+pack : int
+    Number of elements processed by one invocation of the inline assembly. Input elements smaller than 4 bytes are packed into 4-byte registers.
+
+Returns
+-------
+tensor or tuple[tensor, ...]
+    One tensor or a tuple of tensors with the specified dtypes.
+
+Notes
+-----
+Each invocation of the inline assembly processes ``pack`` elements at a time. The exact set of inputs a block receives is unspecified.
+
+This operation does not support empty ``dtype`` -- the assembly must return at least one tensor, even if unused. Work around this by returning a dummy tensor of arbitrary type.
+
+Examples
+--------
+Example using PTX assembly to convert uint8 to int32, then to float32, and compute max with another float32 tensor:
+
+.. code-block:: python
+
+    import triton.experimental.gluon as gluon
+    import triton.experimental.gluon.language as ttgl
+
+    @gluon.jit
+    def kernel(A, B, C, D, BLOCK: ttgl.constexpr):
+        a = ttgl.load(A + ttgl.arange(0, BLOCK))  # uint8 tensor
+        b = ttgl.load(B + ttgl.arange(0, BLOCK))  # float32 tensor
+
+        # For each (a,b) in zip(a,b), perform:
+        # - Convert a to int32 (ai)
+        # - Convert ai to float32
+        # - Compute max(ai, b)
+        # - Return ai and max
+        # Process 4 elements at a time
+        (c, d) = ttgl.inline_asm_elementwise(
+            asm="""
+            {
+                // Unpack `a` into `ai`.
+                .reg .b8 tmp<4>;
+                mov.b32 {tmp0, tmp1, tmp2, tmp3}, $8;
+                cvt.u32.u8 $0, tmp0;
+                cvt.u32.u8 $1, tmp1;
+                cvt.u32.u8 $2, tmp2;
+                cvt.u32.u8 $3, tmp3;
+            }
+            // Convert `ai` to float.
+            cvt.rn.f32.s32 $4, $0;
+            cvt.rn.f32.s32 $5, $1;
+            cvt.rn.f32.s32 $6, $2;
+            cvt.rn.f32.s32 $7, $3;
+            // Take max of `ai` and `b`.
+            max.f32 $4, $4, $9;
+            max.f32 $5, $5, $10;
+            max.f32 $6, $6, $11;
+            max.f32 $7, $7, $12;
+            """,
+            constraints=(
+                # 8 output registers: $0-$3=ai0-3, $4-$7=m0-3
+                "=r,=r,=r,=r,=r,=r,=r,=r,"
+                # 5 input registers: $8=packed_a, $9-$12=b0-3
+                "r,r,r,r,r"),
+            args=[a, b],
+            dtype=(ttgl.int32, ttgl.float32),
+            is_pure=True,
+            pack=4,
+        )
+        ttgl.store(C + ttgl.arange(0, BLOCK), c)
+        ttgl.store(D + ttgl.arange(0, BLOCK), d)

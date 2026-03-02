@@ -1,0 +1,16 @@
+triton.experimental.gluon.language.nvidia.ampere.async_copy
+===========================================================
+
+.. currentmodule:: triton.experimental.gluon.language.nvidia.ampere.async_copy
+
+Async Copy
+----------
+
+.. autosummary::
+    :toctree: generated
+    :nosignatures:
+
+    async_copy_global_to_shared
+    commit_group
+    mbarrier_arrive
+    wait_group

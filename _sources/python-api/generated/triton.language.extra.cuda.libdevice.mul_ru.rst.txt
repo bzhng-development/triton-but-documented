@@ -1,0 +1,51 @@
+triton.language.extra.cuda.libdevice.mul_ru
+============================================
+
+.. currentmodule:: triton.language.extra.cuda.libdevice
+
+.. function:: mul_ru(arg0, arg1, _semantic=None)
+
+    Multiply two floating-point values with round-up rounding mode.
+
+    Performs element-wise multiplication of ``arg0`` and ``arg1`` using IEEE 754 
+    round-up (toward positive infinity) rounding mode. Implemented via CUDA 
+    libdevice functions.
+
+    Parameters
+    ----------
+    arg0 : tl.tensor
+        First input tensor. Must be of floating-point type (fp32 or fp64).
+    arg1 : tl.tensor
+        Second input tensor. Must be of floating-point type (fp32 or fp64).
+    _semantic : optional
+        Internal parameter. Do not set manually.
+
+    Returns
+    -------
+    result : tl.tensor
+        Tensor containing the element-wise product with round-up rounding.
+        Has the same dtype as the inputs (fp32 or fp64).
+
+    Notes
+    -----
+    This function is only available on CUDA devices. It maps to CUDA libdevice 
+    functions ``__nv_fmul_ru`` for float32 and ``__nv_dmul_ru`` for float64.
+
+    The round-up rounding mode rounds results toward positive infinity. This 
+    differs from standard multiplication which uses round-to-nearest-even.
+
+    Supported input dtypes: fp32, fp64. Both inputs must have the same dtype.
+
+    Examples
+    --------
+    .. code-block:: python
+
+        import triton
+        import triton.language as tl
+
+        @triton.jit
+        def kernel(x_ptr, y_ptr, out_ptr, BLOCK_SIZE: tl.constexpr):
+            x = tl.load(x_ptr + tl.arange(0, BLOCK_SIZE))
+            y = tl.load(y_ptr + tl.arange(0, BLOCK_SIZE))
+            result = tl.extra.cuda.libdevice.mul_ru(x, y)
+            tl.store(out_ptr + tl.arange(0, BLOCK_SIZE), result)

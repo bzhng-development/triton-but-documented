@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>triton.language.randn4x &mdash; Triton  documentation</title>
+  <title>randn4x &mdash; Triton  documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=03e43079" />
       <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="../../_static/css/custom.css" />
@@ -63,15 +63,18 @@
 <li class="toctree-l2"><a class="reference internal" href="../triton.language.html#atomic-ops">Atomic Ops</a></li>
 <li class="toctree-l2 current"><a class="reference internal" href="../triton.language.html#random-number-generation">Random Number Generation</a><ul class="current">
 <li class="toctree-l3"><a class="reference internal" href="triton.language.randint4x.html">randint4x</a></li>
-<li class="toctree-l3"><a class="reference internal" href="triton.language.randint.html">triton.language.randint</a></li>
-<li class="toctree-l3"><a class="reference internal" href="triton.language.rand.html">rand</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.language.randint.html">randint</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.language.rand.html">triton.language.rand</a></li>
 <li class="toctree-l3"><a class="reference internal" href="triton.language.randn.html">randn</a></li>
 <li class="toctree-l3"><a class="reference internal" href="triton.language.pair_uniform_to_normal.html">pair_uniform_to_normal</a></li>
 <li class="toctree-l3"><a class="reference internal" href="triton.language.philox.html">philox</a></li>
 <li class="toctree-l3"><a class="reference internal" href="triton.language.philox_impl.html">philox_impl</a></li>
 <li class="toctree-l3"><a class="reference internal" href="triton.language.rand4x.html">rand4x</a></li>
-<li class="toctree-l3 current"><a class="current reference internal" href="#">triton.language.randn4x</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="#triton.language.randn4x"><code class="docutils literal notranslate"><span class="pre">randn4x()</span></code></a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">randn4x</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#parameters">Parameters</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#returns">Returns</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#notes">Notes</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#examples">Examples</a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="triton.language.uint_to_uniform_float.html">uint_to_uniform_float</a></li>
@@ -86,6 +89,35 @@
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../triton.testing.html">triton.testing</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../triton-semantics.html">Triton Semantics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.language.extra.cuda.html">triton.language.extra.cuda</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.language.extra.cuda.libdevice.html">triton.language.extra.cuda.libdevice</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.runtime.html">triton.runtime</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.tools.html">triton.tools</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Gluon (Experimental) API</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.html">triton.experimental.gluon</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.html">triton.experimental.gluon.language</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.nvidia.ampere.html">triton.experimental.gluon.language.nvidia.ampere</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.nvidia.ampere.async_copy.html">triton.experimental.gluon.language.nvidia.ampere.async_copy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.nvidia.ampere.mbarrier.html">triton.experimental.gluon.language.nvidia.ampere.mbarrier</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.nvidia.hopper.html">triton.experimental.gluon.language.nvidia.hopper</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.nvidia.hopper.tma.html">triton.experimental.gluon.language.nvidia.hopper.tma</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.nvidia.hopper.mbarrier.html">triton.experimental.gluon.language.nvidia.hopper.mbarrier</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.nvidia.hopper.cluster.html">triton.experimental.gluon.language.nvidia.hopper.cluster</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.nvidia.blackwell.html">triton.experimental.gluon.language.nvidia.blackwell</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.nvidia.blackwell.tma.html">triton.experimental.gluon.language.nvidia.blackwell.tma</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.nvidia.blackwell.clc.html">triton.experimental.gluon.language.nvidia.blackwell.clc</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.amd.html">triton.experimental.gluon.language.amd</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.amd.gfx1250.html">triton.experimental.gluon.language.amd.gfx1250</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.amd.gfx1250.async_copy.html">triton.experimental.gluon.language.amd.gfx1250.async_copy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.amd.gfx1250.mbarrier.html">triton.experimental.gluon.language.amd.gfx1250.mbarrier</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.amd.gfx1250.cluster.html">triton.experimental.gluon.language.amd.gfx1250.cluster</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.amd.gfx1250.tdm.html">triton.experimental.gluon.language.amd.gfx1250.tdm</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.amd.cdna3.html">triton.experimental.gluon.language.amd.cdna3</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.amd.cdna4.html">triton.experimental.gluon.language.amd.cdna4</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.amd.rdna3.html">triton.experimental.gluon.language.amd.rdna3</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.amd.rdna4.html">triton.experimental.gluon.language.amd.rdna4</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Triton MLIR Dialects</span></p>
 <ul>
@@ -113,7 +145,7 @@
   <ul class="wy-breadcrumbs">
       <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
           <li class="breadcrumb-item"><a href="../triton.language.html">triton.language</a></li>
-      <li class="breadcrumb-item active">triton.language.randn4x</li>
+      <li class="breadcrumb-item active">randn4x</li>
       <li class="wy-breadcrumbs-aside">
             <a href="../../_sources/python-api/generated/triton.language.randn4x.rst.txt" rel="nofollow"> View page source</a>
       </li>
@@ -123,40 +155,38 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <section id="triton-language-randn4x">
-<h1>triton.language.randn4x<a class="headerlink" href="#triton-language-randn4x" title="Link to this heading">¶</a></h1>
-<dl class="py function">
-<dt class="sig sig-object py" id="triton.language.randn4x">
-<span class="sig-prename descclassname"><span class="pre">triton.language.</span></span><span class="sig-name descname"><span class="pre">randn4x</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">seed</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">offset</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_rounds</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#triton.language.randn4x" title="Link to this definition">¶</a></dt>
-<dd><p>Generate four blocks of independent random numbers from the standard normal distribution <span class="math notranslate nohighlight">\(\mathcal{N}(0, 1)\)</span>.</p>
-<p>Applies the Box-Muller transform to four blocks of uniform random numbers generated via the Philox counter-based PRNG. This function is more efficient than calling <a class="reference internal" href="triton.language.randn.html#triton.language.randn" title="triton.language.randn"><code class="xref py py-func docutils literal notranslate"><span class="pre">randn()</span></code></a> four times when multiple streams of normal variates are required.</p>
+  <section id="randn4x">
+<h1>randn4x<a class="headerlink" href="#randn4x" title="Link to this heading">¶</a></h1>
+<p>Given a <code class="code docutils literal notranslate"><span class="pre">seed</span></code> scalar and an <code class="code docutils literal notranslate"><span class="pre">offset</span></code> block, returns 4 blocks of random <code class="code docutils literal notranslate"><span class="pre">float32</span></code> values sampled from a standard normal distribution <span class="math notranslate nohighlight">\(\mathcal{N}(0, 1)\)</span>.</p>
 <section id="parameters">
 <h2>Parameters<a class="headerlink" href="#parameters" title="Link to this heading">¶</a></h2>
 <dl class="simple">
-<dt>seed<span class="classifier">tl.int64</span></dt><dd><p>The seed for the random number generator.</p>
+<dt>seed<span class="classifier">int</span></dt><dd><p>The seed for generating random numbers.</p>
 </dd>
-<dt>offset<span class="classifier">tl.int32 or tl.int64</span></dt><dd><p>The offset block used to initialize the Philox counter state. Typically derived from program indices (e.g., <code class="docutils literal notranslate"><span class="pre">tl.program_id(0)</span></code>).</p>
+<dt>offset<span class="classifier">tl.tensor</span></dt><dd><p>The offsets to generate random numbers for.</p>
 </dd>
-<dt>n_rounds<span class="classifier">tl.constexpr, optional</span></dt><dd><p>Number of rounding rounds for the Philox PRNG. Default is 10.</p>
+<dt>n_rounds<span class="classifier">constexpr, optional</span></dt><dd><p>Number of rounds for the Philox PRNG. Default is 10.</p>
 </dd>
 </dl>
 </section>
 <section id="returns">
 <h2>Returns<a class="headerlink" href="#returns" title="Link to this heading">¶</a></h2>
 <dl class="simple">
-<dt>n1<span class="classifier">tl.tensor</span></dt><dd><p>First block of random values in <span class="math notranslate nohighlight">\(\mathcal{N}(0, 1)\)</span>.</p>
+<dt>n1<span class="classifier">tl.tensor</span></dt><dd><p>First block of random numbers.</p>
 </dd>
-<dt>n2<span class="classifier">tl.tensor</span></dt><dd><p>Second block of random values in <span class="math notranslate nohighlight">\(\mathcal{N}(0, 1)\)</span>.</p>
+<dt>n2<span class="classifier">tl.tensor</span></dt><dd><p>Second block of random numbers.</p>
 </dd>
-<dt>n3<span class="classifier">tl.tensor</span></dt><dd><p>Third block of random values in <span class="math notranslate nohighlight">\(\mathcal{N}(0, 1)\)</span>.</p>
+<dt>n3<span class="classifier">tl.tensor</span></dt><dd><p>Third block of random numbers.</p>
 </dd>
-<dt>n4<span class="classifier">tl.tensor</span></dt><dd><p>Fourth block of random values in <span class="math notranslate nohighlight">\(\mathcal{N}(0, 1)\)</span>.</p>
+<dt>n4<span class="classifier">tl.tensor</span></dt><dd><p>Fourth block of random numbers.</p>
 </dd>
 </dl>
 </section>
 <section id="notes">
 <h2>Notes<a class="headerlink" href="#notes" title="Link to this heading">¶</a></h2>
-<p>The underlying uniform random numbers are generated in <span class="math notranslate nohighlight">\(U(0, 1)\)</span> and transformed using the Box-Muller method. To avoid numerical instability, the uniform inputs are clipped to a minimum value of <span class="math notranslate nohighlight">\(10^{-7}\)</span> before applying the logarithm.</p>
+<p>This function uses the Box-Muller transform to convert uniform random numbers
+into normally distributed random numbers. It is more efficient than calling
+<code class="code docutils literal notranslate"><span class="pre">randn</span></code> four times separately.</p>
 </section>
 <section id="examples">
 <h2>Examples<a class="headerlink" href="#examples" title="Link to this heading">¶</a></h2>
@@ -164,24 +194,15 @@
 <span class="kn">import</span><span class="w"> </span><span class="nn">triton.language</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">tl</span>
 
 <span class="nd">@triton</span><span class="o">.</span><span class="n">jit</span>
-<span class="k">def</span><span class="w"> </span><span class="nf">kernel</span><span class="p">(</span>
-    <span class="n">output_ptr</span><span class="p">,</span>
-    <span class="n">seed</span><span class="p">,</span>
-    <span class="n">BLOCK_SIZE</span><span class="p">:</span> <span class="n">tl</span><span class="o">.</span><span class="n">constexpr</span><span class="p">,</span>
-<span class="p">):</span>
-    <span class="n">pid</span> <span class="o">=</span> <span class="n">tl</span><span class="o">.</span><span class="n">program_id</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">kernel</span><span class="p">(</span><span class="n">X_ptr</span><span class="p">,</span> <span class="n">stride</span><span class="p">,</span> <span class="n">BLOCK_SIZE</span><span class="p">:</span> <span class="n">tl</span><span class="o">.</span><span class="n">constexpr</span><span class="p">):</span>
+    <span class="n">pid</span> <span class="o">=</span> <span class="n">tl</span><span class="o">.</span><span class="n">program_id</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
     <span class="n">offset</span> <span class="o">=</span> <span class="n">pid</span> <span class="o">*</span> <span class="n">BLOCK_SIZE</span> <span class="o">+</span> <span class="n">tl</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">BLOCK_SIZE</span><span class="p">)</span>
-
-    <span class="c1"># Generate 4 independent streams of normal random numbers</span>
+    <span class="n">seed</span> <span class="o">=</span> <span class="mi">123456</span>
     <span class="n">n1</span><span class="p">,</span> <span class="n">n2</span><span class="p">,</span> <span class="n">n3</span><span class="p">,</span> <span class="n">n4</span> <span class="o">=</span> <span class="n">tl</span><span class="o">.</span><span class="n">randn4x</span><span class="p">(</span><span class="n">seed</span><span class="p">,</span> <span class="n">offset</span><span class="p">)</span>
-
-    <span class="c1"># Store the first stream</span>
-    <span class="n">tl</span><span class="o">.</span><span class="n">store</span><span class="p">(</span><span class="n">output_ptr</span> <span class="o">+</span> <span class="n">offset</span><span class="p">,</span> <span class="n">n1</span><span class="p">)</span>
+    <span class="c1"># Use n1, n2, n3, n4 ...</span>
 </pre></div>
 </div>
 </section>
-</dd></dl>
-
 </section>
 
 

@@ -1,0 +1,40 @@
+histogram
+=========
+
+Compute a histogram of a 1D integer tensor.
+
+Parameters
+----------
+input : tensor
+    1D tensor of integer values.
+num_bins : int
+    Number of bins. Bins have width 1 and start at 0.
+mask : tensor, optional
+    Boolean mask to exclude elements when ``False``.
+layout : DistributedLayout, optional
+    Destination layout of the output histogram.
+
+Returns
+-------
+tensor
+    1D int32 tensor of length ``num_bins`` with the requested layout.
+
+Notes
+-----
+This operation is only available in Gluon kernels decorated with ``@gluon.jit``.
+The histogram counts occurrences of each integer value in the input tensor,
+placing the count for value ``i`` in bin ``i``. Values outside the range
+``[0, num_bins)`` are ignored.
+
+Examples
+--------
+.. code-block:: python
+
+    import triton.experimental.gluon as gluon
+    import triton.experimental.gluon.language as ttgl
+
+    @gluon.jit
+    def histogram_kernel(input_ptr, output_ptr, num_bins: ttgl.constexpr):
+        input = ttgl.load(input_ptr)
+        hist = ttgl.histogram(input, num_bins)
+        ttgl.store(output_ptr, hist)

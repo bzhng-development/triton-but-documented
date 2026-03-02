@@ -1,54 +1,56 @@
-advance
-=======
+triton.language.advance
+======================
 
 .. currentmodule:: triton.language
 
-.. function:: advance(base, offsets)
+.. function:: advance(base, offsets, _semantic=None)
 
-   Advance a block pointer by the given offsets.
+    Advance a block pointer by the given offsets.
 
-   Parameters
-   ----------
-   base : tl.pointer_type
-      The block pointer to advance.
-   offsets : tuple of ints or tensors
-      The offsets to advance, specified as a tuple where each element corresponds
-      to a dimension of the pointer.
+    Parameters
+    ----------
+    base : tensor
+        The block pointer to advance.
+    offsets : tuple
+        The offsets to advance, specified as a tuple with one value per dimension.
 
-   Returns
-   -------
-   tl.pointer_type
-      A new block pointer with the updated offset.
+    Returns
+    -------
+    tensor
+        The advanced block pointer.
 
-   Notes
-   -----
-   This function does not have side effects. To move the block pointer, you must
-   assign the result to a variable.
+    Notes
+    -----
+    This function does not have any side effects. To move the block pointer, you
+    must assign the result to a variable.
 
-   This function can also be called as a member function on :py:class:`tensor`,
-   as ``x.advance(...)`` instead of ``advance(x, ...)``.
+    This function can also be called as a member function on :py:class:`tensor`,
+    as ``x.advance(...)`` instead of ``advance(x, ...)``.
 
-   Examples
-   --------
-   .. code-block:: python
+    Examples
+    --------
+    .. code-block:: python
 
-      @triton.jit
-      def kernel(ptr, BLOCK_SIZE: tl.constexpr):
-          # Create a block pointer
-          block_ptr = tl.make_block_ptr(
-              base=ptr,
-              shape=(1024,),
-              strides=(1,),
-              offsets=(0,),
-              block_shape=(BLOCK_SIZE,),
-              order=(0,)
-          )
+        import triton
+        import triton.language as tl
 
-          # Load data from the initial position
-          data = tl.load(block_ptr)
+        @triton.jit
+        def kernel(ptr, BLOCK_SIZE: tl.constexpr):
+            # Create a block pointer
+            block_ptr = tl.make_block_ptr(
+                base=ptr,
+                shape=[1024],
+                strides=[1],
+                offsets=[0],
+                block_shape=[BLOCK_SIZE],
+                order=[0]
+            )
 
-          # Advance the pointer by BLOCK_SIZE elements
-          block_ptr = tl.advance(block_ptr, (BLOCK_SIZE,))
+            # Load from current position
+            data = tl.load(block_ptr)
 
-          # Load data from the new position
-          next_data = tl.load(block_ptr)
+            # Advance the pointer by BLOCK_SIZE
+            block_ptr = tl.advance(block_ptr, [BLOCK_SIZE])
+
+            # Load from new position
+            more_data = tl.load(block_ptr)

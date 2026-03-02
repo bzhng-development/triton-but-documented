@@ -1,0 +1,49 @@
+triton.language.extra.cuda.libdevice.double2ll_rd
+==================================================
+
+.. currentmodule:: triton.language.extra.cuda.libdevice
+
+.. function:: double2ll_rd(arg0, _semantic=None)
+
+   Convert double-precision floating-point value to 64-bit signed integer with round-down rounding.
+
+   Parameters
+   ----------
+   arg0 : tl.tensor
+       Input tensor of double-precision floating-point values (``tl.float64``).
+   _semantic : optional
+       Internal semantic argument, do not provide manually.
+
+   Returns
+   -------
+   tl.tensor
+       Tensor of 64-bit signed integers (``tl.int64``) with the same shape as ``arg0``.
+
+   Notes
+   -----
+   This function calls the CUDA libdevice function ``__nv_double2ll_rd`` which converts
+   double-precision floating-point values to 64-bit signed integers using round-down
+   (toward negative infinity) rounding mode. This differs from standard truncation
+   rounding which rounds toward zero.
+
+   For positive values, round-down and truncation produce the same result. For negative
+   non-integer values, round-down produces a more negative result (e.g., ``-3.7``
+   becomes ``-4`` with round-down, but ``-3`` with truncation).
+
+   The function is pure (no side effects) and operates element-wise on tensors.
+
+   Examples
+   --------
+   .. code-block:: python
+
+       import triton
+       import triton.language as tl
+
+       @triton.jit
+       def convert_kernel(x_ptr, out_ptr, BLOCK_SIZE: tl.constexpr):
+           pid = tl.program_id(0)
+           offsets = pid * BLOCK_SIZE + tl.arange(0, BLOCK_SIZE)
+           x = tl.load(x_ptr + offsets).to(tl.float64)
+           # Convert float64 to int64 with round-down rounding
+           out = tl.extra.cuda.libdevice.double2ll_rd(x)
+           tl.store(out_ptr + offsets, out)

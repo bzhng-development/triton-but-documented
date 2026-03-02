@@ -1,0 +1,45 @@
+triton.language.extra.cuda.libdevice.float2uint_rz
+===================================================
+
+.. currentmodule:: triton.language.extra.cuda.libdevice
+
+.. function:: float2uint_rz(arg0, _semantic=None)
+
+    Convert a 32-bit floating-point value to a 32-bit unsigned integer using round-towards-zero rounding.
+
+    Parameters
+    ----------
+    arg0 : tl.tensor
+        Input tensor of 32-bit floating-point values (``tl.float32``).
+    _semantic : optional
+        Internal semantic argument used by Triton compiler. Do not set manually.
+
+    Returns
+    -------
+    tl.tensor
+        Tensor of 32-bit unsigned integers (``tl.int32``) with the same shape as ``arg0``.
+
+    Notes
+    -----
+    This function wraps the CUDA libdevice intrinsic ``__nv_float2uint_rz`` which performs
+    floating-point to unsigned integer conversion with round-towards-zero (truncation) semantics.
+    Fractional components are discarded. Values outside the representable range of ``int32``
+    produce undefined behavior.
+
+    This is a device-only function that can only be called from within ``@triton.jit``
+    decorated kernels.
+
+    Examples
+    --------
+    .. code-block:: python
+
+        import triton
+        import triton.language as tl
+
+        @triton.jit
+        def kernel(x_ptr, out_ptr, BLOCK_SIZE: tl.constexpr):
+            offsets = tl.arange(0, BLOCK_SIZE)
+            x = tl.load(x_ptr + offsets)
+            # Convert float32 to int32 with round-towards-zero
+            y = tl.extra.cuda.libdevice.float2uint_rz(x)
+            tl.store(out_ptr + offsets, y)

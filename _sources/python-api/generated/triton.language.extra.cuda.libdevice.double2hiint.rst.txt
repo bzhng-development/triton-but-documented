@@ -1,0 +1,47 @@
+triton.language.extra.cuda.libdevice.double2hiint
+==================================================
+
+.. currentmodule:: triton.language.extra.cuda.libdevice
+
+.. function:: double2hiint(arg0, _semantic=None)
+
+   Extract the high 32 bits of a double-precision floating-point value as a signed integer.
+
+   Parameters
+   ----------
+   arg0 : tl.tensor
+      Input tensor of type ``tl.float64``. The double-precision floating-point values
+      whose high 32 bits will be extracted.
+   _semantic : optional
+      Internal semantic argument. Do not set manually.
+
+   Returns
+   -------
+   tl.tensor
+      Tensor of type ``tl.int32`` containing the high 32 bits of each input double
+      interpreted as a signed integer.
+
+   Notes
+   -----
+   This function wraps the CUDA libdevice intrinsic ``__nv_double2hiint``. It is
+   commonly used for type-punning or bit-level manipulation of floating-point
+   values. The operation is pure (no side effects) and compiles to a single
+   GPU instruction.
+
+   For the low 32 bits, use :func:`double2loint`. To reconstruct a double from
+   high and low parts, use :func:`hiloint2double`.
+
+   Examples
+   --------
+   .. code-block:: python
+
+      import triton
+      import triton.language as tl
+
+      @triton.jit
+      def extract_high_bits_kernel(x_ptr, out_ptr, BLOCK: tl.constexpr):
+          pid = tl.program_id(0)
+          offsets = pid * BLOCK + tl.arange(0, BLOCK)
+          x = tl.load(x_ptr + offsets).to(tl.float64)
+          high_bits = tl.libdevice.double2hiint(x)
+          tl.store(out_ptr + offsets, high_bits)

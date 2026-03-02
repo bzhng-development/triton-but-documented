@@ -1,5 +1,5 @@
 cumprod
-=========
+=======
 
 .. currentmodule:: triton.language
 
@@ -9,37 +9,38 @@ cumprod
 
    Parameters
    ----------
-   input : tensor
+   input : Tensor
        The input tensor.
    axis : int, optional
-       The dimension along which the scan is performed. Default is 0.
+       The dimension along which the cumulative product is computed. Default is 0.
    reverse : bool, optional
        If True, the scan is performed in the reverse direction. Default is False.
 
    Returns
    -------
-   tensor
-       A tensor containing the cumulative products.
+   Tensor
+       A tensor containing the cumulative product of the input elements along the specified axis.
 
    Notes
    -----
-   This function can also be called as a member function on :py:class:`tensor`,
-   as :code:`x.cumprod(...)` instead of :code:`cumprod(x, ...)`.
+   This function can also be called as a member function on :py:class:`tensor`, as :code:`x.cumprod(...)` instead of :code:`cumprod(x, ...)`.
 
-   BFloat16 inputs are automatically promoted to Float32 before computation.
+   bfloat16 inputs are automatically promoted to float32 before computation.
+
+   The cumulative product is computed using an associative scan with multiplication as the combine operation.
 
    Examples
    --------
    .. code-block:: python
 
-       import triton
-       import triton.language as tl
+      import triton.language as tl
 
-       @triton.jit
-       def kernel(x_ptr, out_ptr, BLOCK_SIZE: tl.constexpr):
-           pid = tl.program_id(0)
-           offsets = tl.arange(0, BLOCK_SIZE)
-           mask = offsets < BLOCK_SIZE
-           x = tl.load(x_ptr + pid * BLOCK_SIZE + offsets, mask=mask)
-           y = tl.cumprod(x, axis=0)
-           tl.store(out_ptr + pid * BLOCK_SIZE + offsets, y, mask=mask)
+      # Compute cumulative product along axis 0
+      x = tl.arange(0, 8) + 1  # [1, 2, 3, 4, 5, 6, 7, 8]
+      y = tl.cumprod(x, axis=0)  # [1, 2, 6, 24, 120, 720, 5040, 40320]
+
+      # Use as member function
+      z = x.cumprod(axis=0)  # Equivalent to tl.cumprod(x, axis=0)
+
+      # Reverse cumulative product
+      w = tl.cumprod(x, axis=0, reverse=True)

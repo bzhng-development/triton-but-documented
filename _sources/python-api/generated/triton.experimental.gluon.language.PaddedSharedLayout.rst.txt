@@ -1,0 +1,121 @@
+class PaddedSharedLayout
+====================
+
+.. currentmodule:: triton.experimental.gluon.language
+
+.. autoclass:: PaddedSharedLayout
+
+   Represents a shared memory layout that combines padding and element reordering via
+   linear transformation to avoid shared memory bank conflicts.
+
+   Parameters
+   ----------
+   interval_padding_pairs : List[List[int]]
+       List of [interval, padding] pairs. Both interval and padding values must be
+       powers of 2. After every ``interval`` tensor elements, ``padding`` elements
+       are inserted. If a position corresponds to multiple intervals, the padding
+       amounts are summed.
+   offset_bases : List[List[int]]
+       Bases for shared memory offsets. Each basis is a list of length equal to
+       the tensor rank, defining the linear remapping from 1-D shared memory offset
+       to logical n-D tensor elements.
+   cga_layout : List[List[int]], optional
+       Bases for block-level shared memory offsets. Default is empty list.
+   shape : List[int]
+       The n-D logical shared memory shape.
+
+   Notes
+   -----
+   Compared to :class:`SwizzledSharedLayout`, this layout combines padding with
+   element reordering through linear transformations (e.g., row permutation) to
+   prevent shared memory bank conflicts.
+
+   The encoding allows for a linear remapping from 1-D shared memory offsets to
+   logical n-D tensor elements. The remapping is specified via linear bases that
+   map offsets to tensor dimensions.
+
+   All interval and padding values must be powers of 2. The tensor rank must be
+   greater than 0.
+
+   Examples
+   --------
+   Create a padded shared layout with custom interval-padding pairs:
+
+   .. code-block:: python
+
+      import triton.experimental.gluon as gluon
+      import triton.experimental.gluon.language as ttgl
+
+      # Define interval-padding pairs: [interval, padding]
+      interval_padding_pairs = [[2, 1], [4, 2]]
+
+      # Define offset bases for 2D tensor (rank=2)
+      offset_bases = [[1, 0], [0, 1]]
+
+      # Define shape
+      shape = [8, 4]
+
+      layout = ttgl.PaddedSharedLayout(
+          interval_padding_pairs=interval_padding_pairs,
+          offset_bases=offset_bases,
+          cga_layout=[],
+          shape=shape
+      )
+
+   Use the convenience constructor for identity mapping:
+
+   .. code-block:: python
+
+      # Create layout with identity linear mapping
+      layout = ttgl.PaddedSharedLayout.with_identity_for(
+          interval_padding_pairs=[[2, 2]],
+          shape=[8],
+          order=[0],
+          cga_layout=[]
+      )
+
+   .. rubric:: Methods
+
+   .. autosummary::
+
+      ~PaddedSharedLayout.with_identity_for
+      ~PaddedSharedLayout.verify
+      ~PaddedSharedLayout._to_ir
+      ~PaddedSharedLayout.mangle
+
+   .. automethod:: with_identity_for
+
+      Returns a :class:`PaddedSharedLayout` with the given interval and padding
+      pairs and an identity mapping as the linear component for the given shape
+      and order.
+
+      Parameters
+      ----------
+      interval_padding_pairs : List[List[int]]
+          List of [interval, padding] pairs.
+      shape : List[int]
+          The tensor shape. All dimensions must be powers of 2.
+      order : List[int]
+          Dimension ordering for the identity mapping.
+      cga_layout : List[List[int]], optional
+          Bases for block-level shared memory offsets. Default is empty list.
+
+      Returns
+      -------
+      PaddedSharedLayout
+          A new padded shared layout instance with identity linear mapping.
+
+      Notes
+      -----
+      This convenience method constructs offset bases automatically based on
+      the shape and order, creating an identity linear transformation.
+
+   .. automethod:: verify
+
+      Validates the layout configuration.
+
+      Raises
+      ------
+      AssertionError
+          If interval_padding_pairs is empty, intervals or paddings are not
+          powers of 2, or shape rank is invalid.

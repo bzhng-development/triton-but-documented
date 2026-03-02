@@ -1,0 +1,45 @@
+allocate_mbarrier
+=================
+
+Allocate shared memory for a hardware memory barrier (mbarrier) on NVIDIA Ampere and later architectures.
+
+Parameters
+----------
+batch : constexpr, optional
+    If provided, allocates a batch of barriers with the specified size.
+    The resulting shared memory shape is ``[batch, num_elems]``. If None,
+    the shape is ``[num_elems]``. Defaults to None.
+two_ctas : constexpr, bool
+    If True, configures the barrier to synchronize every other CTA,
+    effectively halving the participant count per barrier instance.
+    Defaults to False.
+
+Returns
+-------
+shared_memory_descriptor
+    The allocated mbarrier object.
+
+Notes
+-----
+Requires ``num_ctas`` to be a power of two. If ``two_ctas`` is True,
+``num_ctas`` must be even. The underlying type is ``int64``. Layout is
+handled via :func:`MBarrierLayout.multicta`.
+
+Examples
+--------
+.. code-block:: python
+
+    import triton.experimental.gluon as gluon
+    import triton.experimental.gluon.language as ttgl
+    from triton.experimental.gluon.language.nvidia.ampere.mbarrier import allocate_mbarrier
+
+    @gluon.jit
+    def kernel(...):
+        # Allocate a standard mbarrier for all CTAs
+        bar = allocate_mbarrier()
+
+        # Allocate a barrier synchronizing every other CTA
+        bar_alt = allocate_mbarrier(two_ctas=True)
+
+        # Allocate a batch of 4 barriers
+        bar_batch = allocate_mbarrier(batch=4)

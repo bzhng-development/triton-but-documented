@@ -1,57 +1,33 @@
-triton.language.float8e5
-=======================
+float8e5
+========
 
-8-bit floating point type with 5 exponent bits and 2 mantissa bits (E5M2).
+.. py:data:: triton.language.float8e5
 
-This dtype corresponds to the IEEE 754 binary8 format (E5M2), commonly used in
-machine learning workloads for reduced precision arithmetic. It supports
-special values including NaN, infinity, and subnormal numbers.
+   8-bit floating point format (E5M2).
 
-Parameters
-----------
+   Represents the FP8 data type with 5 exponent bits and 2 mantissa bits.
+   This format offers a wider dynamic range than ``float8e4`` (E4M3) with
+   reduced precision. Primarily used for mixed-precision matrix
+   multiplications on modern NVIDIA GPUs.
 
-None (dtype instance).
+   Notes
+   -----
+   Hardware support requires NVIDIA compute capability >= 9.0 (Hopper) or
+   8.9 (Ada Lovelace) for native operations. Using this type on unsupported
+   hardware may result in emulation or compilation errors.
 
-Returns
--------
+   Examples
+   --------
+   Specify the dtype in pointer operations or type casting:
 
-dtype
-    A ``triton.language.dtype`` instance representing the float8 E5M2 format.
+   .. code-block:: python
 
-Notes
------
+      import triton
+      import triton.language as tl
 
-*   **Bit Layout**: 1 sign bit, 5 exponent bits, 2 mantissa bits.
-*   **Range**: Approximately ``6.55e4`` (max finite value) to ``6.10e-5`` (min normal positive).
-*   **Usage**: Typically used in ``tl.load``, ``tl.store``, or pointer type definitions
-    to specify memory layout. Arithmetic operations involving ``float8e5`` usually
-    require explicit casting to ``float16`` or ``float32`` before computation, as
-    most GPU tensor cores do not support direct arithmetic on 8-bit floats without
-    conversion.
-*   **Hardware Support**: Requires GPU architectures with native support for E5M2
-    (e.g., NVIDIA Hopper H100 or later via specific load/store instructions).
-
-Examples
---------
-
-.. code-block:: python
-
-    import triton
-    import triton.language as tl
-
-    @triton.jit
-    def kernel(ptr, BLOCK_SIZE: tl.constexpr):
-        # Define a pointer type using float8e5
-        f8_ptr = ptr.to(tl.pointer_type(tl.float8e5))
-
-        # Load data as float8e5
-        x = tl.load(f8_ptr + tl.arange(0, BLOCK_SIZE))
-
-        # Cast to float16 for computation
-        x_fp16 = x.to(tl.float16)
-
-        # Perform arithmetic
-        y = x_fp16 * 2.0
-
-        # Store result back (requires appropriate hardware support)
-        tl.store(f8_ptr + tl.arange(0, BLOCK_SIZE), y)
+      @triton.jit
+      def fp8_kernel(x_ptr, y_ptr, n, BLOCK_SIZE: tl.constexpr):
+          offs = tl.program_id(0) * BLOCK_SIZE + tl.arange(0, BLOCK_SIZE)
+          mask = offs < n
+          x = tl.load(x_ptr + offs, mask=mask).to(tl.float8e5)
+          tl.store(y_ptr + offs, x, mask=mask)

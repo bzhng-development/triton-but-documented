@@ -1,81 +1,128 @@
-Compute the matrix product of two 2D or 3D tensors.
+triton.language.dot
+===================
 
-For 3D inputs, performs a batched matrix multiplication where the first dimension
-represents the batch. Supports optional accumulation and precision control for
-Tensor Core operations.
+.. function:: triton.language.dot(input, other, acc=None, input_precision=None, allow_tf32=None, max_num_imprecise_acc=None, out_dtype=triton.language.float32)
 
-Parameters
-----------
-input : tensor
-    The first tensor to be multiplied. Must be 2D or 3D. Supported scalar types:
-    ``int8``, ``float8_e5m2``, ``float16``, ``bfloat16``, ``float32``.
-other : tensor
-    The second tensor to be multiplied. Must be 2D or 3D with compatible inner
-    dimensions. Supported scalar types: ``int8``, ``float8_e5m2``, ``float16``,
-    ``bfloat16``, ``float32``.
-acc : tensor, optional
-    Accumulator tensor. If provided, the result is added to this tensor before
-    returning. Must match the output shape. Supported types: ``float16``,
-    ``float32``, ``int32``.
-input_precision : str, optional
-    Precision mode for ``float32`` x ``float32`` operations on Tensor Cores.
-    Ignored if inputs are not ``float32`` or hardware lacks Tensor Cores.
-    Options for NVIDIA: ``"tf32"``, ``"tf32x3"``, ``"ieee"`` (default: ``"tf32"``).
-    Options for AMD: ``"ieee"``, ``"tf32"`` (CDNA3 only).
-allow_tf32 : bool, optional
-    Deprecated. If ``True``, sets ``input_precision="tf32"``. Mutually exclusive
-    with ``input_precision``; at least one must be ``None``.
-max_num_imprecise_acc : int, optional
-    Maximum number of imprecise accumulations allowed (hardware-specific).
-out_dtype : dtype, optional
-    Data type of the output tensor. Default: ``tl.float32``.
+   Returns the matrix product of two blocks.
 
-Returns
--------
-tensor
-    The matrix product of ``input`` and ``other`` (plus ``acc`` if provided),
-    with shape ``[..., M, N]`` where ``input`` is ``[..., M, K]`` and ``other``
-    is ``[..., K, N]``.
+   The two blocks must both be two-dimensional or three-dimensional and have
+   compatible inner dimensions. For three-dimensional blocks, performs batched
+   matrix multiplication where the first dimension represents the batch.
 
-Notes
------
-When using TF32 precision, ``float32`` inputs may be truncated to TF32 format
-(19-bit floating point) without rounding, which can introduce bias. For best
-results, explicitly round inputs to TF32 or load data using ``TensorDescriptor``
-with ``round_f32_to_tf32=True``.
+   Parameters
+   ----------
+   input : tensor
+       The first tensor to be multiplied. Must be a 2D or 3D tensor with scalar
+       type in {``int8``, ``float8_e5m2``, ``float16``, ``bfloat16``, ``float32``}.
+   other : tensor
+       The second tensor to be multiplied. Must be a 2D or 3D tensor with scalar
+       type in {``int8``, ``float8_e5m2``, ``float16``, ``bfloat16``, ``float32``}.
+   acc : tensor, optional
+       The accumulator tensor. If not None, the result is added to this tensor.
+       Must be a 2D or 3D tensor with scalar type in {``float16``, ``float32``,
+       ``int32``}.
+   input_precision : str, optional
+       How to exercise Tensor Cores for f32 x f32. If the device does not have
+       Tensor Cores or inputs are not dtype f32, this option is ignored.
+       Default is ``"tf32"`` for devices with Tensor Cores.
 
-Examples
---------
-.. code-block:: python
+       - NVIDIA options: ``"tf32"``, ``"tf32x3"``, ``"ieee"``
+       - AMD options: ``"ieee"``, (CDNA3 only) ``"tf32"``
+   allow_tf32 : bool, optional
+       *Deprecated.* If true, ``input_precision`` is set to ``"tf32"``. Only one
+       of ``input_precision`` and ``allow_tf32`` can be specified (at least one
+       must be ``None``).
+   max_num_imprecise_acc : int, optional
+       Maximum number of imprecise accumulations.
+   out_dtype : dtype, optional
+       Output data type. Default is ``tl.float32``.
 
-    import triton
-    import triton.language as tl
+   Returns
+   -------
+   result : tensor
+       The matrix product of ``input`` and ``other``. If ``acc`` is provided,
+       returns ``input @ other + acc``. The output shape is determined by the
+       input shapes: for 2D inputs ``(M, K)`` and ``(K, N)``, output is ``(M, N)``.
+       For 3D inputs with batch dimension ``B``, output is ``(B, M, N)``.
 
-    @triton.jit
-    def matmul_kernel(
-        a_ptr, b_ptr, c_ptr,
-        M, N, K,
-        BLOCK_SIZE_M: tl.constexpr, BLOCK_SIZE_N: tl.constexpr, BLOCK_SIZE_K: tl.constexpr,
-    ):
-        pid = tl.program_id(axis=0)
-        num_pid_m = tl.cdiv(M, BLOCK_SIZE_M)
-        pid_m = pid % num_pid_m
-        pid_n = pid // num_pid_m
+   Notes
+   -----
+   When using TF32 precision, float32 inputs may be truncated to TF32 format
+   (19-bit floating point) without rounding, which may bias the result. For best
+   results, round to TF32 explicitly, or load data using ``TensorDescriptor``
+   with ``round_f32_to_tf32=True``.
 
-        offs_m = (pid_m * BLOCK_SIZE_M + tl.arange(0, BLOCK_SIZE_M)) % M
-        offs_n = (pid_n * BLOCK_SIZE_N + tl.arange(0, BLOCK_SIZE_N)) % N
-        offs_k = tl.arange(0, BLOCK_SIZE_K)
+   The function validates that input tensors have compatible shapes for matrix
+   multiplication. For 2D tensors, the inner dimensions must match. For 3D
+   tensors, batch dimensions must match and inner dimensions must be compatible.
 
-        a_ptrs = a_ptr + offs_m[:, None] * K + offs_k[None, :]
-        b_ptrs = b_ptr + offs_k[:, None] * N + offs_n[None, :]
+   Examples
+   --------
+   .. code-block:: python
 
-        accumulator = tl.zeros((BLOCK_SIZE_M, BLOCK_SIZE_N), dtype=tl.float32)
-        for k in range(0, K, BLOCK_SIZE_K):
-            a = tl.load(a_ptrs, mask=(offs_m[:, None] < M) & (offs_k[None, :] < K - k), other=0.0)
-            b = tl.load(b_ptrs, mask=(offs_k[:, None] < K - k) & (offs_n[None, :] < N), other=0.0)
-            accumulator = tl.dot(a, b, acc=accumulator, input_precision="tf32")
-            a_ptrs += BLOCK_SIZE_K
-            b_ptrs += BLOCK_SIZE_K * N
+      import triton
+      import triton.language as tl
 
-        c_ptrs = c_ptr + offs_m[:, None] * N + offs_n[None, :]
-        tl.store(c_ptrs, accumulator, mask=(offs_m[:, None] < M) & (offs_n[None, :] < N))
+      @triton.jit
+      def matmul_kernel(
+          a_ptr, b_ptr, c_ptr,
+          M, N, K,
+          BLOCK_SIZE_M: tl.constexpr,
+          BLOCK_SIZE_N: tl.constexpr,
+          BLOCK_SIZE_K: tl.constexpr,
+      ):
+          pid = tl.program_id(axis=0)
+          num_pid_m = tl.cdiv(M, BLOCK_SIZE_M)
+          pid_m = pid % num_pid_m
+          pid_n = pid // num_pid_m
+
+          offs_m = (pid_m * BLOCK_SIZE_M + tl.arange(0, BLOCK_SIZE_M)) % M
+          offs_n = (pid_n * BLOCK_SIZE_N + tl.arange(0, BLOCK_SIZE_N)) % N
+          offs_k = tl.arange(0, BLOCK_SIZE_K)
+
+          a_ptrs = a_ptr + offs_m[:, None] * K + offs_k[None, :]
+          b_ptrs = b_ptr + offs_k[:, None] * N + offs_n[None, :]
+
+          accumulator = tl.zeros((BLOCK_SIZE_M, BLOCK_SIZE_N), dtype=tl.float32)
+          for k in range(0, tl.cdiv(K, BLOCK_SIZE_K)):
+              a = tl.load(a_ptrs, mask=(offs_k[None, :] < K - k * BLOCK_SIZE_K), other=0.0)
+              b = tl.load(b_ptrs, mask=(offs_k[:, None] < K - k * BLOCK_SIZE_K), other=0.0)
+              accumulator = tl.dot(a, b, accumulator, out_dtype=tl.float32)
+              a_ptrs += BLOCK_SIZE_K
+              b_ptrs += BLOCK_SIZE_K * N
+
+          c_ptrs = c_ptr + offs_m[:, None] * N + offs_n[None, :]
+          tl.store(c_ptrs, accumulator, mask=(offs_m[:, None] < M) & (offs_n[None, :] < N))
+
+   .. code-block:: python
+
+      # Batched matrix multiplication (3D tensors)
+      @triton.jit
+      def batched_matmul_kernel(
+          a_ptr, b_ptr, c_ptr,
+          B, M, N, K,
+          BLOCK_SIZE_M: tl.constexpr,
+          BLOCK_SIZE_N: tl.constexpr,
+          BLOCK_SIZE_K: tl.constexpr,
+      ):
+          pid_b = tl.program_id(axis=0)
+          pid_m = tl.program_id(axis=1)
+          pid_n = tl.program_id(axis=2)
+
+          offs_m = (pid_m * BLOCK_SIZE_M + tl.arange(0, BLOCK_SIZE_M)) % M
+          offs_n = (pid_n * BLOCK_SIZE_N + tl.arange(0, BLOCK_SIZE_N)) % N
+          offs_k = tl.arange(0, BLOCK_SIZE_K)
+
+          a_ptrs = a_ptr + pid_b * M * K + offs_m[:, None] * K + offs_k[None, :]
+          b_ptrs = b_ptr + pid_b * K * N + offs_k[:, None] * N + offs_n[None, :]
+
+          accumulator = tl.zeros((BLOCK_SIZE_M, BLOCK_SIZE_N), dtype=tl.float32)
+          for k in range(0, tl.cdiv(K, BLOCK_SIZE_K)):
+              a = tl.load(a_ptrs, mask=(offs_k[None, :] < K - k * BLOCK_SIZE_K), other=0.0)
+              b = tl.load(b_ptrs, mask=(offs_k[:, None] < K - k * BLOCK_SIZE_K), other=0.0)
+              accumulator = tl.dot(a, b, accumulator, out_dtype=tl.float32)
+              a_ptrs += BLOCK_SIZE_K
+              b_ptrs += BLOCK_SIZE_K * N
+
+          c_ptrs = c_ptr + pid_b * M * N + offs_m[:, None] * N + offs_n[None, :]
+          tl.store(c_ptrs, accumulator, mask=(offs_m[:, None] < M) & (offs_n[None, :] < N))

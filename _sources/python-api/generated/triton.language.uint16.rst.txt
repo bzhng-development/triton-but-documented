@@ -1,49 +1,21 @@
-triton.language.uint16
-======================
+uint16
+======
 
-16-bit unsigned integer data type.
+.. py:data:: triton.language.uint16
 
-This dtype instance represents unsigned 16-bit integers within Triton kernels.
-It corresponds to the ``uint16`` type in NumPy and maps to ``u16`` in GPU
-machine code.
+   Unsigned 16-bit integer data type.
 
-Parameters
-----------
+   This dtype represents a 16-bit unsigned integer in Triton IR. It is
+   equivalent to CUDA ``uint16_t`` and is used to specify element types
+   for tensors or to cast values within GPU kernels.
 
-None (dtype instance).
+   Examples
+   --------
+   .. code-block:: python
 
-Returns
--------
+      import triton.language as tl
 
-dtype
-    The ``uint16`` data type object.
-
-Notes
------
-
-*   Values range from 0 to 65535.
-*   Arithmetic operations wrap around on overflow (modulo $2^{16}$).
-*   Use this type for memory efficiency when 32-bit precision is not required.
-
-Examples
---------
-
-.. code-block:: python
-
-    import triton
-    import triton.language as tl
-
-    @triton.jit
-    def kernel(ptr, n):
-        # Create a 16-bit unsigned integer constant
-        val: tl.uint16 = tl.constexpr(1000)
-
-        # Load data as uint16
-        offset = tl.program_id(0)
-        x = tl.load(ptr + offset).to(tl.uint16)
-
-        # Perform arithmetic (wraps on overflow)
-        y = x + val
-
-        # Store result
-        tl.store(ptr + offset, y)
+      @triton.jit
+      def kernel(ptr):
+          val = tl.full((1,), 42, dtype=tl.uint16)
+          tl.store(ptr, val)

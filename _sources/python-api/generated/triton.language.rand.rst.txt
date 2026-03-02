@@ -1,49 +1,46 @@
-rand
-====
+triton.language.rand
+====================
 
 .. currentmodule:: triton.language
 
-.. function:: rand(seed, offset, n_rounds=10)
+.. jitfunction:: rand(seed, offset, n_rounds=10)
 
-   Generate random numbers from a uniform distribution :math:`U(0, 1)`.
+Generate random numbers from a uniform distribution.
 
-   Given a :code:`seed` scalar and an :code:`offset` block, returns a block of
-   random :code:`float32` values. Uses the Philox pseudo-random number generator.
+Given a :code:`seed` scalar and an :code:`offset` block, returns a block
+of random :code:`float32` values sampled from the uniform distribution
+:math:`U(0, 1)`.
 
-   Parameters
-   ----------
-   seed : int
-       The seed for generating random numbers.
-   offset : tl.tensor
-       The offsets to generate random numbers for. Typically derived from
-       program IDs to ensure uniqueness across threads.
-   n_rounds : tl.constexpr, optional
-       Number of Philox rounds to run. Default is 10.
+Parameters
+----------
+seed : int
+    The seed for generating random numbers.
+offset : tl.tensor
+    The offsets to generate random numbers for. Typically used to ensure
+    uniqueness across program instances.
+n_rounds : tl.constexpr, optional
+    Number of rounds for the Philox PRNG. Default is 10.
 
-   Returns
-   -------
-   tl.tensor
-       A block of random :code:`float32` values in the range :math:`[0, 1)`.
+Returns
+-------
+tl.tensor
+    Block of random values with dtype :code:`float32`.
 
-   Notes
-   -----
-   This function generates 32-bit or 64-bit integers via :func:`randint` and
-   converts them to floats using a numerically stable scaling method.
+Notes
+-----
+Uses the Philox pseudo-random number generator. The output is numerically
+stable and uniformly distributed in the half-open interval :math:`[0, 1)`.
 
-   Examples
-   --------
-   .. code-block:: python
+Examples
+--------
+.. code-block:: python
 
-      import triton
-      import triton.language as tl
+    import triton
+    import triton.language as tl
 
-      @triton.jit
-      def random_kernel(
-          output_ptr,
-          seed,
-          BLOCK_SIZE: tl.constexpr,
-      ):
-          pid = tl.program_id(0)
-          offset = pid * BLOCK_SIZE + tl.arange(0, BLOCK_SIZE)
-          random_vals = tl.rand(seed, offset)
-          tl.store(output_ptr + offset, random_vals)
+    @triton.jit
+    def kernel(X, seed):
+        pid = tl.program_id(0)
+        offset = pid + tl.arange(0, 128)
+        random_vals = tl.rand(seed, offset)
+        # Store or use random_vals...

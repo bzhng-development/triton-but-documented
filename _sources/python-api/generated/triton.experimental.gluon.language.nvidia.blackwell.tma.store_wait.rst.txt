@@ -1,0 +1,40 @@
+store_wait
+==========
+
+.. py:function:: store_wait(pendings, _semantic=None)
+
+Wait for pending asynchronous Tensor Memory Accelerator (TMA) store operations to complete.
+
+Inserts a barrier that stalls execution until all outstanding asynchronous store
+transactions tracked by ``pendings`` have finished. This ensures data visibility
+and consistency before proceeding.
+
+Parameters
+----------
+pendings : int or tensor
+    The pending transaction count or token returned by asynchronous store operations.
+    Specifies the number of pending transactions to wait for.
+_semantic : GluonSemantic, optional
+    Internal argument used by the Gluon JIT compiler. Do not provide manually.
+
+Returns
+-------
+None
+
+Notes
+-----
+This function is specific to NVIDIA Blackwell architecture and requires TMA to be
+configured appropriately. It must be called within a :func:`@gluon.jit` decorated
+kernel.
+
+Examples
+--------
+.. code-block:: python
+
+    import triton.experimental.gluon as gluon
+    from triton.experimental.gluon.language.nvidia.blackwell import tma
+
+    @gluon.jit
+    def kernel(ptr, pendings):
+        # Wait for all pending stores to complete
+        tma.store_wait(pendings)

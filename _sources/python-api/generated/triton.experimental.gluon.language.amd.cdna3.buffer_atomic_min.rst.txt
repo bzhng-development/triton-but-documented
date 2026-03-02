@@ -1,0 +1,62 @@
+buffer_atomic_min
+=================
+
+.. currentmodule:: triton.experimental.gluon.language.amd.cdna3
+
+.. autofunction:: buffer_atomic_min
+
+Perform an atomic minimum operation on AMD CDNA3 buffer memory.
+
+.. code-block:: python
+
+    buffer_atomic_min(ptr, offsets, value, mask=None, sem=None, scope=None, _semantic=None)
+
+Atomically computes ``min(*ptr[off], value)`` for each offset and stores the result back to memory. Returns the original values at the memory locations before the update.
+
+Parameters
+----------
+ptr : pointer_type
+    Pointer to the global memory buffer.
+offsets : tensor
+    Tensor of offsets specifying which locations to access.
+value : tensor
+    Tensor of values to compare against memory contents.
+mask : tensor, optional
+    Boolean tensor controlling which offsets are active. If ``None``, all offsets are active.
+sem : str, optional
+    Memory semantics for the atomic operation (e.g., ``"acquire"``, ``"release"``, ``"acq_rel"``).
+scope : str, optional
+    Memory scope for the atomic operation (e.g., ``"cta"``, ``"cluster"``, ``"gpu"``).
+_semantic : GluonSemantic
+    Internal semantic handler. Do not pass directly; set via ``@gluon.jit`` decorator.
+
+Returns
+-------
+tensor
+    Tensor containing the original values from memory before the atomic minimum update.
+
+Notes
+-----
+This operation is specific to AMD CDNA3 architecture and uses the buffer atomic instruction
+set. The atomic minimum compares each ``value`` with the corresponding memory location and
+stores the smaller of the two.
+
+The operation is only valid within kernels decorated with ``@gluon.jit``. The ``_semantic``
+parameter is automatically provided by the JIT compiler and should not be passed manually.
+
+Memory semantics (``sem``) and scope (``scope``) control synchronization behavior across
+threads and memory hierarchies. Consult AMD CDNA3 documentation for valid options.
+
+Examples
+--------
+.. code-block:: python
+
+    import triton.experimental.gluon as gluon
+    import triton.experimental.gluon.language as ttgl
+
+    @gluon.jit
+    def atomic_min_kernel(ptr, offsets, values, n_elements, BLOCK_SIZE: tl.constexpr):
+        pid = ttgl.program_id(0)
+        offs = pid * BLOCK_SIZE + ttgl.arange(0, BLOCK_SIZE)
+        mask = offs < n_elements
+        old_vals = ttgl.amd.cdna3.buffer_atomic_min(ptr, offs, values, mask=mask)

@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>&lt;no title&gt; &mdash; Triton  documentation</title>
+  <title>class triton.language.tensor &mdash; Triton  documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=03e43079" />
       <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="../../_static/css/custom.css" />
@@ -51,73 +51,25 @@
 <li class="toctree-l1"><a class="reference internal" href="../triton.html">triton</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="../triton.language.html">triton.language</a><ul class="current">
 <li class="toctree-l2 current"><a class="reference internal" href="../triton.language.html#programming-model">Programming Model</a><ul class="current">
-<li class="toctree-l3 current"><a class="current reference internal" href="#"><code class="docutils literal notranslate"><span class="pre">triton.language.tensor</span></code></a><ul>
-<li class="toctree-l4"><a class="reference internal" href="#triton.language.tensor.__init__"><code class="docutils literal notranslate"><span class="pre">triton.language.tensor.__init__()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#triton.language.tensor.dtype"><code class="docutils literal notranslate"><span class="pre">triton.language.tensor.dtype</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#triton.language.tensor.shape"><code class="docutils literal notranslate"><span class="pre">triton.language.tensor.shape</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#triton.language.tensor.numel"><code class="docutils literal notranslate"><span class="pre">triton.language.tensor.numel</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#triton.language.tensor.type"><code class="docutils literal notranslate"><span class="pre">triton.language.tensor.type</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#triton.language.tensor.T"><code class="docutils literal notranslate"><span class="pre">triton.language.tensor.T</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#triton.language.tensor.broadcast_to"><code class="docutils literal notranslate"><span class="pre">triton.language.tensor.broadcast_to()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#triton.language.tensor.trans"><code class="docutils literal notranslate"><span class="pre">triton.language.tensor.trans()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#triton.language.tensor.permute"><code class="docutils literal notranslate"><span class="pre">triton.language.tensor.permute()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#triton.language.tensor.split"><code class="docutils literal notranslate"><span class="pre">triton.language.tensor.split()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#triton.language.tensor.view"><code class="docutils literal notranslate"><span class="pre">triton.language.tensor.view()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#triton.language.tensor.reshape"><code class="docutils literal notranslate"><span class="pre">triton.language.tensor.reshape()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#triton.language.tensor.expand_dims"><code class="docutils literal notranslate"><span class="pre">triton.language.tensor.expand_dims()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#triton.language.tensor.cast"><code class="docutils literal notranslate"><span class="pre">triton.language.tensor.cast()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#triton.language.tensor.to"><code class="docutils literal notranslate"><span class="pre">triton.language.tensor.to()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#triton.language.tensor.store"><code class="docutils literal notranslate"><span class="pre">triton.language.tensor.store()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#triton.language.tensor.advance"><code class="docutils literal notranslate"><span class="pre">triton.language.tensor.advance()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#triton.language.tensor.atomic_cas"><code class="docutils literal notranslate"><span class="pre">triton.language.tensor.atomic_cas()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#triton.language.tensor.atomic_xchg"><code class="docutils literal notranslate"><span class="pre">triton.language.tensor.atomic_xchg()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#triton.language.tensor.atomic_add"><code class="docutils literal notranslate"><span class="pre">triton.language.tensor.atomic_add()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#triton.language.tensor.atomic_max"><code class="docutils literal notranslate"><span class="pre">triton.language.tensor.atomic_max()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#triton.language.tensor.atomic_min"><code class="docutils literal notranslate"><span class="pre">triton.language.tensor.atomic_min()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#triton.language.tensor.atomic_and"><code class="docutils literal notranslate"><span class="pre">triton.language.tensor.atomic_and()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#triton.language.tensor.atomic_or"><code class="docutils literal notranslate"><span class="pre">triton.language.tensor.atomic_or()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#triton.language.tensor.atomic_xor"><code class="docutils literal notranslate"><span class="pre">triton.language.tensor.atomic_xor()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#triton.language.tensor.exp"><code class="docutils literal notranslate"><span class="pre">triton.language.tensor.exp()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#triton.language.tensor.log"><code class="docutils literal notranslate"><span class="pre">triton.language.tensor.log()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#triton.language.tensor.cos"><code class="docutils literal notranslate"><span class="pre">triton.language.tensor.cos()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#triton.language.tensor.sin"><code class="docutils literal notranslate"><span class="pre">triton.language.tensor.sin()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#triton.language.tensor.sqrt"><code class="docutils literal notranslate"><span class="pre">triton.language.tensor.sqrt()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#triton.language.tensor.rsqrt"><code class="docutils literal notranslate"><span class="pre">triton.language.tensor.rsqrt()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#triton.language.tensor.abs"><code class="docutils literal notranslate"><span class="pre">triton.language.tensor.abs()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#triton.language.tensor.reduce"><code class="docutils literal notranslate"><span class="pre">triton.language.tensor.reduce()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#triton.language.tensor.associative_scan"><code class="docutils literal notranslate"><span class="pre">triton.language.tensor.associative_scan()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#triton.language.tensor.gather"><code class="docutils literal notranslate"><span class="pre">triton.language.tensor.gather()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#triton.language.tensor.histogram"><code class="docutils literal notranslate"><span class="pre">triton.language.tensor.histogram()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#triton.language.tensor.cdiv"><code class="docutils literal notranslate"><span class="pre">triton.language.tensor.cdiv()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#triton.language.tensor.sigmoid"><code class="docutils literal notranslate"><span class="pre">triton.language.tensor.sigmoid()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#triton.language.tensor.softmax"><code class="docutils literal notranslate"><span class="pre">triton.language.tensor.softmax()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#triton.language.tensor.ravel"><code class="docutils literal notranslate"><span class="pre">triton.language.tensor.ravel()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#triton.language.tensor.max"><code class="docutils literal notranslate"><span class="pre">triton.language.tensor.max()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#triton.language.tensor.argmax"><code class="docutils literal notranslate"><span class="pre">triton.language.tensor.argmax()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#triton.language.tensor.min"><code class="docutils literal notranslate"><span class="pre">triton.language.tensor.min()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#triton.language.tensor.argmin"><code class="docutils literal notranslate"><span class="pre">triton.language.tensor.argmin()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#triton.language.tensor.sum"><code class="docutils literal notranslate"><span class="pre">triton.language.tensor.sum()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#triton.language.tensor.xor_sum"><code class="docutils literal notranslate"><span class="pre">triton.language.tensor.xor_sum()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#triton.language.tensor.reduce_or"><code class="docutils literal notranslate"><span class="pre">triton.language.tensor.reduce_or()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#triton.language.tensor.cumsum"><code class="docutils literal notranslate"><span class="pre">triton.language.tensor.cumsum()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#triton.language.tensor.cumprod"><code class="docutils literal notranslate"><span class="pre">triton.language.tensor.cumprod()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#triton.language.tensor.sort"><code class="docutils literal notranslate"><span class="pre">triton.language.tensor.sort()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#triton.language.tensor.flip"><code class="docutils literal notranslate"><span class="pre">triton.language.tensor.flip()</span></code></a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">class triton.language.tensor</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#parameters">Parameters</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#attributes">Attributes</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#notes">Notes</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#examples">Examples</a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="triton.language.tensor_descriptor.html">tensor_descriptor</a></li>
 <li class="toctree-l3"><a class="reference internal" href="triton.language.program_id.html">program_id</a></li>
-<li class="toctree-l3"><a class="reference internal" href="triton.language.num_programs.html">num_programs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.language.num_programs.html">triton.language.num_programs</a></li>
 <li class="toctree-l3"><a class="reference internal" href="triton.language.block_type.html">block_type</a></li>
-<li class="toctree-l3"><a class="reference internal" href="triton.language.condition.html"><code class="docutils literal notranslate"><span class="pre">triton.language.condition</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="triton.language.const.html"><code class="docutils literal notranslate"><span class="pre">triton.language.const</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="triton.language.constexpr.html">class constexpr</a></li>
-<li class="toctree-l3"><a class="reference internal" href="triton.language.constexpr_type.html"><code class="docutils literal notranslate"><span class="pre">constexpr_type</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="triton.language.dtype.html">dtype</a></li>
-<li class="toctree-l3"><a class="reference internal" href="triton.language.pointer_type.html"><code class="docutils literal notranslate"><span class="pre">pointer_type</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.language.condition.html">class triton.language.condition</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.language.const.html">const</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.language.constexpr.html">constexpr</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.language.constexpr_type.html">constexpr_type</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.language.dtype.html">class dtype</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.language.pointer_type.html">pointer_type</a></li>
 <li class="toctree-l3"><a class="reference internal" href="triton.language.slice.html">slice</a></li>
-<li class="toctree-l3"><a class="reference internal" href="triton.language.tensor_descriptor_type.html">triton.language.tensor_descriptor_type</a></li>
-<li class="toctree-l3"><a class="reference internal" href="triton.language.tuple.html"><code class="docutils literal notranslate"><span class="pre">triton.language.tuple</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.language.tuple.html">class triton.language.tuple</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../triton.language.html#creation-ops">Creation Ops</a></li>
@@ -139,6 +91,35 @@
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../triton.testing.html">triton.testing</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../triton-semantics.html">Triton Semantics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.language.extra.cuda.html">triton.language.extra.cuda</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.language.extra.cuda.libdevice.html">triton.language.extra.cuda.libdevice</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.runtime.html">triton.runtime</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.tools.html">triton.tools</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Gluon (Experimental) API</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.html">triton.experimental.gluon</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.html">triton.experimental.gluon.language</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.nvidia.ampere.html">triton.experimental.gluon.language.nvidia.ampere</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.nvidia.ampere.async_copy.html">triton.experimental.gluon.language.nvidia.ampere.async_copy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.nvidia.ampere.mbarrier.html">triton.experimental.gluon.language.nvidia.ampere.mbarrier</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.nvidia.hopper.html">triton.experimental.gluon.language.nvidia.hopper</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.nvidia.hopper.tma.html">triton.experimental.gluon.language.nvidia.hopper.tma</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.nvidia.hopper.mbarrier.html">triton.experimental.gluon.language.nvidia.hopper.mbarrier</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.nvidia.hopper.cluster.html">triton.experimental.gluon.language.nvidia.hopper.cluster</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.nvidia.blackwell.html">triton.experimental.gluon.language.nvidia.blackwell</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.nvidia.blackwell.tma.html">triton.experimental.gluon.language.nvidia.blackwell.tma</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.nvidia.blackwell.clc.html">triton.experimental.gluon.language.nvidia.blackwell.clc</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.amd.html">triton.experimental.gluon.language.amd</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.amd.gfx1250.html">triton.experimental.gluon.language.amd.gfx1250</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.amd.gfx1250.async_copy.html">triton.experimental.gluon.language.amd.gfx1250.async_copy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.amd.gfx1250.mbarrier.html">triton.experimental.gluon.language.amd.gfx1250.mbarrier</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.amd.gfx1250.cluster.html">triton.experimental.gluon.language.amd.gfx1250.cluster</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.amd.gfx1250.tdm.html">triton.experimental.gluon.language.amd.gfx1250.tdm</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.amd.cdna3.html">triton.experimental.gluon.language.amd.cdna3</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.amd.cdna4.html">triton.experimental.gluon.language.amd.cdna4</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.amd.rdna3.html">triton.experimental.gluon.language.amd.rdna3</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.amd.rdna4.html">triton.experimental.gluon.language.amd.rdna4</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Triton MLIR Dialects</span></p>
 <ul>
@@ -166,7 +147,7 @@
   <ul class="wy-breadcrumbs">
       <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
           <li class="breadcrumb-item"><a href="../triton.language.html">triton.language</a></li>
-      <li class="breadcrumb-item active">&lt;no title&gt;</li>
+      <li class="breadcrumb-item active">class triton.language.tensor</li>
       <li class="wy-breadcrumbs-aside">
             <a href="../../_sources/python-api/generated/triton.language.tensor.rst.txt" rel="nofollow"> View page source</a>
       </li>
@@ -176,364 +157,74 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <dl class="py class">
-<dt class="sig sig-object py" id="triton.language.tensor">
-<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">triton.language.</span></span><span class="sig-name descname"><span class="pre">tensor</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">handle</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">type</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="triton.language.dtype.html#triton.language.dtype" title="triton.language.dtype"><span class="pre">dtype</span></a></span></em><span class="sig-paren">)</span><a class="headerlink" href="#triton.language.tensor" title="Link to this definition">¶</a></dt>
-<dd><p>Represents an N-dimensional array of values or pointers.</p>
-<p><code class="code docutils literal notranslate"><span class="pre">tensor</span></code> is the fundamental data structure in Triton programs. Most
+  <section id="class-triton-language-tensor">
+<h1>class triton.language.tensor<a class="headerlink" href="#class-triton-language-tensor" title="Link to this heading">¶</a></h1>
+<p>Represents an N-dimensional array of values or pointers.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">tensor</span></code> is the fundamental data structure in Triton programs. Most
 functions in <code class="xref py py-mod docutils literal notranslate"><span class="pre">triton.language</span></code> operate on and return tensors.</p>
-<p>Most of the named member functions here are duplicates of the free functions
-in <code class="code docutils literal notranslate"><span class="pre">triton.language</span></code>. For example, <code class="code docutils literal notranslate"><span class="pre">triton.language.sqrt(x)</span></code> is
-equivalent to <code class="code docutils literal notranslate"><span class="pre">x.sqrt()</span></code>.</p>
-<p><code class="code docutils literal notranslate"><span class="pre">tensor</span></code> also defines most of the magic/dunder methods, so you can
-write <code class="code docutils literal notranslate"><span class="pre">x+y</span></code>, <code class="code docutils literal notranslate"><span class="pre">x</span> <span class="pre">&lt;&lt;</span> <span class="pre">2</span></code>, etc.</p>
-<p class="rubric">Constructors</p>
-<dl class="py method">
-<dt class="sig sig-object py" id="triton.language.tensor.__init__">
-<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">handle</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">type</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="triton.language.dtype.html#triton.language.dtype" title="triton.language.dtype"><span class="pre">dtype</span></a></span></em><span class="sig-paren">)</span><a class="headerlink" href="#triton.language.tensor.__init__" title="Link to this definition">¶</a></dt>
-<dd><p>Not called by user code. Tensors are typically created via helper functions
-such as <a class="reference internal" href="triton.language.full.html#triton.language.full" title="triton.language.full"><code class="xref py py-func docutils literal notranslate"><span class="pre">triton.language.full()</span></code></a>, <code class="xref py py-func docutils literal notranslate"><span class="pre">triton.language.arange()</span></code>,
-or by loading data from memory using <a class="reference internal" href="triton.language.load.html#triton.language.load" title="triton.language.load"><code class="xref py py-func docutils literal notranslate"><span class="pre">triton.language.load()</span></code></a>.</p>
-</dd></dl>
-
-<p class="rubric">Attributes</p>
-<dl class="py attribute">
-<dt class="sig sig-object py" id="triton.language.tensor.dtype">
-<span class="sig-name descname"><span class="pre">dtype</span></span><a class="headerlink" href="#triton.language.tensor.dtype" title="Link to this definition">¶</a></dt>
-<dd><p>The scalar data type of the tensor elements (e.g., <code class="code docutils literal notranslate"><span class="pre">tl.float32</span></code>).</p>
-</dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="triton.language.tensor.shape">
-<span class="sig-name descname"><span class="pre">shape</span></span><a class="headerlink" href="#triton.language.tensor.shape" title="Link to this definition">¶</a></dt>
-<dd><p>A tuple of <code class="code docutils literal notranslate"><span class="pre">constexpr</span></code> integers representing the dimensions of the tensor.</p>
-</dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="triton.language.tensor.numel">
-<span class="sig-name descname"><span class="pre">numel</span></span><a class="headerlink" href="#triton.language.tensor.numel" title="Link to this definition">¶</a></dt>
-<dd><p>The total number of elements in the tensor.</p>
-</dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="triton.language.tensor.type">
-<span class="sig-name descname"><span class="pre">type</span></span><a class="headerlink" href="#triton.language.tensor.type" title="Link to this definition">¶</a></dt>
-<dd><p>The full tensor type, which may include block shape information.</p>
-</dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="triton.language.tensor.T">
-<span class="sig-name descname"><span class="pre">T</span></span><a class="headerlink" href="#triton.language.tensor.T" title="Link to this definition">¶</a></dt>
-<dd><p>Property that returns a transposed view of a 2D tensor. Transposition is
-handled by the AST visitor; direct access raises an error.</p>
-</dd></dl>
-
-<p class="rubric">Operations</p>
-<p>The <code class="code docutils literal notranslate"><span class="pre">tensor</span></code> class supports standard Python arithmetic, bitwise, and
-comparison operators, which are lowered to GPU instructions:</p>
-<ul class="simple">
-<li><p>Arithmetic: <code class="code docutils literal notranslate"><span class="pre">+</span></code>, <code class="code docutils literal notranslate"><span class="pre">-</span></code>, <code class="code docutils literal notranslate"><span class="pre">*</span></code>, <code class="code docutils literal notranslate"><span class="pre">/</span></code>, <code class="code docutils literal notranslate"><span class="pre">//</span></code>, <code class="code docutils literal notranslate"><span class="pre">%</span></code></p></li>
-<li><p>Bitwise: <code class="code docutils literal notranslate"><span class="pre">&amp;</span></code>, <code class="code docutils literal notranslate"><span class="pre">|</span></code>, <code class="code docutils literal notranslate"><span class="pre">^</span></code>, <code class="code docutils literal notranslate"><span class="pre">&lt;&lt;</span></code>, <code class="code docutils literal notranslate"><span class="pre">&gt;&gt;</span></code>, <code class="code docutils literal notranslate"><span class="pre">~</span></code></p></li>
-<li><p>Comparison: <code class="code docutils literal notranslate"><span class="pre">==</span></code>, <code class="code docutils literal notranslate"><span class="pre">!=</span></code>, <code class="code docutils literal notranslate"><span class="pre">&lt;</span></code>, <code class="code docutils literal notranslate"><span class="pre">&lt;=</span></code>, <code class="code docutils literal notranslate"><span class="pre">&gt;</span></code>, <code class="code docutils literal notranslate"><span class="pre">&gt;=</span></code></p></li>
-<li><p>Unary: <code class="code docutils literal notranslate"><span class="pre">-</span></code>, <code class="code docutils literal notranslate"><span class="pre">not</span></code></p></li>
-</ul>
-<p class="rubric">Member Functions</p>
-<p>The following methods are available as members of <code class="code docutils literal notranslate"><span class="pre">tensor</span></code>. They are
-equivalent to the free functions in <code class="xref py py-mod docutils literal notranslate"><span class="pre">triton.language</span></code> with the tensor
-passed as the first argument.</p>
-<dl class="py method">
-<dt class="sig sig-object py" id="triton.language.tensor.broadcast_to">
-<span class="sig-name descname"><span class="pre">broadcast_to</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">shape</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#triton.language.tensor.broadcast_to" title="Link to this definition">¶</a></dt>
-<dd><p>Broadcasts the tensor to the specified shape.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="triton.language.tensor.trans">
-<span class="sig-name descname"><span class="pre">trans</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">dims</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#triton.language.tensor.trans" title="Link to this definition">¶</a></dt>
-<dd><p>Permutes the dimensions. If no arguments are provided, swaps the last two
-dimensions (2D transpose).</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="triton.language.tensor.permute">
-<span class="sig-name descname"><span class="pre">permute</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">dims</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#triton.language.tensor.permute" title="Link to this definition">¶</a></dt>
-<dd><p>Permutes the dimensions according to the provided order.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="triton.language.tensor.split">
-<span class="sig-name descname"><span class="pre">split</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#triton.language.tensor.split" title="Link to this definition">¶</a></dt>
-<dd><p>Splits the tensor in two along the last dimension (which must have size 2).</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="triton.language.tensor.view">
-<span class="sig-name descname"><span class="pre">view</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">shape</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#triton.language.tensor.view" title="Link to this definition">¶</a></dt>
-<dd><p>Returns a tensor with the same elements but a different shape. Deprecated;
-use <a class="reference internal" href="#triton.language.tensor.reshape" title="triton.language.tensor.reshape"><code class="xref py py-meth docutils literal notranslate"><span class="pre">reshape()</span></code></a> instead.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="triton.language.tensor.reshape">
-<span class="sig-name descname"><span class="pre">reshape</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">shape</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">can_reorder</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#triton.language.tensor.reshape" title="Link to this definition">¶</a></dt>
-<dd><p>Returns a tensor with the same number of elements but a new shape.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="triton.language.tensor.expand_dims">
-<span class="sig-name descname"><span class="pre">expand_dims</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">axis</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#triton.language.tensor.expand_dims" title="Link to this definition">¶</a></dt>
-<dd><p>Inserts a new length-1 dimension at the specified axis.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="triton.language.tensor.cast">
-<span class="sig-name descname"><span class="pre">cast</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dtype</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fp_downcast_rounding</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bitcast</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#triton.language.tensor.cast" title="Link to this definition">¶</a></dt>
-<dd><p>Casts the tensor to the specified data type.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="triton.language.tensor.to">
-<span class="sig-name descname"><span class="pre">to</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dtype</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fp_downcast_rounding</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bitcast</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#triton.language.tensor.to" title="Link to this definition">¶</a></dt>
-<dd><p>Alias for <a class="reference internal" href="#triton.language.tensor.cast" title="triton.language.tensor.cast"><code class="xref py py-meth docutils literal notranslate"><span class="pre">cast()</span></code></a>.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="triton.language.tensor.store">
-<span class="sig-name descname"><span class="pre">store</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pointer</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">value</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mask</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">boundary_check</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">()</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cache_modifier</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">eviction_policy</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#triton.language.tensor.store" title="Link to this definition">¶</a></dt>
-<dd><p>Stores the tensor to memory at the given pointer.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="triton.language.tensor.advance">
-<span class="sig-name descname"><span class="pre">advance</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">offsets</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#triton.language.tensor.advance" title="Link to this definition">¶</a></dt>
-<dd><p>Advances a block pointer by the given offsets.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="triton.language.tensor.atomic_cas">
-<span class="sig-name descname"><span class="pre">atomic_cas</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cmp</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">val</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sem</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scope</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#triton.language.tensor.atomic_cas" title="Link to this definition">¶</a></dt>
-<dd><p>Performs an atomic compare-and-swap.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="triton.language.tensor.atomic_xchg">
-<span class="sig-name descname"><span class="pre">atomic_xchg</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">val</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mask</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sem</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scope</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#triton.language.tensor.atomic_xchg" title="Link to this definition">¶</a></dt>
-<dd><p>Performs an atomic exchange.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="triton.language.tensor.atomic_add">
-<span class="sig-name descname"><span class="pre">atomic_add</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">val</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mask</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sem</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scope</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#triton.language.tensor.atomic_add" title="Link to this definition">¶</a></dt>
-<dd><p>Performs an atomic add.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="triton.language.tensor.atomic_max">
-<span class="sig-name descname"><span class="pre">atomic_max</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">val</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mask</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sem</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scope</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#triton.language.tensor.atomic_max" title="Link to this definition">¶</a></dt>
-<dd><p>Performs an atomic max.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="triton.language.tensor.atomic_min">
-<span class="sig-name descname"><span class="pre">atomic_min</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">val</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mask</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sem</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scope</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#triton.language.tensor.atomic_min" title="Link to this definition">¶</a></dt>
-<dd><p>Performs an atomic min.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="triton.language.tensor.atomic_and">
-<span class="sig-name descname"><span class="pre">atomic_and</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">val</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mask</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sem</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scope</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#triton.language.tensor.atomic_and" title="Link to this definition">¶</a></dt>
-<dd><p>Performs an atomic bitwise AND.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="triton.language.tensor.atomic_or">
-<span class="sig-name descname"><span class="pre">atomic_or</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">val</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mask</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sem</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scope</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#triton.language.tensor.atomic_or" title="Link to this definition">¶</a></dt>
-<dd><p>Performs an atomic bitwise OR.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="triton.language.tensor.atomic_xor">
-<span class="sig-name descname"><span class="pre">atomic_xor</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">val</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mask</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sem</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scope</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#triton.language.tensor.atomic_xor" title="Link to this definition">¶</a></dt>
-<dd><p>Performs an atomic bitwise XOR.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="triton.language.tensor.exp">
-<span class="sig-name descname"><span class="pre">exp</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#triton.language.tensor.exp" title="Link to this definition">¶</a></dt>
-<dd><p>Computes the exponential of each element.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="triton.language.tensor.log">
-<span class="sig-name descname"><span class="pre">log</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#triton.language.tensor.log" title="Link to this definition">¶</a></dt>
-<dd><p>Computes the natural logarithm of each element.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="triton.language.tensor.cos">
-<span class="sig-name descname"><span class="pre">cos</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#triton.language.tensor.cos" title="Link to this definition">¶</a></dt>
-<dd><p>Computes the cosine of each element.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="triton.language.tensor.sin">
-<span class="sig-name descname"><span class="pre">sin</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#triton.language.tensor.sin" title="Link to this definition">¶</a></dt>
-<dd><p>Computes the sine of each element.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="triton.language.tensor.sqrt">
-<span class="sig-name descname"><span class="pre">sqrt</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#triton.language.tensor.sqrt" title="Link to this definition">¶</a></dt>
-<dd><p>Computes the square root of each element.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="triton.language.tensor.rsqrt">
-<span class="sig-name descname"><span class="pre">rsqrt</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#triton.language.tensor.rsqrt" title="Link to this definition">¶</a></dt>
-<dd><p>Computes the reciprocal square root of each element.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="triton.language.tensor.abs">
-<span class="sig-name descname"><span class="pre">abs</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#triton.language.tensor.abs" title="Link to this definition">¶</a></dt>
-<dd><p>Computes the absolute value of each element.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="triton.language.tensor.reduce">
-<span class="sig-name descname"><span class="pre">reduce</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">axis</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">combine_fn</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">keep_dims</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#triton.language.tensor.reduce" title="Link to this definition">¶</a></dt>
-<dd><p>Reduces the tensor along an axis using a custom combine function.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="triton.language.tensor.associative_scan">
-<span class="sig-name descname"><span class="pre">associative_scan</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">axis</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">combine_fn</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reverse</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#triton.language.tensor.associative_scan" title="Link to this definition">¶</a></dt>
-<dd><p>Performs an associative scan (prefix sum/product) along an axis.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="triton.language.tensor.gather">
-<span class="sig-name descname"><span class="pre">gather</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">indices</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">axis</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#triton.language.tensor.gather" title="Link to this definition">¶</a></dt>
-<dd><p>Gathers slices from the tensor along an axis.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="triton.language.tensor.histogram">
-<span class="sig-name descname"><span class="pre">histogram</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">num_bins</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#triton.language.tensor.histogram" title="Link to this definition">¶</a></dt>
-<dd><p>Computes a histogram of the tensor values.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="triton.language.tensor.cdiv">
-<span class="sig-name descname"><span class="pre">cdiv</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">div</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#triton.language.tensor.cdiv" title="Link to this definition">¶</a></dt>
-<dd><p>Computes ceiling division.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="triton.language.tensor.sigmoid">
-<span class="sig-name descname"><span class="pre">sigmoid</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#triton.language.tensor.sigmoid" title="Link to this definition">¶</a></dt>
-<dd><p>Computes the sigmoid function.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="triton.language.tensor.softmax">
-<span class="sig-name descname"><span class="pre">softmax</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dim</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">keep_dims</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ieee_rounding</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#triton.language.tensor.softmax" title="Link to this definition">¶</a></dt>
-<dd><p>Computes the softmax along a dimension.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="triton.language.tensor.ravel">
-<span class="sig-name descname"><span class="pre">ravel</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#triton.language.tensor.ravel" title="Link to this definition">¶</a></dt>
-<dd><p>Flattens the tensor to 1D.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="triton.language.tensor.max">
-<span class="sig-name descname"><span class="pre">max</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">axis</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">return_indices</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">return_indices_tie_break_left</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">keep_dims</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#triton.language.tensor.max" title="Link to this definition">¶</a></dt>
-<dd><p>Computes the maximum value along an axis.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="triton.language.tensor.argmax">
-<span class="sig-name descname"><span class="pre">argmax</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">axis</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tie_break_left</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">keep_dims</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#triton.language.tensor.argmax" title="Link to this definition">¶</a></dt>
-<dd><p>Returns the indices of the maximum value.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="triton.language.tensor.min">
-<span class="sig-name descname"><span class="pre">min</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">axis</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">return_indices</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">return_indices_tie_break_left</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">keep_dims</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#triton.language.tensor.min" title="Link to this definition">¶</a></dt>
-<dd><p>Computes the minimum value along an axis.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="triton.language.tensor.argmin">
-<span class="sig-name descname"><span class="pre">argmin</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">axis</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tie_break_left</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">keep_dims</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#triton.language.tensor.argmin" title="Link to this definition">¶</a></dt>
-<dd><p>Returns the indices of the minimum value.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="triton.language.tensor.sum">
-<span class="sig-name descname"><span class="pre">sum</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">axis</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">keep_dims</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dtype</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#triton.language.tensor.sum" title="Link to this definition">¶</a></dt>
-<dd><p>Computes the sum of elements along an axis.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="triton.language.tensor.xor_sum">
-<span class="sig-name descname"><span class="pre">xor_sum</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">axis</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">keep_dims</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#triton.language.tensor.xor_sum" title="Link to this definition">¶</a></dt>
-<dd><p>Computes the bitwise XOR sum along an axis.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="triton.language.tensor.reduce_or">
-<span class="sig-name descname"><span class="pre">reduce_or</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">axis</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">keep_dims</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#triton.language.tensor.reduce_or" title="Link to this definition">¶</a></dt>
-<dd><p>Computes the bitwise OR reduction along an axis.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="triton.language.tensor.cumsum">
-<span class="sig-name descname"><span class="pre">cumsum</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">axis</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reverse</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#triton.language.tensor.cumsum" title="Link to this definition">¶</a></dt>
-<dd><p>Computes the cumulative sum along an axis.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="triton.language.tensor.cumprod">
-<span class="sig-name descname"><span class="pre">cumprod</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">axis</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reverse</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#triton.language.tensor.cumprod" title="Link to this definition">¶</a></dt>
-<dd><p>Computes the cumulative product along an axis.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="triton.language.tensor.sort">
-<span class="sig-name descname"><span class="pre">sort</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dim</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">descending</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#triton.language.tensor.sort" title="Link to this definition">¶</a></dt>
-<dd><p>Sorts the tensor along a dimension.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="triton.language.tensor.flip">
-<span class="sig-name descname"><span class="pre">flip</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dim</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#triton.language.tensor.flip" title="Link to this definition">¶</a></dt>
-<dd><p>Reverses the order of elements along a dimension.</p>
-</dd></dl>
-
-<p class="rubric">Examples</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">triton</span>
-<span class="kn">import</span><span class="w"> </span><span class="nn">triton.language</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">tl</span>
+<section id="parameters">
+<h2>Parameters<a class="headerlink" href="#parameters" title="Link to this heading">¶</a></h2>
+<dl class="simple">
+<dt>handle<span class="classifier">ir.value</span></dt><dd><p>Internal IR handle (not typically passed by user code)</p>
+</dd>
+<dt>type<span class="classifier">dtype</span></dt><dd><p>Tensor type, which can be a scalar dtype or block_type</p>
+</dd>
+</dl>
+</section>
+<section id="attributes">
+<h2>Attributes<a class="headerlink" href="#attributes" title="Link to this heading">¶</a></h2>
+<dl class="simple">
+<dt>dtype<span class="classifier">dtype</span></dt><dd><p>The scalar data type of the tensor elements</p>
+</dd>
+<dt>shape<span class="classifier">tuple of constexpr</span></dt><dd><p>The shape of the tensor (empty tuple for scalars)</p>
+</dd>
+<dt>numel<span class="classifier">constexpr</span></dt><dd><p>Total number of elements in the tensor</p>
+</dd>
+<dt>type<span class="classifier">dtype</span></dt><dd><p>The full tensor type (may be block_type)</p>
+</dd>
+<dt>handle<span class="classifier">ir.value</span></dt><dd><p>Internal IR handle</p>
+</dd>
+</dl>
+</section>
+<section id="notes">
+<h2>Notes<a class="headerlink" href="#notes" title="Link to this heading">¶</a></h2>
+<p>Tensors are typically created through Triton operations rather than direct
+construction. User code should use functions like <code class="xref py py-func docutils literal notranslate"><span class="pre">triton.language.load()</span></code>,
+<a class="reference internal" href="triton.language.arange.html#triton.language.arange" title="triton.language.arange"><code class="xref py py-func docutils literal notranslate"><span class="pre">triton.language.arange()</span></code></a>, or <a class="reference internal" href="triton.language.full.html#triton.language.full" title="triton.language.full"><code class="xref py py-func docutils literal notranslate"><span class="pre">triton.language.full()</span></code></a> to create
+tensors.</p>
+<p>Most named member functions are duplicates of free functions in
+<code class="xref py py-mod docutils literal notranslate"><span class="pre">triton.language</span></code>. For example, <code class="docutils literal notranslate"><span class="pre">triton.language.sqrt(x)</span></code> is
+equivalent to <code class="docutils literal notranslate"><span class="pre">x.sqrt()</span></code>.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">tensor</span></code> class defines magic/dunder methods for operator overloading,
+supporting expressions like <code class="docutils literal notranslate"><span class="pre">x</span> <span class="pre">+</span> <span class="pre">y</span></code>, <code class="docutils literal notranslate"><span class="pre">x</span> <span class="pre">&lt;&lt;</span> <span class="pre">2</span></code>, <code class="docutils literal notranslate"><span class="pre">x</span> <span class="pre">==</span> <span class="pre">y</span></code>, etc.</p>
+<p>Member functions added via the <code class="docutils literal notranslate"><span class="pre">_tensor_member_fn</span></code> decorator include
+operations for shape manipulation (<code class="docutils literal notranslate"><span class="pre">reshape</span></code>, <code class="docutils literal notranslate"><span class="pre">broadcast_to</span></code>, <code class="docutils literal notranslate"><span class="pre">trans</span></code>),
+reductions (<code class="docutils literal notranslate"><span class="pre">sum</span></code>, <code class="docutils literal notranslate"><span class="pre">max</span></code>, <code class="docutils literal notranslate"><span class="pre">min</span></code>), atomic operations (<code class="docutils literal notranslate"><span class="pre">atomic_add</span></code>,
+<code class="docutils literal notranslate"><span class="pre">atomic_cas</span></code>), and mathematical functions (<code class="docutils literal notranslate"><span class="pre">exp</span></code>, <code class="docutils literal notranslate"><span class="pre">log</span></code>, <code class="docutils literal notranslate"><span class="pre">sqrt</span></code>).</p>
+</section>
+<section id="examples">
+<h2>Examples<a class="headerlink" href="#examples" title="Link to this heading">¶</a></h2>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nd">@triton</span><span class="o">.</span><span class="n">jit</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">kernel</span><span class="p">(</span><span class="n">x_ptr</span><span class="p">,</span> <span class="n">y_ptr</span><span class="p">,</span> <span class="n">BLOCK</span><span class="p">:</span> <span class="n">tl</span><span class="o">.</span><span class="n">constexpr</span><span class="p">):</span>
+    <span class="n">pid</span> <span class="o">=</span> <span class="n">tl</span><span class="o">.</span><span class="n">program_id</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+    <span class="n">offsets</span> <span class="o">=</span> <span class="n">pid</span> <span class="o">*</span> <span class="n">BLOCK</span> <span class="o">+</span> <span class="n">tl</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">BLOCK</span><span class="p">)</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="n">tl</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">x_ptr</span> <span class="o">+</span> <span class="n">offsets</span><span class="p">)</span>  <span class="c1"># x is a tensor</span>
+    <span class="n">y</span> <span class="o">=</span> <span class="n">tl</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>                <span class="c1"># Returns a tensor</span>
+    <span class="n">tl</span><span class="o">.</span><span class="n">store</span><span class="p">(</span><span class="n">y_ptr</span> <span class="o">+</span> <span class="n">offsets</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
 
 <span class="nd">@triton</span><span class="o">.</span><span class="n">jit</span>
-<span class="k">def</span><span class="w"> </span><span class="nf">kernel</span><span class="p">(</span><span class="n">x_ptr</span><span class="p">,</span> <span class="n">y_ptr</span><span class="p">,</span> <span class="n">BLOCK_SIZE</span><span class="p">:</span> <span class="n">tl</span><span class="o">.</span><span class="n">constexpr</span><span class="p">):</span>
-    <span class="c1"># Load a block of data into a tensor</span>
-    <span class="n">x</span> <span class="o">=</span> <span class="n">tl</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">x_ptr</span> <span class="o">+</span> <span class="n">tl</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">BLOCK_SIZE</span><span class="p">))</span>
-
-    <span class="c1"># Perform element-wise operations using tensor methods</span>
-    <span class="n">y</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">sqrt</span><span class="p">()</span> <span class="o">*</span> <span class="mf">2.0</span>
-
-    <span class="c1"># Reduce the tensor to a single value</span>
-    <span class="n">sum_x</span> <span class="o">=</span> <span class="n">tl</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
-
-    <span class="c1"># Store the result</span>
-    <span class="n">tl</span><span class="o">.</span><span class="n">store</span><span class="p">(</span><span class="n">y_ptr</span> <span class="o">+</span> <span class="n">tl</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">BLOCK_SIZE</span><span class="p">),</span> <span class="n">y</span><span class="p">)</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">matmul_kernel</span><span class="p">(</span><span class="n">a_ptr</span><span class="p">,</span> <span class="n">b_ptr</span><span class="p">,</span> <span class="n">c_ptr</span><span class="p">,</span> <span class="n">M</span><span class="p">,</span> <span class="n">N</span><span class="p">,</span> <span class="n">K</span><span class="p">,</span> <span class="n">BLOCK_M</span><span class="p">,</span> <span class="n">BLOCK_N</span><span class="p">,</span> <span class="n">BLOCK_K</span><span class="p">):</span>
+    <span class="n">pid_m</span> <span class="o">=</span> <span class="n">tl</span><span class="o">.</span><span class="n">program_id</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+    <span class="n">pid_n</span> <span class="o">=</span> <span class="n">tl</span><span class="o">.</span><span class="n">program_id</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">offs_m</span> <span class="o">=</span> <span class="n">pid_m</span> <span class="o">*</span> <span class="n">BLOCK_M</span> <span class="o">+</span> <span class="n">tl</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">BLOCK_M</span><span class="p">)</span>
+    <span class="n">offs_n</span> <span class="o">=</span> <span class="n">pid_n</span> <span class="o">*</span> <span class="n">BLOCK_N</span> <span class="o">+</span> <span class="n">tl</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">BLOCK_N</span><span class="p">)</span>
+    <span class="n">a</span> <span class="o">=</span> <span class="n">tl</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">a_ptr</span> <span class="o">+</span> <span class="n">offs_m</span><span class="p">[:,</span> <span class="kc">None</span><span class="p">]</span> <span class="o">*</span> <span class="n">K</span> <span class="o">+</span> <span class="n">offs_n</span><span class="p">[</span><span class="kc">None</span><span class="p">,</span> <span class="p">:])</span>  <span class="c1"># 2D tensor</span>
+    <span class="n">b</span> <span class="o">=</span> <span class="n">tl</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">b_ptr</span> <span class="o">+</span> <span class="n">offs_m</span><span class="p">[:,</span> <span class="kc">None</span><span class="p">]</span> <span class="o">*</span> <span class="n">K</span> <span class="o">+</span> <span class="n">offs_n</span><span class="p">[</span><span class="kc">None</span><span class="p">,</span> <span class="p">:])</span>  <span class="c1"># 2D tensor</span>
+    <span class="n">c</span> <span class="o">=</span> <span class="n">tl</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">)</span>                                           <span class="c1"># Matrix product tensor</span>
 </pre></div>
 </div>
-</dd></dl>
-
+</section>
+</section>
 
 
            </div>

@@ -1,69 +1,45 @@
 cuda_memcheck
-==============
+=============
 
-.. currentmodule:: triton.testing
+.. py:function:: triton.testing.cuda_memcheck(**target_kwargs)
 
-.. function:: cuda_memcheck(**target_kwargs)
+    Decorator to run specific test configurations under ``cuda-memcheck``.
 
-   Decorator that runs a pytest test function under ``cuda-memcheck`` to detect
-   out-of-bounds memory accesses and other CUDA runtime errors.
+    Wraps a test function to re-execute it via ``cuda-memcheck`` if the call
+    arguments match the specified ``target_kwargs``. Validates that no memory
+    access errors occur during execution.
 
-   The decorator inspects the calling process name and test arguments. If the
-   parent process is not already ``cuda-memcheck`` and the provided
-   ``target_kwargs`` are present in the test call, it re-executes the specific
-   test node via ``subprocess`` with ``cuda-memcheck`` enabled. It asserts that
-   the execution returns successfully with zero errors.
+    Parameters
+    ----------
+    **target_kwargs : dict
+        Keyword arguments used to filter test configurations. If the test is
+        invoked with kwargs that include these items, the test will be
+        re-executed under ``cuda-memcheck``.
 
-   Parameters
-   ----------
-   **target_kwargs : dict
-       Keyword arguments used to conditionally trigger the memory check. The
-       decorator only invokes ``cuda-memcheck`` if these items are a subset of
-       the arguments passed to the wrapped test function.
+    Returns
+    -------
+    decorator : callable
+        A decorator that wraps the test function.
 
-   Returns
-   -------
-   decorator : callable
-       A decorator that wraps the target test function with memory checking
-       logic.
+    Notes
+    -----
+    Requires the ``cuda-memcheck`` binary to be available in the system PATH.
+    The wrapped test function must be a ``pytest`` test and accept a
+    ``request`` fixture. Sets ``PYTORCH_NO_CUDA_MEMORY_CACHING=1`` during
+    memcheck execution. Asserts that ``cuda-memcheck`` exits with code 0 and
+    reports 0 errors.
 
-   Raises
-   ------
-   AssertionError
-       If the wrapped test function does not include a ``request`` fixture
-       (required for identifying the test node), or if ``cuda-memcheck``
-       reports any errors or non-zero return code.
+    Examples
+    --------
+    Apply the decorator to a pytest test function. The test must accept the
+    ``request`` fixture.
 
-   Notes
-   -----
-   - The decorated test function must accept a ``request`` fixture (typically
-     provided by pytest), even if it is unused within the test body.
-   - Sets the environment variable ``PYTORCH_NO_CUDA_MEMORY_CACHING=1`` during
-     the memcheck run to ensure accurate memory tracking.
-   - This decorator is intended for use in CI or debugging workflows where
-     detecting illegal memory access is critical.
+    .. code-block:: python
 
-   Examples
-   --------
-   .. code-block:: python
+        import triton.testing as tt
 
-      import triton
-      import triton.testing as tt
-      import pytest
-
-      @tt.cuda_memcheck(mode="strict")
-      def test_kernel_bounds(request):
-          # Define a kernel that may have out-of-bounds access
-          @triton.jit
-          def kernel(x_ptr, n):
-              pid = triton.program_id(0)
-              if pid < n:
-                  val = triton.load(x_ptr + pid)
-                  triton.store(x_ptr + pid, val + 1)
-
-          # Launch kernel
-          x = torch.zeros(1024, device='cuda')
-          kernel[(1024,)](x, 1024)
-
-      # Run with pytest: the decorator will invoke cuda-memcheck automatically
-      # if 'mode="strict"' is passed.
+        @tt.cuda_memcheck(block_size=128)
+        def test_my_kernel(block_size, request):
+            # Define kernel logic here
+            # This test will run under cuda-memcheck when block_size=128
+            pass

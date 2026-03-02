@@ -18,7 +18,7 @@
     <script src="../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
-    <link rel="next" title="Parameters" href="triton.language.histogram.html" />
+    <link rel="next" title="histogram" href="triton.language.histogram.html" />
     <link rel="prev" title="cumprod" href="triton.language.cumprod.html" /> 
 </head>
 
@@ -59,19 +59,20 @@
 <li class="toctree-l2"><a class="reference internal" href="../triton.language.html#math-ops">Math Ops</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../triton.language.html#reduction-ops">Reduction Ops</a></li>
 <li class="toctree-l2 current"><a class="reference internal" href="../triton.language.html#scan-sort-ops">Scan/Sort Ops</a><ul class="current">
-<li class="toctree-l3"><a class="reference internal" href="triton.language.associative_scan.html"><code class="docutils literal notranslate"><span class="pre">triton.language.associative_scan()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.language.associative_scan.html">triton.language.associative_scan</a></li>
 <li class="toctree-l3"><a class="reference internal" href="triton.language.cumprod.html">cumprod</a></li>
 <li class="toctree-l3 current"><a class="current reference internal" href="#">cumsum</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="#triton.language.cumsum"><code class="docutils literal notranslate"><span class="pre">cumsum()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id1">cumsum</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#parameters">Parameters</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#returns">Returns</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#notes">Notes</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#examples">Examples</a></li>
 </ul>
 </li>
-<li class="toctree-l3"><a class="reference internal" href="triton.language.histogram.html">Parameters</a></li>
-<li class="toctree-l3"><a class="reference internal" href="triton.language.histogram.html#returns">Returns</a></li>
-<li class="toctree-l3"><a class="reference internal" href="triton.language.histogram.html#notes">Notes</a></li>
-<li class="toctree-l3"><a class="reference internal" href="triton.language.histogram.html#examples">Examples</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.language.histogram.html">histogram</a></li>
 <li class="toctree-l3"><a class="reference internal" href="triton.language.sort.html">sort</a></li>
-<li class="toctree-l3"><a class="reference internal" href="triton.language.topk.html">topk</a></li>
-<li class="toctree-l3"><a class="reference internal" href="triton.language.gather.html"><code class="docutils literal notranslate"><span class="pre">triton.language.gather()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.language.topk.html">triton.language.topk</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.language.gather.html">gather</a></li>
 <li class="toctree-l3"><a class="reference internal" href="triton.language.bitonic_merge.html">bitonic_merge</a></li>
 </ul>
 </li>
@@ -86,6 +87,35 @@
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../triton.testing.html">triton.testing</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../triton-semantics.html">Triton Semantics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.language.extra.cuda.html">triton.language.extra.cuda</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.language.extra.cuda.libdevice.html">triton.language.extra.cuda.libdevice</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.runtime.html">triton.runtime</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.tools.html">triton.tools</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Gluon (Experimental) API</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.html">triton.experimental.gluon</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.html">triton.experimental.gluon.language</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.nvidia.ampere.html">triton.experimental.gluon.language.nvidia.ampere</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.nvidia.ampere.async_copy.html">triton.experimental.gluon.language.nvidia.ampere.async_copy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.nvidia.ampere.mbarrier.html">triton.experimental.gluon.language.nvidia.ampere.mbarrier</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.nvidia.hopper.html">triton.experimental.gluon.language.nvidia.hopper</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.nvidia.hopper.tma.html">triton.experimental.gluon.language.nvidia.hopper.tma</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.nvidia.hopper.mbarrier.html">triton.experimental.gluon.language.nvidia.hopper.mbarrier</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.nvidia.hopper.cluster.html">triton.experimental.gluon.language.nvidia.hopper.cluster</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.nvidia.blackwell.html">triton.experimental.gluon.language.nvidia.blackwell</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.nvidia.blackwell.tma.html">triton.experimental.gluon.language.nvidia.blackwell.tma</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.nvidia.blackwell.clc.html">triton.experimental.gluon.language.nvidia.blackwell.clc</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.amd.html">triton.experimental.gluon.language.amd</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.amd.gfx1250.html">triton.experimental.gluon.language.amd.gfx1250</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.amd.gfx1250.async_copy.html">triton.experimental.gluon.language.amd.gfx1250.async_copy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.amd.gfx1250.mbarrier.html">triton.experimental.gluon.language.amd.gfx1250.mbarrier</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.amd.gfx1250.cluster.html">triton.experimental.gluon.language.amd.gfx1250.cluster</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.amd.gfx1250.tdm.html">triton.experimental.gluon.language.amd.gfx1250.tdm</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.amd.cdna3.html">triton.experimental.gluon.language.amd.cdna3</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.amd.cdna4.html">triton.experimental.gluon.language.amd.cdna4</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.amd.rdna3.html">triton.experimental.gluon.language.amd.rdna3</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.amd.rdna4.html">triton.experimental.gluon.language.amd.rdna4</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Triton MLIR Dialects</span></p>
 <ul>
@@ -125,52 +155,50 @@
              
   <section id="cumsum">
 <h1>cumsum<a class="headerlink" href="#cumsum" title="Link to this heading">¶</a></h1>
-<dl class="py function">
-<dt class="sig sig-object py" id="triton.language.cumsum">
-<span class="sig-prename descclassname"><span class="pre">triton.language.</span></span><span class="sig-name descname"><span class="pre">cumsum</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">axis</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reverse</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dtype</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#triton.language.cumsum" title="Link to this definition">¶</a></dt>
-<dd><p>Returns the cumulative sum of all elements in the <code class="code docutils literal notranslate"><span class="pre">input</span></code> tensor along the provided <code class="code docutils literal notranslate"><span class="pre">axis</span></code>.</p>
+<section id="id1">
+<h2>cumsum<a class="headerlink" href="#id1" title="Link to this heading">¶</a></h2>
+<p>Compute the cumulative sum of the elements along a given axis.</p>
+</section>
 <section id="parameters">
 <h2>Parameters<a class="headerlink" href="#parameters" title="Link to this heading">¶</a></h2>
 <dl class="simple">
-<dt>input<span class="classifier">tensor</span></dt><dd><p>The input values.</p>
+<dt>input<span class="classifier">tensor</span></dt><dd><p>The input tensor.</p>
 </dd>
-<dt>axis<span class="classifier">int, optional</span></dt><dd><p>The dimension along which the scan should be done. Default is 0.</p>
+<dt>axis<span class="classifier">int, optional</span></dt><dd><p>The axis along which the cumulative sum is computed. Default is 0.</p>
 </dd>
-<dt>reverse<span class="classifier">bool, optional</span></dt><dd><p>If True, the scan is performed in the reverse direction. Default is False.</p>
+<dt>reverse<span class="classifier">bool, optional</span></dt><dd><p>If <code class="docutils literal notranslate"><span class="pre">True</span></code>, the scan is performed in the reverse direction. Default is <code class="docutils literal notranslate"><span class="pre">False</span></code>.</p>
 </dd>
-<dt>dtype<span class="classifier">dtype, optional</span></dt><dd><p>The desired data type of the returned tensor. If specified, the input tensor is cast to <code class="code docutils literal notranslate"><span class="pre">dtype</span></code> before the operation is performed. If not specified, small integer types (&lt; 32 bits) are upcasted to prevent overflow. Note that <code class="code docutils literal notranslate"><span class="pre">tl.bfloat16</span></code> inputs are automatically promoted to <code class="code docutils literal notranslate"><span class="pre">tl.float32</span></code>.</p>
+<dt>dtype<span class="classifier">dtype, optional</span></dt><dd><p>The desired data type of the returned tensor. If specified, the input tensor is cast to <code class="docutils literal notranslate"><span class="pre">dtype</span></code> before the operation. If not specified, small integer types (&lt; 32 bits) are upcasted to prevent overflow. <code class="docutils literal notranslate"><span class="pre">tl.bfloat16</span></code> inputs are automatically promoted to <code class="docutils literal notranslate"><span class="pre">tl.float32</span></code>.</p>
 </dd>
 </dl>
 </section>
 <section id="returns">
 <h2>Returns<a class="headerlink" href="#returns" title="Link to this heading">¶</a></h2>
 <dl class="simple">
-<dt>tensor</dt><dd><p>A tensor containing the cumulative sums.</p>
+<dt>tensor</dt><dd><p>A tensor of the same shape as <code class="docutils literal notranslate"><span class="pre">input</span></code> containing the cumulative sums.</p>
 </dd>
 </dl>
 </section>
 <section id="notes">
 <h2>Notes<a class="headerlink" href="#notes" title="Link to this heading">¶</a></h2>
-<p>This function can also be called as a member function on <a class="reference internal" href="triton.language.tensor.html#triton.language.tensor" title="triton.language.tensor"><code class="xref py py-class docutils literal notranslate"><span class="pre">tensor</span></code></a>,
-as <code class="code docutils literal notranslate"><span class="pre">x.cumsum(...)</span></code> instead of <code class="code docutils literal notranslate"><span class="pre">cumsum(x,</span> <span class="pre">...)</span></code>.</p>
+<p>This function can also be called as a member function on <code class="docutils literal notranslate"><span class="pre">tensor</span></code>, as <code class="docutils literal notranslate"><span class="pre">x.cumsum(...)</span></code> instead of <code class="docutils literal notranslate"><span class="pre">cumsum(x,</span> <span class="pre">...)</span></code>.</p>
 </section>
 <section id="examples">
 <h2>Examples<a class="headerlink" href="#examples" title="Link to this heading">¶</a></h2>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">triton</span>
-<span class="kn">import</span><span class="w"> </span><span class="nn">triton.language</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">tl</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">triton.language</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">tl</span>
 
-<span class="nd">@triton</span><span class="o">.</span><span class="n">jit</span>
-<span class="k">def</span><span class="w"> </span><span class="nf">kernel</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">Y</span><span class="p">,</span> <span class="n">BLOCK_SIZE</span><span class="p">:</span> <span class="n">tl</span><span class="o">.</span><span class="n">constexpr</span><span class="p">):</span>
-    <span class="n">pid</span> <span class="o">=</span> <span class="n">tl</span><span class="o">.</span><span class="n">program_id</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
-    <span class="n">offset</span> <span class="o">=</span> <span class="n">pid</span> <span class="o">*</span> <span class="n">BLOCK_SIZE</span>
-    <span class="n">x</span> <span class="o">=</span> <span class="n">tl</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">X</span> <span class="o">+</span> <span class="n">offset</span> <span class="o">+</span> <span class="n">tl</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">BLOCK_SIZE</span><span class="p">))</span>
-    <span class="n">y</span> <span class="o">=</span> <span class="n">tl</span><span class="o">.</span><span class="n">cumsum</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
-    <span class="n">tl</span><span class="o">.</span><span class="n">store</span><span class="p">(</span><span class="n">Y</span> <span class="o">+</span> <span class="n">offset</span> <span class="o">+</span> <span class="n">tl</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">BLOCK_SIZE</span><span class="p">),</span> <span class="n">y</span><span class="p">)</span>
+<span class="c1"># Basic usage</span>
+<span class="n">x</span> <span class="o">=</span> <span class="n">tl</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">8</span><span class="p">)</span>
+<span class="n">y</span> <span class="o">=</span> <span class="n">tl</span><span class="o">.</span><span class="n">cumsum</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>  <span class="c1"># [0, 1, 3, 6, 10, 15, 21, 28]</span>
+
+<span class="c1"># Member function usage</span>
+<span class="n">z</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">cumsum</span><span class="p">()</span>
+
+<span class="c1"># Reverse cumulative sum</span>
+<span class="n">r</span> <span class="o">=</span> <span class="n">tl</span><span class="o">.</span><span class="n">cumsum</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">reverse</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </pre></div>
 </div>
 </section>
-</dd></dl>
-
 </section>
 
 
@@ -178,7 +206,7 @@ as <code class="code docutils literal notranslate"><span class="pre">x.cumsum(..
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
         <a href="triton.language.cumprod.html" class="btn btn-neutral float-left" title="cumprod" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="triton.language.histogram.html" class="btn btn-neutral float-right" title="Parameters" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="triton.language.histogram.html" class="btn btn-neutral float-right" title="histogram" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>

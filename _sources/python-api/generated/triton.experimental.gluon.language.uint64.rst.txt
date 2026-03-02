@@ -1,0 +1,27 @@
+uint64
+======
+
+.. py:data:: triton.experimental.gluon.language.uint64
+
+   64-bit unsigned integer data type.
+
+   Represents an unsigned 64-bit integer type within Gluon kernels. This dtype instance is used to annotate scalar values or tensor elements requiring 64-bit precision without sign bits.
+
+   Notes
+   -----
+   Supported across all Gluon backends (NVIDIA Hopper/Blackwell, AMD CDNA3/RDNA3). Commonly used for global pointer offsets, large counters, or bit-wise operations requiring 64-bit width. Use ``ttgl.int64`` for signed arithmetic or ``ttgl.uint32`` to reduce register pressure when 64-bit range is unnecessary.
+
+   Examples
+   --------
+   Define a kernel accepting a 64-bit unsigned integer argument:
+
+   .. code-block:: python
+
+      import triton.experimental.gluon as gluon
+      import triton.experimental.gluon.language as ttgl
+
+      @gluon.jit
+      def process_count(count: ttgl.uint64):
+          # Perform 64-bit unsigned arithmetic
+          next_count = count + 1
+          pass

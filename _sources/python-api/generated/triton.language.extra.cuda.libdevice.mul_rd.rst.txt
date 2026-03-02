@@ -1,0 +1,50 @@
+triton.language.extra.cuda.libdevice.mul_rd
+============================================
+
+.. currentmodule:: triton.language.extra.cuda.libdevice
+
+.. function:: mul_rd(arg0, arg1, _semantic=None)
+
+    Multiply two floating-point values with round-down (toward negative infinity) rounding mode.
+
+    Parameters
+    ----------
+    arg0 : tensor
+        First input tensor. Must be of floating-point type (``fp32`` or ``fp64``).
+    arg1 : tensor
+        Second input tensor. Must be of floating-point type (``fp32`` or ``fp64``).
+    _semantic : optional
+        Internal parameter for Triton semantic handling. Do not set manually.
+
+    Returns
+    -------
+    result : tensor
+        Tensor containing the element-wise product of ``arg0`` and ``arg1`` with
+        round-down rounding mode applied. Has the same dtype as the inputs.
+
+    Notes
+    -----
+    This function calls CUDA libdevice functions:
+
+    - ``__nv_fmul_rd`` for ``fp32`` inputs
+    - ``__nv_dmul_rd`` for ``fp64`` inputs
+
+    Round-down rounding mode rounds the result toward negative infinity. This differs
+    from the default round-to-nearest-even mode used by standard multiplication.
+
+    Both inputs must have the same dtype. The operation is pure (no side effects).
+
+    Examples
+    --------
+    .. code-block:: python
+
+        import triton
+        import triton.language as tl
+
+        @triton.jit
+        def kernel(x_ptr, y_ptr, out_ptr, BLOCK_SIZE: tl.constexpr):
+            x = tl.load(x_ptr + tl.arange(0, BLOCK_SIZE))
+            y = tl.load(y_ptr + tl.arange(0, BLOCK_SIZE))
+            # Multiply with round-down rounding mode
+            result = tl.extra.cuda.libdevice.mul_rd(x, y)
+            tl.store(out_ptr + tl.arange(0, BLOCK_SIZE), result)

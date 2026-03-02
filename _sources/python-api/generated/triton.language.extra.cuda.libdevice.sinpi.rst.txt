@@ -1,0 +1,44 @@
+triton.language.extra.cuda.libdevice.sinpi
+==========================================
+
+.. currentmodule:: triton.language.extra.cuda.libdevice
+
+.. function:: sinpi(arg0, _semantic=None)
+
+    Compute :code:`sin(pi * x)` element-wise.
+
+    Parameters
+    ----------
+    arg0 : tl.tensor
+        Input tensor of floating-point values.
+
+    Returns
+    -------
+    tl.tensor
+        Tensor containing :code:`sin(pi * x)` for each element in :code:`arg0`.
+        Has the same dtype as the input (fp32 or fp64).
+
+    Notes
+    -----
+    This function calls CUDA libdevice implementations:
+
+    - :code:`__nv_sinpif` for float32 inputs
+    - :code:`__nv_sinpi` for float64 inputs
+
+    Using :code:`sinpi(x)` is more accurate than :code:`sin(pi * x)` for large
+    values of :code:`x`, as it avoids precision loss in the multiplication.
+
+    Examples
+    --------
+    .. code-block:: python
+
+        import triton
+        import triton.language as tl
+
+        @triton.jit
+        def sinpi_kernel(x_ptr, y_ptr, BLOCK_SIZE: tl.constexpr):
+            pid = tl.program_id(0)
+            offsets = pid * BLOCK_SIZE + tl.arange(0, BLOCK_SIZE)
+            x = tl.load(x_ptr + offsets)
+            y = tl.extra.cuda.libdevice.sinpi(x)
+            tl.store(y_ptr + offsets, y)

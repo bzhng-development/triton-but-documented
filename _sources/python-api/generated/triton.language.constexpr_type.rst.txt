@@ -1,43 +1,44 @@
-.. py:class:: constexpr_type(value)
+constexpr_type
+==============
 
-   Type representation for a compile-time constant value in Triton IR.
+.. currentmodule:: triton.language
 
-   This class wraps a Python value known at compile-time, allowing it to be used
-   as a type annotation within the Triton type system. It is typically instantiated
-   implicitly when using :py:class:`constexpr` values or :py:obj:`tl.constexpr`
-   annotations in kernel definitions.
+.. class:: constexpr_type(value)
+
+   Type representation for compile-time constant values in Triton IR.
 
    Parameters
    ----------
-   value : Python scalar or dtype
-       The constant value to wrap (e.g., an int, float, or :py:class:`dtype`).
+   value : int, float, or dtype
+       The compile-time constant value to wrap. This value is known at
+       compile-time and does not require runtime computation.
 
-   Returns
-   -------
-   constexpr_type
-       A type object representing the constant value.
+   Attributes
+   ----------
+   value
+       The wrapped constant value.
 
    Notes
    -----
-   Instances of :py:class:`constexpr_type` are hashable and compare equal if
-   their underlying values are equal. The mangled name for this type is prefixed
-   with ``c`` followed by the mangled representation of the value.
+   ``constexpr_type`` is used internally by Triton to represent types of
+   compile-time constants. It inherits from ``base_type`` and implements
+   type mangling for kernel compilation.
 
-   This type does not emit any IR instructions during flattening, as the value
-   is embedded directly in the type structure.
+   Users typically interact with ``constexpr`` values rather than directly
+   instantiating ``constexpr_type``. The type is automatically created when
+   a ``constexpr`` value is constructed.
 
    Examples
    --------
    >>> import triton.language as tl
-   >>> t = tl.constexpr_type(42)
-   >>> print(t)
+   >>> from triton.language import constexpr_type
+   >>> t = constexpr_type(42)
+   >>> t
    constexpr_type[42]
-   >>> t.mangle()
-   'c42'
+   >>> t.value
+   42
 
-   .. code-block:: python
-
-      @triton.jit
-      def kernel(BLOCK_SIZE: tl.constexpr):
-          # BLOCK_SIZE has type constexpr_type[int] internally
-          pass
+   >>> # constexpr_type is typically used indirectly through constexpr
+   >>> c = tl.constexpr(10)
+   >>> c.type
+   constexpr_type[10]

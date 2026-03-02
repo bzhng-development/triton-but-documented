@@ -1,58 +1,56 @@
-Set GPU clock frequencies for benchmarking.
+triton.testing.set_gpu_clock
+============================
 
-This context manager locks the GPU SM and memory clocks to specified values
-using ``nvidia-smi``, validates the settings, and yields theoretical
-compute (TFLOPS) and memory bandwidth (GBPS) estimates based on the
-locked frequencies. Upon exit, it restores the GPU to default clock
-settings.
+.. function:: triton.testing.set_gpu_clock(ref_sm_clock=1350, ref_mem_clock=1215)
 
-Requires ``nvidia-smi`` in PATH and appropriate permissions to modify
-GPU clocks. Targets GPU 0 by default.
+   Context manager that locks GPU SM and memory clocks to specified frequencies
+   for benchmarking.
 
-Parameters
-----------
-ref_sm_clock : int, optional
-    Reference SM clock frequency in MHz. Default is 1350.
-ref_mem_clock : int, optional
-    Reference memory clock frequency in MHz. Default is 1215.
+   Sets the GPU clocks using ``nvidia-smi``, verifies the settings, and yields
+   theoretical compute throughput (TFLOPS) and memory bandwidth (GBPS). Restores
+   default clock settings on exit.
 
-Yields
-------
-tflops : float
-    Theoretical peak compute performance in TFLOPS, calculated based on
-    the locked SM clock and assumed hardware parameters (e.g., 108 SMs,
-    256 CUDA cores per SM, 4 operations per cycle).
-gbps : float
-    Theoretical peak memory bandwidth in GBPS, calculated based on the
-    locked memory clock and assumed bus width (e.g., 640-bit interface).
+   Parameters
+   ----------
+   ref_sm_clock : int, optional
+       Reference SM clock frequency in MHz. Default is 1350.
+   ref_mem_clock : int, optional
+       Reference memory clock frequency in MHz. Default is 1215.
 
-Raises
-------
-AssertionError
-    If the actual GPU clocks do not match the requested frequencies
-    within a 10 MHz tolerance.
-subprocess.CalledProcessError
-    If ``nvidia-smi`` commands fail.
+   Yields
+   ------
+   tflops : float
+       Theoretical tensor core throughput in TFLOPS.
+   gbps : float
+       Theoretical memory bandwidth in GBPS.
 
-Notes
------
-The performance estimates assume specific hardware configurations
-(Ampere-like: 108 SMs, 256 cores/SM, 640-bit memory bus). Adjust
-calculations if targeting different GPU architectures.
+   Raises
+   ------
+   AssertionError
+       If GPU clocks cannot be set to the specified frequencies within
+       10 MHz tolerance.
 
-Clock locking persists only within the ``with`` block. Automatic reset
-occurs on context exit, even if an exception is raised.
+   Notes
+   -----
+   This context manager requires ``nvidia-smi`` to be available in PATH and
+   sufficient permissions to modify GPU clock settings. Only GPU 0 is configured.
 
-Examples
---------
-.. code-block:: python
+   TFLOPS calculation assumes: 108 SMs, 4 tensor cores per SM, 256 FMA ops per
+   cycle, 2 operations per FMA.
 
-    import triton.testing as tt
+   GBPS calculation assumes: 640-bit memory interface, DDR (2x) transfer rate.
 
-    # Lock clocks and retrieve theoretical performance metrics
-    with tt.set_gpu_clock(ref_sm_clock=1400, ref_mem_clock=1200) as (tflops, gbps):
-        print(f"Peak TFLOPS: {tflops:.2f}")
-        print(f"Peak GBPS: {gbps:.2f}")
-        # Run benchmarks here with deterministic clock speeds
+   Clock settings are automatically reset when exiting the context.
 
-    # Clocks are automatically reset to default after the block
+   Examples
+   --------
+   .. code-block:: python
+
+      import triton.testing as tt
+
+      with tt.set_gpu_clock(ref_sm_clock=1350, ref_mem_clock=1215) as (tflops, gbps):
+          print(f"Theoretical TFLOPS: {tflops}")
+          print(f"Theoretical GBPS: {gbps}")
+          # Run benchmarks here with fixed clock speeds
+
+      # GPU clocks are automatically restored after context exits

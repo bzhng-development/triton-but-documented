@@ -1,69 +1,82 @@
-class triton.Config
-==================
+triton.Config
+=============
 
-Represents a possible kernel configuration for the auto-tuner to try.
-
-This object encapsulates compilation parameters and meta-arguments used to
-instantiate a GPU kernel. Instances are typically passed to
-:func:`triton.autotune` to define the search space for performance tuning.
+Represents a kernel configuration for the auto-tuner to try.
 
 Parameters
 ----------
 kwargs : dict
-    A dictionary of meta-parameters to pass to the kernel as keyword arguments.
-    Keys must match the names of `tl.constexpr` arguments in the kernel definition.
+    Dictionary of meta-parameters to pass to the kernel as keyword arguments.
 num_warps : int, optional
-    The number of warps to use for the kernel. Defaults to 4.
-    Each warp consists of 32 threads; for example, ``num_warps=8`` results in
-    256 concurrent threads per block.
+    Number of warps to use for the kernel when compiled for GPUs. Each warp
+    contains 32 threads, so ``num_warps=8`` means 256 threads per kernel
+    instance. Default is 4.
 num_stages : int, optional
-    The number of stages for software pipelining of loops. Defaults to 3.
-    Increasing this value can improve instruction-level parallelism, particularly
-    for matrix multiplication workloads on NVIDIA Ampere (SM80+) and newer GPUs.
+    Number of stages for software-pipelining loops. Mostly useful for matrix
+    multiplication workloads on SM80+ GPUs. Default is 3.
 num_ctas : int, optional
-    The number of blocks in a block cluster. Defaults to 1.
-    This parameter enables Cooperative Thread Arrays (CTA) and is only supported
-    on NVIDIA Hopper (SM90+) GPUs.
+    Number of blocks in a block cluster. SM90+ only. Default is 1.
 maxnreg : int, optional
-    Maximum number of registers one thread can use. Corresponds to the PTX
-    ``.maxnreg`` directive. Defaults to ``None`` (compiler decides).
-    Not supported on all platforms.
+    Maximum number of registers one thread can use. Corresponds to PTX
+    ``.maxnreg`` directive. Not supported on all platforms. Default is None.
 pre_hook : callable, optional
-    A function called before the kernel is launched. It receives the full
-    argument dictionary as its single input. Useful for custom setup logic
-    during autotuning.
+    Function called before the kernel is called. Receives kernel arguments
+    as parameters. Default is None.
 ir_override : str, optional
-    Path to a file containing user-defined intermediate representation (IR)
-    to override the compiler's generated code. Supported extensions include
-    ``.ttgir``, ``.llir``, ``.ptx``, and ``.amdgcn``. Defaults to ``None``.
+    Filename of a user-defined IR file (.{ttgir|llir|ptx|amdgcn}). Default
+    is None.
+
+Attributes
+----------
+kwargs : dict
+    Dictionary of meta-parameters.
+num_warps : int
+    Number of warps.
+num_stages : int
+    Number of pipeline stages.
+num_ctas : int
+    Number of block clusters.
+maxnreg : int or None
+    Maximum register count per thread.
+pre_hook : callable or None
+    Pre-execution hook function.
+ir_override : str or None
+    IR override filename.
+
+Notes
+-----
+This class is primarily used with :func:`triton.autotune` to specify
+different configurations to benchmark during auto-tuning. Multiple
+:py:class:`Config` objects are passed to the ``configs`` parameter of
+:func:`autotune`, and the auto-tuner will benchmark each configuration
+to find the best one for the given input.
 
 Examples
 --------
-Define a set of configurations to test different block sizes and warp counts:
-
 .. code-block:: python
 
     import triton
     import triton.language as tl
 
-    configs = [
-        triton.Config(kwargs={'BLOCK_SIZE': 128}, num_warps=4, num_stages=3),
-        triton.Config(kwargs={'BLOCK_SIZE': 1024}, num_warps=8, num_stages=4),
-        triton.Config(kwargs={'BLOCK_SIZE': 64}, num_warps=2, num_stages=2),
-    ]
+    # Basic configuration with custom block size
+    config = triton.Config(kwargs={'BLOCK_SIZE': 128}, num_warps=4)
 
-    @triton.autotune(configs=configs, key=['n'])
+    # Configuration optimized for matrix multiplication on SM80+
+    config = triton.Config(
+        kwargs={'BLOCK_SIZE': 256},
+        num_warps=8,
+        num_stages=2
+    )
+
+    # Use with autotune decorator
+    @triton.autotune(
+        configs=[
+            triton.Config(kwargs={'BLOCK_SIZE': 128}, num_warps=4),
+            triton.Config(kwargs={'BLOCK_SIZE': 256}, num_warps=8),
+        ],
+        key=['x_size']
+    )
     @triton.jit
-    def vector_add_kernel(x_ptr, y_ptr, out_ptr, n, BLOCK_SIZE: tl.constexpr):
-        # Kernel implementation
-        ...
-
-Notes
------
-- The ``num_stages`` optimization is most effective on GPUs with large shared
-  memory capacity and async memory copy instructions (SM80+).
-- ``num_ctas`` requires hardware support for block clusters (SM90+); setting
-  this on older architectures will result in a compilation error.
-- When used with :func:`triton.autotune`, each configuration causes the kernel
-  to be compiled and benchmarked. Ensure side effects are handled correctly
-  using ``reset_to_zero`` or ``pre_hook`` if the kernel modifies input tensors.
+    def kernel(x_ptr, x_size, BLOCK_SIZE: tl.constexpr):
+        # kernel implementation
+        pass

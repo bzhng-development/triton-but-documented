@@ -1,0 +1,46 @@
+allocate_mbarrier
+=================
+
+.. py:function:: allocate_mbarrier(batch: triton.language.core.constexpr = None, two_ctas: triton.language.core.constexpr = False)
+
+   Allocate shared memory for a multi-CTA memory barrier (mbarrier).
+
+   Parameters
+   ----------
+   batch : constexpr, optional
+       Number of barrier instances to allocate in a batch. If ``None``, allocates
+       a 1D array sized by the CTA count.
+   two_ctas : constexpr, bool
+       If ``True``, configures the barrier to synchronize every other CTA. This
+       halves the number of participating CTAs per barrier instance.
+
+   Returns
+   -------
+   shared_memory_descriptor
+       The allocated mbarrier object ready for initialization.
+
+   Notes
+   -----
+   The underlying shared memory layout is configured using :class:`MBarrierLayout`.
+   Requires the grid dimension to be a power of two. If ``two_ctas`` is ``True``,
+   the total number of CTAs must be even. Compatible with NVIDIA Ampere, Hopper,
+   and Blackwell architectures.
+
+   Examples
+   --------
+   .. code-block:: python
+
+       import triton.experimental.gluon as gluon
+       import triton.experimental.gluon.language as ttgl
+
+       @gluon.jit
+       def kernel(...):
+           # Allocate a barrier for all CTAs
+           bar = ttgl.nvidia.hopper.mbarrier.allocate_mbarrier()
+           ttgl.nvidia.hopper.mbarrier.init(bar, count=1024)
+
+           # Allocate a batch of 4 barriers
+           bar_batch = ttgl.nvidia.hopper.mbarrier.allocate_mbarrier(batch=4)
+
+           # Allocate barrier for every other CTA
+           bar_pair = ttgl.nvidia.hopper.mbarrier.allocate_mbarrier(two_ctas=True)

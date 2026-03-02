@@ -1,0 +1,48 @@
+triton.language.extra.cuda.libdevice.abs
+=========================================
+
+.. currentmodule:: triton.language.extra.cuda.libdevice
+
+.. function:: abs(arg0, _semantic=None)
+
+    Compute the absolute value of each element in the input tensor.
+
+    Parameters
+    ----------
+    arg0 : tl.tensor
+        Input tensor. Supported dtypes are int32, int64, fp32, and fp64.
+    _semantic : optional
+        Internal parameter used by the Triton compiler. Do not set manually.
+
+    Returns
+    -------
+    out : tl.tensor
+        Tensor containing the absolute values of the input elements.
+        The output dtype matches the input dtype.
+
+    Notes
+    -----
+    This function is an extern wrapper that dispatches to CUDA libdevice
+    intrinsics based on the input dtype:
+
+    - ``int32``: calls ``__nv_abs``
+    - ``int64``: calls ``__nv_llabs``
+    - ``fp32``: calls ``__nv_fabsf``
+    - ``fp64``: calls ``__nv_fabs``
+
+    The operation is pure (no side effects) and element-wise.
+
+    Examples
+    --------
+    .. code-block:: python
+
+        import triton
+        import triton.language as tl
+        from triton.language.extra.cuda import libdevice
+
+        @triton.jit
+        def abs_kernel(x_ptr, y_ptr, BLOCK_SIZE: tl.constexpr):
+            offsets = tl.arange(0, BLOCK_SIZE)
+            x = tl.load(x_ptr + offsets)
+            y = libdevice.abs(x)
+            tl.store(y_ptr + offsets, y)

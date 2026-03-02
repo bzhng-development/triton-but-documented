@@ -1,0 +1,44 @@
+double2float_rd
+===============
+
+.. currentmodule:: triton.language.extra.cuda.libdevice
+
+.. function:: double2float_rd(arg0, _semantic=None)
+
+    Convert double-precision floating-point value to single-precision with round-down rounding.
+
+    Parameters
+    ----------
+    arg0 : tl.tensor
+        Input tensor of double-precision floating-point values (fp64).
+
+    Returns
+    -------
+    tl.tensor
+        Tensor of single-precision floating-point values (fp32) rounded toward negative infinity.
+
+    Notes
+    -----
+    This function invokes the CUDA libdevice function ``__nv_double2float_rd`` which performs
+    conversion from 64-bit to 32-bit floating-point format with rounding toward negative infinity
+    (round-down mode). This differs from the default round-to-nearest-even behavior of standard
+    type casting.
+
+    The function is pure (no side effects) and operates element-wise on the input tensor.
+
+    Examples
+    --------
+    .. code-block:: python
+
+        import triton
+        import triton.language as tl
+        from triton.language.extra.cuda import libdevice
+
+        @triton.jit
+        def kernel(x_ptr, y_ptr, n):
+            pid = tl.program_id(0)
+            offset = pid * 4
+            x = tl.load(x_ptr + offset + tl.arange(0, 4))
+            # Convert fp64 to fp32 with round-down rounding
+            y = libdevice.double2float_rd(x)
+            tl.store(y_ptr + offset + tl.arange(0, 4), y)

@@ -1,40 +1,59 @@
-.. py:function:: atomic_cas(pointer, cmp, val, sem=None, scope=None)
+atomic_cas
+==========
+
+.. currentmodule:: triton.language
+
+.. function:: atomic_cas(pointer, cmp, val, sem=None, scope=None)
 
    Performs an atomic compare-and-swap at the memory location specified by ``pointer``.
 
-   Atomically checks if the value at ``pointer`` equals ``cmp``. If true, stores ``val``; otherwise, leaves the memory unchanged. Returns the value stored at ``pointer`` before the operation.
+   Atomically compares the value at ``pointer`` with ``cmp``. If they are equal, stores ``val`` at ``pointer``. Returns the value stored at ``pointer`` before the operation.
 
    Parameters
    ----------
-   pointer : tl.pointer_type
-       The memory location(s) to operate on. Must be a pointer or block of pointers.
-   cmp : tl.tensor
-       The expected value(s) to compare against. Must have the same dtype as ``pointer.dtype.element_ty``.
-   val : tl.tensor
-       The value(s) to store if the comparison succeeds. Must have the same dtype as ``pointer.dtype.element_ty``.
+   pointer : tensor
+       The memory location to operate on. Must be a pointer or block of pointers.
+   cmp : tensor
+       The value expected to be found at the atomic location. Must have the same dtype as ``pointer.dtype.element_ty``.
+   val : tensor
+       The value to store if the comparison succeeds. Must have the same dtype as ``pointer.dtype.element_ty``.
    sem : str, optional
-       Specifies the memory semantics. Acceptable values are ``"acquire"``, ``"release"``, ``"acq_rel"``, and ``"relaxed"``. Defaults to ``"acq_rel"``.
+       Specifies the memory semantics for the operation. Acceptable values are ``"acquire"``, ``"release"``, ``"acq_rel"`` (ACQUIRE_RELEASE), and ``"relaxed"``. Defaults to ``"acq_rel"``.
    scope : str, optional
-       Defines the scope of threads observing the synchronization effect. Acceptable values are ``"gpu"`` (default), ``"cta"`` (thread block), or ``"sys"`` (system-wide).
+       Defines the scope of threads that observe the synchronizing effect of the atomic operation. Acceptable values are ``"gpu"`` (default), ``"cta"`` (cooperative thread array/thread block), or ``"sys"`` (SYSTEM). Defaults to ``"gpu"``.
 
    Returns
    -------
-   tl.tensor
+   tensor
        The data stored at ``pointer`` before the atomic operation.
 
    Notes
    -----
-   This function can also be called as a member function on :py:class:`tl.tensor`, as ``x.atomic_cas(cmp, val)`` instead of ``tl.atomic_cas(x, cmp, val)``.
+   This function can also be called as a member function on :py:class:`tensor`, as ``x.atomic_cas(...)`` instead of ``atomic_cas(x, ...)``.
 
-   The operation is performed element-wise for block inputs.
+   The compare-and-swap operation is useful for implementing locks, counters, and other synchronization primitives in GPU kernels.
 
    Examples
    --------
    .. code-block:: python
 
+      import triton
+      import triton.language as tl
+
       @triton.jit
-      def kernel(ptr, old_val, new_val, BLOCK: tl.constexpr):
+      def atomic_counter_kernel(counter_ptr, increment, BLOCK_SIZE: tl.constexpr):
           pid = tl.program_id(0)
-          addr = ptr + pid
-          prev = tl.atomic_cas(addr, old_val, new_val)
-          # prev holds the value before the swap
+          offset = pid * BLOCK_SIZE + tl.arange(0, BLOCK_SIZE)
+          cmp = tl.load(counter_ptr + offset)
+          val = cmp + increment
+          old_val = tl.atomic_cas(counter_ptr + offset, cmp, val)
+          # old_val contains the value before the atomic operation
+
+      @triton.jit
+      def atomic_lock_kernel(lock_ptr, thread_id, BLOCK_SIZE: tl.constexpr):
+          pid = tl.program_id(0)
+          offset = pid * BLOCK_SIZE + tl.arange(0, BLOCK_SIZE)
+          cmp = 0  # Expected value: unlocked
+          val = thread_id  # New value: locked by this thread
+          old_val = tl.atomic_cas(lock_ptr + offset, cmp, val)
+          # old_val == 0 means this thread acquired the lock

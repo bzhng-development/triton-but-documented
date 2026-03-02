@@ -1,0 +1,39 @@
+invalidate
+==========
+
+Invalidate an mbarrier, resetting its state.
+
+Parameters
+----------
+mbarrier : ``shared_memory_descriptor``
+    The barrier object to invalidate.
+
+Returns
+-------
+None
+
+Notes
+-----
+This operation is specific to NVIDIA Hopper architecture. Invalidating a
+memory barrier resets its transaction count and internal state, allowing it
+to be re-armed for subsequent synchronization operations. This is typically
+used when reusing barrier descriptors in loops or multiple
+production/consumption phases.
+
+Examples
+--------
+.. code-block:: python
+
+    import triton.experimental.gluon as gluon
+    import triton.experimental.gluon.language as ttgl
+    from ttgl.nvidia.hopper import mbarrier
+
+    @gluon.jit
+    def kernel(...):
+        # Allocate a shared memory barrier
+        mb = mbarrier.alloc(...)
+
+        # ... synchronize and wait ...
+
+        # Reset the barrier state for reuse
+        mbarrier.invalidate(mb)

@@ -1,0 +1,74 @@
+map_elementwise
+===============
+
+.. currentmodule:: triton.experimental.gluon.language
+
+.. function:: map_elementwise(scalar_fn, *args, pack=1)
+
+   Map a scalar function element-wise over input tensors.
+
+   Applies ``scalar_fn`` to each element of the input tensors after implicit
+   broadcasting. Enables per-element control flow that avoids computing both
+   branches of conditional logic (unlike :func:`where` which eagerly evaluates
+   both sides).
+
+   Parameters
+   ----------
+   scalar_fn : Callable[..., Tuple[tensor, ...]]
+      JIT-compiled function that operates on scalar values. Must accept scalar
+      arguments and return a tensor or tuple of tensors.
+   *args : tensor
+      Input tensors to map over. All tensors are broadcasted to a common shape
+      before applying the function.
+   pack : int, optional
+      Number of elements processed per function invocation. Default is 1.
+      Increasing pack may improve throughput for lightweight operations.
+
+   Returns
+   -------
+   tensor or Tuple[tensor, ...]
+      Output tensor(s) with the same shape as the broadcasted inputs. Returns
+      a single tensor if ``scalar_fn`` returns one tensor, otherwise returns
+      a tuple of tensors.
+
+   Notes
+   -----
+   Unlike :func:`where`, this function enables true control flow at the element
+   level. Conditional branches inside ``scalar_fn`` are only executed for
+   elements that satisfy the condition, avoiding unnecessary computation.
+
+   The ``pack`` parameter allows processing multiple elements in a single
+   function call, which can reduce launch overhead for simple operations.
+   All packed elements must produce consistent types.
+
+   Examples
+   --------
+   .. code-block:: python
+
+      import triton.experimental.gluon as gluon
+      import triton.experimental.gluon.language as ttgl
+
+      @gluon.jit
+      def selu_scalar(x, alpha):
+          if x > 0:
+              return x
+          else:
+              return alpha * (ttgl.exp(x) - 1)
+
+      @gluon.jit
+      def selu(x, alpha):
+          return ttgl.map_elementwise(selu_scalar, x, alpha)
+
+   .. code-block:: python
+
+      # Example with pack > 1 for improved throughput
+      @gluon.jit
+      def relu_scalar(x):
+          if x > 0:
+              return x
+          else:
+              return 0.0
+
+      @gluon.jit
+      def relu_packed(x):
+          return ttgl.map_elementwise(relu_scalar, x, pack=4)

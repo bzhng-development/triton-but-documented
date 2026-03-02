@@ -1,0 +1,53 @@
+async_load
+==========
+
+Load a block of tensor from global memory to shared memory asynchronously using AMD GFX1250 TDM.
+
+Parameters
+----------
+src : tensor_descriptor
+    The source tensor descriptor specifying the global memory location and layout.
+offsets : List[constexpr | tensor]
+    The offsets from the base pointer in the tensor descriptor. Can be compile-time
+    constants or runtime tensors.
+dest : shared_memory_descriptor
+    The shared memory destination descriptor where the loaded data will be stored.
+pred : constexpr or tensor, optional
+    Predicate to enable or disable the load. Defaults to 1 (always execute).
+mbarrier : shared_memory_descriptor, optional
+    The memory barrier object to signal "arrive" on upon load completion. If None,
+    no barrier signaling occurs.
+
+Returns
+-------
+None
+
+Notes
+-----
+This function is specific to AMD GFX1250 architecture and uses TDM (Tensor Data Movement)
+for asynchronous memory transfers. The operation is non-blocking and returns immediately
+while the data transfer continues in the background. Use ``mbarrier`` to synchronize
+on completion if needed.
+
+The ``offsets`` parameter allows specifying multiple offset values for complex access
+patterns. Each offset is applied relative to the base pointer in the tensor descriptor.
+
+Examples
+--------
+.. code-block:: python
+
+    import triton.experimental.gluon as gluon
+    import triton.experimental.gluon.language as ttgl
+    from triton.experimental.gluon.language.amd.gfx1250.tdm import async_load
+
+    @gluon.jit
+    def kernel(src_desc, dst_desc, mbarrier):
+        offsets = [ttgl.constexpr(0)]
+        async_load(
+            src=src_desc,
+            offsets=offsets,
+            dest=dst_desc,
+            mbarrier=mbarrier
+        )
+        # Wait for the async load to complete
+        ttgl.mbarrier.arrive_and_wait(mbarrier)

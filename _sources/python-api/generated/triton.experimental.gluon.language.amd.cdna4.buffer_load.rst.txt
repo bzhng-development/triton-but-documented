@@ -1,0 +1,43 @@
+buffer_load
+===========
+
+Load data from global memory using a scalar base pointer and offset tensor on AMD CDNA4 GPUs.
+
+Parameters
+----------
+ptr : pointer_type
+    Scalar base pointer to global memory.
+offsets : tensor
+    Tensor of byte offsets relative to ``ptr``.
+mask : tensor, optional
+    Boolean tensor for predicated loads. Elements where ``mask`` is False
+    will not be loaded from memory.
+other : tensor or scalar, optional
+    Value to fill for masked-off elements. If None, masked elements are
+    undefined.
+cache : str, optional
+    Cache modifier specifier (e.g., '.ca', '.cg'). Controls cache behavior.
+
+Returns
+-------
+tensor
+    A Gluon tensor containing the loaded data.
+
+Notes
+-----
+This operation is specific to AMD CDNA4 architecture. It uses buffer load
+instructions that accept a scalar base pointer and a vector of offsets,
+rather than a vector of pointers. Data is loaded directly into registers.
+
+Examples
+--------
+.. code-block:: python
+
+    import triton.experimental.gluon as gluon
+    import triton.experimental.gluon.language as ttgl
+
+    @gluon.jit
+    def kernel(ptr, offsets):
+        # Load data using scalar base pointer and offset tensor
+        data = ttgl.amd.cdna4.buffer_load(ptr, offsets)
+        ...

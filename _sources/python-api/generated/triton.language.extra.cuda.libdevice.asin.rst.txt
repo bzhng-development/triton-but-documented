@@ -1,0 +1,44 @@
+asin
+====
+
+asin(arg0, _semantic=None)
+
+Compute the inverse sine (arcsine) of each element in the input tensor.
+
+Parameters
+----------
+arg0 : tensor
+    Input tensor. Must be of floating-point type (``fp32`` or ``fp64``).
+_semantic : optional
+    Internal semantic argument. Do not set manually.
+
+Returns
+-------
+tensor
+    Output tensor of the same shape as ``arg0``. Contains the inverse sine
+    of each element, in radians. The return dtype matches the input dtype
+    (``fp32`` or ``fp64``).
+
+Notes
+-----
+This function wraps the CUDA libdevice ``__nv_asinf`` (for ``fp32``) and
+``__nv_asin`` (for ``fp64``) functions. The output values are in the range
+``[-pi/2, pi/2]``. Input values should be in the domain ``[-1, 1]``;
+behavior is undefined for values outside this range.
+
+The operation is pure (no side effects) and is available only in
+JIT-compiled Triton kernels decorated with ``@triton.jit``.
+
+Examples
+--------
+.. code-block:: python
+
+    import triton
+    import triton.language as tl
+
+    @triton.jit
+    def kernel(x_ptr, y_ptr, BLOCK_SIZE: tl.constexpr):
+        offsets = tl.arange(0, BLOCK_SIZE)
+        x = tl.load(x_ptr + offsets)
+        y = tl.extra.cuda.libdevice.asin(x)
+        tl.store(y_ptr + offsets, y)

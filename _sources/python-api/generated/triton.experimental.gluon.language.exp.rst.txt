@@ -1,0 +1,40 @@
+exp
+===
+
+Computes the element-wise natural exponential of the input tensor.
+
+Parameters
+----------
+x : tensor
+    The input tensor. Must have floating point dtype (``fp32`` or ``fp64``).
+_semantic : GluonSemantic, optional
+    Internal semantic argument. Do not set manually.
+
+Returns
+-------
+tensor
+    A tensor containing :math:`e^x` for each element in ``x``. The output has
+    the same shape and dtype as the input.
+
+Notes
+-----
+This function only supports ``fp32`` and ``fp64`` data types. Attempts to use
+other dtypes will raise an error at compile time.
+
+The exponential is computed as :math:`e^x` where :math:`e` is Euler's number
+(approximately 2.71828).
+
+Examples
+--------
+.. code-block:: python
+
+    import triton.experimental.gluon as gluon
+    import triton.experimental.gluon.language as ttgl
+
+    @gluon.jit
+    def exp_kernel(x_ptr, y_ptr, BLOCK_SIZE: ttgl.constexpr):
+        pid = ttgl.program_id(0)
+        offs = pid * BLOCK_SIZE + ttgl.arange(0, BLOCK_SIZE)
+        x = ttgl.load(x_ptr + offs)
+        y = ttgl.exp(x)
+        ttgl.store(y_ptr + offs, y)

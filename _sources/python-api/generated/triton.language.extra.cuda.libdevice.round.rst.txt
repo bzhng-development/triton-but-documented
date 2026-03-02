@@ -1,0 +1,39 @@
+triton.language.extra.cuda.libdevice.round
+==========================================
+
+.. function:: round(arg0, _semantic=None)
+
+    Round a floating-point value to the nearest integer.
+
+    Parameters
+    ----------
+    arg0 : tl.tensor
+        Input tensor of floating-point values. Supports ``fp32`` and ``fp64``
+        dtypes.
+    _semantic : optional
+        Internal parameter used by Triton compiler. Do not set manually.
+
+    Returns
+    -------
+    tl.tensor
+        Tensor of rounded values with the same dtype as ``arg0``.
+
+    Notes
+    -----
+    This function dispatches to CUDA libdevice routines: ``__nv_roundf`` for
+    ``fp32`` inputs and ``__nv_round`` for ``fp64`` inputs. Rounding follows
+    the standard round-to-nearest behavior.
+
+    Examples
+    --------
+    .. code-block:: python
+
+        import triton
+        import triton.language as tl
+
+        @triton.jit
+        def kernel(x_ptr, y_ptr, BLOCK_SIZE: tl.constexpr):
+            offsets = tl.program_id(0) * BLOCK_SIZE + tl.arange(0, BLOCK_SIZE)
+            x = tl.load(x_ptr + offsets)
+            y = tl.extra.cuda.libdevice.round(x)
+            tl.store(y_ptr + offsets, y)

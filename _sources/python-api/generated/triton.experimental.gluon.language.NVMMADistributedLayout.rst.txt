@@ -1,0 +1,92 @@
+class triton.experimental.gluon.language.NVMMADistributedLayout
+===============================================================
+
+.. class:: NVMMADistributedLayout(version, warps_per_cta, instr_shape, cga_layout=[])
+
+   Represents a distributed layout for NVIDIA MMA (tensor core) operations.
+
+   This layout defines how tensor data is partitioned across warps and CTAs for
+   matrix multiply-accumulate instructions on NVIDIA GPUs. It is used to configure
+   the distribution of operands and results for tensor core operations in Gluon
+   kernels.
+
+   Parameters
+   ----------
+   version : list of int
+       Version identifier for the MMA instruction. Specifies the GPU architecture
+       and instruction set version (e.g., ``[8, 9]`` for Hopper H100).
+   warps_per_cta : list of int
+       Number of warps per CTA (thread block) for each dimension. Determines how
+       warps are distributed across the tensor dimensions.
+   instr_shape : list of int
+       Instruction shape for the MMA operation. Defines the tile size processed
+       by a single tensor core instruction (e.g., ``[16, 8, 16]`` for FP16).
+   cga_layout : list of list of int, optional
+       Bases describing CTA tiling for cooperative group assembly (CGA). Default
+       is empty list. Used for multi-CTA cooperation on Hopper and later
+       architectures.
+
+   Attributes
+   ----------
+   version : list of int
+       The MMA instruction version.
+   warps_per_cta : list of int
+       The warp distribution per CTA.
+   instr_shape : list of int
+       The MMA instruction tile shape.
+   cga_layout : list of list of int
+       The CTA tiling bases.
+   rank : int
+       The rank (number of dimensions) of the layout, derived from
+       ``len(warps_per_cta)``.
+
+   Notes
+   -----
+   This layout is specifically designed for NVIDIA tensor core operations and
+   should be paired with compatible shared memory layouts (e.g.,
+   :class:`NVMMASharedLayout`) for optimal performance.
+
+   The ``version`` parameter encodes the GPU architecture generation:
+   - ``[8, 0]``: Ampere (A100)
+   - ``[8, 9]``: Hopper (H100)
+   - ``[9, 0]``: Blackwell (B200)
+
+   Examples
+   --------
+   Create an MMA layout for Hopper H100 with 4 warps per CTA:
+
+   .. code-block:: python
+
+      import triton.experimental.gluon as gluon
+      import triton.experimental.gluon.language as ttgl
+
+      # Hopper H100 MMA layout with 4 warps, 16x8x16 tile
+      mma_layout = ttgl.NVMMADistributedLayout(
+          version=[8, 9],
+          warps_per_cta=[4, 1],
+          instr_shape=[16, 8, 16],
+      )
+
+      # Use in a kernel with explicit layout control
+      @gluon.jit
+      def kernel(...):
+          # Kernel implementation using mma_layout
+          pass
+
+   Create an MMA layout with CGA for multi-CTA cooperation:
+
+   .. code-block:: python
+
+      # H100 with 2 CTAs cooperating via CGA
+      mma_layout = ttgl.NVMMADistributedLayout(
+          version=[8, 9],
+          warps_per_cta=[4, 1],
+          instr_shape=[16, 8, 16],
+          cga_layout=[[1, 0], [0, 2]],  # 2 CTAs in second dimension
+      )
+
+   See Also
+   --------
+   :class:`NVMMASharedLayout` : Shared memory layout for NVIDIA MMA operations
+   :class:`BlockedLayout` : General blocked distributed layout
+   :class:`DistributedLinearLayout` : Linear distributed layout with explicit bases

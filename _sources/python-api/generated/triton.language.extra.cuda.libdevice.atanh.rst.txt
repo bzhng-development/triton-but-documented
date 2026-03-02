@@ -1,0 +1,46 @@
+atanh
+=====
+
+Compute the inverse hyperbolic tangent of the input element-wise.
+
+Parameters
+----------
+arg0 : tensor
+    Input tensor. Must have floating-point dtype (``fp32`` or ``fp64``).
+_semantic : optional
+    Internal semantic argument. Do not set manually.
+
+Returns
+-------
+tensor
+    Output tensor of the same shape as ``arg0``. Contains the inverse
+    hyperbolic tangent of each element.
+
+Notes
+-----
+This function calls CUDA libdevice functions:
+
+- ``__nv_atanhf`` for ``fp32`` inputs
+- ``__nv_atanh`` for ``fp64`` inputs
+
+The inverse hyperbolic tangent is defined as:
+
+.. math::
+
+    \text{atanh}(x) = \frac{1}{2} \ln\left(\frac{1+x}{1-x}\right)
+
+The domain is :math:`x \in (-1, 1)`. Values outside this range return NaN.
+
+Examples
+--------
+.. code-block:: python
+
+    import triton
+    import triton.language as tl
+
+    @triton.jit
+    def atanh_kernel(x_ptr, y_ptr, BLOCK_SIZE: tl.constexpr):
+        offsets = tl.arange(0, BLOCK_SIZE)
+        x = tl.load(x_ptr + offsets)
+        y = tl.extra.cuda.libdevice.atanh(x)
+        tl.store(y_ptr + offsets, y)

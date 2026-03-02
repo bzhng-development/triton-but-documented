@@ -1,52 +1,52 @@
-Returns the indices of the minimum values of a tensor along a given axis.
+triton.language.argmin
+======================
 
-.. code-block:: python
+.. currentmodule:: triton.language
 
-    argmin(input, axis, tie_break_left=True, keep_dims=False)
+.. function:: argmin(input, axis, tie_break_left=True, keep_dims=False)
 
-Parameters
-----------
-input : tl.tensor
-    Input tensor.
-axis : int
-    Axis along which to compute the argmin. If ``None``, reduction is performed over all dimensions.
-tie_break_left : bool, optional
-    If ``True`` (default), in case of ties, the left-most index is returned. If ``False``, the tie-breaking behavior is implementation-defined.
-keep_dims : bool, optional
-    If ``True``, the reduced axes are retained with length 1. Default is ``False``.
+   Returns the indices of the minimum values along a given axis.
 
-Returns
--------
-tl.tensor
-    Tensor of indices indicating the position of the minimum value.
+   Parameters
+   ----------
+   input : Tensor
+       The input tensor.
+   axis : int
+       The dimension along which the reduction should be done.
+   tie_break_left : bool, optional
+       If True (default), in case of a tie (i.e., multiple elements have the
+       same minimum value), return the left-most index. If False, return any
+       index with the minimum value.
+   keep_dims : bool, optional
+       If True, the reduced dimensions are retained with length 1. Default is
+       False.
 
-Notes
------
-This function can also be called as a member function on :py:class:`tl.tensor`,
-as ``x.argmin(...)`` instead of ``tl.argmin(x, ...)``.
+   Returns
+   -------
+   Tensor
+       A tensor containing the indices of the minimum values. The shape
+       depends on the ``axis`` and ``keep_dims`` parameters.
 
-The reduction operation requires associative and commutative semantics.
+   Notes
+   -----
+   This function can also be called as a member function on
+   :py:class:`tensor`, as ``x.argmin(...)`` instead of
+   ``argmin(x, ...)``.
 
-Examples
---------
-.. code-block:: python
+   The reduction operation is associative and commutative.
 
-    import triton.language as tl
+   Examples
+   --------
+   .. code-block:: python
 
-    # Example 1: Argmin over a specific axis
-    @triton.jit
-    def kernel(X, Y, stride):
-        pid = tl.program_id(0)
-        row = tl.arange(0, stride) + pid * stride
-        x = tl.load(X + row)
-        # Find index of minimum value in the row
-        min_idx = tl.argmin(x, axis=0)
-        tl.store(Y + pid, min_idx)
+      import triton.language as tl
 
-    # Example 2: Using tie_break_left=False
-    @triton.jit
-    def kernel_tie_break(X, Y):
-        x = tl.load(X)
-        # In case of ties, do not guarantee left-most index
-        min_idx = tl.argmin(x, axis=0, tie_break_left=False)
-        tl.store(Y, min_idx)
+      # Find the index of minimum value along axis 0
+      x = tl.arange(0, 16).reshape((4, 4))
+      min_idx = tl.argmin(x, axis=0)
+
+      # Keep reduced dimension
+      min_idx_keep = tl.argmin(x, axis=0, keep_dims=True)
+
+      # Use as member function
+      min_idx_member = x.argmin(axis=1)

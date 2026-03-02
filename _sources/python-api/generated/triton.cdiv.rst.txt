@@ -1,39 +1,33 @@
 cdiv
 ====
 
-Compute the ceiling of integer division.
+.. py:function:: triton.cdiv(x, y)
 
-Parameters
-----------
-x : int
-    The dividend.
-y : int
-    The divisor. Must be non-zero.
+   Compute the ceiling of the division of ``x`` by ``y``.
 
-Returns
--------
-int
-    The smallest integer greater than or equal to ``x / y``.
+   Parameters
+   ----------
+   x : int
+       The dividend.
+   y : int
+       The divisor.
 
-Notes
------
-This function is marked as a ``constexpr_function``, meaning it is evaluated
-at compile-time when used inside Triton kernels. It computes ``(x + y - 1) // y``
-to avoid floating-point arithmetic while ensuring correct rounding up for
-positive integers.
+   Returns
+   -------
+   int
+       The smallest integer greater than or equal to ``x / y``.
 
-Examples
---------
-.. code-block:: python
+   Notes
+   -----
+   This is a constexpr function evaluated at compile time. It is
+   equivalent to ``(x + y - 1) // y``. Commonly used to calculate
+   grid dimensions for kernel launches.
 
-    import triton
+   Examples
+   --------
+   .. code-block:: python
 
-    # Compile-time evaluation
-    result = triton.cdiv(10, 3)  # Returns 4
+      import triton
 
-    # Usage in a kernel definition
-    @triton.jit
-    def my_kernel(ptr, BLOCK_SIZE: tl.constexpr):
-        # Calculate number of blocks needed
-        num_blocks = tl.cdiv(1024, BLOCK_SIZE)
-        ...
+      # Calculate grid size for a vector of size 1024 with block size 256
+      grid = (triton.cdiv(1024, 256), 1, 1)  # (4, 1, 1)

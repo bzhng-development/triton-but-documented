@@ -1,61 +1,50 @@
 bitonic_merge
-==============
+=============
 
 .. currentmodule:: triton.language
 
-.. autofunction:: bitonic_merge
-
 .. function:: bitonic_merge(x, dim=None, descending=False)
 
-   Performs a full bitonic merge on the input tensor along the specified dimension.
+    Performs a bitonic merge operation on a tensor along a specified dimension.
 
-   This operation assumes the input data forms a bitonic sequence (or is the result
-   of prior bitonic sort stages) and merges it into a fully sorted sequence.
-   The size of the dimension to be sorted must be a power of two.
+    This function applies a bitonic sorting network to merge elements along the
+    specified dimension. The dimension size must be a power of 2. Currently only
+    the last (minor) dimension is supported.
 
-   Currently, only the minor (last) dimension is supported.
+    Parameters
+    ----------
+    x : tensor
+        Input tensor to merge. The size of the merge dimension must be a power of 2.
+    dim : int, optional
+        Dimension along which to perform the merge. If None, uses the last dimension.
+        Currently only the last dimension is supported.
+    descending : bool, optional
+        If True, merge in descending order. If False (default), merge in ascending order.
 
-   Parameters
-   ----------
-   x : tl.tensor
-       The input tensor to merge. The size of the merging dimension must be a power of two.
-   dim : constexpr, optional
-       The dimension along which to perform the merge. If ``None``, defaults to the last
-       dimension. Only the last dimension is currently supported.
-   descending : constexpr, optional
-       If ``True``, the result is sorted in descending order. If ``False`` (default),
-       the result is sorted in ascending order.
+    Returns
+    -------
+    tensor
+        Tensor with elements merged along the specified dimension.
 
-   Returns
-   -------
-   tl.tensor
-       A tensor containing the merged values, sorted along the specified dimension.
+    Notes
+    -----
+    This is a low-level primitive used by sorting operations like :func:`sort` and
+    :func:`topk`. The bitonic merge operation requires the dimension size to be a
+    power of 2. Only the last dimension is currently supported.
 
-   Notes
-   -----
-   This is a low-level primitive used to implement sorting networks (e.g., in :func:`triton.language.sort`
-   or :func:`triton.language.topk`). It executes a complete bitonic merging network of depth
-   :math:`\log_2(N)` where :math:`N` is the size of the dimension.
+    Examples
+    --------
+    .. code-block:: python
 
-   The function compiles to efficient GPU compare-and-swap instructions using XOR-based
-   addressing for thread communication.
+        import triton.language as tl
 
-   Examples
-   --------
-   .. code-block:: python
+        # Merge a 1D tensor of 8 elements (must be power of 2)
+        x = tl.arange(0, 8)
+        merged = tl.bitonic_merge(x)  # Ascending order
 
-       import triton
-       import triton.language as tl
+        # Merge in descending order
+        merged_desc = tl.bitonic_merge(x, descending=True)
 
-       @triton.jit
-       def kernel(x_ptr, BLOCK_SIZE: tl.constexpr):
-           # Load data assuming it is in a bitonic sequence state
-           pid = tl.program_id(0)
-           offs = tl.arange(0, BLOCK_SIZE)
-           x = tl.load(x_ptr + pid * BLOCK_SIZE + offs)
-
-           # Perform a full bitonic merge to sort the block
-           # BLOCK_SIZE must be a power of 2
-           sorted_x = tl.bitonic_merge(x, descending=False)
-
-           tl.store(x_ptr + pid * BLOCK_SIZE + offs, sorted_x)
+        # 2D tensor - merges along last dimension
+        y = tl.reshape(tl.arange(0, 16), (2, 8))
+        merged_2d = tl.bitonic_merge(y)  # Merges each row

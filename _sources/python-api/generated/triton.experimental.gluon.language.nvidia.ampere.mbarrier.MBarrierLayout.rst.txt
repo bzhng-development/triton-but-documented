@@ -1,0 +1,72 @@
+MBarrierLayout
+==============
+
+.. py:class:: MBarrierLayout(cga_layout=None)
+
+   Layout for mbarrier synchronization in Ampere and later architectures.
+
+   Defines the memory layout for mbarrier objects in shared memory, supporting
+   Cooperative Group Array (CGA) clustering for multi-CTA synchronization on
+   NVIDIA Ampere and later GPUs.
+
+   Parameters
+   ----------
+   cga_layout : List[List[int]], optional
+       CGA layout bases. Defaults to ``[]``.
+
+   Notes
+   -----
+   Inherits from :class:`SwizzledSharedLayout`. Requires NVIDIA Ampere architecture
+   or later (SM80+). This layout is typically passed to
+   :func:`ttgl.allocate_shared_memory` when allocating mbarriers.
+
+   Examples
+   --------
+   .. code-block:: python
+
+      import triton.experimental.gluon as gluon
+      import triton.experimental.gluon.language as ttgl
+
+      # Default layout
+      layout = ttgl.nvidia.ampere.mbarrier.MBarrierLayout()
+
+      # Multi-CTA layout for 4 CTAs
+      layout = ttgl.nvidia.ampere.mbarrier.MBarrierLayout.multicta(4)
+
+   .. py:method:: multicta(num_ctas, two_cta=False)
+
+      Create a multi-CTA mbarrier layout.
+
+      Constructs a layout suitable for synchronizing across multiple CTAs using
+      a single mbarrier object.
+
+      Parameters
+      ----------
+      num_ctas : int
+          Number of CTAs. Must be positive and a power of two.
+      two_cta : bool, optional
+          Whether the barrier should synchronize every other CTA. Defaults to
+          ``False``.
+
+      Returns
+      -------
+      MBarrierLayout
+          The constructed layout.
+
+      Notes
+      -----
+      Validates that ``num_ctas`` is positive and a power of two. If ``two_cta``
+      is ``True``, ``num_ctas`` must be even. The layout bases are computed
+      automatically to support the specified clustering mode.
+
+      Examples
+      --------
+      .. code-block:: python
+
+         import triton.experimental.gluon.language as ttgl
+
+         # Layout for 8 CTAs
+         layout = ttgl.nvidia.ampere.mbarrier.MBarrierLayout.multicta(8)
+
+         # Layout for 8 CTAs in pairs (4 barriers)
+         layout = ttgl.nvidia.ampere.mbarrier.MBarrierLayout.multicta(8, two_cta=True)

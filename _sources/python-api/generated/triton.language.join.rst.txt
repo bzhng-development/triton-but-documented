@@ -1,38 +1,47 @@
-.. py:function:: triton.language.join(a, b, _semantic=None)
+triton.language.join
+====================
 
-   Join the given tensors in a new, minor dimension.
+.. currentmodule:: triton.language
 
-   For example, given two tensors of shape ``(4, 8)``, produces a new tensor of
-   shape ``(4, 8, 2)``. Given two scalars, returns a tensor of shape ``(2,)``.
+.. function:: join(a, b, _semantic=None)
 
-   The two inputs are broadcasted to be the same shape.
+    Join the given tensors in a new, minor dimension.
 
-   To join more than two elements, use multiple calls to this function. This
-   reflects the constraint in Triton that tensors must have power-of-two sizes.
+    Parameters
+    ----------
+    a : tensor
+        The first input tensor.
+    b : tensor
+        The second input tensor.
 
-   :py:func:`split` is the inverse of this function.
+    Returns
+    -------
+    tensor
+        A tensor with the same shape as the inputs plus a new minor dimension
+        of size 2.
 
-   Parameters
-   ----------
-   a : tensor
-       The first input tensor.
-   b : tensor
-       The second input tensor.
+    Notes
+    -----
+    The two inputs are broadcasted to be the same shape before joining.
 
-   Returns
-   -------
-   tensor
-       A tensor with the same shape as the broadcasted inputs, plus a new
-       minor dimension of size 2.
+    If you want to join more than two elements, you can use multiple calls to
+    this function. This reflects the constraint in Triton that tensors must
+    have power-of-two sizes.
 
-   Examples
-   --------
-   .. code-block:: python
+    :func:`join` is the inverse of :func:`split`.
 
-      @triton.jit
-      def kernel(ptr_a, ptr_b, ptr_out, BLOCK_SIZE: tl.constexpr):
-          a = tl.load(ptr_a + tl.arange(0, BLOCK_SIZE))
-          b = tl.load(ptr_b + tl.arange(0, BLOCK_SIZE))
-          # Join two 1D tensors of shape [BLOCK_SIZE] into a 2D tensor [BLOCK_SIZE, 2]
-          c = tl.join(a, b)
-          tl.store(ptr_out + tl.arange(0, BLOCK_SIZE * 2), c)
+    Examples
+    --------
+    .. code-block:: python
+
+        import triton.language as tl
+
+        @triton.jit
+        def kernel(Ap, Bp, Cp, M, N, BLOCK_M: tl.constexpr, BLOCK_N: tl.constexpr):
+            offs_m = tl.arange(0, BLOCK_M)
+            offs_n = tl.arange(0, BLOCK_N)
+            a = tl.load(Ap + offs_m[:, None] * N + offs_n[None, :])
+            b = tl.load(Bp + offs_m[:, None] * N + offs_n[None, :])
+            # Join two (BLOCK_M, BLOCK_N) tensors into (BLOCK_M, BLOCK_N, 2)
+            c = tl.join(a, b)
+            tl.store(Cp + offs_m[:, None, None] * N * 2 + offs_n[None, :, None] * 2 + tl.arange(0, 2)[None, None, :], c)

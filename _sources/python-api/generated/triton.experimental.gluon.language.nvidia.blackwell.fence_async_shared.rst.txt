@@ -1,0 +1,61 @@
+fence_async_shared
+==================
+
+.. currentmodule:: triton.experimental.gluon.language.nvidia.blackwell
+
+.. autofunction:: fence_async_shared
+
+.. rubric:: API Documentation
+
+.. function:: fence_async_shared(cluster=False, _semantic=None)
+
+   Issue a fence to complete asynchronous shared memory operations.
+
+   Inserts a hardware fence instruction that ensures all prior asynchronous
+   shared memory operations are visible to subsequent memory operations.
+   Required for correct synchronization when using TMA (Tensor Memory
+   Accelerator) or other async shared memory primitives on NVIDIA Blackwell
+   architectures.
+
+   Parameters
+   ----------
+   cluster : bool, optional
+       Whether to fence across the CTA cluster. When ``True``, synchronizes
+       across all CTAs in the cluster. When ``False``, synchronizes within
+       the current CTA only. Default is ``False``.
+   _semantic : GluonSemantic, optional
+       Internal semantic context. Do not set manually; this is provided
+       automatically by the Gluon JIT compiler.
+
+   Returns
+   -------
+   None
+
+   Notes
+   -----
+   This function is specific to NVIDIA Blackwell (SM 100) architectures.
+   On earlier architectures, this operation may be a no-op or emit different
+   fence instructions.
+
+   The fence ensures memory ordering guarantees required for correct
+   execution of asynchronous copy operations. Failure to issue appropriate
+   fences may result in undefined behavior or data races.
+
+   Examples
+   --------
+   >>> import triton.experimental.gluon as gluon
+   >>> import triton.experimental.gluon.language as ttgl
+   >>>
+   >>> @gluon.jit
+   >>> def kernel():
+   ...     # Issue async shared memory operations
+   ...     # ...
+   ...     # Fence to ensure completion before subsequent accesses
+   ...     ttgl.nvidia.blackwell.fence_async_shared()
+   ...     # Safe to access shared memory now
+   ...
+   >>> # Fence across cluster when using multi-CTA kernels
+   >>> @gluon.jit
+   >>> def cluster_kernel():
+   ...     # ... async operations ...
+   ...     ttgl.nvidia.blackwell.fence_async_shared(cluster=True)

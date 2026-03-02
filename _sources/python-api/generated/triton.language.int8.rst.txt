@@ -1,34 +1,21 @@
-triton.language.int8
-====================
+int8
+====
 
 8-bit signed integer data type.
 
-This dtype represents signed 8-bit integers in Triton kernels, corresponding to
-``int8`` in C/C++ and ``torch.int8`` in PyTorch. It is used for quantized
-computations, memory-efficient storage, and mixed-precision workflows.
-
-Parameters
-----------
-
-None
-    This is a dtype instance and does not accept runtime arguments.
-
-Returns
--------
-
-dtype
-    An instance representing the 8-bit signed integer type.
+This object represents the 8-bit signed integer type in Triton. It is used to
+specify data types for tensor operations, pointer casting, and kernel
+arguments. It corresponds to CUDA's ``int8`` and NumPy's ``numpy.int8``.
 
 Notes
 -----
-
-*   Range: -128 to 127.
-*   Arithmetic operations follow standard two's complement wrapping semantics.
-*   Use ``tl.cast`` to convert between ``int8`` and other dtypes (e.g., ``float16``, ``int32``).
-*   Hardware support for native ``int8`` tensor operations varies by GPU architecture (e.g., Tensor Cores on Volta+).
+The representable range for ``tl.int8`` is ``[-128, 127]``. Arithmetic
+operations follow standard two's complement wrapping semantics on the GPU.
 
 Examples
 --------
+Specify ``tl.int8`` as the ``dtype`` argument in tensor creation or type
+conversion operations:
 
 .. code-block:: python
 
@@ -36,22 +23,12 @@ Examples
     import triton.language as tl
 
     @triton.jit
-    def quantize_kernel(x_ptr, out_ptr, n, BLOCK: tl.constexpr):
-        pid = tl.program_id(0)
-        offs = pid * BLOCK + tl.arange(0, BLOCK)
-        mask = offs < n
+    def quantize_kernel(x_ptr, out_ptr, n):
+        offsets = tl.arange(0, n)
+        x = tl.load(x_ptr + offsets)
+        # Convert to int8
+        q = (x * 10.0).to(tl.int8)
+        tl.store(out_ptr + offsets, q)
 
-        # Load float32 values
-        x = tl.load(x_ptr + offs, mask=mask)
-
-        # Quantize to int8 (scale factor assumed to be 0.1 for example)
-        scale = 0.1
-        x_quant = tl.cast(x / scale, tl.int8)
-
-        # Store int8 results
-        tl.store(out_ptr + offs, x_quant, mask=mask)
-
-    # Usage context (host side)
-    # block_size = 128
-    # grid = (triton.cdiv(N, block_size),)
-    # quantize_kernel[grid](x_float, out_int8, N, BLOCK=block_size)
+    # Create a constant tensor with int8 dtype
+    const = tl.full((128,), -1, dtype=tl.int8)

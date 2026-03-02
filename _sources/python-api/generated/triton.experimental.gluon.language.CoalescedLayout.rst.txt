@@ -1,0 +1,40 @@
+class triton.experimental.gluon.language.CoalescedLayout
+=============================================================
+
+.. class:: CoalescedLayout()
+
+   Represents a coalesced distributed memory layout in Gluon IR.
+
+   CoalescedLayout provides a simple distribution strategy where tensor elements
+   are distributed across threads in a coalesced access pattern. This layout is
+   typically used when memory access patterns benefit from contiguous, sequential
+   memory transactions across the thread hierarchy.
+
+   Notes
+   -----
+   ``CoalescedLayout`` has no rank and cannot be queried for dimensionality.
+   Attempting to access the ``rank`` property will raise a ``ValueError``.
+
+   This layout is converted to Gluon IR via ``builder.get_coalesced_layout()``
+   and is mangled as ``"CL"`` for kernel serialization.
+
+   Examples
+   --------
+   Create a coalesced layout for use in kernel definitions:
+
+   .. code-block:: python
+
+      import triton.experimental.gluon as gluon
+      import triton.experimental.gluon.language as ttgl
+
+      @gluon.jit
+      def kernel():
+          layout = ttgl.CoalescedLayout()
+          # Use layout in tensor operations
+          # ...
+
+   See Also
+   --------
+   AutoLayout : Automatic layout selection
+   BlockedLayout : Blocked distribution across threads, warps, and CTAs
+   DistributedLayout : Base class for distributed memory layouts

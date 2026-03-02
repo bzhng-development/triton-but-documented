@@ -1,0 +1,40 @@
+program_id
+==========
+
+.. currentmodule:: triton.experimental.gluon.language
+
+.. function:: program_id(axis, _semantic=None)
+
+   Returns the ID of the current program instance along the given axis.
+
+   Parameters
+   ----------
+   axis : int
+       The axis of the 3D launch grid. Must be 0, 1, or 2.
+
+   Returns
+   -------
+   int
+       The program ID along the specified axis.
+
+   Notes
+   -----
+   This function is only valid inside Gluon JIT kernels decorated with
+   ``@gluon.jit``. The ``_semantic`` parameter is internal and should not
+   be provided by users.
+
+   Examples
+   --------
+   .. code-block:: python
+
+      import triton.experimental.gluon as gluon
+      import triton.experimental.gluon.language as ttgl
+
+      @gluon.jit
+      def kernel(x_ptr, N):
+          pid_x = ttgl.program_id(0)
+          pid_y = ttgl.program_id(1)
+          pid_z = ttgl.program_id(2)
+          # Use program IDs to compute memory offsets
+          offset = pid_x + pid_y * N + pid_z * N * N
+          # ... rest of kernel

@@ -1,0 +1,42 @@
+double2float_rz
+===============
+
+.. currentmodule:: triton.language.extra.cuda.libdevice
+
+.. function:: double2float_rz(arg0, _semantic=None)
+
+    Convert double-precision floating-point value to single-precision with round-towards-zero.
+
+    Parameters
+    ----------
+    arg0 : tl.tensor
+        Input tensor of double-precision (fp64) floating-point values.
+
+    Returns
+    -------
+    tl.tensor
+        Tensor of single-precision (fp32) floating-point values.
+
+    Notes
+    -----
+    This function calls the CUDA libdevice function ``__nv_double2float_rz`` which performs
+    conversion from 64-bit to 32-bit floating-point with round-towards-zero (RTZ) rounding mode.
+    This is useful when deterministic rounding behavior is required, as opposed to the default
+    round-to-nearest-even mode.
+
+    The function is pure and has no side effects. Only fp64 input type is supported.
+
+    Examples
+    --------
+    .. code-block:: python
+
+        import triton
+        import triton.language as tl
+        from triton.language.extra.cuda import libdevice
+
+        @triton.jit
+        def kernel(ptr_in, ptr_out, BLOCK_SIZE: tl.constexpr):
+            offset = tl.arange(0, BLOCK_SIZE)
+            x = tl.load(ptr_in + offset)  # fp64 tensor
+            y = libdevice.double2float_rz(x)  # convert to fp32 with RTZ
+            tl.store(ptr_out + offset, y)

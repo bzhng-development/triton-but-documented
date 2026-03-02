@@ -1,0 +1,47 @@
+permute
+=======
+
+.. currentmodule:: triton.experimental.gluon.language
+
+.. function:: permute(input, *dims, _semantic=None)
+
+   Permutes the dimensions of a tensor.
+
+   Parameters
+   ----------
+   input : Block
+       The input tensor to permute.
+   *dims : int or tuple of int
+       The desired ordering of dimensions. For example, ``(2, 1, 0)``
+       reverses the order of dimensions in a 3D tensor. Can be passed
+       as individual arguments or as a tuple.
+
+   Returns
+   -------
+   Block
+       A tensor with dimensions permuted according to ``dims``.
+
+   Notes
+   -----
+   The ``dims`` argument can be passed as a tuple or as individual
+   parameters. These are equivalent::
+
+       permute(x, (2, 1, 0))
+       permute(x, 2, 1, 0)
+
+   :py:func:`trans` is equivalent to this function, except when ``dims``
+   is empty, it tries to swap the last two axes.
+
+   This function can also be called as a member function on
+   :py:class:`tensor`, as ``x.permute(...)`` instead of
+   ``permute(x, ...)``.
+
+   Examples
+   --------
+   >>> import triton.experimental.gluon as gluon
+   >>> import triton.experimental.gluon.language as ttgl
+   >>> @gluon.jit
+   ... def kernel(x_ptr, y_ptr, BLOCK_SIZE: tl.constexpr):
+   ...     x = ttgl.load(x_ptr)
+   ...     y = ttgl.permute(x, 2, 1, 0)  # Reverse dimensions
+   ...     ttgl.store(y_ptr, y)

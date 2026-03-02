@@ -1,36 +1,27 @@
 randn
 =====
 
-.. currentmodule:: triton.language
+.. py:function:: triton.language.randn(seed, offset, n_rounds=10)
 
-.. function:: randn(seed, offset, n_rounds=constexpr[10])
-
-   Generate random numbers from a standard normal distribution :math:`\mathcal{N}(0, 1)`.
-
-   Given a ``seed`` scalar and an ``offset`` block, returns a block of random
-   ``float32`` values sampled from the standard normal distribution using the
-   Box-Muller transform.
+   Given a :code:`seed` scalar and an :code:`offset` block, returns a block of random :code:`float32` in :math:`\mathcal{N}(0, 1)`.
 
    Parameters
    ----------
-   seed : int
-       The seed for the pseudo-random number generator.
-   offset : tl.tensor
-       The offsets to generate random numbers for. Typically ``tl.program_id(0)``
-       or a range of indices.
+   seed :
+       The seed for generating random numbers.
+   offset :
+       The offsets to generate random numbers for.
    n_rounds : tl.constexpr, optional
        Number of rounds for the Philox PRNG. Default is 10.
 
    Returns
    -------
-   tl.tensor
-       A tensor of ``float32`` values distributed as :math:`\mathcal{N}(0, 1)`.
+   out : tl.block
+       A block of random :code:`float32` values sampled from the standard normal distribution.
 
    Notes
    -----
-   This function uses the Philox counter-based PRNG to generate uniform random
-   integers, converts them to uniform floats in :math:`[0, 1)`, and applies
-   the Box-Muller transform to produce normally distributed values.
+   This function uses the Philox pseudo-random number generator combined with the Box-Muller transform to generate normally distributed random numbers.
 
    Examples
    --------
@@ -40,12 +31,10 @@ randn
       import triton.language as tl
 
       @triton.jit
-      def kernel(
-          output_ptr,
-          seed,
-          BLOCK_SIZE: tl.constexpr,
-      ):
-          pid = tl.program_id(0)
+      def kernel(x_ptr, n_elements, BLOCK_SIZE: tl.constexpr):
+          pid = tl.program_id(axis=0)
           offset = pid * BLOCK_SIZE + tl.arange(0, BLOCK_SIZE)
-          random_vals = tl.randn(seed, offset)
-          tl.store(output_ptr + offset, random_vals)
+          seed = 123
+          random_noise = tl.randn(seed, offset)
+          # Use random_noise in computations
+          ...

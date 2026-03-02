@@ -1,0 +1,40 @@
+float2uint_rd
+=============
+
+Convert floating-point values to unsigned integers using round-down rounding mode.
+
+Parameters
+----------
+arg0 : tensor
+    Input tensor of 32-bit floating-point values (``tl.float32``).
+_semantic : optional
+    Internal semantic argument, typically not provided by users.
+
+Returns
+-------
+tensor
+    Tensor of 32-bit unsigned integers (``tl.int32``).
+
+Notes
+-----
+This function invokes the CUDA libdevice intrinsic ``__nv_float2uint_rd``, which
+converts each floating-point element to an unsigned integer by rounding toward
+negative infinity (round-down mode). Values outside the representable range of
+``uint32`` produce undefined behavior.
+
+The operation is element-wise and pure (no side effects).
+
+Examples
+--------
+.. code-block:: python
+
+    import triton
+    import triton.language as tl
+    from triton.language.extra.cuda import libdevice
+
+    @triton.jit
+    def float_to_uint_kernel(x_ptr, y_ptr, BLOCK_SIZE: tl.constexpr):
+        offsets = tl.arange(0, BLOCK_SIZE)
+        x = tl.load(x_ptr + offsets)
+        y = libdevice.float2uint_rd(x)
+        tl.store(y_ptr + offsets, y)

@@ -1,0 +1,39 @@
+ll2double_rn(arg0, _semantic=None)
+===============================
+
+Convert a 64-bit integer to double-precision floating-point with round-to-nearest.
+
+Parameters
+----------
+arg0 : tensor of int64
+    Input tensor containing 64-bit signed integers to convert.
+_semantic : optional
+    Internal semantic argument used by Triton compiler.
+
+Returns
+-------
+tensor of fp64
+    Tensor containing the double-precision floating-point representation
+    of the input integers, rounded to nearest.
+
+Notes
+-----
+This function wraps the CUDA libdevice intrinsic ``__nv_ll2double_rn``.
+The conversion uses round-to-nearest rounding mode (RN).
+
+This is an external function that compiles directly to GPU machine code.
+It must be called from within a :code:`@triton.jit` decorated kernel.
+
+Examples
+--------
+.. code-block:: python
+
+    import triton
+    import triton.language as tl
+
+    @triton.jit
+    def convert_kernel(input_ptr, output_ptr, n_elements, BLOCK: tl.constexpr):
+        offsets = tl.arange(0, BLOCK)
+        int_vals = tl.load(input_ptr + offsets)
+        float_vals = tl.extra.cuda.libdevice.ll2double_rn(int_vals)
+        tl.store(output_ptr + offsets, float_vals)

@@ -1,49 +1,36 @@
 xor_sum
 =======
 
-.. currentmodule:: triton.language
+Compute the XOR sum of elements along a given axis.
 
-.. function:: xor_sum(input, axis=None, keep_dims=False)
+Parameters
+----------
+input : tensor
+    The input tensor. Must be of integer type.
+axis : int, optional
+    The dimension along which the reduction is performed. If ``None``, reduce all dimensions.
+keep_dims : bool, optional
+    If ``True``, the reduced axes are retained as dimensions of size 1.
 
-   Returns the bitwise XOR sum of all elements in the :code:`input` tensor along the provided :code:`axis`.
+Returns
+-------
+tensor
+    The result of the XOR reduction.
 
-   The reduction operation is associative and commutative. This function is only supported for integer tensors.
+Notes
+-----
+This function can also be called as a member function on :py:class:`triton.language.tensor`,
+as ``x.xor_sum(...)`` instead of ``xor_sum(x, ...)``.
 
-   Parameters
-   ----------
-   input : Tensor
-       The input tensor containing integer values.
-   axis : int, optional
-       The dimension along which the reduction is performed. If :code:`None`, all dimensions are reduced.
-   keep_dims : bool, optional
-       If :code:`True`, the reduced dimensions are retained with length 1. Default is :code:`False`.
+The reduction operation is associative and commutative.
 
-   Returns
-   -------
-   Tensor
-       A tensor containing the bitwise XOR sum of the input elements.
+Examples
+--------
+.. code-block:: python
 
-   Notes
-   -----
-   This function can also be called as a member function on :py:class:`tensor`,
-   as :code:`x.xor_sum(...)` instead of :code:`xor_sum(x, ...)`.
+    import triton.language as tl
 
-   Examples
-   --------
-   .. code-block:: python
-
-      import triton
-      import triton.language as tl
-
-      @triton.jit
-      def kernel(X, Y, BLOCK_SIZE: tl.constexpr):
-          pid = tl.program_id(0)
-          offs = tl.arange(0, BLOCK_SIZE)
-          mask = offs < BLOCK_SIZE
-          x = tl.load(X + pid * BLOCK_SIZE + offs, mask=mask)
-          # Compute XOR sum across the block
-          y = tl.xor_sum(x, axis=0)
-          tl.store(Y + pid, y)
-
-      # Launch kernel
-      # X contains integer data, Y will store the XOR sum per block
+    # Create a 1D tensor of integers
+    x = tl.arange(0, 8)
+    # Compute XOR sum across all elements
+    result = tl.xor_sum(x)

@@ -1,0 +1,59 @@
+static_print
+============
+
+Print values at compile time during kernel compilation.
+
+.. code-block:: python
+
+    triton.experimental.gluon.language.static_print(*values, sep=' ', end='\n', file=None, flush=False)
+
+Parameters
+----------
+
+*values : tuple
+    Values to print at compile time. Can be strings, constexpr values, or other
+    compile-time constants.
+
+sep : str, optional
+    String inserted between values. Default is a space.
+
+end : str, optional
+    String appended after the last value. Default is a newline.
+
+file : object, optional
+    Ignored. Present for API compatibility with builtin :code:`print`.
+
+flush : bool, optional
+    Ignored. Present for API compatibility with builtin :code:`print`.
+
+Returns
+-------
+
+None
+
+Notes
+-----
+
+This function emits output during kernel compilation, not during kernel execution.
+It is useful for debugging compile-time values such as :code:`constexpr` constants,
+block sizes, or other static parameters.
+
+Calling the Python builtin :code:`print` inside a Gluon kernel is not equivalent to
+:code:`static_print`. The builtin :code:`print` maps to :code:`device_print`, which
+executes at runtime and has different argument requirements.
+
+Use :code:`static_print` for inspecting compile-time constants and :code:`device_print`
+for runtime tensor values.
+
+Examples
+--------
+
+.. code-block:: python
+
+    import triton.experimental.gluon as gluon
+    import triton.experimental.gluon.language as ttgl
+
+    @gluon.jit
+    def kernel(BLOCK_SIZE: ttgl.constexpr):
+        ttgl.static_print(f"BLOCK_SIZE={BLOCK_SIZE}")
+        ttgl.static_print("Compilation complete", sep=" - ")

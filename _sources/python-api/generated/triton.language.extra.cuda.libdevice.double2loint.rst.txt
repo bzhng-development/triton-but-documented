@@ -1,0 +1,42 @@
+triton.language.extra.cuda.libdevice.double2loint
+==================================================
+
+Extract the low 32 bits of a double-precision floating-point value as an integer.
+
+Parameters
+----------
+arg0 : tensor
+    Input tensor of type ``fp64`` (double-precision floating-point).
+_semantic : optional
+    Internal semantic parameter for Triton JIT compilation. Do not set manually.
+
+Returns
+-------
+tensor
+    Tensor of type ``int32`` containing the low 32 bits of the input double's
+    bit representation.
+
+Notes
+-----
+This function is a wrapper around the CUDA libdevice function ``__nv_double2loint``.
+It performs a bit-cast operation, interpreting the lower 32 bits of the IEEE 754
+double-precision representation as a signed 32-bit integer. This is useful for
+low-level bit manipulation of floating-point values.
+
+The function is pure (no side effects) and operates element-wise on tensors.
+
+Examples
+--------
+.. code-block:: python
+
+    import triton
+    import triton.language as tl
+
+    @triton.jit
+    def extract_low_bits_kernel(x_ptr, out_ptr, BLOCK_SIZE: tl.constexpr):
+        pid = tl.program_id(0)
+        offs = pid * BLOCK_SIZE + tl.arange(0, BLOCK_SIZE)
+        x = tl.load(x_ptr + offs)
+        # Extract low 32 bits of double representation
+        low_bits = tl.extra.cuda.libdevice.double2loint(x)
+        tl.store(out_ptr + offs, low_bits)

@@ -1,101 +1,99 @@
-dtype
-=====
+class dtype
+==============
 
-.. currentmodule:: triton.language
+Data type descriptor for Triton tensors.
 
-.. class:: dtype(name)
+The ``dtype`` class represents scalar data types used in Triton GPU kernels. It encapsulates type information including bitwidth, signedness, and floating-point characteristics.
 
-   Represents a scalar data type in Triton IR.
+Parameters
+----------
+name : str
+    The name of the data type. Must be one of the supported type strings:
+    ``'int1'``, ``'int8'``, ``'int16'``, ``'int32'``, ``'int64'``,
+    ``'uint8'``, ``'uint16'``, ``'uint32'``, ``'uint64'``,
+    ``'fp8e4b15'``, ``'fp8e4nv'``, ``'fp8e4b8'``, ``'fp8e5'``, ``'fp8e5b16'``,
+    ``'fp16'``, ``'bf16'``, ``'fp32'``, ``'fp64'``, or ``'void'``.
 
-   This class encapsulates properties of primitive types such as bitwidth,
-   signedness (for integers), and floating-point format details (mantissa width,
-   exponent bias). It is used to define the element type of tensors and pointers.
+Attributes
+----------
+name : str
+    The type name string.
+primitive_bitwidth : int
+    The bitwidth of the primitive type.
+itemsize : int
+    The size in bytes (``primitive_bitwidth // 8``).
+int_signedness : SIGNEDNESS
+    Signedness for integer types (``SIGNED`` or ``UNSIGNED``).
+int_bitwidth : int
+    Bitwidth for integer types.
+fp_mantissa_width : int
+    Mantissa width for floating-point types.
+exponent_bias : int
+    Exponent bias for floating-point types.
 
-   Parameters
-   ----------
-   name : str
-       The string name of the data type. Supported values include:
-       ``int1``, ``int8``, ``int16``, ``int32``, ``int64``,
-       ``uint8``, ``uint16``, ``uint32``, ``uint64``,
-       ``fp8e4b15``, ``fp8e4nv``, ``fp8e4b8``, ``fp8e5``, ``fp8e5b16``,
-       ``fp16``, ``bf16``, ``fp32``, ``fp64``, and ``void``.
+Methods
+-------
+is_fp8()
+    Returns ``True`` if this is an fp8 type.
+is_fp16(), is_bf16(), is_fp32(), is_fp64()
+    Returns ``True`` if this matches the specific floating-point type.
+is_int8(), is_int16(), is_int32(), is_int64()
+    Returns ``True`` if this matches the specific signed integer type.
+is_uint8(), is_uint16(), is_uint32(), is_uint64()
+    Returns ``True`` if this matches the specific unsigned integer type.
+is_int()
+    Returns ``True`` if this is any integer type (signed or unsigned).
+is_floating()
+    Returns ``True`` if this is any floating-point type.
+is_standard_floating()
+    Returns ``True`` if this is a standard floating-point type (fp16, bf16, fp32, fp64).
+is_bool()
+    Returns ``True`` if this is ``int1`` (boolean type).
+kind()
+    Returns the type kind (``KIND.BOOLEAN``, ``KIND.INTEGRAL``, or ``KIND.FLOATING``).
+get_int_max_value()
+    Returns the maximum representable integer value for this type.
+get_int_min_value()
+    Returns the minimum representable integer value for this type.
+to_ir(builder)
+    Converts this dtype to an MLIR type using the given builder.
 
-   Attributes
-   ----------
-   name : str
-       The string identifier of the type.
-   primitive_bitwidth : int
-       The size of the type in bits.
-   itemsize : int
-       The size of the type in bytes.
-   int_signedness : SIGNEDNESS
-       Enum indicating if the type is signed or unsigned (only for integer types).
-   int_bitwidth : int
-       The bitwidth of the integer component (only for integer types).
-   fp_mantissa_width : int
-       The width of the mantissa in bits (only for floating-point types).
-   exponent_bias : int
-       The exponent bias value (only for floating-point types).
+Notes
+-----
+Predefined dtype instances are available as module-level constants:
+``tl.int1``, ``tl.int8``, ``tl.int16``, ``tl.int32``, ``tl.int64``,
+``tl.uint8``, ``tl.uint16``, ``tl.uint32``, ``tl.uint64``,
+``tl.float8e5``, ``tl.float8e5b16``, ``tl.float8e4nv``, ``tl.float8e4b8``,
+``tl.float8e4b15``, ``tl.float16``, ``tl.bfloat16``, ``tl.float32``, ``tl.float64``.
 
-   Methods
-   -------
-   is_fp8()
-       Returns True if the type is an fp8 variant.
-   is_fp16(), is_bf16(), is_fp32(), is_fp64()
-       Returns True if the type matches the specific floating-point format.
-   is_int8(), is_int16(), is_int32(), is_int64()
-       Returns True if the type matches the specific signed integer format.
-   is_uint8(), is_uint16(), is_uint32(), is_uint64()
-       Returns True if the type matches the specific unsigned integer format.
-   is_floating()
-       Returns True if the type is any floating-point type.
-   is_standard_floating()
-       Returns True if the type is a standard floating-point type (fp16, bf16, fp32, fp64).
-   is_int_signed(), is_int_unsigned()
-       Returns True if the type is a signed or unsigned integer respectively.
-   is_int()
-       Returns True if the type is any integer type.
-   is_bool()
-       Returns True if the type is int1 (boolean).
-   kind()
-       Returns the type kind (BOOLEAN, INTEGRAL, or FLOATING).
-   get_int_max_value(), get_int_min_value()
-       Returns the maximum or minimum representable value for integer types.
-   to_ir(builder)
-       Converts the dtype to the corresponding MLIR type using the given builder.
+The ``dtype`` class is typically not instantiated directly by user code. Instead, use the predefined constants or pass dtype strings to functions that accept dtype parameters.
 
-   Notes
-   -----
-   Instantiating this class directly is typically done via module-level constants
-   (e.g., ``tl.int32``, ``tl.float16``) rather than calling the constructor with
-   a string, though both are supported.
+Examples
+--------
+.. code-block:: python
 
-   Floating-point formats like ``fp8e4nv`` refer to specific hardware
-   implementations (e.g., NVIDIA Hopper FP8 formats).
+    import triton.language as tl
 
-   Examples
-   --------
-   .. code-block:: python
+    # Using predefined dtype constants
+    dtype = tl.int32
+    print(dtype.name)              # 'int32'
+    print(dtype.primitive_bitwidth)  # 32
+    print(dtype.itemsize)          # 4
+    print(dtype.is_int())          # True
+    print(dtype.is_floating())     # False
 
-      import triton.language as tl
+    # Creating dtype from string
+    dtype = tl.dtype('fp16')
+    print(dtype.is_fp16())         # True
+    print(dtype.fp_mantissa_width) # 10
+    print(dtype.exponent_bias)     # 15
 
-      # Using predefined constants (recommended)
-      t1 = tl.int32
-      t2 = tl.float16
-
-      # Constructing from string name
-      t3 = tl.dtype("bf16")
-
-      # Inspecting properties
-      print(t3.name)                # "bf16"
-      print(t3.primitive_bitwidth)  # 16
-      print(t3.is_floating())       # True
-      print(t3.fp_mantissa_width)   # 7
-
-      # Type checking in a kernel
-      @triton.jit
-      def kernel(x_ptr, n, BLOCK: tl.constexpr):
-          dtype = x_ptr.dtype.element_ty
-          if dtype.is_fp16():
-              # Specialized logic for fp16
-              pass
+    # Type inspection in kernel code
+    @triton.jit
+    def kernel(x_ptr, dtype: tl.constexpr):
+        if dtype.is_floating():
+            # Handle floating-point types
+            pass
+        elif dtype.is_int():
+            # Handle integer types
+            pass

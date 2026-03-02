@@ -3,54 +3,43 @@ reduce_or
 
 .. currentmodule:: triton.language
 
-.. autofunction:: reduce_or
+.. function:: reduce_or(input, axis, keep_dims=False)
 
-Returns the bitwise OR reduction of all elements in the :code:`input` tensor along the provided :code:`axis`.
+   Computes the bitwise OR reduction of all elements in the input tensor along the specified axis.
 
-The reduction operation is associative and commutative. This function requires integer input types.
+   Parameters
+   ----------
+   input : Tensor
+       The input tensor to reduce. Must be of integer type.
+   axis : int
+       The dimension along which the reduction should be performed. If None, reduces all dimensions.
+   keep_dims : bool, optional
+       If True, keeps the reduced dimensions with length 1. Default is False.
 
-Parameters
-----------
-input : Tensor
-    The input tensor containing integer values.
-axis : int
-    The dimension along which the reduction is performed. If ``None``, reduces all dimensions.
-keep_dims : bool, optional
-    If ``True``, the reduced dimensions are retained with length 1. Default is ``False``.
+   Returns
+   -------
+   Tensor
+       A tensor containing the bitwise OR reduction of the input along the specified axis.
 
-Returns
--------
-Tensor
-    A tensor containing the bitwise OR reduction result. The shape depends on :code:`axis` and :code:`keep_dims`.
+   Notes
+   -----
+   This function only supports integer tensors. The reduction operation is associative and commutative.
 
-Notes
------
-This function can also be called as a member function on :py:class:`tensor`,
-as :code:`x.reduce_or(...)` instead of :code:`reduce_or(x, ...)`.
+   This function can also be called as a member function on :py:class:`tensor`, as ``x.reduce_or(...)`` instead of ``reduce_or(x, ...)``.
 
-Only integer dtypes are supported. Passing floating-point types will result in a compilation error.
+   Examples
+   --------
+   .. code-block:: python
 
-Examples
---------
-.. code-block:: python
+      import triton
+      import triton.language as tl
 
-    import triton
-    import triton.language as tl
+      @triton.jit
+      def kernel(x_ptr, out_ptr, BLOCK_SIZE: tl.constexpr):
+          x = tl.load(x_ptr + tl.arange(0, BLOCK_SIZE))
+          # Reduce OR across all elements
+          result = tl.reduce_or(x, axis=0)
+          tl.store(out_ptr, result)
 
-    @triton.jit
-    def kernel(ptr, stride):
-        # Load a block of integers
-        x = tl.load(ptr + tl.arange(0, 16) * stride)
-        
-        # Compute bitwise OR across the entire block
-        result = tl.reduce_or(x, axis=0)
-        
-        # Store result
-        tl.store(ptr, result)
-
-    # Usage as a member function
-    @triton.jit
-    def kernel_member(ptr, stride):
-        x = tl.load(ptr + tl.arange(0, 16) * stride)
-        result = x.reduce_or(axis=0)
-        tl.store(ptr, result)
+      # Can also be called as a tensor method
+      result = x.reduce_or(axis=0)

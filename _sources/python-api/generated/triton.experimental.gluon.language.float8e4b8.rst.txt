@@ -1,0 +1,25 @@
+float8e4b8
+==========
+
+8-bit floating point type with 4 exponent bits and exponent bias of 8.
+
+This dtype corresponds to the NVIDIA Hopper FP8 E4M3 format. Unlike IEEE 754 E4M3 (bias 7), this format uses an exponent bias of 8, sacrificing NaN representation for a larger dynamic range. It is optimized for mixed-precision compute on Tensor Cores.
+
+Notes
+-----
+Hardware support requires NVIDIA Hopper (H100) or later architectures.
+This type is suitable for mixed-precision matrix multiplications via Warpgroup MMA.
+In Gluon, explicit layout control is required when using this dtype in shared memory or TMA operations.
+
+Examples
+--------
+.. code-block:: python
+
+    import triton.experimental.gluon as gluon
+    import triton.experimental.gluon.language as ttgl
+
+    @gluon.jit
+    def kernel(x_ptr: ttgl.pointer[ttgl.float8e4b8], n: ttgl.int32):
+        pid = gluon.program_id(0)
+        x = ttgl.load(x_ptr + pid)
+        ttgl.store(x_ptr + pid, x)

@@ -1,0 +1,42 @@
+arrive
+======
+
+.. py:function:: triton.experimental.gluon.language.amd.gfx1250.mbarrier.arrive(mbarrier, *, count=1, _semantic=None)
+
+    Arrive at a memory barrier and decrement the pending count.
+
+    Signals arrival at the specified ``mbarrier`` by decreasing the pending arrival
+    count by ``count``. If the pending count reaches zero, the barrier phase changes
+    (decremented in a wraparound manner) and the pending count is reloaded with the
+    initial count value.
+
+    Parameters
+    ----------
+    mbarrier : shared_memory_descriptor
+        Handle to the barrier to be signaled.
+    count : int, optional
+        Count to arrive with. Defaults to 1.
+    _semantic : GluonSemantic, optional
+        Internal semantic context. Do not pass directly.
+
+    Returns
+    -------
+    phase : tensor
+        0-D tensor of ``int32`` representing the mbarrier's phase parity (0 for even,
+        1 for odd) prior to the arrive operation.
+
+    Notes
+    -----
+    This operation is specific to AMD GFX1250 hardware. The returned phase parity
+    can be used to track barrier state transitions across warp groups. The operation
+    requires a ``count`` attribute of at least 1.
+
+    Examples
+    --------
+    >>> import triton.experimental.gluon as gluon
+    >>> import triton.experimental.gluon.language as ttgl
+    >>> @gluon.jit
+    ... def kernel(...):
+    ...     mbarrier = ttgl.allocate_shared_memory(...)
+    ...     phase = ttgl.amd.gfx1250.mbarrier.arrive(mbarrier, count=1)
+    ...     ttgl.debug_barrier()

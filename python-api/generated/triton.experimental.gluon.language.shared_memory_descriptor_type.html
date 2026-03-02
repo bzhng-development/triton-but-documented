@@ -1,0 +1,359 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>shared_memory_descriptor_type &mdash; Triton  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=03e43079" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/custom.css" />
+
+  
+      <script src="../../_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="sin" href="triton.experimental.gluon.language.sin.html" />
+    <link rel="prev" title="shared_memory_descriptor" href="triton.experimental.gluon.language.shared_memory_descriptor.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            Triton
+              <img src="https://cdn.openai.com/triton/assets/triton-logo.png" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../getting-started/installation.html">Installation</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Python API</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../triton.html">triton</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.language.html">triton.language</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.testing.html">triton.testing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton-semantics.html">Triton Semantics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.language.extra.cuda.html">triton.language.extra.cuda</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.language.extra.cuda.libdevice.html">triton.language.extra.cuda.libdevice</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.runtime.html">triton.runtime</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.tools.html">triton.tools</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Gluon (Experimental) API</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.html">triton.experimental.gluon</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../triton.experimental.gluon.language.html">triton.experimental.gluon.language</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="../triton.experimental.gluon.language.html#language-primitives">Language Primitives</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="triton.experimental.gluon.language.AutoLayout.html">AutoLayout</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.experimental.gluon.language.BlockedLayout.html">BlockedLayout</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.experimental.gluon.language.CoalescedLayout.html">class triton.experimental.gluon.language.CoalescedLayout</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.experimental.gluon.language.DistributedLinearLayout.html">DistributedLinearLayout</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.experimental.gluon.language.DotOperandLayout.html">class triton.experimental.gluon.language.DotOperandLayout</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.experimental.gluon.language.NVMMADistributedLayout.html">class triton.experimental.gluon.language.NVMMADistributedLayout</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.experimental.gluon.language.NVMMASharedLayout.html">class triton.experimental.gluon.language.NVMMASharedLayout</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.experimental.gluon.language.PaddedSharedLayout.html">class PaddedSharedLayout</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.experimental.gluon.language.SharedLinearLayout.html">SharedLinearLayout</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.experimental.gluon.language.SliceLayout.html">class triton.experimental.gluon.language.SliceLayout</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.experimental.gluon.language.SwizzledSharedLayout.html">class triton.experimental.gluon.language.SwizzledSharedLayout</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.experimental.gluon.language.abs.html">abs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.experimental.gluon.language.add.html">add</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.experimental.gluon.language.allocate_shared_memory.html">allocate_shared_memory</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.experimental.gluon.language.arange.html">arange</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.experimental.gluon.language.associative_scan.html">associative_scan</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.experimental.gluon.language.assume.html">assume</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.experimental.gluon.language.atomic_add.html">atomic_add</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.experimental.gluon.language.atomic_and.html">atomic_and</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.experimental.gluon.language.atomic_cas.html">atomic_cas</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.experimental.gluon.language.atomic_max.html">atomic_max</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.experimental.gluon.language.atomic_min.html">atomic_min</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.experimental.gluon.language.atomic_or.html">atomic_or</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.experimental.gluon.language.atomic_xchg.html">atomic_xchg</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.experimental.gluon.language.atomic_xor.html">atomic_xor</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.experimental.gluon.language.bank_conflicts.html">bank_conflicts</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.experimental.gluon.language.barrier.html">gluon.language.barrier</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.experimental.gluon.language.base_type.html">base_type</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.experimental.gluon.language.base_value.html">base_value</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.experimental.gluon.language.bfloat16.html">bfloat16</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.experimental.gluon.language.block_type.html">block_type</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.experimental.gluon.language.broadcast.html">broadcast</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.experimental.gluon.language.cast.html">cast</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.experimental.gluon.language.cdiv.html">cdiv</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.experimental.gluon.language.ceil.html">ceil</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.experimental.gluon.language.constexpr.html">constexpr</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.experimental.gluon.language.convert_layout.html">convert_layout</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.experimental.gluon.language.cos.html">cos</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.experimental.gluon.language.device_assert.html">device_assert</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.experimental.gluon.language.device_print.html">device_print</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.experimental.gluon.language.distributed_type.html">distributed_type</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.experimental.gluon.language.div_rn.html">div_rn</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.experimental.gluon.language.dot_fma.html">dot_fma</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.experimental.gluon.language.dtype.html">dtype</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.experimental.gluon.language.erf.html">erf</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.experimental.gluon.language.exp.html">exp</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.experimental.gluon.language.exp2.html">exp2</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.experimental.gluon.language.expand_dims.html">expand_dims</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.experimental.gluon.language.fdiv.html">fdiv</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.experimental.gluon.language.float16.html">float16</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.experimental.gluon.language.float32.html">float32</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.experimental.gluon.language.float64.html">float64</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.experimental.gluon.language.float8e4b15.html">float8e4b15</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.experimental.gluon.language.float8e4b8.html">float8e4b8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.experimental.gluon.language.float8e4nv.html">float8e4nv</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.experimental.gluon.language.float8e5.html">float8e5</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.experimental.gluon.language.float8e5b16.html">float8e5b16</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.experimental.gluon.language.floor.html">floor</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.experimental.gluon.language.fma.html">fma</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.experimental.gluon.language.fp4_to_fp.html">fp4_to_fp</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.experimental.gluon.language.full.html">full</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.experimental.gluon.language.full_like.html">full_like</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.experimental.gluon.language.gather.html">gather</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.experimental.gluon.language.histogram.html">histogram</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.experimental.gluon.language.inline_asm_elementwise.html">inline_asm_elementwise</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.experimental.gluon.language.int1.html">int1</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.experimental.gluon.language.int16.html">int16</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.experimental.gluon.language.int32.html">int32</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.experimental.gluon.language.int64.html">int64</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.experimental.gluon.language.int8.html">int8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.experimental.gluon.language.join.html">join</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.experimental.gluon.language.load.html">load</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.experimental.gluon.language.log.html">log</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.experimental.gluon.language.log2.html">log2</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.experimental.gluon.language.map_elementwise.html">map_elementwise</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.experimental.gluon.language.max.html">ttgl.max</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.experimental.gluon.language.max_constancy.html">max_constancy</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.experimental.gluon.language.max_contiguous.html">max_contiguous</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.experimental.gluon.language.maximum.html">maximum</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.experimental.gluon.language.min.html">min</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.experimental.gluon.language.minimum.html">minimum</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.experimental.gluon.language.mul.html">mul</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.experimental.gluon.language.multiple_of.html">multiple_of</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.experimental.gluon.language.num_ctas.html">num_ctas</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.experimental.gluon.language.num_programs.html">num_programs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.experimental.gluon.language.num_warps.html">num_warps</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.experimental.gluon.language.permute.html">permute</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.experimental.gluon.language.pointer_type.html">pointer_type</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.experimental.gluon.language.program_id.html">program_id</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.experimental.gluon.language.ravel.html">ravel</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.experimental.gluon.language.reduce.html">reduce</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.experimental.gluon.language.reduce_or.html">reduce_or</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.experimental.gluon.language.reshape.html">reshape</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.experimental.gluon.language.rsqrt.html">rsqrt</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.experimental.gluon.language.set_auto_layout.html">set_auto_layout</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.experimental.gluon.language.shared_memory_descriptor.html">shared_memory_descriptor</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">shared_memory_descriptor_type</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#triton.experimental.gluon.language.shared_memory_descriptor_type"><code class="docutils literal notranslate"><span class="pre">shared_memory_descriptor_type</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="triton.experimental.gluon.language.sin.html">sin</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.experimental.gluon.language.split.html">split</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.experimental.gluon.language.sqrt.html">sqrt</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.experimental.gluon.language.sqrt_rn.html">sqrt_rn</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.experimental.gluon.language.static_assert.html">static_assert</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.experimental.gluon.language.static_print.html">static_print</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.experimental.gluon.language.static_range.html">static_range</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.experimental.gluon.language.store.html">store</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.experimental.gluon.language.sub.html">sub</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.experimental.gluon.language.sum.html">sum</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.experimental.gluon.language.tensor.html">class tensor</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.experimental.gluon.language.to_linear_layout.html">to_linear_layout</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.experimental.gluon.language.to_tensor.html">to_tensor</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.experimental.gluon.language.tuple.html">tuple</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.experimental.gluon.language.tuple_type.html">tuple_type</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.experimental.gluon.language.uint16.html">uint16</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.experimental.gluon.language.uint32.html">uint32</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.experimental.gluon.language.uint64.html">uint64</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.experimental.gluon.language.uint8.html">uint8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.experimental.gluon.language.umulhi.html">umulhi</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.experimental.gluon.language.void.html">void</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.experimental.gluon.language.warp_specialize.html">warp_specialize</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.experimental.gluon.language.where.html">ttgl.where</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.experimental.gluon.language.xor_sum.html">xor_sum</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.experimental.gluon.language.zeros.html">zeros</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.experimental.gluon.language.zeros_like.html">zeros_like</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.nvidia.ampere.html">triton.experimental.gluon.language.nvidia.ampere</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.nvidia.ampere.async_copy.html">triton.experimental.gluon.language.nvidia.ampere.async_copy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.nvidia.ampere.mbarrier.html">triton.experimental.gluon.language.nvidia.ampere.mbarrier</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.nvidia.hopper.html">triton.experimental.gluon.language.nvidia.hopper</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.nvidia.hopper.tma.html">triton.experimental.gluon.language.nvidia.hopper.tma</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.nvidia.hopper.mbarrier.html">triton.experimental.gluon.language.nvidia.hopper.mbarrier</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.nvidia.hopper.cluster.html">triton.experimental.gluon.language.nvidia.hopper.cluster</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.nvidia.blackwell.html">triton.experimental.gluon.language.nvidia.blackwell</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.nvidia.blackwell.tma.html">triton.experimental.gluon.language.nvidia.blackwell.tma</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.nvidia.blackwell.clc.html">triton.experimental.gluon.language.nvidia.blackwell.clc</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.amd.html">triton.experimental.gluon.language.amd</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.amd.gfx1250.html">triton.experimental.gluon.language.amd.gfx1250</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.amd.gfx1250.async_copy.html">triton.experimental.gluon.language.amd.gfx1250.async_copy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.amd.gfx1250.mbarrier.html">triton.experimental.gluon.language.amd.gfx1250.mbarrier</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.amd.gfx1250.cluster.html">triton.experimental.gluon.language.amd.gfx1250.cluster</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.amd.gfx1250.tdm.html">triton.experimental.gluon.language.amd.gfx1250.tdm</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.amd.cdna3.html">triton.experimental.gluon.language.amd.cdna3</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.amd.cdna4.html">triton.experimental.gluon.language.amd.cdna4</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.amd.rdna3.html">triton.experimental.gluon.language.amd.rdna3</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.amd.rdna4.html">triton.experimental.gluon.language.amd.rdna4</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Triton MLIR Dialects</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../dialects/dialects.html">Triton MLIR Dialects and Ops</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Programming Guide</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../programming-guide/chapter-1/introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../programming-guide/chapter-2/related-work.html">Related Work</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../programming-guide/chapter-3/debugging.html">Debugging Triton</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">Triton</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../triton.experimental.gluon.language.html">triton.experimental.gluon.language</a></li>
+      <li class="breadcrumb-item active">shared_memory_descriptor_type</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../_sources/python-api/generated/triton.experimental.gluon.language.shared_memory_descriptor_type.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="shared-memory-descriptor-type">
+<h1>shared_memory_descriptor_type<a class="headerlink" href="#shared-memory-descriptor-type" title="Link to this heading">¶</a></h1>
+<dl class="py class">
+<dt class="sig sig-object py" id="triton.experimental.gluon.language.shared_memory_descriptor_type">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">triton.experimental.gluon.language.</span></span><span class="sig-name descname"><span class="pre">shared_memory_descriptor_type</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">element_ty</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">shape</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">layout</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alloc_shape</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#triton.experimental.gluon.language.shared_memory_descriptor_type" title="Link to this definition">¶</a></dt>
+<dd><p>Type descriptor for shared memory allocations in Gluon IR.</p>
+<p>Represents the type of a shared memory descriptor, specifying the element
+data type, logical shape, shared memory layout, and physical allocation
+shape. This type is used to statically describe shared memory regions for
+explicit GPU memory management.</p>
+<section id="parameters">
+<h2>Parameters<a class="headerlink" href="#parameters" title="Link to this heading">¶</a></h2>
+<dl class="simple">
+<dt>element_ty<span class="classifier">dtype</span></dt><dd><p>The element data type stored in shared memory (e.g., <code class="docutils literal notranslate"><span class="pre">float16</span></code>,
+<code class="docutils literal notranslate"><span class="pre">int32</span></code>).</p>
+</dd>
+<dt>shape<span class="classifier">Sequence[int]</span></dt><dd><p>The logical dimensions of the shared memory region.</p>
+</dd>
+<dt>layout<span class="classifier">SharedLayout</span></dt><dd><p>The shared memory layout describing how elements are distributed
+across memory banks. Must be an instance of <code class="docutils literal notranslate"><span class="pre">SharedLayout</span></code>.</p>
+</dd>
+<dt>alloc_shape<span class="classifier">Sequence[int]</span></dt><dd><p>The physical allocation shape, which may differ from the logical
+shape to accommodate padding or swizzling.</p>
+</dd>
+</dl>
+</section>
+<section id="attributes">
+<h2>Attributes<a class="headerlink" href="#attributes" title="Link to this heading">¶</a></h2>
+<dl class="simple">
+<dt>element_ty<span class="classifier">dtype</span></dt><dd><p>The element data type.</p>
+</dd>
+<dt>shape<span class="classifier">Tuple[int, …]</span></dt><dd><p>The logical shape of the shared memory region.</p>
+</dd>
+<dt>layout<span class="classifier">SharedLayout</span></dt><dd><p>The shared memory layout.</p>
+</dd>
+<dt>alloc_shape<span class="classifier">Tuple[int, …]</span></dt><dd><p>The physical allocation shape.</p>
+</dd>
+</dl>
+</section>
+<section id="notes">
+<h2>Notes<a class="headerlink" href="#notes" title="Link to this heading">¶</a></h2>
+<p>The <code class="docutils literal notranslate"><span class="pre">layout</span></code> parameter must be a <code class="docutils literal notranslate"><span class="pre">SharedLayout</span></code> instance (e.g.,
+<code class="docutils literal notranslate"><span class="pre">BlockedLayout</span></code>, <code class="docutils literal notranslate"><span class="pre">CoalescedLayout</span></code>). The <code class="docutils literal notranslate"><span class="pre">alloc_shape</span></code> may be
+larger than <code class="docutils literal notranslate"><span class="pre">shape</span></code> to accommodate hardware requirements such as
+bank conflict avoidance or TMA swizzling.</p>
+<p>This type is typically constructed via <code class="docutils literal notranslate"><span class="pre">allocate_shared_memory</span></code> and
+used to type-check shared memory operations.</p>
+</section>
+<section id="examples">
+<h2>Examples<a class="headerlink" href="#examples" title="Link to this heading">¶</a></h2>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span><span class="w"> </span><span class="nn">triton.experimental.gluon</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">gluon</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span><span class="w"> </span><span class="nn">triton.experimental.gluon.language</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">ttgl</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">triton.experimental.gluon.language._layouts</span><span class="w"> </span><span class="kn">import</span> <span class="n">BlockedLayout</span>
+<span class="gp">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nd">@gluon</span><span class="o">.</span><span class="n">jit</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">def</span><span class="w"> </span><span class="nf">kernel</span><span class="p">():</span>
+<span class="gp">... </span>    <span class="n">layout</span> <span class="o">=</span> <span class="n">BlockedLayout</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">32</span><span class="p">],</span> <span class="p">[</span><span class="mi">128</span><span class="p">,</span> <span class="mi">128</span><span class="p">],</span> <span class="p">[</span><span class="mi">4</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">])</span>
+<span class="gp">... </span>    <span class="n">smem_ty</span> <span class="o">=</span> <span class="n">ttgl</span><span class="o">.</span><span class="n">shared_memory_descriptor_type</span><span class="p">(</span>
+<span class="gp">... </span>        <span class="n">element_ty</span><span class="o">=</span><span class="n">ttgl</span><span class="o">.</span><span class="n">float16</span><span class="p">,</span>
+<span class="gp">... </span>        <span class="n">shape</span><span class="o">=</span><span class="p">[</span><span class="mi">128</span><span class="p">,</span> <span class="mi">128</span><span class="p">],</span>
+<span class="gp">... </span>        <span class="n">layout</span><span class="o">=</span><span class="n">layout</span><span class="p">,</span>
+<span class="gp">... </span>        <span class="n">alloc_shape</span><span class="o">=</span><span class="p">[</span><span class="mi">128</span><span class="p">,</span> <span class="mi">128</span><span class="p">]</span>
+<span class="gp">... </span>    <span class="p">)</span>
+<span class="gp">... </span>    <span class="c1"># Use smem_ty for type annotations or static checks</span>
+</pre></div>
+</div>
+</section>
+<section id="see-also">
+<h2>See Also<a class="headerlink" href="#see-also" title="Link to this heading">¶</a></h2>
+<p>allocate_shared_memory : Allocate shared memory with given type.
+shared_memory_descriptor : Runtime handle to shared memory allocation.</p>
+</section>
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="triton.experimental.gluon.language.shared_memory_descriptor.html" class="btn btn-neutral float-left" title="shared_memory_descriptor" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="triton.experimental.gluon.language.sin.html" class="btn btn-neutral float-right" title="sin" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2020, Philippe Tillet.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

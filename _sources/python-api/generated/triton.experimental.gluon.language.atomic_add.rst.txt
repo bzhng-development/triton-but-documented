@@ -1,0 +1,91 @@
+atomic_add
+==========
+
+.. currentmodule:: triton.experimental.gluon.language
+
+.. function:: atomic_add(pointer, val, mask=None, sem=None, scope=None, _semantic=None)
+
+   Performs an atomic addition at the memory location specified by ``pointer``.
+
+   Returns the data stored at ``pointer`` before the atomic operation completes.
+
+   Parameters
+   ----------
+   pointer : tensor
+      Block of pointers with ``dtype=triton.PointerDType`` specifying the memory
+      locations to operate on.
+   val : tensor
+      Block of values with ``dtype=pointer.dtype.element_ty`` to add atomically.
+   mask : tensor, optional
+      Boolean tensor specifying which elements to operate on. If ``None``, all
+      elements are processed.
+   sem : str, optional
+      Memory semantics for the operation. Acceptable values are ``"acquire"``,
+      ``"release"``, ``"acq_rel"``, and ``"relaxed"``. Defaults to ``"acq_rel"``.
+   scope : str, optional
+      Scope of threads observing the synchronizing effect. Acceptable values are
+      ``"gpu"`` (default), ``"cta"`` (cooperative thread array), or ``"sys"``
+      (system-wide).
+
+   Returns
+   -------
+   tensor
+      Tensor containing the values stored at ``pointer`` before the atomic
+      addition.
+
+   Notes
+   -----
+   This function can also be called as a member function on :py:class:`tensor`,
+   as ``x.atomic_add(...)`` instead of ``atomic_add(x, ...)``.
+
+   The memory semantics (``sem``) control ordering constraints:
+
+   - ``"acquire"``: Subsequent memory operations cannot be reordered before this
+     operation.
+   - ``"release"``: Prior memory operations cannot be reordered after this
+     operation.
+   - ``"acq_rel"``: Combines both acquire and release semantics.
+   - ``"relaxed"``: No ordering constraints.
+
+   The scope (``scope``) defines visibility:
+
+   - ``"gpu"``: Visible across the entire GPU device.
+   - ``"cta"``: Visible only within the cooperative thread array (thread block).
+   - ``"sys"``: Visible system-wide across all devices.
+
+   Examples
+   --------
+   .. code-block:: python
+
+      import triton.experimental.gluon as gluon
+      import triton.experimental.gluon.language as ttgl
+
+      @gluon.jit
+      def atomic_add_kernel(ptr, val, n):
+          pid = ttgl.program_id(0)
+          offset = pid
+          old_val = ttgl.atomic_add(ptr + offset, val)
+          # old_val contains the value before addition
+
+   .. code-block:: python
+
+      # Using member function syntax
+      @gluon.jit
+      def atomic_add_member_kernel(ptr, val, n):
+          pid = ttgl.program_id(0)
+          offset = pid
+          old_val = (ptr + offset).atomic_add(val)
+
+   .. code-block:: python
+
+      # With memory semantics and scope
+      @gluon.jit
+      def atomic_add_semantics_kernel(ptr, val, n):
+          pid = ttgl.program_id(0)
+          offset = pid
+          old_val = ttgl.atomic_add(
+              ptr + offset,
+              val,
+              sem="acq_rel",
+              scope="gpu"
+          )

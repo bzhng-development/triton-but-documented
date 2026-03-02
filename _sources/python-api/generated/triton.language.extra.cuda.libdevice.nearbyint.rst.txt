@@ -1,0 +1,47 @@
+nearbyint
+=========
+
+Round to the nearest integer value.
+
+Parameters
+----------
+arg0 : tensor
+    Input tensor of floating-point values. Supported dtypes are ``fp32`` and
+    ``fp64``.
+_semantic : optional
+    Internal parameter, do not set manually.
+
+Returns
+-------
+tensor
+    Tensor of the same dtype as ``arg0`` containing the nearest integer values.
+    The dtype is preserved (``fp32`` returns ``fp32``, ``fp64`` returns ``fp64``).
+
+Notes
+-----
+This function rounds to the nearest integer value, with ties rounded to even
+(rounding mode: round to nearest, ties to even). It is equivalent to the C
+``nearbyint`` function and maps to CUDA libdevice functions ``__nv_nearbyintf``
+(for ``fp32``) and ``__nv_nearbyint`` (for ``fp64``).
+
+Unlike ``rint``, this function does not raise the inexact floating-point
+exception when the result differs from the input. The operation is pure (no
+side effects).
+
+Examples
+--------
+.. code-block:: python
+
+    import triton
+    import triton.language as tl
+
+    @triton.jit
+    def kernel(x_ptr, y_ptr, BLOCK_SIZE: tl.constexpr):
+        offsets = tl.arange(0, BLOCK_SIZE)
+        x = tl.load(x_ptr + offsets)
+        y = tl.extra.cuda.libdevice.nearbyint(x)
+        tl.store(y_ptr + offsets, y)
+
+    # Example usage
+    # x = [1.5, 2.3, 3.7, -1.5]
+    # y = [2.0, 2.0, 4.0, -2.0]  # ties rounded to even

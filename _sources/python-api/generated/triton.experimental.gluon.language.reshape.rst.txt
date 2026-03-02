@@ -1,0 +1,54 @@
+reshape
+=======
+
+.. currentmodule:: triton.experimental.gluon.language
+
+.. function:: reshape(input, *shape, can_reorder=False)
+
+   Returns a tensor with the same number of elements as ``input`` but with the
+   provided shape.
+
+   Parameters
+   ----------
+   input : Block
+       The input tensor to reshape.
+   *shape : int or tuple of int
+       The new shape. Can be passed as a tuple or as individual integer
+       parameters.
+   can_reorder : bool, optional
+       If True, allows reordering of elements during reshape. Default is False.
+
+   Returns
+   -------
+   tensor
+       A tensor with the same number of elements as ``input`` but with the
+       new shape.
+
+   Notes
+   -----
+   The ``shape`` argument can be passed as a tuple or as individual parameters:
+
+   .. code-block:: python
+
+      # These are equivalent
+      reshape(x, (32, 32))
+      reshape(x, 32, 32)
+
+   This function can also be called as a member function on :py:class:`tensor`,
+   as ``x.reshape(...)`` instead of ``reshape(x, ...)``.
+
+   Examples
+   --------
+   Reshape a 1D tensor to 2D:
+
+   .. code-block:: python
+
+      import triton.experimental.gluon as gluon
+      import triton.experimental.gluon.language as ttgl
+
+      @gluon.jit
+      def kernel(x_ptr, out_ptr, BLOCK_SIZE: tl.constexpr):
+          x = ttgl.load(x_ptr)
+          # Reshape from [BLOCK_SIZE] to [BLOCK_SIZE // 2, 2]
+          y = ttgl.reshape(x, BLOCK_SIZE // 2, 2)
+          ttgl.store(out_ptr, y)

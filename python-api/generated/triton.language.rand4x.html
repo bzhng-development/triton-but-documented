@@ -19,7 +19,7 @@
     <script src="../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
-    <link rel="next" title="triton.language.randn4x" href="triton.language.randn4x.html" />
+    <link rel="next" title="randn4x" href="triton.language.randn4x.html" />
     <link rel="prev" title="philox_impl" href="triton.language.philox_impl.html" /> 
 </head>
 
@@ -63,20 +63,17 @@
 <li class="toctree-l2"><a class="reference internal" href="../triton.language.html#atomic-ops">Atomic Ops</a></li>
 <li class="toctree-l2 current"><a class="reference internal" href="../triton.language.html#random-number-generation">Random Number Generation</a><ul class="current">
 <li class="toctree-l3"><a class="reference internal" href="triton.language.randint4x.html">randint4x</a></li>
-<li class="toctree-l3"><a class="reference internal" href="triton.language.randint.html">triton.language.randint</a></li>
-<li class="toctree-l3"><a class="reference internal" href="triton.language.rand.html">rand</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.language.randint.html">randint</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.language.rand.html">triton.language.rand</a></li>
 <li class="toctree-l3"><a class="reference internal" href="triton.language.randn.html">randn</a></li>
 <li class="toctree-l3"><a class="reference internal" href="triton.language.pair_uniform_to_normal.html">pair_uniform_to_normal</a></li>
 <li class="toctree-l3"><a class="reference internal" href="triton.language.philox.html">philox</a></li>
 <li class="toctree-l3"><a class="reference internal" href="triton.language.philox_impl.html">philox_impl</a></li>
 <li class="toctree-l3 current"><a class="current reference internal" href="#">rand4x</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="#parameters">Parameters</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#returns">Returns</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#notes">Notes</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#examples">Examples</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#triton.language.rand4x"><code class="docutils literal notranslate"><span class="pre">triton.language.rand4x()</span></code></a></li>
 </ul>
 </li>
-<li class="toctree-l3"><a class="reference internal" href="triton.language.randn4x.html">triton.language.randn4x</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.language.randn4x.html">randn4x</a></li>
 <li class="toctree-l3"><a class="reference internal" href="triton.language.uint_to_uniform_float.html">uint_to_uniform_float</a></li>
 </ul>
 </li>
@@ -89,6 +86,35 @@
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../triton.testing.html">triton.testing</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../triton-semantics.html">Triton Semantics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.language.extra.cuda.html">triton.language.extra.cuda</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.language.extra.cuda.libdevice.html">triton.language.extra.cuda.libdevice</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.runtime.html">triton.runtime</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.tools.html">triton.tools</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Gluon (Experimental) API</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.html">triton.experimental.gluon</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.html">triton.experimental.gluon.language</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.nvidia.ampere.html">triton.experimental.gluon.language.nvidia.ampere</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.nvidia.ampere.async_copy.html">triton.experimental.gluon.language.nvidia.ampere.async_copy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.nvidia.ampere.mbarrier.html">triton.experimental.gluon.language.nvidia.ampere.mbarrier</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.nvidia.hopper.html">triton.experimental.gluon.language.nvidia.hopper</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.nvidia.hopper.tma.html">triton.experimental.gluon.language.nvidia.hopper.tma</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.nvidia.hopper.mbarrier.html">triton.experimental.gluon.language.nvidia.hopper.mbarrier</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.nvidia.hopper.cluster.html">triton.experimental.gluon.language.nvidia.hopper.cluster</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.nvidia.blackwell.html">triton.experimental.gluon.language.nvidia.blackwell</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.nvidia.blackwell.tma.html">triton.experimental.gluon.language.nvidia.blackwell.tma</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.nvidia.blackwell.clc.html">triton.experimental.gluon.language.nvidia.blackwell.clc</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.amd.html">triton.experimental.gluon.language.amd</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.amd.gfx1250.html">triton.experimental.gluon.language.amd.gfx1250</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.amd.gfx1250.async_copy.html">triton.experimental.gluon.language.amd.gfx1250.async_copy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.amd.gfx1250.mbarrier.html">triton.experimental.gluon.language.amd.gfx1250.mbarrier</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.amd.gfx1250.cluster.html">triton.experimental.gluon.language.amd.gfx1250.cluster</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.amd.gfx1250.tdm.html">triton.experimental.gluon.language.amd.gfx1250.tdm</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.amd.cdna3.html">triton.experimental.gluon.language.amd.cdna3</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.amd.cdna4.html">triton.experimental.gluon.language.amd.cdna4</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.amd.rdna3.html">triton.experimental.gluon.language.amd.rdna3</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.amd.rdna4.html">triton.experimental.gluon.language.amd.rdna4</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Triton MLIR Dialects</span></p>
 <ul>
@@ -128,38 +154,40 @@
              
   <section id="rand4x">
 <h1>rand4x<a class="headerlink" href="#rand4x" title="Link to this heading">¶</a></h1>
-<p>Generate four independent blocks of uniform random float32 values.</p>
-<p>Given a scalar <code class="docutils literal notranslate"><span class="pre">seed</span></code> and a block of <code class="docutils literal notranslate"><span class="pre">offsets</span></code>, returns four blocks of
-random numbers uniformly distributed in the interval <span class="math notranslate nohighlight">\([0, 1)\)</span>. This
-function utilizes the Philox counter-based PRNG and is more efficient than
-calling <a class="reference internal" href="triton.language.rand.html#triton.language.rand" title="triton.language.rand"><code class="xref py py-func docutils literal notranslate"><span class="pre">rand()</span></code></a> four times due to reduced kernel launch overhead and
-optimized state progression.</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="triton.language.rand4x">
+<span class="sig-prename descclassname"><span class="pre">triton.language.</span></span><span class="sig-name descname"><span class="pre">rand4x</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">seed</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">offsets</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_rounds</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#triton.language.rand4x" title="Link to this definition">¶</a></dt>
+<dd><p>Given a <code class="code docutils literal notranslate"><span class="pre">seed</span></code> scalar and an <code class="code docutils literal notranslate"><span class="pre">offsets</span></code> block,
+returns 4 blocks of random <code class="code docutils literal notranslate"><span class="pre">float32</span></code> in <span class="math notranslate nohighlight">\(U(0, 1)\)</span>.</p>
 <section id="parameters">
 <h2>Parameters<a class="headerlink" href="#parameters" title="Link to this heading">¶</a></h2>
 <dl class="simple">
-<dt>seed<span class="classifier">scalar</span></dt><dd><p>The seed for the pseudo-random number generator. Must be an integer type.</p>
+<dt>seed</dt><dd><p>The seed for generating random numbers.</p>
 </dd>
-<dt>offsets<span class="classifier">block</span></dt><dd><p>A block of offsets defining the sequence indices for the random numbers.
-Typically generated using <code class="docutils literal notranslate"><span class="pre">tl.arange</span></code> or pointer offsets.</p>
+<dt>offsets</dt><dd><p>The offsets to generate random numbers for.</p>
 </dd>
-<dt>n_rounds<span class="classifier">constexpr, optional</span></dt><dd><p>The number of mixing rounds for the Philox cipher. Default is 10.
-Increasing this value improves statistical quality at the cost of performance.</p>
+<dt>n_rounds<span class="classifier">tl.constexpr, optional</span></dt><dd><p>Number of rounds for Philox PRNG. Default is 10.</p>
 </dd>
 </dl>
 </section>
 <section id="returns">
 <h2>Returns<a class="headerlink" href="#returns" title="Link to this heading">¶</a></h2>
 <dl class="simple">
-<dt>u1, u2, u3, u4<span class="classifier">block</span></dt><dd><p>Four blocks of <code class="docutils literal notranslate"><span class="pre">float32</span></code> values sampled from <span class="math notranslate nohighlight">\(U(0, 1)\)</span>.</p>
+<dt>u1<span class="classifier">tl.block</span></dt><dd><p>First block of random float32 values.</p>
+</dd>
+<dt>u2<span class="classifier">tl.block</span></dt><dd><p>Second block of random float32 values.</p>
+</dd>
+<dt>u3<span class="classifier">tl.block</span></dt><dd><p>Third block of random float32 values.</p>
+</dd>
+<dt>u4<span class="classifier">tl.block</span></dt><dd><p>Fourth block of random float32 values.</p>
 </dd>
 </dl>
 </section>
 <section id="notes">
 <h2>Notes<a class="headerlink" href="#notes" title="Link to this heading">¶</a></h2>
-<p>The underlying algorithm is Philox, a cryptographically strong counter-based
-PRNG designed for parallel architectures. The conversion from integer to float
-uses a numerically stable method to ensure uniformity across the representable
-range of <code class="docutils literal notranslate"><span class="pre">float32</span></code>.</p>
+<p>Uses the Philox pseudo-random number generator.
+This function is more efficient than calling <code class="xref py py-func docutils literal notranslate"><span class="pre">triton.language.rand()</span></code>
+four times.</p>
 </section>
 <section id="examples">
 <h2>Examples<a class="headerlink" href="#examples" title="Link to this heading">¶</a></h2>
@@ -167,26 +195,14 @@ range of <code class="docutils literal notranslate"><span class="pre">float32</s
 <span class="kn">import</span><span class="w"> </span><span class="nn">triton.language</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">tl</span>
 
 <span class="nd">@triton</span><span class="o">.</span><span class="n">jit</span>
-<span class="k">def</span><span class="w"> </span><span class="nf">kernel</span><span class="p">(</span>
-    <span class="n">out_ptr1</span><span class="p">,</span> <span class="n">out_ptr2</span><span class="p">,</span> <span class="n">out_ptr3</span><span class="p">,</span> <span class="n">out_ptr4</span><span class="p">,</span>
-    <span class="n">seed</span><span class="p">,</span>
-    <span class="n">BLOCK_SIZE</span><span class="p">:</span> <span class="n">tl</span><span class="o">.</span><span class="n">constexpr</span><span class="p">,</span>
-<span class="p">):</span>
-    <span class="c1"># Map program id to offset block</span>
-    <span class="n">pid</span> <span class="o">=</span> <span class="n">tl</span><span class="o">.</span><span class="n">program_id</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
-    <span class="n">offsets</span> <span class="o">=</span> <span class="n">pid</span> <span class="o">*</span> <span class="n">BLOCK_SIZE</span> <span class="o">+</span> <span class="n">tl</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">BLOCK_SIZE</span><span class="p">)</span>
-
-    <span class="c1"># Generate 4 independent streams of random numbers</span>
-    <span class="n">r1</span><span class="p">,</span> <span class="n">r2</span><span class="p">,</span> <span class="n">r3</span><span class="p">,</span> <span class="n">r4</span> <span class="o">=</span> <span class="n">tl</span><span class="o">.</span><span class="n">rand4x</span><span class="p">(</span><span class="n">seed</span><span class="p">,</span> <span class="n">offsets</span><span class="p">)</span>
-
-    <span class="c1"># Store results</span>
-    <span class="n">tl</span><span class="o">.</span><span class="n">store</span><span class="p">(</span><span class="n">out_ptr1</span> <span class="o">+</span> <span class="n">offsets</span><span class="p">,</span> <span class="n">r1</span><span class="p">)</span>
-    <span class="n">tl</span><span class="o">.</span><span class="n">store</span><span class="p">(</span><span class="n">out_ptr2</span> <span class="o">+</span> <span class="n">offsets</span><span class="p">,</span> <span class="n">r2</span><span class="p">)</span>
-    <span class="n">tl</span><span class="o">.</span><span class="n">store</span><span class="p">(</span><span class="n">out_ptr3</span> <span class="o">+</span> <span class="n">offsets</span><span class="p">,</span> <span class="n">r3</span><span class="p">)</span>
-    <span class="n">tl</span><span class="o">.</span><span class="n">store</span><span class="p">(</span><span class="n">out_ptr4</span> <span class="o">+</span> <span class="n">offsets</span><span class="p">,</span> <span class="n">r4</span><span class="p">)</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">kernel</span><span class="p">(</span><span class="n">rng_seed</span><span class="p">,</span> <span class="n">offsets</span><span class="p">):</span>
+    <span class="n">u1</span><span class="p">,</span> <span class="n">u2</span><span class="p">,</span> <span class="n">u3</span><span class="p">,</span> <span class="n">u4</span> <span class="o">=</span> <span class="n">tl</span><span class="o">.</span><span class="n">rand4x</span><span class="p">(</span><span class="n">rng_seed</span><span class="p">,</span> <span class="n">offsets</span><span class="p">)</span>
+    <span class="c1"># Use u1, u2, u3, u4</span>
 </pre></div>
 </div>
 </section>
+</dd></dl>
+
 </section>
 
 
@@ -194,7 +210,7 @@ range of <code class="docutils literal notranslate"><span class="pre">float32</s
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
         <a href="triton.language.philox_impl.html" class="btn btn-neutral float-left" title="philox_impl" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="triton.language.randn4x.html" class="btn btn-neutral float-right" title="triton.language.randn4x" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="triton.language.randn4x.html" class="btn btn-neutral float-right" title="randn4x" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>

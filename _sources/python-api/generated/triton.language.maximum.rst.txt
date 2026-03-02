@@ -1,35 +1,37 @@
-Computes the element-wise maximum of two input tensors.
+triton.language.maximum
+======================
 
-.. function:: triton.language.maximum(x, y, propagate_nan=tl.PropagateNan.NONE)
+.. currentmodule:: triton.language
+
+.. function:: maximum(x, y, propagate_nan=PropagateNan.NONE)
 
    Computes the element-wise maximum of :code:`x` and :code:`y`.
 
-   If :code:`propagate_nan` is set to :code:`tl.PropagateNan.PROPAGATE_NAN`,
-   NaN values in either input will propagate to the output. Otherwise, NaNs
-   are treated as missing values and ignored (returning the non-NaN operand).
-
-   For :code:`bfloat16` inputs, values are promoted to :code:`float32` before
-   comparison.
-
    Parameters
    ----------
-   x : tl.tensor
+   x : Block
        The first input tensor.
-   y : tl.tensor
+   y : Block
        The second input tensor.
    propagate_nan : tl.PropagateNan, optional
-       Whether to propagate NaN values. Default is :code:`tl.PropagateNan.NONE`.
+       Whether to propagate NaN values. Default is :code:`PropagateNan.NONE`.
 
    Returns
    -------
-   tl.tensor
+   Block
        A tensor containing the element-wise maximum values.
 
-   See Also
-   --------
-   tl.minimum : Computes the element-wise minimum.
-   tl.clamp : Clamps values within a range.
-   tl.PropagateNan : Enum for NaN propagation behavior.
+   Notes
+   -----
+   If either input is of type :code:`bfloat16`, it is promoted to :code:`float32`
+   before the operation is performed, as hardware does not support FMAX for
+   bfloat16.
+
+   NaN propagation behavior is controlled by the :code:`propagate_nan` parameter.
+   See :class:`tl.PropagateNan` for available options.
+
+   This function can also be called as a member function on :py:class:`tensor`,
+   as :code:`x.maximum(y)` instead of :code:`maximum(x, y)`.
 
    Examples
    --------
@@ -39,8 +41,20 @@ Computes the element-wise maximum of two input tensors.
       import triton.language as tl
 
       @triton.jit
-      def kernel(X_ptr, Y_ptr, Out_ptr, BLOCK_SIZE: tl.constexpr):
-          x = tl.load(X_ptr + tl.arange(0, BLOCK_SIZE))
-          y = tl.load(Y_ptr + tl.arange(0, BLOCK_SIZE))
+      def kernel(x_ptr, y_ptr, out_ptr, BLOCK_SIZE: tl.constexpr):
+          x = tl.load(x_ptr + tl.arange(0, BLOCK_SIZE))
+          y = tl.load(y_ptr + tl.arange(0, BLOCK_SIZE))
           out = tl.maximum(x, y)
-          tl.store(Out_ptr + tl.arange(0, BLOCK_SIZE), out)
+          tl.store(out_ptr + tl.arange(0, BLOCK_SIZE), out)
+
+      # Using as member function
+      @triton.jit
+      def kernel_member(x_ptr, y_ptr, out_ptr, BLOCK_SIZE: tl.constexpr):
+          x = tl.load(x_ptr + tl.arange(0, BLOCK_SIZE))
+          y = tl.load(y_ptr + tl.arange(0, BLOCK_SIZE))
+          out = x.maximum(y)
+          tl.store(out_ptr + tl.arange(0, BLOCK_SIZE), out)
+
+   .. seealso::
+      :func:`triton.language.minimum`
+      :class:`triton.language.PropagateNan`

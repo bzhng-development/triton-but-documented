@@ -1,0 +1,39 @@
+exp2
+====
+
+Compute 2^x element-wise.
+
+Parameters
+----------
+arg0 : tensor
+    Input tensor of floating-point values (fp32 or fp64).
+_semantic : optional
+    Internal semantic parameter (do not set manually).
+
+Returns
+-------
+tensor
+    Tensor of same shape and dtype as ``arg0`` containing 2^arg0 for each element.
+
+Notes
+-----
+Dispatches to CUDA libdevice functions:
+
+- ``__nv_exp2f`` for ``fp32`` inputs
+- ``__nv_exp2`` for ``fp64`` inputs
+
+The operation is pure (no side effects). Only supported on CUDA devices.
+
+Examples
+--------
+.. code-block:: python
+
+    import triton
+    import triton.language as tl
+
+    @triton.jit
+    def exp2_kernel(x_ptr, y_ptr, BLOCK_SIZE: tl.constexpr):
+        offsets = tl.arange(0, BLOCK_SIZE)
+        x = tl.load(x_ptr + offsets)
+        y = tl.exp2(x)  # Computes 2^x
+        tl.store(y_ptr + offsets, y)

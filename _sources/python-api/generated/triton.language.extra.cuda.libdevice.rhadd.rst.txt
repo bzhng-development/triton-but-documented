@@ -1,0 +1,46 @@
+triton.language.extra.cuda.libdevice.rhadd
+==========================================
+
+.. function:: rhadd(arg0, arg1, _semantic=None)
+
+   Compute rounded half add: ``(arg0 + arg1 + 1) >> 1``.
+
+   Parameters
+   ----------
+   arg0 : tensor
+       First input tensor. Must be ``int32`` or ``uint32``.
+   arg1 : tensor
+       Second input tensor. Must be ``int32`` or ``uint32``. Same dtype as ``arg0``.
+   _semantic : optional
+       Internal semantic argument. Do not set manually.
+
+   Returns
+   -------
+   tensor
+       Tensor of same dtype as inputs containing ``(arg0 + arg1 + 1) >> 1``.
+
+   Notes
+   -----
+   This function maps to CUDA libdevice functions:
+
+   - ``__nv_rhadd`` for ``int32`` inputs
+   - ``__nv_urhadd`` for ``uint32`` inputs
+
+   Computes the average of two integers with rounding toward positive infinity.
+   Equivalent to ``(arg0 + arg1 + 1) // 2`` but avoids overflow in the addition.
+
+   Examples
+   --------
+   .. code-block:: python
+
+      import triton
+      import triton.language as tl
+
+      @triton.jit
+      def kernel(x_ptr, y_ptr, out_ptr, BLOCK: tl.constexpr):
+          pid = tl.program_id(0)
+          offs = pid * BLOCK + tl.arange(0, BLOCK)
+          x = tl.load(x_ptr + offs)
+          y = tl.load(y_ptr + offs)
+          result = tl.extra.cuda.libdevice.rhadd(x, y)
+          tl.store(out_ptr + offs, result)

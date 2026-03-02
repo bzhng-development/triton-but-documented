@@ -1,4 +1,9 @@
-.. py:function:: triton.language.atomic_max(pointer, val, mask=None, sem=None, scope=None)
+atomic_max
+==========
+
+.. currentmodule:: triton.language
+
+.. function:: atomic_max(pointer, val, mask=None, sem=None, scope=None)
 
    Performs an atomic maximum operation at the memory location specified by ``pointer``.
 
@@ -6,26 +11,26 @@
 
    Parameters
    ----------
-   pointer : triton.PointerType or block of pointer
-       The memory locations to operate on.
-   val : block of scalar
+   pointer : tensor
+       The memory locations to operate on. Must be a block of pointer type.
+   val : tensor
        The values with which to perform the atomic operation. Must have the same
        dtype as ``pointer.dtype.element_ty``.
-   mask : block of bool, optional
+   mask : tensor, optional
        If ``mask[idx]`` is false, do not perform the atomic operation at
-       ``pointer[idx]``.
+       ``pointer[idx]``. Must be a block of ``triton.int1``.
    sem : str, optional
        Specifies the memory semantics for the operation. Acceptable values are
-       ``"acquire"``, ``"release"``, ``"acq_rel"``, and ``"relaxed"``. If not
-       provided, defaults to ``"acq_rel"``.
+       ``"acquire"``, ``"release"``, ``"acq_rel"`` (ACQUIRE_RELEASE), and
+       ``"relaxed"``. Defaults to ``"acq_rel"``.
    scope : str, optional
        Defines the scope of threads that observe the synchronizing effect of the
-       atomic operation. Acceptable values are ``"gpu"`` (default), ``"cta"``,
-       or ``"sys"``.
+       atomic operation. Acceptable values are ``"gpu"`` (default), ``"cta"``
+       (cooperative thread array, thread block), or ``"sys"`` (SYSTEM).
 
    Returns
    -------
-   block of scalar
+   tensor
        The data stored at ``pointer`` before the atomic operation.
 
    Notes
@@ -33,11 +38,15 @@
    This function can also be called as a member function on :py:class:`tensor`,
    as ``x.atomic_max(...)`` instead of ``atomic_max(x, ...)``.
 
+   The atomic maximum operation computes ``max(*pointer, val)`` and stores the
+   result back to ``*pointer`` atomically.
+
    Examples
    --------
    .. code-block:: python
 
       @triton.jit
-      def kernel(ptr, val, BLOCK: tl.constexpr):
-          offs = tl.arange(0, BLOCK)
-          old_val = tl.atomic_max(ptr + offs, val)
+      def kernel(ptr, vals, BLOCK_SIZE: tl.constexpr):
+          pid = tl.program_id(0)
+          offset = pid * BLOCK_SIZE + tl.arange(0, BLOCK_SIZE)
+          old_vals = tl.atomic_max(ptr + offset, vals)

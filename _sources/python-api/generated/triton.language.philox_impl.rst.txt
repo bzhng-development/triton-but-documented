@@ -1,78 +1,57 @@
 philox_impl
-============
+===========
 
-Run ``n_rounds`` rounds of the Philox pseudo-random number generator for a given state and key.
+.. py:function:: triton.language.philox_impl(c0, c1, c2, c3, k0, k1, n_rounds: triton.language.core.constexpr = 10)
 
-Parameters
-----------
-c0 : triton.language.tensor
-    First 32-bit or 64-bit unsigned integer component of the counter state.
-c1 : triton.language.tensor
-    Second 32-bit or 64-bit unsigned integer component of the counter state.
-c2 : triton.language.tensor
-    Third 32-bit or 64-bit unsigned integer component of the counter state.
-c3 : triton.language.tensor
-    Fourth 32-bit or 64-bit unsigned integer component of the counter state.
-k0 : triton.language.tensor
-    First 32-bit or 64-bit unsigned integer component of the key (seed).
-k1 : triton.language.tensor
-    Second 32-bit or 64-bit unsigned integer component of the key (seed).
-n_rounds : triton.language.core.constexpr, optional
-    Number of mixing rounds to perform. Default is 10. Must be a compile-time constant.
+    Run `n_rounds` rounds of Philox for state (c0, c1, c2, c3) and key (k0, k1).
 
-Returns
--------
-c0 : triton.language.tensor
-    Updated first component of the counter state.
-c1 : triton.language.tensor
-    Updated second component of the counter state.
-c2 : triton.language.tensor
-    Updated third component of the counter state.
-c3 : triton.language.tensor
-    Updated fourth component of the counter state.
+    Parameters
+    ----------
+    c0 : tl.tensor
+        Counter state variable.
+    c1 : tl.tensor
+        Counter state variable.
+    c2 : tl.tensor
+        Counter state variable.
+    c3 : tl.tensor
+        Counter state variable.
+    k0 : tl.tensor
+        Key variable.
+    k1 : tl.tensor
+        Key variable.
+    n_rounds : tl.constexpr, optional
+        Number of rounds, default is 10.
 
-Notes
------
-This function implements the core mixing loop of the Philox-4x32 or Philox-4x64 algorithm.
-The data type (uint32 or uint64) is inferred from the input ``c0`` tensor.
-All arithmetic operations are performed with overflow sanitization disabled to match
-GPU integer semantics. The key is incremented by magic constants each round to ensure
-diffusion.
+    Returns
+    -------
+    c0 : tl.tensor
+        Updated counter state.
+    c1 : tl.tensor
+        Updated counter state.
+    c2 : tl.tensor
+        Updated counter state.
+    c3 : tl.tensor
+        Updated counter state.
 
-This is a low-level primitive; users typically call :func:`triton.language.random.philox`
-or higher-level functions like :func:`triton.language.random.randint` instead.
+    Notes
+    -----
+    Supports `tl.uint32` and `tl.uint64` dtypes. Constants are selected
+    based on input dtype.
 
-Examples
---------
-.. code-block:: python
+    Examples
+    --------
+    .. code-block:: python
 
-    import triton
-    import triton.language as tl
+        import triton.language as tl
 
-    @triton.jit
-    def example_kernel(
-        c0_ptr, c1_ptr, c2_ptr, c3_ptr,
-        seed,
-        BLOCK_SIZE: tl.constexpr,
-    ):
-        pid = tl.program_id(0)
-        offset = pid * BLOCK_SIZE
-
-        # Initialize counter state from offsets
-        c0 = offset
-        c1 = tl.full([BLOCK_SIZE], 0, dtype=tl.uint32)
-        c2 = tl.full([BLOCK_SIZE], 0, dtype=tl.uint32)
-        c3 = tl.full([BLOCK_SIZE], 0, dtype=tl.uint32)
-
-        # Split seed into two uint32 keys
-        k0 = (seed & 0xFFFFFFFF).to(tl.uint32)
-        k1 = ((seed >> 32) & 0xFFFFFFFF).to(tl.uint32)
-
-        # Run 10 rounds of Philox manually
-        r0, r1, r2, r3 = tl.philox_impl(c0, c1, c2, c3, k0, k1, n_rounds=10)
-
-        # Store results
-        tl.store(c0_ptr + offset, r0)
-        tl.store(c1_ptr + offset, r1)
-        tl.store(c2_ptr + offset, r2)
-        tl.store(c3_ptr + offset, r3)
+        @triton.jit
+        def kernel(...):
+            # Initialize state and key
+            c0 = tl.full((1,), 0, dtype=tl.uint32)
+            c1 = tl.full((1,), 0, dtype=tl.uint32)
+            c2 = tl.full((1,), 0, dtype=tl.uint32)
+            c3 = tl.full((1,), 0, dtype=tl.uint32)
+            k0 = tl.full((1,), 0, dtype=tl.uint32)
+            k1 = tl.full((1,), 0, dtype=tl.uint32)
+            # Run Philox
+            c0, c1, c2, c3 = tl.philox_impl(c0, c1, c2, c3, k0, k1)

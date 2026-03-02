@@ -1,0 +1,47 @@
+hadd
+====
+
+Compute the hardware-accelerated add with rounding of two integers.
+
+Parameters
+----------
+arg0 : tensor
+    First input tensor of type ``int32`` or ``uint32``.
+arg1 : tensor
+    Second input tensor of type ``int32`` or ``uint32``. Must have the same
+    dtype as ``arg0``.
+_semantic : optional
+    Internal semantic argument (do not pass explicitly).
+
+Returns
+-------
+tensor
+    Tensor of the same dtype as inputs containing the hardware add result.
+
+Notes
+-----
+This function maps to CUDA libdevice intrinsics:
+
+- ``int32`` inputs use ``__nv_hadd``
+- ``uint32`` inputs use ``__nv_uhadd``
+
+The operation computes ``(arg0 + arg1) >> 1`` with hardware rounding,
+providing better precision than naive integer division for averaging.
+Both inputs must have the same dtype.
+
+Examples
+--------
+.. code-block:: python
+
+    import triton
+    import triton.language as tl
+
+    @triton.jit
+    def kernel(x_ptr, y_ptr, out_ptr, BLOCK_SIZE: tl.constexpr):
+        pid = tl.program_id(0)
+        offs = pid * BLOCK_SIZE + tl.arange(0, BLOCK_SIZE)
+        x = tl.load(x_ptr + offs)
+        y = tl.load(y_ptr + offs)
+        # Compute hardware-accelerated average
+        avg = tl.extra.cuda.libdevice.hadd(x, y)
+        tl.store(out_ptr + offs, avg)

@@ -1,48 +1,23 @@
-triton.language.void
-====================
+void
+====
 
-The void data type.
+.. py:data:: triton.language.void
 
-This type represents the absence of a value and is primarily used to indicate
-that a pointer does not reference a valid data object or that a function does
-not return a value. In Triton, ``void`` is often used for pointers to opaque
-memory addresses or for kernel functions with no return statement.
+    The void data type.
 
-Parameters
-----------
+    Represents the absence of a value. Primarily used in function signatures
+    to indicate that a kernel or device function does not return a value.
 
-None.
+    Notes
+    -----
+    This is an instance of :class:`triton.language.dtype`. It cannot be used
+    to allocate memory or perform arithmetic operations.
 
-Returns
--------
+    Examples
+    --------
+    .. code-block:: python
 
-dtype
-    The void data type instance.
+        import triton.language as tl
 
-Notes
------
-
-*   Pointers of type ``void`` cannot be dereferenced directly; they must be
-    cast to a typed pointer (e.g., ``tl.pointer_type(tl.int32)``) before
-    loading or storing data.
-*   Kernel functions decorated with ``@triton.jit`` implicitly return ``void``
-    if no explicit return value is provided.
-
-Examples
---------
-
-.. code-block:: python
-
-    import triton
-    import triton.language as tl
-
-    @triton.jit
-    def kernel_no_return(x_ptr):
-        # Implicitly returns void
-        pass
-
-    @triton.jit
-    def kernel_void_ptr(x_ptr):
-        # Cast a void pointer to an int32 pointer before loading
-        x = tl.load(x_ptr.to(tl.pointer_type(tl.int32)))
-        tl.store(x_ptr.to(tl.pointer_type(tl.int32)), x + 1)
+        # Reference the void type
+        print(tl.void)

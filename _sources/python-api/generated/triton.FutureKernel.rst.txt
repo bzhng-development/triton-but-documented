@@ -1,106 +1,45 @@
-.. class:: FutureKernel(finalize_compile, future)
+FutureKernel
+============
 
-   Proxy object representing a kernel compilation scheduled for asynchronous execution.
+.. class:: triton.FutureKernel(finalize_compile, future)
 
-   This class wraps a :class:`concurrent.futures.Future` containing a pending
-   compiled kernel. It lazily blocks on the future when the kernel result is
-   first accessed, applies a finalization hook, and caches the resulting
-   :class:`CompiledKernel`. Attribute access is transparently delegated to the
-   underlying compiled kernel, allowing seamless interaction without explicit
-   synchronization.
+   Wrapper for asynchronous kernel compilation tasks.
 
    Parameters
    ----------
    finalize_compile : callable
-       A callback function invoked with the compiled kernel object immediately
-       after successful compilation and before caching. Used to perform
-       backend-specific finalization steps.
+       Callback function invoked after compilation completes.
    future : concurrent.futures.Future
-       A future object representing the asynchronous compilation task. Its
-       result must be a raw compiled kernel instance.
+       Future object representing the pending compilation task.
 
    .. method:: result(ignore_errors=False)
 
-      Block until the asynchronous compilation completes and return the cached
-      compiled kernel.
-
-      On the first invocation, this method waits for ``future`` to resolve.
-      If successful, it calls ``finalize_compile`` on the result, caches it,
-      and returns the kernel. Subsequent calls return the cached instance
-      immediately.
+      Blocks until compilation finishes, finalizes the kernel, and returns
+      the compiled object.
 
       Parameters
       ----------
       ignore_errors : bool, optional
-          If ``True``, suppress exceptions raised during compilation and return
-          ``None`` instead of raising. Default is ``False``, which propagates
-          the exception.
+          If True, suppress exceptions during compilation (default False).
 
       Returns
       -------
-      CompiledKernel or None
-          The finalized compiled kernel if compilation succeeds (or if
-          ``ignore_errors=True`` and an error occurred). Returns ``None`` if
-          an error occurs and ``ignore_errors=True``.
-
-      Raises
-      ------
-      Exception
-          Propagates the exception raised by the underlying future if
-          ``ignore_errors=False``.
-
-   .. method:: __getattr__(name)
-
-      Delegate attribute access to the underlying compiled kernel.
-
-      This enables transparent usage of ``FutureKernel`` instances as if they
-      were standard :class:`CompiledKernel` objects. The method implicitly
-      calls :meth:`result()` to ensure the kernel is compiled before accessing
-      attributes.
-
-      Parameters
-      ----------
-      name : str
-          The attribute name to retrieve from the compiled kernel.
-
-      Returns
-      -------
-      any
-          The value of the requested attribute from the compiled kernel.
+      kernel : object
+          The compiled kernel object.
 
    Notes
    -----
-   Instances of this class are typically created internally by
-   :class:`AsyncCompileMode` and should not be instantiated directly by users.
-   The transparency provided by :meth:`__getattr__` allows kernels to be used
-   in device code launches (e.g., ``kernel[args]()``) without manual
-   synchronization.
+   Implements ``__getattr__`` to transparently proxy attribute access to the
+   underlying compiled kernel. The kernel result is cached after the first
+   call to ``result()``.
 
    Examples
    --------
-   >>> import triton
-   >>> from concurrent.futures import ThreadPoolExecutor
-   >>>
-   >>> # Define a simple kernel
-   >>> @triton.jit
-   >>> def add_kernel(x_ptr, y_ptr, output_ptr, n,
-   ...                BLOCK_SIZE: triton.constexpr):
-   ...     pid = triton.program_id(0)
-   ...     offs = pid * BLOCK_SIZE + triton.arange(0, BLOCK_SIZE)
-   ...     mask = offs < n
-   ...     output = triton.load(x_ptr, offs, mask) + triton.load(y_ptr, offs, mask)
-   ...     triton.store(output_ptr, offs, output, mask)
-   >>>
-   >>> # Setup async compilation context
-   >>> with triton.runtime.AsyncCompileMode(ThreadPoolExecutor()) as mode:
-   ...     # Submit compilation (returns FutureKernel immediately)
-   ...     future_kern = mode.submit("add_kernel", 
-     ...                             lambda: triton.compile(add_kernel, signature={"x_ptr": "*fp32", "y_ptr": "*fp32", "output_ptr": "*fp32", "n": "i32", "BLOCK_SIZE": "constexpr"}, constants={"BLOCK_SIZE": 1024}),
-     ...                             lambda k: None)  # No-op finalizer
-     ...
-     ...     # Use future_kern transparently; compilation blocks here if needed
-     ...     # The __getattr__ delegation calls result() implicitly
-     ...     print(future_kern.name)  # Accesses compiled kernel attribute
-     ...
-     ...     # Launch kernel (triggers compilation if not yet done)
-     ...     # future_kern[grid](args...)
+   Typically used internally by :class:`triton.runtime.AsyncCompileMode`:
+
+   .. code-block:: python
+
+      with AsyncCompileMode(executor) as mode:
+          future_kernel = mode.submit(key, compile_fn, finalize_fn)
+          # Access kernel methods directly; compilation triggers lazily
+          future_kernel.run(grid, args)

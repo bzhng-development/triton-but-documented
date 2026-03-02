@@ -1,41 +1,39 @@
-div_rn
-======
+triton.language.div_rn
+======================
 
 .. currentmodule:: triton.language
 
-.. autofunction:: div_rn
+.. function:: div_rn(x, y, _semantic=None)
 
-Computes the element-wise precise division of :code:`x` and :code:`y`, rounding to nearest according to the IEEE standard.
+   Computes the element-wise precise division of :code:`x` and :code:`y`, rounding to nearest per IEEE 754 standard.
 
-Parameters
-----------
-x : Block
-    The dividend input values. Must be floating-point (typically ``fp32``).
-y : Block
-    The divisor input values. Must be floating-point (typically ``fp32``).
+   Parameters
+   ----------
+   x : tensor
+       The dividend input values. Must be floating-point type.
+   y : tensor
+       The divisor input values. Must be floating-point type.
 
-Returns
--------
-Block
-    A tensor containing the result of :code:`x / y` with IEEE rounding semantics.
+   Returns
+   -------
+   tensor
+       Element-wise quotient of :code:`x` and :code:`y`.
 
-Notes
------
-This operation enforces strict IEEE 754 rounding behavior (round to nearest, ties to even), unlike the default ``/`` operator in Triton which may use fast math approximations depending on compiler flags.
-The function currently supports ``fp32`` inputs; other types may be legalized or rejected depending on the backend.
+   Notes
+   -----
+   This operation uses IEEE 754 round-to-nearest rounding mode for precise floating-point division.
 
-Examples
---------
-.. code-block:: python
+   Only supports :code:`fp32` dtype. Inputs are automatically legalized to a common type.
 
-    import triton
-    import triton.language as tl
+   Examples
+   --------
+   .. code-block:: python
 
-    @triton.jit
-    def kernel(X, Y, Z, BLOCK_SIZE: tl.constexpr):
-        offs = tl.arange(0, BLOCK_SIZE)
-        x = tl.load(X + offs)
-        y = tl.load(Y + offs)
-        # Perform precise IEEE division
-        z = tl.div_rn(x, y)
-        tl.store(Z + offs, z)
+      @triton.jit
+      def kernel(x_ptr, y_ptr, out_ptr, BLOCK: tl.constexpr):
+          pid = tl.program_id(0)
+          offsets = pid * BLOCK + tl.arange(0, BLOCK)
+          x = tl.load(x_ptr + offsets)
+          y = tl.load(y_ptr + offsets)
+          out = tl.div_rn(x, y)
+          tl.store(out_ptr + offsets, out)

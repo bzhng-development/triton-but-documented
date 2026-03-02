@@ -1,0 +1,43 @@
+uint2float_rn
+=============
+
+.. currentmodule:: triton.language.extra.cuda.libdevice
+
+.. function:: uint2float_rn(arg0, _semantic=None)
+
+   Convert unsigned 32-bit integer to 32-bit float using round-to-nearest rounding.
+
+   Parameters
+   ----------
+   arg0 : tl.tensor
+       Input tensor of unsigned 32-bit integers (``tl.uint32``).
+   _semantic
+       Internal parameter, do not set manually.
+
+   Returns
+   -------
+   tl.tensor
+       Tensor of 32-bit floating-point values (``tl.fp32``).
+
+   Notes
+   -----
+   This function invokes the CUDA libdevice function ``__nv_uint2float_rn``.
+   The rounding mode is round-to-nearest-even (RN).
+   This operation is pure (no side effects).
+   Only ``uint32`` input type is supported.
+
+   Example
+   -------
+   .. code-block:: python
+
+      import triton
+      import triton.language as tl
+      from triton.language.extra.cuda import libdevice
+
+      @triton.jit
+      def uint_to_float_kernel(x_ptr, y_ptr, BLOCK_SIZE: tl.constexpr):
+          pid = tl.program_id(0)
+          offsets = pid * BLOCK_SIZE + tl.arange(0, BLOCK_SIZE)
+          uint_vals = tl.load(x_ptr + offsets)
+          float_vals = libdevice.uint2float_rn(uint_vals)
+          tl.store(y_ptr + offsets, float_vals)

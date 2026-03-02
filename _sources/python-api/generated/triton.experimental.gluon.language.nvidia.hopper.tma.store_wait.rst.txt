@@ -1,0 +1,73 @@
+store_wait
+==========
+
+Wait for pending asynchronous TMA store operations to complete.
+
+.. code-block:: python
+
+    triton.experimental.gluon.language.nvidia.hopper.tma.store_wait(pendings, _semantic=None)
+
+Parameters
+----------
+
+pendings : int
+    The number of pending store operations to wait for. Typically the return value
+    from :func:`triton.experimental.gluon.language.nvidia.hopper.tma.store` or
+    :func:`triton.experimental.gluon.language.nvidia.hopper.tma.async_store`.
+
+_semantic : GluonSemantic, optional
+    Internal parameter used by the Gluon JIT compiler. Do not set manually.
+
+Returns
+-------
+
+None
+
+Notes
+-----
+
+This function inserts a ``tma.store_wait`` PTX instruction that stalls until the
+specified number of pending TMA store transactions have completed. It is required
+for correctness when reading data that was previously written via async TMA stores.
+
+On NVIDIA Hopper (and later) architectures, TMA operations are asynchronous with
+respect to the thread pipeline. Proper use of :func:`store_wait` ensures memory
+consistency before subsequent loads or computes depend on the stored data.
+
+The ``pendings`` argument should match the number of outstanding store operations
+from prior TMA store calls in the same kernel region.
+
+Examples
+--------
+
+.. code-block:: python
+
+    import triton.experimental.gluon as gluon
+    import triton.experimental.gluon.language as ttgl
+    from triton.experimental.gluon.language.nvidia.hopper import tma
+
+    @gluon.jit
+    def kernel(
+        input_ptr,
+        output_ptr,
+        BLOCK_SIZE: ttgl.constexpr,
+    ):
+        # Allocate shared memory for TMA transfer
+        smem = ttgl.allocate_shared_memory(
+            ttgl.float16,
+            [BLOCK_SIZE],
+            ttgl.swizzled_shared_layout(BLOCK_SIZE, 8),
+        )
+
+        # Async TMA store from global to shared memory
+        pending = tma.store(input_ptr, smem)
+
+        # Wait for store to complete before reading from shared memory
+        tma.store_wait(pending)
+
+        # Now safe to load from shared memory
+        data = smem.load(ttgl.blocked_layout([BLOCK_SIZE]))
+
+        # ... process data ...
+
+        ttgl.store(output_ptr, data)

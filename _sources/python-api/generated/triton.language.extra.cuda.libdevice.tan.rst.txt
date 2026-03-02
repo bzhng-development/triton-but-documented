@@ -1,0 +1,46 @@
+tan
+===
+
+.. currentmodule:: triton.language.extra.cuda.libdevice
+
+.. function:: tan(arg0, _semantic=None)
+
+    Compute the tangent of each element in the input tensor.
+
+    Parameters
+    ----------
+    arg0 : tensor
+        Input tensor of floating-point values. Supported dtypes are ``fp32`` and
+        ``fp64``.
+    _semantic : optional
+        Internal semantic argument. Do not set manually.
+
+    Returns
+    -------
+    out : tensor
+        Tensor of the same shape and dtype as ``arg0``, containing the tangent
+        of each element.
+
+    Notes
+    -----
+    This function is a wrapper around CUDA libdevice functions:
+
+    - ``__nv_tanf`` for ``fp32`` inputs
+    - ``__nv_tan`` for ``fp64`` inputs
+
+    The operation is pure (no side effects). Input values where cosine is zero
+    (e.g., :math:`\pi/2 + k\pi`) will produce infinity or NaN.
+
+    Examples
+    --------
+    .. code-block:: python
+
+        import triton
+        import triton.language as tl
+
+        @triton.jit
+        def tan_kernel(input_ptr, output_ptr, BLOCK_SIZE: tl.constexpr):
+            offsets = tl.arange(0, BLOCK_SIZE)
+            x = tl.load(input_ptr + offsets)
+            y = tl.extra.cuda.libdevice.tan(x)
+            tl.store(output_ptr + offsets, y)

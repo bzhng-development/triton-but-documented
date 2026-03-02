@@ -1,0 +1,43 @@
+float2int_rz
+============
+
+.. currentmodule:: triton.language.extra.cuda.libdevice
+
+.. function:: float2int_rz(arg0, _semantic=None)
+
+   Convert a floating-point value to a signed integer using round-towards-zero.
+
+   Parameters
+   ----------
+   arg0 : tl.tensor
+       Input tensor of float32 values to convert.
+   _semantic : optional
+       Internal semantic argument, do not set manually.
+
+   Returns
+   -------
+   tl.tensor
+       Tensor of int32 values with the same shape as ``arg0``.
+
+   Notes
+   -----
+   This function calls the CUDA libdevice function ``__nv_float2int_rz`` which
+   converts floating-point values to integers using round-towards-zero semantics.
+   Fractional parts are truncated toward zero (e.g., 3.9 becomes 3, -3.9 becomes -3).
+
+   The operation is pure (no side effects) and supports elementwise broadcasting.
+
+   Examples
+   --------
+   .. code-block:: python
+
+      import triton
+      import triton.language as tl
+
+      @triton.jit
+      def kernel(x_ptr, out_ptr, n):
+          pid = tl.program_id(0)
+          offset = pid * 32
+          x = tl.load(x_ptr + offset + tl.arange(0, 32))
+          out = tl.extra.cuda.libdevice.float2int_rz(x)
+          tl.store(out_ptr + offset + tl.arange(0, 32), out)

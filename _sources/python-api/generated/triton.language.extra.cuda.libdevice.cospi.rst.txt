@@ -1,0 +1,47 @@
+triton.language.extra.cuda.libdevice.cospi
+==========================================
+
+.. currentmodule:: triton.language.extra.cuda.libdevice
+
+.. function:: cospi(arg0, _semantic=None)
+
+    Compute the cosine of the input argument multiplied by :math:`\pi`.
+
+    Computes :math:`\cos(\pi \cdot x)` for each element in the input tensor.
+    This function uses CUDA libdevice intrinsics for efficient computation.
+
+    Parameters
+    ----------
+    arg0 : tensor
+        Input tensor of floating-point type. Supported dtypes are ``fp32`` and
+        ``fp64``.
+
+    Returns
+    -------
+    tensor
+        Output tensor of the same dtype as ``arg0``, containing the cosine
+        values.
+
+    Notes
+    -----
+    This function is CUDA-specific and relies on libdevice intrinsics:
+    ``__nv_cospif`` for ``fp32`` and ``__nv_cospi`` for ``fp64``.
+
+    The function is pure (no side effects) and supports elementwise operation
+    on tensors.
+
+    Examples
+    --------
+    .. code-block:: python
+
+        import triton
+        import triton.language as tl
+
+        @triton.jit
+        def cospi_kernel(x_ptr, y_ptr, n, BLOCK_SIZE: tl.constexpr):
+            pid = tl.program_id(0)
+            offsets = pid * BLOCK_SIZE + tl.arange(0, BLOCK_SIZE)
+            mask = offsets < n
+            x = tl.load(x_ptr + offsets, mask=mask)
+            y = tl.extra.cuda.libdevice.cospi(x)
+            tl.store(y_ptr + offsets, y, mask=mask)

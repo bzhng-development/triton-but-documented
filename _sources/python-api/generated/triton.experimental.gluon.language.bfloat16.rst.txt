@@ -1,0 +1,28 @@
+bfloat16
+========
+
+.. py:data:: triton.experimental.gluon.language.bfloat16
+
+    16-bit brain floating point format.
+
+    Notes
+    -----
+    The bfloat16 data type follows the IEEE 754 standard with 1 sign bit, 8
+    exponent bits, and 7 mantissa bits. It offers the same dynamic range as
+    float32 but with reduced precision, making it suitable for deep learning
+    training and inference.
+
+    This type is natively supported on NVIDIA Ampere (SM_80+), Hopper, and
+    Blackwell GPUs, as well as AMD CDNA3 and RDNA3 architectures.
+
+    Examples
+    --------
+    >>> import triton.experimental.gluon as gluon
+    >>> import triton.experimental.gluon.language as ttgl
+    >>> @gluon.jit
+    ... def cast_kernel(x_ptr, y_ptr, size, BLOCK_SIZE: ttgl.constexpr):
+    ...     idx = ttgl.program_id(0) * BLOCK_SIZE + ttgl.arange(0, BLOCK_SIZE)
+    ...     mask = idx < size
+    ...     fp32_val = ttgl.load(x_ptr + idx, mask=mask)
+    ...     bf16_val = fp32_val.to(ttgl.bfloat16)
+    ...     ttgl.store(y_ptr + idx, bf16_val, mask=mask)

@@ -1,0 +1,37 @@
+SharedLinearLayout
+==================
+
+.. class:: SharedLinearLayout(offset_bases: list[list[int]], block_bases: list[list[int]] = [], alignment: int = 16)
+
+   Represents a shared memory layout defined via an explicit LinearLayout.
+
+   Parameters
+   ----------
+   offset_bases : list[list[int]]
+       Bases for shared memory offsets mapping to tensor dimensions. Each inner 
+       list corresponds to a basis vector. Must not be empty. The rank of the 
+       layout is inferred from the length of the first basis.
+   block_bases : list[list[int]], optional
+       Bases for block-level (CTA) shared memory offsets. Defaults to empty list.
+   alignment : int, optional
+       Alignment requirement in bytes. Must be a positive power of two. Defaults 
+       to 16.
+
+   Notes
+   -----
+   Defines a linear mapping from shared memory offsets to logical tensor indices. 
+   All bases in ``offset_bases`` and ``block_bases`` must match the rank derived 
+   from ``offset_bases[0]``. Validation fails if ``alignment`` is not a positive 
+   power of two.
+
+   Examples
+   --------
+   Define a 2D shared memory layout with specific offset bases:
+
+   .. code-block:: python
+
+      import triton.experimental.gluon.language as ttgl
+
+      # Define bases for a 2D layout [dim0, dim1]
+      offset_bases = [[1, 0], [0, 1]]
+      layout = ttgl.SharedLinearLayout(offset_bases=offset_bases, alignment=32)

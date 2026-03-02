@@ -1,0 +1,31 @@
+arrive
+======
+
+.. py:function:: triton.experimental.gluon.language.nvidia.hopper.cluster.arrive(relaxed=False)
+
+    Signal arrival at a cluster synchronization barrier.
+
+    Parameters
+    ----------
+    relaxed : bool, optional
+        If True, use relaxed consistency semantics. Defaults to False.
+
+    Notes
+    -----
+    Specific to NVIDIA Hopper architecture. Signals that the CTA has reached
+    a synchronization point within a cluster. Must be paired with
+    :func:`wait` or :func:`expect` for correct cluster-wide synchronization.
+
+    Requires the kernel to be launched with a cluster configuration.
+
+    Examples
+    --------
+    .. code-block:: python
+
+        import triton.experimental.gluon as gluon
+        import triton.experimental.gluon.language as ttgl
+
+        @gluon.jit
+        def kernel(...):
+            ttgl.nvidia.hopper.cluster.arrive()
+            ttgl.nvidia.hopper.cluster.wait()

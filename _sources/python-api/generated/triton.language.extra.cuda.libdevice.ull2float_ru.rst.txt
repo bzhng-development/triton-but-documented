@@ -1,0 +1,44 @@
+ull2float_ru
+============
+
+.. currentmodule:: triton.language.extra.cuda.libdevice
+
+.. function:: ull2float_ru(arg0, _semantic=None)
+
+    Convert unsigned 64-bit integer to float32 with round-up rounding mode.
+
+    Parameters
+    ----------
+    arg0 : tl.uint64
+        Input unsigned 64-bit integer value or tensor.
+    _semantic : optional
+        Internal semantic argument, do not set manually.
+
+    Returns
+    -------
+    tl.float32
+        Float32 result of converting arg0 with round-up (toward +inf) rounding.
+
+    Notes
+    -----
+    This is a CUDA libdevice function that wraps ``__nv_ull2float_ru``.
+    The conversion uses IEEE 754 round-up (toward positive infinity) rounding mode.
+    Only available on CUDA targets.
+
+    For large uint64 values that cannot be exactly represented in float32,
+    the result is rounded up to the next representable float32 value.
+
+    Examples
+    --------
+    .. code-block:: python
+
+        import triton
+        import triton.language as tl
+
+        @triton.jit
+        def kernel(x_ptr, y_ptr, BLOCK: tl.constexpr):
+            pid = tl.program_id(0)
+            offsets = pid * BLOCK + tl.arange(0, BLOCK)
+            x = tl.load(x_ptr + offsets).to(tl.uint64)
+            y = tl.extra.cuda.libdevice.ull2float_ru(x)
+            tl.store(y_ptr + offsets, y)

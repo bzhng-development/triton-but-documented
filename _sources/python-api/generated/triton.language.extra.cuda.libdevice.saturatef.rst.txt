@@ -1,0 +1,38 @@
+triton.language.extra.cuda.libdevice.saturatef
+==============================================
+
+.. currentmodule:: triton.language.extra.cuda.libdevice
+
+.. autofunction:: saturatef
+
+Clamp floating-point values to the range :math:`[0.0, 1.0]`.
+
+Parameters
+----------
+arg0 : tensor
+    Input tensor of type ``tl.float32``.
+
+Returns
+-------
+result : tensor
+    Output tensor of type ``tl.float32``. Each element is clamped to the
+    range :math:`[0.0, 1.0]`.
+
+Notes
+-----
+Calls the CUDA libdevice function ``__nv_saturatef``. This operation is
+equivalent to :code:`tl.minimum(tl.maximum(arg0, 0.0), 1.0)`. The function
+is pure and has no side effects.
+
+Examples
+--------
+.. code-block:: python
+
+    import triton
+    import triton.language as tl
+
+    @triton.jit
+    def kernel(x_ptr, y_ptr, BLOCK_SIZE: tl.constexpr):
+        x = tl.load(x_ptr + tl.arange(0, BLOCK_SIZE))
+        y = tl.extra.cuda.libdevice.saturatef(x)
+        tl.store(y_ptr + tl.arange(0, BLOCK_SIZE), y)

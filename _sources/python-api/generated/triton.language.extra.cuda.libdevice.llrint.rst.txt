@@ -1,0 +1,42 @@
+llrint
+======
+
+Round floating-point value to nearest integer (long long).
+
+Parameters
+----------
+arg0 : tensor
+    Input floating-point tensor. Must be of type ``fp32`` or ``fp64``.
+_semantic : optional
+    Internal semantic argument. Do not set manually.
+
+Returns
+-------
+out : tensor
+    Tensor of type ``int64`` containing the rounded integer values.
+
+Notes
+-----
+This function rounds each element of the input tensor to the nearest
+integer value using the current rounding mode, returning the result as
+a 64-bit integer. For CUDA targets, this maps to the libdevice functions
+``__nv_llrintf`` (for ``fp32``) and ``__nv_llrint`` (for ``fp64``).
+
+The operation is pure (no side effects) and supports both scalar and
+block tensors.
+
+Examples
+--------
+.. code-block:: python
+
+    import triton
+    import triton.language as tl
+
+    @triton.jit
+    def kernel(x_ptr, y_ptr, BLOCK_SIZE: tl.constexpr):
+        pid = tl.program_id(0)
+        offsets = pid * BLOCK_SIZE + tl.arange(0, BLOCK_SIZE)
+        x = tl.load(x_ptr + offsets)
+        # Round floating-point values to nearest integer
+        y = tl.extra.cuda.libdevice.llrint(x)
+        tl.store(y_ptr + offsets, y)

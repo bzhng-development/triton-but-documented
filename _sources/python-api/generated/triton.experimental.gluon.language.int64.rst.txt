@@ -1,0 +1,23 @@
+int64
+=====
+
+.. py:data:: triton.experimental.gluon.language.int64
+
+   64-bit signed integer scalar type.
+
+   Represents a 64-bit signed integer value within Gluon kernels. This type is used for type annotations in kernel signatures and arithmetic operations requiring 64-bit precision.
+
+   Notes
+   -----
+   Operations involving ``int64`` are compiled to native 64-bit integer instructions on supported architectures (NVIDIA Hopper/Blackwell, AMD CDNA3/RDNA3+). Overflow behavior follows standard two's complement arithmetic.
+
+   Examples
+   --------
+   .. code-block:: python
+
+      import triton.experimental.gluon as gluon
+      import triton.experimental.gluon.language as ttgl
+
+      @gluon.jit
+      def kernel(x: ttgl.int64):
+          return x + 1

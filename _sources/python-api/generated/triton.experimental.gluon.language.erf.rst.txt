@@ -1,0 +1,43 @@
+erf
+===
+
+.. currentmodule:: triton.experimental.gluon.language
+
+.. function:: erf(x, _semantic=None)
+
+   Computes the element-wise Gaussian error function of :code:`x`.
+
+   Parameters
+   ----------
+   x : tensor
+       Input tensor. Must have floating point dtype (``fp32`` or ``fp64``).
+
+   Returns
+   -------
+   tensor
+       Output tensor of same shape and dtype as :code:`x`, containing the error function values.
+
+   Notes
+   -----
+   The error function is defined as:
+
+   .. math::
+
+      \text{erf}(x) = \frac{2}{\sqrt{\pi}} \int_0^x e^{-t^2} dt
+
+   This operation is only supported for ``fp32`` and ``fp64`` dtypes.
+
+   Examples
+   --------
+   .. code-block:: python
+
+      import triton.experimental.gluon as gluon
+      import triton.experimental.gluon.language as ttgl
+
+      @gluon.jit
+      def kernel(x_ptr, y_ptr, BLOCK_SIZE: ttgl.constexpr):
+          pid = ttgl.program_id(0)
+          offs = pid * BLOCK_SIZE + ttgl.arange(0, BLOCK_SIZE)
+          x = ttgl.load(x_ptr + offs)
+          y = ttgl.erf(x)
+          ttgl.store(y_ptr + offs, y)

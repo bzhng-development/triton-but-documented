@@ -1,0 +1,50 @@
+mul_rn
+======
+
+.. currentmodule:: triton.language.extra.cuda.libdevice
+
+.. function:: mul_rn(arg0, arg1, _semantic=None)
+
+   Multiply two floating-point values with round-to-nearest rounding mode.
+
+   Parameters
+   ----------
+   arg0 : tl.tensor
+       First input tensor. Must be of type ``tl.float32`` or ``tl.float64``.
+   arg1 : tl.tensor
+       Second input tensor. Must be of type ``tl.float32`` or ``tl.float64``.
+   _semantic : optional
+       Internal parameter for Triton semantics. Do not set manually.
+
+   Returns
+   -------
+   result : tl.tensor
+       Element-wise product of ``arg0`` and ``arg1`` with round-to-nearest
+       rounding. Same dtype as inputs.
+
+   Notes
+   -----
+   This function calls CUDA libdevice routines ``__nv_fmul_rn`` (for fp32)
+   and ``__nv_dmul_rn`` (for fp64). The ``rn`` suffix indicates round-to-nearest
+   rounding mode, which is the default IEEE 754 rounding behavior.
+
+   Both inputs must have the same dtype. Mixed precision is not supported.
+
+   This is an extern function that requires CUDA backend.
+
+   Examples
+   --------
+   .. code-block:: python
+
+      import triton
+      import triton.language as tl
+
+      @triton.jit
+      def kernel(x_ptr, y_ptr, out_ptr, BLOCK_SIZE: tl.constexpr):
+          pid = tl.program_id(0)
+          offs = pid * BLOCK_SIZE + tl.arange(0, BLOCK_SIZE)
+          x = tl.load(x_ptr + offs)
+          y = tl.load(y_ptr + offs)
+          # Multiply with round-to-nearest rounding
+          result = tl.extra.cuda.libdevice.mul_rn(x, y)
+          tl.store(out_ptr + offs, result)

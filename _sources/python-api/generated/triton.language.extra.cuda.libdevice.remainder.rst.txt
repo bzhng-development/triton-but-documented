@@ -1,0 +1,47 @@
+triton.language.extra.cuda.libdevice.remainder
+===============================================
+
+.. currentmodule:: triton.language.extra.cuda.libdevice
+
+.. function:: remainder(arg0, arg1, _semantic=None)
+
+    Compute the IEEE remainder of dividing :code:`arg0` by :code:`arg1`.
+
+    Parameters
+    ----------
+    arg0 : tl.tensor
+        The dividend. Must be floating-point (fp32 or fp64).
+    arg1 : tl.tensor
+        The divisor. Must be floating-point (fp32 or fp64) with the same dtype
+        as :code:`arg0`.
+    _semantic : optional
+        Internal parameter for semantic propagation. Do not set manually.
+
+    Returns
+    -------
+    result : tl.tensor
+        The remainder of :code:`arg0 / arg1`. Has the same dtype as the inputs.
+
+    Notes
+    -----
+    This function wraps CUDA libdevice's ``__nv_remainderf`` (fp32) and
+    ``__nv_remainder`` (fp64) operations. The result is the IEEE remainder,
+    computed as :code:`arg0 - n * arg1` where :code:`n` is the nearest integer
+    to the exact value of :code:`arg0 / arg1`.
+
+    The operation is pure (no side effects) and supports element-wise computation
+    on tensors.
+
+    Examples
+    --------
+    .. code-block:: python
+
+        import triton
+        import triton.language as tl
+
+        @triton.jit
+        def kernel(x_ptr, y_ptr, out_ptr, BLOCK: tl.constexpr):
+            x = tl.load(x_ptr + tl.arange(0, BLOCK))
+            y = tl.load(y_ptr + tl.arange(0, BLOCK))
+            rem = tl.extra.cuda.libdevice.remainder(x, y)
+            tl.store(out_ptr + tl.arange(0, BLOCK), rem)

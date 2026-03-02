@@ -1,0 +1,59 @@
+mma_v2
+======
+
+.. currentmodule:: triton.experimental.gluon.language.nvidia.blackwell
+
+.. function:: mma_v2(a, b, acc, input_precision=None, _semantic=None)
+
+   Perform a matrix multiply-accumulate operation using NVIDIA Blackwell MMA v2 hardware instructions.
+
+   Parameters
+   ----------
+   a : tensor
+       First operand tensor with :class:`DotOperandLayout` (operand index 0).
+   b : tensor
+       Second operand tensor with :class:`DotOperandLayout` (operand index 1).
+   acc : tensor
+       Accumulator tensor with :class:`NVMMADistributedLayout` version 2.0.
+   input_precision : dtype, optional
+       Precision for intermediate computation. If None, uses accumulator dtype.
+   _semantic : GluonSemantic, optional
+       Internal semantic context (automatically provided by JIT).
+
+   Returns
+   -------
+   tensor
+       Result tensor with the same type and layout as ``acc``.
+
+   Notes
+   -----
+   This function emits NVIDIA Blackwell MMA v2 instructions (SM90+). Strict layout
+   requirements must be satisfied:
+
+   * ``acc`` must have an :class:`NVMMADistributedLayout` with version ``[2, 0]``
+   * ``a`` and ``b`` must have :class:`DotOperandLayout` with matching parent layout
+   * ``a`` operand index must be 0, ``b`` operand index must be 1
+   * All tensors must have compatible shapes for matrix multiplication
+
+   This is a low-level primitive for explicit GPU programming. Prefer higher-level
+   :func:`triton.experimental.gluon.language.dot` when possible.
+
+   Examples
+   --------
+   .. code-block:: python
+
+      import triton.experimental.gluon as gluon
+      import triton.experimental.gluon.language as ttgl
+      from triton.experimental.gluon.language.nvidia.blackwell import mma_v2
+
+      @gluon.jit
+      def kernel(ACC, A, B):
+          # Load tensors with appropriate layouts
+          a = ttgl.load(A)  # DotOperandLayout, operand_index=0
+          b = ttgl.load(B)  # DotOperandLayout, operand_index=1
+          acc = ttgl.load(ACC)  # NVMMADistributedLayout v2.0
+
+          # Perform MMA v2 operation
+          result = mma_v2(a, b, acc)
+
+          ttgl.store(ACC, result)

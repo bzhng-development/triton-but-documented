@@ -1,0 +1,56 @@
+triton.language.extra.cuda.libdevice.normcdf
+=============================================
+
+.. currentmodule:: triton.language.extra.cuda.libdevice
+
+.. autofunction:: normcdf
+
+Compute the cumulative distribution function (CDF) of the standard normal distribution.
+
+Parameters
+----------
+arg0 : tensor
+    Input tensor of floating-point values. Supported dtypes are ``fp32`` and ``fp64``.
+_semantic : optional
+    Internal semantic argument (do not pass explicitly).
+
+Returns
+-------
+tensor
+    Tensor of the same dtype as ``arg0`` containing the CDF values. For each element ``x``,
+    returns the probability that a standard normal random variable is less than or equal to ``x``.
+
+Notes
+-----
+This function wraps CUDA libdevice functions:
+
+- ``__nv_normcdff`` for ``fp32`` inputs
+- ``__nv_normcdf`` for ``fp64`` inputs
+
+The standard normal CDF is defined as:
+
+.. math::
+
+    \Phi(x) = \frac{1}{\sqrt{2\pi}} \int_{-\infty}^{x} e^{-t^2/2} dt
+
+The function is pure (no side effects) and supports elementwise operations on tensors.
+
+Examples
+--------
+.. code-block:: python
+
+    import triton
+    import triton.language as tl
+
+    @triton.jit
+    def kernel(X_ptr, Y_ptr, BLOCK_SIZE: tl.constexpr):
+        offsets = tl.arange(0, BLOCK_SIZE)
+        x = tl.load(X_ptr + offsets)
+        # Compute standard normal CDF
+        y = tl.extra.cuda.libdevice.normcdf(x)
+        tl.store(Y_ptr + offsets, y)
+
+    # Usage with float32
+    x = torch.randn(1024, device='cuda', dtype=torch.float32)
+    y = torch.empty_like(x)
+    kernel[(1,)](x, y, BLOCK_SIZE=1024)

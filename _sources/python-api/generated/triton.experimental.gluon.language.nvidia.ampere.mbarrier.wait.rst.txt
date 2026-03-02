@@ -1,0 +1,43 @@
+wait
+====
+
+Wait until the mbarrier completes a specified phase.
+
+Blocks execution until the mbarrier reaches the given phase index. This is used
+for synchronization between warps or thread blocks using hardware mbarriers.
+
+Parameters
+----------
+mbarrier : shared_memory_descriptor
+    The barrier object to wait on. Must be a shared memory descriptor with
+    mbarrier semantics.
+phase : int
+    The phase index to wait for. The barrier must reach this phase before
+    execution continues.
+pred : bool, optional
+    Predicate controlling execution. If False, the wait operation is skipped.
+    Defaults to True.
+deps : Sequence[shared_memory_descriptor], optional
+    Dependent shared memory allocations that the barrier is waiting on. Used
+    to track liveness of dependent allocations. Defaults to empty tuple.
+
+Returns
+-------
+None
+
+Notes
+-----
+This function is only available on NVIDIA Ampere and later architectures that
+support hardware mbarriers. The phase parameter typically alternates between
+0 and 1 for double-buffering patterns.
+
+Examples
+--------
+.. code-block:: python
+
+    import triton.experimental.gluon as gluon
+    import triton.experimental.gluon.language as ttgl
+
+    @gluon.jit
+    def kernel(mbarrier, phase):
+        ttgl.nvidia.ampere.mbarrier.wait(mbarrier, phase)

@@ -1,0 +1,36 @@
+MBarrierLayout
+==============
+
+.. class:: MBarrierLayout(cga_layout=None)
+
+   Layout for mbarrier synchronization on AMD GFX1250 hardware.
+
+   Inherits from :class:`triton.experimental.gluon.language._layouts.SwizzledSharedLayout`.
+   This layout configures shared memory descriptors for hardware memory barriers
+   used in thread block synchronization.
+
+   Parameters
+   ----------
+   cga_layout : list of list of int, optional
+      CGA layout bases. Defaults to empty list.
+
+   Notes
+   -----
+   Specific to AMD GFX1250 (and compatible CDNA/RDNA) architectures.
+   The layout ensures correct alignment and swizzling for mbarrier operations
+   such as :func:`triton.experimental.gluon.language.amd.gfx1250.mbarrier.init`,
+   :func:`triton.experimental.gluon.language.amd.gfx1250.mbarrier.wait`, and
+   :func:`triton.experimental.gluon.language.amd.gfx1250.mbarrier.arrive`.
+
+   Examples
+   --------
+   .. code-block:: python
+
+      import triton.experimental.gluon as gluon
+      from triton.experimental.gluon.language.amd.gfx1250 import mbarrier
+
+      # Create default mbarrier layout
+      layout = mbarrier.MBarrierLayout()
+
+      # Create with specific CGA layout
+      layout = mbarrier.MBarrierLayout(cga_layout=[[1, 2], [3, 4]])

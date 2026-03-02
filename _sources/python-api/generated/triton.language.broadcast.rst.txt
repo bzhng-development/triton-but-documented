@@ -1,44 +1,37 @@
-.. py:function:: triton.language.broadcast(input, other, _semantic=None)
+broadcast
+=========
 
-   Tries to broadcast the two given blocks to a common compatible shape.
+Broadcast two tensors to a common compatible shape.
 
-   Parameters
-   ----------
-   input : tl.tensor
-       The first input tensor.
-   other : tl.tensor
-       The second input tensor.
+Applies NumPy-style broadcasting rules to make two input tensors compatible for element-wise operations.
 
-   Returns
-   -------
-   tl.tensor
-       A tensor representing the broadcasted result of ``input`` and ``other``.
+Parameters
+----------
+input : tensor
+    The first input tensor.
+other : tensor
+    The second input tensor.
 
-   Notes
-   -----
-   This function follows standard NumPy broadcasting rules. The inputs must be
-   broadcastable to a common shape. If the shapes are already compatible, the
-   operation may be a no-op.
+Returns
+-------
+tensor
+    A tuple of two tensors broadcasted to a common shape.
 
-   This function is typically called implicitly by arithmetic operations or
-   explicitly when preparing tensors for element-wise operations.
+Notes
+-----
+This function follows standard broadcasting semantics where dimensions of
+size 1 can be expanded to match corresponding dimensions in the other
+tensor. Both tensors must be broadcastable to a common shape.
 
-   Examples
-   --------
-   .. code-block:: python
+Examples
+--------
+.. code-block:: python
 
-       import triton
-       import triton.language as tl
-
-       @triton.jit
-       def kernel(x_ptr, y_ptr, out_ptr, BLOCK_SIZE: tl.constexpr):
-           # Load two tensors of different shapes
-           x = tl.load(x_ptr + tl.arange(0, BLOCK_SIZE))  # shape: [BLOCK_SIZE]
-           y = tl.full([1], 2.0, dtype=tl.float32)        # shape: [1]
-
-           # Explicitly broadcast y to match x's shape
-           y_broadcasted = tl.broadcast(x, y)
-
-           # Now both tensors have shape [BLOCK_SIZE]
-           out = x + y_broadcasted
-           tl.store(out_ptr + tl.arange(0, BLOCK_SIZE), out)
+    @triton.jit
+    def kernel(x_ptr, y_ptr, out_ptr, BLOCK: tl.constexpr):
+        x = tl.load(x_ptr + tl.arange(0, BLOCK))
+        y = tl.full((BLOCK,), 1.0, dtype=tl.float32)
+        # Broadcast x and y to compatible shapes
+        x_b, y_b = tl.broadcast(x, y)
+        out = x_b + y_b
+        tl.store(out_ptr + tl.arange(0, BLOCK), out)

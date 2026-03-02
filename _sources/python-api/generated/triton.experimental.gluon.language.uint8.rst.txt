@@ -1,0 +1,24 @@
+uint8
+=====
+
+.. py:data:: triton.experimental.gluon.language.uint8
+
+   8-bit unsigned integer data type.
+
+   Represents an unsigned 8-bit integer type for use in Gluon kernels. This dtype is used to specify the element type of tensors and blocks within kernel definitions.
+
+   Notes
+   -----
+   Values range from 0 to 255. Overflow behavior follows standard unsigned integer wrapping.
+
+   Examples
+   --------
+   .. code-block:: python
+
+      import triton.experimental.gluon as gluon
+      import triton.experimental.gluon.language as ttgl
+
+      @gluon.jit
+      def kernel(ptr):
+          val = ttgl.load(ptr).to(ttgl.uint8)
+          ttgl.store(ptr, val)

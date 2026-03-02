@@ -1,0 +1,15 @@
+triton.experimental.gluon
+=========================
+
+.. currentmodule:: triton.experimental.gluon
+
+Gluon Core
+----------
+
+.. autosummary::
+    :toctree: generated
+    :nosignatures:
+
+    constexpr_function
+    jit
+    must_use_result

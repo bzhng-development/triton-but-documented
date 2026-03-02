@@ -1,0 +1,50 @@
+rcp64h
+======
+
+.. currentmodule:: triton.language.extra.cuda.libdevice
+
+.. py:function:: rcp64h(arg0, _semantic=None)
+
+   Compute the reciprocal (1/x) of a 64-bit floating-point value using CUDA libdevice.
+
+   Parameters
+   ----------
+   arg0 : tl.tensor
+       Input tensor of dtype fp64.
+   _semantic : optional
+       Internal parameter, do not use directly.
+
+   Returns
+   -------
+   result : tl.tensor
+       Tensor of dtype fp64 containing the reciprocal of input values (1/arg0).
+
+   Notes
+   -----
+   This function is an extern wrapper around the CUDA libdevice function
+   ``__nv_rcp64h``. The operation is element-wise and marked as pure
+   (no side effects).
+
+   Only supports fp64 (double precision) input and output types.
+
+   Examples
+   --------
+   .. code-block:: python
+
+      import triton
+      import triton.language as tl
+      import torch
+
+      @triton.jit
+      def reciprocal_kernel(x_ptr, y_ptr, n, BLOCK: tl.constexpr):
+          pid = tl.program_id(0)
+          offs = pid * BLOCK + tl.arange(0, BLOCK)
+          mask = offs < n
+          x = tl.load(x_ptr + offs, mask=mask)
+          y = tl.extra.cuda.libdevice.rcp64h(x)
+          tl.store(y_ptr + offs, y, mask=mask)
+
+      n = 1024
+      x = torch.randn(n, dtype=torch.float64, device='cuda')
+      y = torch.empty(n, dtype=torch.float64, device='cuda')
+      reciprocal_kernel[(triton.cdiv(n, 128),)](x, y, n, BLOCK=128)

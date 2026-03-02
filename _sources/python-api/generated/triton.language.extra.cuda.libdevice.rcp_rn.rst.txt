@@ -1,0 +1,45 @@
+rcp_rn
+======
+
+.. currentmodule:: triton.language.extra.cuda.libdevice
+
+.. function:: rcp_rn(arg0, _semantic=None)
+
+   Compute reciprocal with round-to-nearest rounding.
+
+   Parameters
+   ----------
+   arg0 : tl.tensor
+       Input tensor of floating-point type (fp32 or fp64).
+   _semantic : optional
+       Internal semantic argument, do not set manually.
+
+   Returns
+   -------
+   result : tl.tensor
+       Reciprocal of input (1/arg0) with same dtype as input.
+
+   Notes
+   -----
+   This function calls NVIDIA libdevice device functions:
+
+   - ``__nv_frcp_rn`` for fp32 inputs
+   - ``__nv_drcp_rn`` for fp64 inputs
+
+   The rounding mode is round-to-nearest (RN). The function is pure
+   (no side effects).
+
+   Example
+   -------
+   .. code-block:: python
+
+       import triton
+       import triton.language as tl
+       from triton.language.extra.cuda import libdevice
+
+       @triton.jit
+       def reciprocal_kernel(x_ptr, y_ptr, BLOCK: tl.constexpr):
+           offsets = tl.arange(0, BLOCK)
+           x = tl.load(x_ptr + offsets)
+           y = libdevice.rcp_rn(x)
+           tl.store(y_ptr + offsets, y)

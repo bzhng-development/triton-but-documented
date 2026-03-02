@@ -1,0 +1,54 @@
+mbarrier.wait
+=============
+
+Wait until the mbarrier object completes its current phase.
+
+Parameters
+----------
+mbarrier : shared_memory_descriptor
+    The barrier object to wait on.
+phase : int
+    The phase index to wait for.
+pred : bool, optional
+    Predicate. Operation is skipped if predicate is False. Defaults to True.
+deps : Sequence[shared_memory_descriptor], optional
+    Dependent allocations barrier is waiting on. Used to track liveness of
+    dependent allocations. Defaults to ().
+
+Returns
+-------
+None
+
+Notes
+-----
+This function is specific to NVIDIA Hopper architecture and requires the
+mbarrier to be properly initialized before calling wait. The phase parameter
+specifies which phase of the barrier to wait for completion.
+
+The predicate parameter allows conditional execution - if pred is False, the
+wait operation is skipped entirely.
+
+The deps parameter tracks dependent shared memory allocations to ensure
+proper liveness tracking during barrier synchronization.
+
+Examples
+--------
+.. code-block:: python
+
+    import triton.experimental.gluon as gluon
+    import triton.experimental.gluon.language as ttgl
+    from triton.experimental.gluon.language.nvidia.hopper import mbarrier
+
+    @gluon.jit
+    def kernel():
+        # Create a mbarrier in shared memory
+        mb = mbarrier.alloc(shape=[128], layout=ttgl.SharedLayout())
+        
+        # Initialize the barrier
+        mbarrier.init(mb, count=1024)
+        
+        # Wait for phase 0 to complete
+        mbarrier.wait(mb, phase=0)
+        
+        # Wait for phase 1 with predicate
+        mbarrier.wait(mb, phase=1, pred=True)

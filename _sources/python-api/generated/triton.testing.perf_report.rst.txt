@@ -1,67 +1,64 @@
 perf_report
 ===========
 
-.. currentmodule:: triton.testing
+.. function:: perf_report(benchmarks)
 
-.. autofunction:: perf_report
+   Mark a function for benchmarking.
 
-Decorator that marks a function for benchmarking using the provided :class:`Benchmark` configurations.
-The returned object exposes a :meth:`run` method to execute the benchmarks, generate performance plots,
-and export results to CSV.
+   Decorator that wraps a function with benchmarking configurations. The
+   returned object provides a :code:`.run` method to execute the benchmarks
+   and generate performance reports with plots and data.
 
-Parameters
-----------
-benchmarks : :class:`Benchmark` or list of :class:`Benchmark`
-    Benchmarking configurations defining the parameters to sweep (x-axis),
-    the line arguments (series), and plot metadata.
+   Parameters
+   ----------
+   benchmarks : Benchmark or list of Benchmark
+       Benchmarking configurations. Can be a single :class:`Benchmark`
+       instance or a list of :class:`Benchmark` instances defining the
+       parameters to sweep during benchmarking.
 
-Returns
--------
-callable
-    A decorator wrapper. When applied to a benchmark target function, it returns
-    a :class:`Mark` object containing the function and configurations.
+   Returns
+   -------
+   wrapper : callable
+       A decorator function that wraps the target benchmark function. The
+       wrapped function returns a :class:`Mark` object with a :code:`run`
+       method to execute the benchmarks.
 
-Notes
------
-The decorated function must accept arguments corresponding to the ``x_names``
-and ``line_arg`` defined in the :class:`Benchmark` objects. The function should
-return execution time metrics (typically mean, min, and max).
+   Notes
+   -----
+   The benchmark function should accept the parameters defined in
+   :code:`benchmarks` (x_names, line_arg, and args). The function should
+   return timing measurements, typically from :func:`do_bench` or
+   :func:`do_bench_cudagraph`.
 
-Calling :meth:`Mark.run` executes the kernel for each configuration combination,
-measures latency using :func:`do_bench`, and optionally saves plots and data
-if ``save_path`` is provided.
+   The :code:`run` method supports the following options:
 
-Examples
---------
-.. code-block:: python
+   * :code:`show_plots` : Display matplotlib plots
+   * :code:`print_data` : Print benchmark results to stdout
+   * :code:`save_path` : Directory to save plots and CSV data
+   * :code:`return_df` : Return pandas DataFrame with results
 
-    import triton
-    import triton.testing as tt
-
-    # Define benchmark configuration
-    bench = tt.Benchmark(
-        x_names=['SIZE'],
-        x_vals=[2**i for i in range(10, 20)],
-        line_arg='provider',
-        line_vals=['triton', 'torch'],
-        line_names=['Triton', 'PyTorch'],
-        plot_name='vector-add',
-        args={},
-        xlabel='Vector Size',
-        ylabel='GB/s',
-    )
-
-    @tt.perf_report(bench)
-    def benchmark(SIZE, provider):
-        # Setup tensors
-        x = torch.randn(SIZE, device='cuda')
-        y = torch.randn(SIZE, device='cuda')
-        if provider == 'triton':
-            # Call triton kernel
-            return triton_kernel[x.stride(0)](x, y, SIZE)
-        else:
-            # Call torch operator
-            return x + y
-
-    # Execute benchmarks and save results
-    benchmark.run(save_path='.', show_plots=True)
+   Examples
+   --------
+   >>> import triton
+   >>> import triton.testing as tt
+   >>>
+   >>> # Define benchmark configuration
+   >>> benchmark = tt.Benchmark(
+   ...     x_names=['size'],
+   ...     x_vals=[2**i for i in range(10, 20)],
+   ...     line_arg='provider',
+   ...     line_vals=['triton', 'torch'],
+   ...     line_names=['Triton', 'PyTorch'],
+   ...     plot_name='vector-add-performance',
+   ...     args={},
+   ...     ylabel='GB/s',
+   ... )
+   >>>
+   >>> # Mark function for benchmarking
+   >>> @triton.testing.perf_report(benchmark)
+   ... def benchmark_kernel(size, provider):
+   ...     # Benchmark implementation
+   ...     return tt.do_bench(lambda: kernel_fn(size))
+   >>>
+   >>> # Run benchmarks and save results
+   >>> benchmark_kernel.run(save_path='results', print_data=True)

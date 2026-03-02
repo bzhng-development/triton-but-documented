@@ -1,0 +1,15 @@
+triton.experimental.gluon.language.amd
+======================================
+
+.. currentmodule:: triton.experimental.gluon.language.amd
+
+AMD Common
+----------
+
+.. autosummary::
+    :toctree: generated
+    :nosignatures:
+
+    AMDMFMALayout
+    AMDWMMALayout
+    warp_pipeline_stage

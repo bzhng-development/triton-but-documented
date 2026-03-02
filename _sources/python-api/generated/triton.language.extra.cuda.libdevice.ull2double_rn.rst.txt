@@ -1,0 +1,42 @@
+ull2double_rn
+=============
+
+ull2double_rn(arg0, _semantic=None)
+    Convert unsigned 64-bit integer to double-precision floating-point value.
+
+    Parameters
+    ----------
+    arg0 : tl.tensor
+        Input tensor of unsigned 64-bit integers (uint64).
+    _semantic : optional
+        Internal parameter, do not use directly.
+
+    Returns
+    -------
+    result : tl.tensor
+        Tensor of double-precision floating-point values (fp64).
+
+    Notes
+    -----
+    This function uses the CUDA libdevice intrinsic ``__nv_ull2double_rn`` which
+    performs conversion with round-to-nearest-even rounding mode.
+
+    The operation is pure (no side effects) and can be used in device code.
+
+    This function is only available on CUDA targets.
+
+    Examples
+    --------
+    .. code-block:: python
+
+        import triton
+        import triton.language as tl
+        from triton.language.extra.cuda import libdevice
+
+        @triton.jit
+        def convert_kernel(x_ptr, y_ptr, n, BLOCK: tl.constexpr):
+            pid = tl.program_id(0)
+            offset = pid * BLOCK
+            uint_vals = tl.load(x_ptr + offset).to(tl.uint64)
+            double_vals = libdevice.ull2double_rn(uint_vals)
+            tl.store(y_ptr + offset, double_vals)

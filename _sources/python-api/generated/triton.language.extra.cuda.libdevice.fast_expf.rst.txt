@@ -1,0 +1,42 @@
+fast_expf
+=========
+
+fast_expf(arg0, _semantic=None)
+    Compute the exponential function e^x with reduced accuracy but improved performance.
+
+    Parameters
+    ----------
+    arg0 : tensor
+        Input tensor of type ``tl.float32``.
+    _semantic
+        Internal parameter used by Triton compiler. Do not set manually.
+
+    Returns
+    -------
+    result : tensor
+        Output tensor of type ``tl.float32`` containing e^arg0.
+
+    Notes
+    -----
+    This function uses the CUDA libdevice ``__nv_fast_expf`` intrinsic, which provides
+    a fast approximation of the exponential function with lower accuracy than
+    :py:func:`tl.exp` but better performance. The maximum error is approximately 2 ulps.
+
+    Only supports ``float32`` input and output types. This function is pure (no side
+    effects) and can be safely used in compiler optimizations.
+
+    Examples
+    --------
+    .. code-block:: python
+
+        import triton
+        import triton.language as tl
+        from triton.language.extra.cuda import libdevice
+
+        @triton.jit
+        def exp_kernel(x_ptr, y_ptr, BLOCK_SIZE: tl.constexpr):
+            pid = tl.program_id(0)
+            offs = pid * BLOCK_SIZE + tl.arange(0, BLOCK_SIZE)
+            x = tl.load(x_ptr + offs)
+            y = libdevice.fast_expf(x)
+            tl.store(y_ptr + offs, y)

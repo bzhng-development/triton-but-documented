@@ -1,56 +1,45 @@
-triton.language.randn4x
-=======================
+randn4x
+=======
 
-.. currentmodule:: triton.language
+Given a :code:`seed` scalar and an :code:`offset` block, returns 4 blocks of random :code:`float32` values sampled from a standard normal distribution :math:`\mathcal{N}(0, 1)`.
 
-.. function:: randn4x(seed, offset, n_rounds=10)
+Parameters
+----------
+seed : int
+    The seed for generating random numbers.
+offset : tl.tensor
+    The offsets to generate random numbers for.
+n_rounds : constexpr, optional
+    Number of rounds for the Philox PRNG. Default is 10.
 
-   Generate four blocks of independent random numbers from the standard normal distribution :math:`\mathcal{N}(0, 1)`.
+Returns
+-------
+n1 : tl.tensor
+    First block of random numbers.
+n2 : tl.tensor
+    Second block of random numbers.
+n3 : tl.tensor
+    Third block of random numbers.
+n4 : tl.tensor
+    Fourth block of random numbers.
 
-   Applies the Box-Muller transform to four blocks of uniform random numbers generated via the Philox counter-based PRNG. This function is more efficient than calling :func:`randn` four times when multiple streams of normal variates are required.
+Notes
+-----
+This function uses the Box-Muller transform to convert uniform random numbers
+into normally distributed random numbers. It is more efficient than calling
+:code:`randn` four times separately.
 
-   Parameters
-   ----------
-   seed : tl.int64
-      The seed for the random number generator.
-   offset : tl.int32 or tl.int64
-      The offset block used to initialize the Philox counter state. Typically derived from program indices (e.g., ``tl.program_id(0)``).
-   n_rounds : tl.constexpr, optional
-      Number of rounding rounds for the Philox PRNG. Default is 10.
+Examples
+--------
+.. code-block:: python
 
-   Returns
-   -------
-   n1 : tl.tensor
-      First block of random values in :math:`\mathcal{N}(0, 1)`.
-   n2 : tl.tensor
-      Second block of random values in :math:`\mathcal{N}(0, 1)`.
-   n3 : tl.tensor
-      Third block of random values in :math:`\mathcal{N}(0, 1)`.
-   n4 : tl.tensor
-      Fourth block of random values in :math:`\mathcal{N}(0, 1)`.
+    import triton
+    import triton.language as tl
 
-   Notes
-   -----
-   The underlying uniform random numbers are generated in :math:`U(0, 1)` and transformed using the Box-Muller method. To avoid numerical instability, the uniform inputs are clipped to a minimum value of :math:`10^{-7}` before applying the logarithm.
-
-   Examples
-   --------
-   .. code-block:: python
-
-      import triton
-      import triton.language as tl
-
-      @triton.jit
-      def kernel(
-          output_ptr,
-          seed,
-          BLOCK_SIZE: tl.constexpr,
-      ):
-          pid = tl.program_id(axis=0)
-          offset = pid * BLOCK_SIZE + tl.arange(0, BLOCK_SIZE)
-
-          # Generate 4 independent streams of normal random numbers
-          n1, n2, n3, n4 = tl.randn4x(seed, offset)
-
-          # Store the first stream
-          tl.store(output_ptr + offset, n1)
+    @triton.jit
+    def kernel(X_ptr, stride, BLOCK_SIZE: tl.constexpr):
+        pid = tl.program_id(0)
+        offset = pid * BLOCK_SIZE + tl.arange(0, BLOCK_SIZE)
+        seed = 123456
+        n1, n2, n3, n4 = tl.randn4x(seed, offset)
+        # Use n1, n2, n3, n4 ...

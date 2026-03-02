@@ -1,0 +1,13 @@
+triton.tools
+============
+
+.. currentmodule:: triton.tools
+
+Tools
+-----
+
+.. autosummary::
+    :toctree: generated
+    :nosignatures:
+
+    LinearLayout

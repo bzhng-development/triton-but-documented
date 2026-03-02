@@ -1,0 +1,46 @@
+maximum
+=======
+
+.. currentmodule:: triton.experimental.gluon.language
+
+.. function:: maximum(x, y, propagate_nan=PropagateNan.NONE)
+
+   Computes the element-wise maximum of two tensors.
+
+   Parameters
+   ----------
+   x : Block
+       The first input tensor.
+   y : Block
+       The second input tensor.
+   propagate_nan : PropagateNan, optional
+       Whether to propagate NaN values. Defaults to ``PropagateNan.NONE``.
+
+   Returns
+   -------
+   Block
+       A tensor containing the element-wise maximum values.
+
+   Notes
+   -----
+   bfloat16 inputs are promoted to float32 before computing the maximum.
+
+   The behavior when encountering NaN values is controlled by the
+   ``propagate_nan`` parameter. See :class:`triton.language.PropagateNan`
+   for available options.
+
+   Examples
+   --------
+   .. code-block:: python
+
+      import triton.experimental.gluon as gluon
+      import triton.experimental.gluon.language as ttgl
+
+      @gluon.jit
+      def kernel(x_ptr, y_ptr, out_ptr, BLOCK_SIZE: tl.constexpr):
+          pid = ttgl.program_id(0)
+          offsets = pid * BLOCK_SIZE + ttgl.arange(0, BLOCK_SIZE)
+          x = ttgl.load(x_ptr + offsets)
+          y = ttgl.load(y_ptr + offsets)
+          maximum = ttgl.maximum(x, y)
+          ttgl.store(out_ptr + offsets, maximum)

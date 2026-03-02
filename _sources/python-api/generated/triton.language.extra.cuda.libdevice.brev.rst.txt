@@ -1,0 +1,36 @@
+brev
+====
+
+Bit-reverse the input integer.
+
+Parameters
+----------
+arg0 : tensor of int32 or int64
+    Input tensor whose bits will be reversed.
+
+Returns
+-------
+tensor of int32 or int64
+    Output tensor with bits reversed. The dtype matches the input dtype.
+
+Notes
+-----
+This function calls the CUDA libdevice functions ``__nv_brev`` for int32
+and ``__nv_brevll`` for int64. The operation reverses the order of bits
+in the binary representation of each element. For example, the binary
+pattern ``000...001`` becomes ``100...000``.
+
+Examples
+--------
+.. code-block:: python
+
+    import triton
+    import triton.language as tl
+
+    @triton.jit
+    def kernel(x_ptr, y_ptr, BLOCK_SIZE: tl.constexpr):
+        pid = tl.program_id(0)
+        offs = pid * BLOCK_SIZE + tl.arange(0, BLOCK_SIZE)
+        x = tl.load(x_ptr + offs)
+        y = tl.extra.cuda.libdevice.brev(x)
+        tl.store(y_ptr + offs, y)

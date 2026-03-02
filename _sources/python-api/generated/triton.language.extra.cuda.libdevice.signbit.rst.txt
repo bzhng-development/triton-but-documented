@@ -1,0 +1,46 @@
+triton.language.extra.cuda.libdevice.signbit
+=============================================
+
+.. function:: signbit(arg0, _semantic=None)
+
+    Test element-wise whether the sign bit is set (i.e., the value is negative).
+
+    Parameters
+    ----------
+    arg0 : tensor
+        Input tensor of floating-point type. Must be fp32 or fp64.
+
+    Returns
+    -------
+    out : tensor
+        Tensor of int32 values. Each element is 1 if the corresponding input
+        element has the sign bit set (negative or negative zero), 0 otherwise.
+
+    Notes
+    -----
+    This function maps to CUDA libdevice functions ``__nv_signbitf`` for fp32
+    and ``__nv_signbitd`` for fp64. Unlike comparison with zero, ``signbit``
+    correctly handles signed zeros (returns 1 for -0.0) and NaN values
+    (returns 1 for negative NaN).
+
+    The function is pure (no side effects) and supports element-wise
+    broadcasting.
+
+    Examples
+    --------
+    .. code-block:: python
+
+        import triton
+        import triton.language as tl
+
+        @triton.jit
+        def kernel(x_ptr, out_ptr, n):
+            offsets = tl.arange(0, n)
+            x = tl.load(x_ptr + offsets)
+            sign = tl.extra.cuda.libdevice.signbit(x)
+            tl.store(out_ptr + offsets, sign)
+
+        # Usage
+        import torch
+        x = torch.tensor([-1.0, 0.0, -0.0, 1.0, float('nan')], device='cuda')
+        # signbit returns: [1, 0, 1, 0, 0] (depends on NaN bit pattern)

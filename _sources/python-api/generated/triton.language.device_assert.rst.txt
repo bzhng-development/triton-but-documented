@@ -1,41 +1,55 @@
-Assert the condition at runtime from the GPU device.
+triton.language.device_assert
+=============================
 
-.. code-block:: python
+.. currentmodule:: triton.language
 
-    tl.device_assert(cond, msg='', mask=None)
+.. function:: device_assert(cond, msg='', mask=None, _semantic=None)
 
-Parameters
-----------
-cond : tensor
-    The condition to assert. Must be a boolean tensor.
-msg : str, optional
-    The message to print if the assertion fails. Must be a string literal.
-    Default is an empty string.
-mask : tensor, optional
-    A boolean tensor indicating which elements to check. If provided, the
-    assertion is only evaluated where ``mask`` is true.
+    Assert the condition at runtime from the device.
 
-Notes
------
-This function requires the environment variable ``TRITON_DEBUG`` to be set
-to a non-zero value to have any effect. If ``TRITON_DEBUG=0``, the assertion
-is ignored.
+    Requires that the environment variable ``TRITON_DEBUG`` is set to a value
+    besides ``0`` in order for this to have any effect.
 
-Using the Python ``assert`` statement within a ``@triton.jit`` function is
-equivalent to calling this function, provided the error message is supplied
-as a string literal (e.g., ``assert pid == 0, "pid != 0"``).
+    Parameters
+    ----------
+    cond : tensor
+        The condition to assert. Must be a boolean tensor.
+    msg : str, optional
+        The message to print if the assertion fails. Must be a string literal.
+        Default is empty string.
+    mask : tensor, optional
+        If provided, only assert where mask is true.
 
-Examples
---------
-.. code-block:: python
+    Returns
+    -------
+    None
 
-    import triton
-    import triton.language as tl
+    Notes
+    -----
+    Using the Python ``assert`` statement is equivalent to calling this
+    function, except that the message argument must be provided and must be
+    a string, e.g., ``assert pid == 0, "pid != 0"``. The ``TRITON_DEBUG``
+    environment variable must be set for the ``assert`` statement to have
+    any effect.
 
-    @triton.jit
-    def kernel(pid):
-        # Assert that program ID is 0; prints "pid != 0" if false and TRITON_DEBUG is set
-        tl.device_assert(pid == 0, "pid != 0")
+    Examples
+    --------
+    .. code-block:: python
 
-        # Equivalent Python assert syntax
-        assert pid == 0, "pid != 0"
+        import triton
+        import triton.language as tl
+
+        @triton.jit
+        def kernel(pid):
+            # Assert that pid equals 0
+            tl.device_assert(pid == 0)
+            
+            # Equivalent Python assert statement
+            assert pid == 0, "pid != 0"
+            
+            # With custom message
+            tl.device_assert(pid < 1024, "pid out of range")
+            
+            # With mask (only assert for certain threads)
+            mask = pid % 2 == 0
+            tl.device_assert(pid < 512, "even pid too large", mask=mask)

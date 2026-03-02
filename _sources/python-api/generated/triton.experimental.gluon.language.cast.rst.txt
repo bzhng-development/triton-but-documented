@@ -1,0 +1,59 @@
+cast
+====
+
+.. function:: cast(input, dtype, fp_downcast_rounding=None, bitcast=False)
+
+Casts a tensor to the given dtype.
+
+Parameters
+----------
+input : tensor
+    The input tensor to cast.
+dtype : tl.dtype
+    The target data type.
+fp_downcast_rounding : str, optional
+    The rounding mode for downcasting floating-point values. This parameter is
+    only used when input is a floating-point tensor and dtype is a floating-point
+    type with a smaller bitwidth. Supported values are ``"rtne"`` (round to
+    nearest, ties to even) and ``"rtz"`` (round towards zero).
+bitcast : bool, optional
+    If True, the tensor is bitcasted to the given dtype, instead of being
+    numerically casted. Default is False.
+
+Returns
+-------
+tensor
+    The casted tensor with the target dtype.
+
+Notes
+-----
+This function can also be called as a member function on :py:class:`tensor`,
+as ``x.cast(...)`` instead of ``cast(x, ...)``.
+
+Examples
+--------
+.. code-block:: python
+
+    import triton.experimental.gluon as gluon
+    import triton.experimental.gluon.language as ttgl
+
+    @gluon.jit
+    def kernel(x_ptr, y_ptr, BLOCK_SIZE: ttgl.constexpr):
+        x = ttgl.load(x_ptr)
+        # Numeric cast to float16
+        y = ttgl.cast(x, ttgl.float16)
+        ttgl.store(y_ptr, y)
+
+    @gluon.jit
+    def kernel2(x_ptr, y_ptr, BLOCK_SIZE: ttgl.constexpr):
+        x = ttgl.load(x_ptr)
+        # Bitcast to int32 (reinterpret bits without numeric conversion)
+        y = ttgl.cast(x, ttgl.int32, bitcast=True)
+        ttgl.store(y_ptr, y)
+
+    @gluon.jit
+    def kernel3(x_ptr, y_ptr, BLOCK_SIZE: ttgl.constexpr):
+        x = ttgl.load(x_ptr)
+        # Downcast float32 to float16 with round-to-zero
+        y = ttgl.cast(x, ttgl.float16, fp_downcast_rounding="rtz")
+        ttgl.store(y_ptr, y)

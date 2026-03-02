@@ -1,0 +1,119 @@
+base_type
+=========
+
+.. py:class:: triton.experimental.gluon.language.base_type
+
+   Abstract base class for type representations in the Gluon type system.
+
+   This class defines the interface that all type objects must implement to
+   support IR lowering, type mangling, and value reconstruction. Subclasses
+   represent concrete types such as :py:class:`dtype`, :py:class:`pointer_type`,
+   :py:class:`block_type`, and :py:class:`tuple_type`.
+
+   .. rubric:: Methods
+
+   .. py:method:: __eq__(other) -> bool
+
+      Compare two types for equality.
+
+      Parameters
+      ----------
+      other : base_type
+         The type to compare against.
+
+      Returns
+      -------
+      bool
+         True if the types are equal, False otherwise.
+
+      Notes
+      -----
+      Must be implemented by subclasses.
+
+   .. py:method:: __ne__(other) -> bool
+
+      Compare two types for inequality.
+
+      Parameters
+      ----------
+      other : base_type
+         The type to compare against.
+
+      Returns
+      -------
+      bool
+         True if the types are not equal, False otherwise.
+
+      Notes
+      -----
+      Default implementation negates :py:meth:`__eq__`.
+
+   .. py:method:: _unflatten_ir(handles, cursor) -> Tuple[base_value, int]
+
+      Reconstruct a frontend value from IR handles.
+
+      Parameters
+      ----------
+      handles : List[ir.value]
+         List of IR value handles to reconstruct from.
+      cursor : int
+         Index of the first handle relevant to this value.
+
+      Returns
+      -------
+      Tuple[base_value, int]
+         A tuple containing the reconstructed frontend value and the updated
+         cursor position after consuming handles.
+
+      Notes
+      -----
+      Must be implemented by subclasses. This method is used during IR
+      deserialization to rebuild frontend values from low-level IR handles.
+
+   .. py:method:: mangle() -> str
+
+      Return a mangled string representation of the type.
+
+      Returns
+      -------
+      str
+         The mangled type name used for caching and identification.
+
+      Notes
+      -----
+      Must be implemented by subclasses. Type mangling is used for kernel
+      cache key generation and type identification.
+
+   .. py:method:: _flatten_ir_types(builder, out) -> None
+
+      Flatten this type into IR type handles.
+
+      Parameters
+      ----------
+      builder : ir.builder
+         The IR builder context.
+      out : List[ir.type]
+         Output list to append IR type handles to.
+
+      Notes
+      -----
+      Must be implemented by subclasses. This method converts frontend type
+      representations into low-level IR types during kernel compilation.
+
+   .. rubric:: Examples
+
+   .. code-block:: python
+
+      import triton.experimental.gluon as gluon
+      import triton.experimental.gluon.language as ttgl
+
+      # base_type is not instantiated directly - use concrete subclasses
+      dtype = ttgl.dtype('fp32')
+      ptr_type = ttgl.pointer_type(dtype)
+
+      # Type comparison
+      assert dtype == ttgl.dtype('fp32')
+      assert dtype != ttgl.dtype('fp16')
+
+      # Type mangling for cache keys
+      mangled = dtype.mangle()  # Returns 'fp32'

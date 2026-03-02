@@ -1,0 +1,95 @@
+buffer_atomic_add
+=================
+
+.. currentmodule:: triton.experimental.gluon.language.amd.cdna4
+
+.. autofunction:: buffer_atomic_add
+
+Perform an atomic add operation on AMD CDNA4 buffer memory.
+
+This function atomically adds a value to a memory location in buffer address space,
+specifically optimized for AMD CDNA4 (Instinct MI300X/MI325X) GPU architecture.
+The operation uses AMD's buffer atomic instructions for improved performance on
+CDNA4 hardware.
+
+Parameters
+----------
+ptr : pointer
+    Pointer to the buffer memory location. Must be a buffer pointer type
+    compatible with CDNA4 buffer addressing.
+offsets : tensor
+    Tensor of offsets to apply to the base pointer. Each offset specifies
+    which memory location to operate on.
+value : tensor
+    The value to atomically add to each memory location. Must have the same
+    shape as ``offsets``.
+mask : tensor, optional
+    Boolean tensor specifying which lanes should execute the atomic operation.
+    If ``None``, all lanes execute the operation.
+sem : str, optional
+    Memory semantics for the atomic operation. Options include:
+    ``"acquire"``, ``"release"``, ``"acq_rel"``, or ``"relaxed"``.
+    Defaults to relaxed semantics.
+scope : str, optional
+    Memory scope for the atomic operation. Options include:
+    ``"cta"``, ``"cluster"``, or ``"gpu"``. Defaults to CTA scope.
+_semantic : GluonSemantic, optional
+    Internal semantic handler. Automatically provided by the Gluon JIT
+    compiler. Do not set manually.
+
+Returns
+-------
+tensor
+    Tensor containing the original values at each memory location before
+    the atomic add was performed. Has the same shape as ``offsets``.
+
+Notes
+-----
+This function is architecture-specific and only works on AMD CDNA4 GPUs.
+For portable code, consider using the generic ``atomic_add`` from
+``triton.experimental.gluon.language`` instead.
+
+Buffer atomic operations on CDNA4 provide better performance than global
+memory atomics for certain access patterns, particularly when working
+with buffer address space.
+
+The operation is equivalent to:
+``old_value = memory[ptr + offsets]; memory[ptr + offsets] += value``
+
+Examples
+--------
+
+.. code-block:: python
+
+    import triton.experimental.gluon as gluon
+    import triton.experimental.gluon.language as ttgl
+    from triton.experimental.gluon.language.amd import cdna4
+
+    @gluon.jit
+    def buffer_atomic_add_kernel(
+        ptr,
+        offsets,
+        values,
+        BLOCK_SIZE: ttgl.constexpr,
+    ):
+        # Load offsets for this program
+        pid = ttgl.program_id(0)
+        offset_ptrs = pid * BLOCK_SIZE + ttgl.arange(0, BLOCK_SIZE)
+        offsets = ttgl.load(offsets + offset_ptrs)
+        
+        # Load values to add
+        values = ttgl.load(values + offset_ptrs)
+        
+        # Perform atomic add on buffer memory
+        old_values = cdna4.buffer_atomic_add(ptr, offsets, values)
+        
+        # Store old values for verification
+        ttgl.store(ptr + offset_ptrs + 1000, old_values)
+
+    # Launch kernel
+    buffer_atomic_add_kernel[(num_programs,)](
+        buffer_ptr,
+        offset_tensor,
+        value_tensor,
+        BLOCK_SIZE=256,
+    )

@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Parameters &mdash; Triton  documentation</title>
+  <title>triton.testing.do_bench_cudagraph &mdash; Triton  documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=03e43079" />
       <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="../../_static/css/custom.css" />
@@ -19,7 +19,7 @@
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
     <link rel="next" title="perf_report" href="triton.testing.perf_report.html" />
-    <link rel="prev" title="Parameters" href="triton.testing.do_bench.html" /> 
+    <link rel="prev" title="do_bench" href="triton.testing.do_bench.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -52,14 +52,46 @@
 <li class="toctree-l1"><a class="reference internal" href="../triton.language.html">triton.language</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="../triton.testing.html">triton.testing</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="triton.testing.Benchmark.html">class triton.testing.Benchmark</a></li>
-<li class="toctree-l2"><a class="reference internal" href="triton.testing.do_bench.html"><code class="docutils literal notranslate"><span class="pre">triton.testing.do_bench()</span></code></a></li>
-<li class="toctree-l2 current"><a class="current reference internal" href="#"><code class="docutils literal notranslate"><span class="pre">triton.testing.do_bench_cudagraph()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="triton.testing.do_bench.html">do_bench</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">triton.testing.do_bench_cudagraph</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#do_bench_cudagraph"><code class="docutils literal notranslate"><span class="pre">do_bench_cudagraph()</span></code></a></li>
+</ul>
+</li>
 <li class="toctree-l2"><a class="reference internal" href="triton.testing.perf_report.html">perf_report</a></li>
-<li class="toctree-l2"><a class="reference internal" href="triton.testing.assert_close.html">assert_close</a></li>
+<li class="toctree-l2"><a class="reference internal" href="triton.testing.assert_close.html">triton.testing.assert_close</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../triton.testing.html#utilities">Utilities</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../triton-semantics.html">Triton Semantics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.language.extra.cuda.html">triton.language.extra.cuda</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.language.extra.cuda.libdevice.html">triton.language.extra.cuda.libdevice</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.runtime.html">triton.runtime</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.tools.html">triton.tools</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Gluon (Experimental) API</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.html">triton.experimental.gluon</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.html">triton.experimental.gluon.language</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.nvidia.ampere.html">triton.experimental.gluon.language.nvidia.ampere</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.nvidia.ampere.async_copy.html">triton.experimental.gluon.language.nvidia.ampere.async_copy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.nvidia.ampere.mbarrier.html">triton.experimental.gluon.language.nvidia.ampere.mbarrier</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.nvidia.hopper.html">triton.experimental.gluon.language.nvidia.hopper</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.nvidia.hopper.tma.html">triton.experimental.gluon.language.nvidia.hopper.tma</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.nvidia.hopper.mbarrier.html">triton.experimental.gluon.language.nvidia.hopper.mbarrier</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.nvidia.hopper.cluster.html">triton.experimental.gluon.language.nvidia.hopper.cluster</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.nvidia.blackwell.html">triton.experimental.gluon.language.nvidia.blackwell</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.nvidia.blackwell.tma.html">triton.experimental.gluon.language.nvidia.blackwell.tma</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.nvidia.blackwell.clc.html">triton.experimental.gluon.language.nvidia.blackwell.clc</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.amd.html">triton.experimental.gluon.language.amd</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.amd.gfx1250.html">triton.experimental.gluon.language.amd.gfx1250</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.amd.gfx1250.async_copy.html">triton.experimental.gluon.language.amd.gfx1250.async_copy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.amd.gfx1250.mbarrier.html">triton.experimental.gluon.language.amd.gfx1250.mbarrier</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.amd.gfx1250.cluster.html">triton.experimental.gluon.language.amd.gfx1250.cluster</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.amd.gfx1250.tdm.html">triton.experimental.gluon.language.amd.gfx1250.tdm</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.amd.cdna3.html">triton.experimental.gluon.language.amd.cdna3</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.amd.cdna4.html">triton.experimental.gluon.language.amd.cdna4</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.amd.rdna3.html">triton.experimental.gluon.language.amd.rdna3</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.amd.rdna4.html">triton.experimental.gluon.language.amd.rdna4</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Triton MLIR Dialects</span></p>
 <ul>
@@ -87,7 +119,7 @@
   <ul class="wy-breadcrumbs">
       <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
           <li class="breadcrumb-item"><a href="../triton.testing.html">triton.testing</a></li>
-      <li class="breadcrumb-item active">Parameters</li>
+      <li class="breadcrumb-item active">triton.testing.do_bench_cudagraph</li>
       <li class="wy-breadcrumbs-aside">
             <a href="../../_sources/python-api/generated/triton.testing.do_bench_cudagraph.rst.txt" rel="nofollow"> View page source</a>
       </li>
@@ -97,98 +129,101 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <dl class="py function">
-<dt class="sig sig-object py" id="triton.testing.do_bench_cudagraph">
-<span class="sig-prename descclassname"><span class="pre">triton.testing.</span></span><span class="sig-name descname"><span class="pre">do_bench_cudagraph</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fn</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rep</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">20</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">grad_to_none</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">quantiles</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">return_mode</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'mean'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#triton.testing.do_bench_cudagraph" title="Link to this definition">¶</a></dt>
-<dd><p>Benchmark the runtime of a CUDA function using CUDA graphs to minimize host overhead.</p>
-<p>This function estimates the kernel execution time, constructs a CUDA graph with
-unrolled repetitions to reduce launch latency, and measures the graph replay time.
-It is suitable for benchmarking small kernels where host overhead significantly
-impacts measurement accuracy.</p>
+  <section id="triton-testing-do-bench-cudagraph">
+<h1>triton.testing.do_bench_cudagraph<a class="headerlink" href="#triton-testing-do-bench-cudagraph" title="Link to this heading">¶</a></h1>
+<dl class="py function">
+<dt class="sig sig-object py" id="do_bench_cudagraph">
+<span class="sig-name descname"><span class="pre">do_bench_cudagraph</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fn</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rep</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">20</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">grad_to_none</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">quantiles</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">return_mode</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'mean'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#do_bench_cudagraph" title="Link to this definition">¶</a></dt>
+<dd><p>Benchmark the runtime of the provided function using CUDA graphs.</p>
+<p>This function measures kernel execution time by constructing a CUDA graph
+with unrolled function calls to minimize host overhead. It is more accurate
+than <code class="xref py py-func docutils literal notranslate"><span class="pre">do_bench()</span></code> for measuring kernel performance without CPU launch
+overhead.</p>
 <section id="parameters">
-<h1>Parameters<a class="headerlink" href="#parameters" title="Link to this heading">¶</a></h1>
+<h2>Parameters<a class="headerlink" href="#parameters" title="Link to this heading">¶</a></h2>
 <dl class="simple">
-<dt>fn<span class="classifier">callable</span></dt><dd><p>The function to benchmark. Must contain CUDA operations compatible with
-<code class="docutils literal notranslate"><span class="pre">torch.cuda.CUDAGraph</span></code>.</p>
+<dt>fn<span class="classifier">callable</span></dt><dd><p>Function to benchmark. Should contain CUDA kernel launches.</p>
 </dd>
-<dt>rep<span class="classifier">int, optional</span></dt><dd><p>Target repetition time in milliseconds. The function determines the number
-of iterations within the graph to approximate this duration (default is 20).</p>
+<dt>rep<span class="classifier">int, optional</span></dt><dd><p>Total repetition time in milliseconds. Default is 20.</p>
 </dd>
-<dt>grad_to_none<span class="classifier">list of torch.Tensor, optional</span></dt><dd><p>List of tensors whose gradients should be reset to <code class="docutils literal notranslate"><span class="pre">None</span></code> before each
-iteration. Useful when benchmarking functions involving autograd.</p>
+<dt>grad_to_none<span class="classifier">list of torch.Tensor, optional</span></dt><dd><p>List of tensors whose gradients should be reset to None before each run.
+Useful when benchmarking functions with backward passes.</p>
 </dd>
-<dt>quantiles<span class="classifier">list of float, optional</span></dt><dd><p>Performance percentiles to compute (e.g., <code class="docutils literal notranslate"><span class="pre">[0.2,</span> <span class="pre">0.8]</span></code>). If provided,
-overrides <code class="docutils literal notranslate"><span class="pre">return_mode</span></code> and returns the quantile values.</p>
+<dt>quantiles<span class="classifier">list of float, optional</span></dt><dd><p>Quantiles to compute (e.g., [0.2, 0.8] for 20th and 80th percentiles).
+If provided, overrides return_mode.</p>
 </dd>
-<dt>return_mode<span class="classifier">str, optional</span></dt><dd><p>Statistical measure to return. Options are <code class="docutils literal notranslate"><span class="pre">&quot;min&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;max&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;mean&quot;</span></code>,
-<code class="docutils literal notranslate"><span class="pre">&quot;median&quot;</span></code>, or <code class="docutils literal notranslate"><span class="pre">&quot;all&quot;</span></code>. Default is <code class="docutils literal notranslate"><span class="pre">&quot;mean&quot;</span></code>. Ignored if <code class="docutils literal notranslate"><span class="pre">quantiles</span></code>
-is specified.</p>
+<dt>return_mode<span class="classifier">str, optional</span></dt><dd><p>Statistical measure to return. Options are “min”, “max”, “mean”,
+“median”, or “all”. Default is “mean”.</p>
 </dd>
 </dl>
 </section>
 <section id="returns">
-<h1>Returns<a class="headerlink" href="#returns" title="Link to this heading">¶</a></h1>
+<h2>Returns<a class="headerlink" href="#returns" title="Link to this heading">¶</a></h2>
 <dl class="simple">
-<dt>float or list of float</dt><dd><p>Benchmark result in milliseconds. Type depends on <code class="docutils literal notranslate"><span class="pre">return_mode</span></code> and
-<code class="docutils literal notranslate"><span class="pre">quantiles</span></code>:
-- <code class="docutils literal notranslate"><span class="pre">&quot;min&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;max&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;mean&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;median&quot;</span></code>: single float.
-- <code class="docutils literal notranslate"><span class="pre">&quot;all&quot;</span></code>: list of all measured times.
-- <code class="docutils literal notranslate"><span class="pre">quantiles</span></code>: list of quantile values (or single float if one quantile).</p>
+<dt>float or list of float</dt><dd><p>Runtime measurement in milliseconds. Type depends on return_mode:
+- “min”, “max”, “mean”, “median”: single float value
+- “all”: list of all measured times
+- With quantiles: list of quantile values or single value if one quantile</p>
 </dd>
 </dl>
 </section>
 <section id="notes">
-<h1>Notes<a class="headerlink" href="#notes" title="Link to this heading">¶</a></h1>
-<ul class="simple">
-<li><p>Uses CUDA graphs to amortize kernel launch overhead, providing more accurate
-measurements for fast kernels compared to <code class="docutils literal notranslate"><span class="pre">do_bench</span></code>.</p></li>
-<li><p>Performs 5 warmup iterations before graph construction and 10 measurement
-retries for statistical stability.</p></li>
-<li><p>Graph construction overhead is not included in the reported time.</p></li>
-<li><p>Requires PyTorch with CUDA graph support.</p></li>
-</ul>
+<h2>Notes<a class="headerlink" href="#notes" title="Link to this heading">¶</a></h2>
+<p>This function differs from <code class="xref py py-func docutils literal notranslate"><span class="pre">do_bench()</span></code> in that it uses CUDA graphs to
+eliminate host launch overhead, providing more accurate kernel-only timing.
+The benchmarking process:</p>
+<ol class="arabic simple">
+<li><p>Warmup: Runs the function once to initialize CUDA context.</p></li>
+<li><p>Estimation: Runs 5 iterations to estimate kernel runtime.</p></li>
+<li><p>Graph construction: Builds a CUDA graph with unrolled calls based on
+estimated runtime and target repetition time.</p></li>
+<li><p>Measurement: Replays the graph 10 times and reports statistics.</p></li>
+</ol>
+<p>CUDA graph creation has ~300ms overhead on A100, so this function is best
+suited for benchmarks where accuracy matters more than setup time.</p>
 </section>
 <section id="examples">
-<h1>Examples<a class="headerlink" href="#examples" title="Link to this heading">¶</a></h1>
+<h2>Examples<a class="headerlink" href="#examples" title="Link to this heading">¶</a></h2>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">torch</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">triton</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">triton.testing</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">tt</span>
 
-<span class="c1"># Define a simple CUDA kernel wrapper</span>
-<span class="k">def</span><span class="w"> </span><span class="nf">my_kernel_fn</span><span class="p">():</span>
-    <span class="c1"># ... CUDA operations ...</span>
+<span class="nd">@triton</span><span class="o">.</span><span class="n">jit</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">kernel_fn</span><span class="p">(</span><span class="n">x_ptr</span><span class="p">,</span> <span class="n">y_ptr</span><span class="p">,</span> <span class="n">n</span><span class="p">):</span>
+    <span class="c1"># Kernel implementation</span>
     <span class="k">pass</span>
 
-<span class="c1"># Benchmark with default settings (mean time)</span>
-<span class="n">mean_time</span> <span class="o">=</span> <span class="n">tt</span><span class="o">.</span><span class="n">do_bench_cudagraph</span><span class="p">(</span><span class="n">my_kernel_fn</span><span class="p">)</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">run_kernel</span><span class="p">():</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="mi">1024</span><span class="p">,</span> <span class="n">device</span><span class="o">=</span><span class="s1">&#39;cuda&#39;</span><span class="p">)</span>
+    <span class="n">y</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">empty_like</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+    <span class="n">kernel_fn</span><span class="p">[(</span><span class="mi">1</span><span class="p">,)](</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="mi">1024</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">y</span>
 
-<span class="c1"># Benchmark returning min and max times</span>
-<span class="n">min_time</span> <span class="o">=</span> <span class="n">tt</span><span class="o">.</span><span class="n">do_bench_cudagraph</span><span class="p">(</span><span class="n">my_kernel_fn</span><span class="p">,</span> <span class="n">return_mode</span><span class="o">=</span><span class="s2">&quot;min&quot;</span><span class="p">)</span>
-<span class="n">max_time</span> <span class="o">=</span> <span class="n">tt</span><span class="o">.</span><span class="n">do_bench_cudagraph</span><span class="p">(</span><span class="n">my_kernel_fn</span><span class="p">,</span> <span class="n">return_mode</span><span class="o">=</span><span class="s2">&quot;max&quot;</span><span class="p">)</span>
+<span class="c1"># Basic benchmark</span>
+<span class="n">ms</span> <span class="o">=</span> <span class="n">tt</span><span class="o">.</span><span class="n">do_bench_cudagraph</span><span class="p">(</span><span class="n">run_kernel</span><span class="p">,</span> <span class="n">rep</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Kernel runtime: </span><span class="si">{</span><span class="n">ms</span><span class="si">}</span><span class="s2"> ms&quot;</span><span class="p">)</span>
 
-<span class="c1"># Benchmark with gradient reset for training kernels</span>
-<span class="n">tensor</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="mi">1024</span><span class="p">,</span> <span class="n">device</span><span class="o">=</span><span class="s1">&#39;cuda&#39;</span><span class="p">,</span> <span class="n">requires_grad</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-<span class="n">time</span> <span class="o">=</span> <span class="n">tt</span><span class="o">.</span><span class="n">do_bench_cudagraph</span><span class="p">(</span>
-    <span class="k">lambda</span><span class="p">:</span> <span class="n">my_kernel_fn</span><span class="p">(),</span>
-    <span class="n">grad_to_none</span><span class="o">=</span><span class="p">[</span><span class="n">tensor</span><span class="p">]</span>
-<span class="p">)</span>
+<span class="c1"># Get min and max times</span>
+<span class="n">min_ms</span> <span class="o">=</span> <span class="n">tt</span><span class="o">.</span><span class="n">do_bench_cudagraph</span><span class="p">(</span><span class="n">run_kernel</span><span class="p">,</span> <span class="n">return_mode</span><span class="o">=</span><span class="s1">&#39;min&#39;</span><span class="p">)</span>
+<span class="n">max_ms</span> <span class="o">=</span> <span class="n">tt</span><span class="o">.</span><span class="n">do_bench_cudagraph</span><span class="p">(</span><span class="n">run_kernel</span><span class="p">,</span> <span class="n">return_mode</span><span class="o">=</span><span class="s1">&#39;max&#39;</span><span class="p">)</span>
 
-<span class="c1"># Benchmark with custom quantiles (20th and 80th percentile)</span>
-<span class="n">q20</span><span class="p">,</span> <span class="n">q80</span> <span class="o">=</span> <span class="n">tt</span><span class="o">.</span><span class="n">do_bench_cudagraph</span><span class="p">(</span>
-    <span class="n">my_kernel_fn</span><span class="p">,</span>
-    <span class="n">quantiles</span><span class="o">=</span><span class="p">[</span><span class="mf">0.2</span><span class="p">,</span> <span class="mf">0.8</span><span class="p">]</span>
-<span class="p">)</span>
+<span class="c1"># Get all measurements</span>
+<span class="n">all_times</span> <span class="o">=</span> <span class="n">tt</span><span class="o">.</span><span class="n">do_bench_cudagraph</span><span class="p">(</span><span class="n">run_kernel</span><span class="p">,</span> <span class="n">return_mode</span><span class="o">=</span><span class="s1">&#39;all&#39;</span><span class="p">)</span>
+
+<span class="c1"># With quantiles (20th, 50th, 80th percentiles)</span>
+<span class="n">percentiles</span> <span class="o">=</span> <span class="n">tt</span><span class="o">.</span><span class="n">do_bench_cudagraph</span><span class="p">(</span><span class="n">run_kernel</span><span class="p">,</span> <span class="n">quantiles</span><span class="o">=</span><span class="p">[</span><span class="mf">0.2</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.8</span><span class="p">])</span>
 </pre></div>
 </div>
 </section>
 </dd></dl>
 
+</section>
 
 
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="triton.testing.do_bench.html" class="btn btn-neutral float-left" title="Parameters" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="triton.testing.do_bench.html" class="btn btn-neutral float-left" title="do_bench" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
         <a href="triton.testing.perf_report.html" class="btn btn-neutral float-right" title="perf_report" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 

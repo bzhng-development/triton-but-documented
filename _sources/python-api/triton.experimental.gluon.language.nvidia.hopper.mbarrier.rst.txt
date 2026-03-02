@@ -1,0 +1,21 @@
+triton.experimental.gluon.language.nvidia.hopper.mbarrier
+=========================================================
+
+.. currentmodule:: triton.experimental.gluon.language.nvidia.hopper.mbarrier
+
+Memory Barriers
+---------------
+
+.. autosummary::
+    :toctree: generated
+    :nosignatures:
+
+    MBarrierLayout
+    allocate_mbarrier
+    arrive
+    expect
+    fence_init_release_cluster
+    init
+    invalidate
+    sync_cluster_init
+    wait

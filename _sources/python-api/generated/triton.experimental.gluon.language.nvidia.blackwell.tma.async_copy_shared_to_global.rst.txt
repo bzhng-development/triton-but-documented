@@ -1,0 +1,66 @@
+triton.experimental.gluon.language.nvidia.blackwell.tma.async_copy_shared_to_global
+================================================================================
+
+.. currentmodule:: triton.experimental.gluon.language.nvidia.blackwell.tma
+
+.. function:: async_copy_shared_to_global(tensor_desc, coord, src, _semantic=None)
+
+   Initiate an asynchronous TMA copy from shared memory to global memory on NVIDIA Blackwell GPUs.
+
+   Parameters
+   ----------
+   tensor_desc : shared_memory_descriptor
+       Tensor descriptor specifying the global memory destination, including element type, shape, and layout.
+   coord : tensor or sequence of int
+       Coordinates defining the region of global memory to write to. Must match the rank of ``tensor_desc``.
+   src : tensor
+       Source tensor in shared memory containing data to copy. Must be compatible with ``tensor_desc`` element type.
+   _semantic : GluonSemantic, optional
+       Internal semantic object. Do not pass explicitly; handled automatically by the ``@gluon.jit`` decorator.
+
+   Returns
+   -------
+   None
+
+   Notes
+   -----
+   This function is specific to NVIDIA Blackwell architecture (compute capability 10.x) and requires TMA (Tensor Memory Accelerator) support.
+
+   The copy is asynchronous - execution continues immediately without waiting for the transfer to complete. Use appropriate barriers or wait operations to ensure completion before accessing the data.
+
+   When ``enable_iisan`` is enabled, alignment checks are performed on the innermost coordinate to ensure correct memory access patterns.
+
+   Coordinates are converted to IR values without requiring 64-bit integers.
+
+   Examples
+   --------
+   .. code-block:: python
+
+      import triton.experimental.gluon as gluon
+      import triton.experimental.gluon.language as ttgl
+      from triton.experimental.gluon.language.nvidia.blackwell import tma
+
+      @gluon.jit
+      def kernel(
+          global_ptr,
+          shared_desc,
+      ):
+          # Create tensor descriptor for global memory
+          tensor_desc = tma.make_tensor_descriptor(
+              global_ptr,
+              shape=[128, 128],
+              dtype=ttgl.float16,
+              block_shape=[64, 64],
+          )
+
+          # Load data into shared memory
+          src = shared_desc.load(ttgl.AutoLayout())
+
+          # Define coordinates for the copy
+          coord = [0, 0]
+
+          # Initiate async copy from shared to global
+          tma.async_copy_shared_to_global(tensor_desc, coord, src)
+
+          # Issue TMA wait to ensure copy completion
+          tma.wait_copy_pending()

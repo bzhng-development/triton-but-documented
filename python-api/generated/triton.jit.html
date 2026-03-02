@@ -18,7 +18,7 @@
     <script src="../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
-    <link rel="next" title="Parameters" href="triton.autotune.html" />
+    <link rel="next" title="triton.autotune" href="triton.autotune.html" />
     <link rel="prev" title="triton" href="../triton.html" /> 
 </head>
 
@@ -49,19 +49,48 @@
 <p class="caption" role="heading"><span class="caption-text">Python API</span></p>
 <ul class="current">
 <li class="toctree-l1 current"><a class="reference internal" href="../triton.html">triton</a><ul class="current">
-<li class="toctree-l2 current"><a class="current reference internal" href="#">triton.jit</a></li>
-<li class="toctree-l2"><a class="reference internal" href="triton.autotune.html"><code class="docutils literal notranslate"><span class="pre">triton.autotune()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="triton.heuristics.html">Parameters</a></li>
-<li class="toctree-l2"><a class="reference internal" href="triton.heuristics.html#returns">Returns</a></li>
-<li class="toctree-l2"><a class="reference internal" href="triton.heuristics.html#notes">Notes</a></li>
-<li class="toctree-l2"><a class="reference internal" href="triton.heuristics.html#examples">Examples</a></li>
-<li class="toctree-l2"><a class="reference internal" href="triton.Config.html">class triton.Config</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">triton.jit</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#triton.jit"><code class="docutils literal notranslate"><span class="pre">jit()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="triton.autotune.html">triton.autotune</a></li>
+<li class="toctree-l2"><a class="reference internal" href="triton.heuristics.html">triton.heuristics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="triton.Config.html">triton.Config</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../triton.html#runtime-and-compiler">Runtime and Compiler</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../triton.language.html">triton.language</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../triton.testing.html">triton.testing</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../triton-semantics.html">Triton Semantics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.language.extra.cuda.html">triton.language.extra.cuda</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.language.extra.cuda.libdevice.html">triton.language.extra.cuda.libdevice</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.runtime.html">triton.runtime</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.tools.html">triton.tools</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Gluon (Experimental) API</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.html">triton.experimental.gluon</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.html">triton.experimental.gluon.language</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.nvidia.ampere.html">triton.experimental.gluon.language.nvidia.ampere</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.nvidia.ampere.async_copy.html">triton.experimental.gluon.language.nvidia.ampere.async_copy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.nvidia.ampere.mbarrier.html">triton.experimental.gluon.language.nvidia.ampere.mbarrier</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.nvidia.hopper.html">triton.experimental.gluon.language.nvidia.hopper</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.nvidia.hopper.tma.html">triton.experimental.gluon.language.nvidia.hopper.tma</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.nvidia.hopper.mbarrier.html">triton.experimental.gluon.language.nvidia.hopper.mbarrier</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.nvidia.hopper.cluster.html">triton.experimental.gluon.language.nvidia.hopper.cluster</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.nvidia.blackwell.html">triton.experimental.gluon.language.nvidia.blackwell</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.nvidia.blackwell.tma.html">triton.experimental.gluon.language.nvidia.blackwell.tma</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.nvidia.blackwell.clc.html">triton.experimental.gluon.language.nvidia.blackwell.clc</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.amd.html">triton.experimental.gluon.language.amd</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.amd.gfx1250.html">triton.experimental.gluon.language.amd.gfx1250</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.amd.gfx1250.async_copy.html">triton.experimental.gluon.language.amd.gfx1250.async_copy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.amd.gfx1250.mbarrier.html">triton.experimental.gluon.language.amd.gfx1250.mbarrier</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.amd.gfx1250.cluster.html">triton.experimental.gluon.language.amd.gfx1250.cluster</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.amd.gfx1250.tdm.html">triton.experimental.gluon.language.amd.gfx1250.tdm</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.amd.cdna3.html">triton.experimental.gluon.language.amd.cdna3</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.amd.cdna4.html">triton.experimental.gluon.language.amd.cdna4</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.amd.rdna3.html">triton.experimental.gluon.language.amd.rdna3</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.amd.rdna4.html">triton.experimental.gluon.language.amd.rdna4</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Triton MLIR Dialects</span></p>
 <ul>
@@ -101,82 +130,95 @@
              
   <section id="triton-jit">
 <h1>triton.jit<a class="headerlink" href="#triton-jit" title="Link to this heading">¶</a></h1>
-<p>Decorator for JIT-compiling a Python function into a GPU kernel using the Triton compiler.</p>
-<p>When applied, the function is transformed into a <code class="docutils literal notranslate"><span class="pre">JITFunction</span></code> that can be launched on the GPU with a specified grid configuration. The decorated function operates in a restricted environment, having access only to Python primitives, Triton language builtins, its own arguments, and other JIT-compiled functions.</p>
-<p class="rubric">Notes</p>
-<p>Arguments passed to a JIT-compiled function are implicitly converted to pointers if they possess a <code class="docutils literal notranslate"><span class="pre">.data_ptr()</span></code> method and a <code class="docutils literal notranslate"><span class="pre">.dtype</span></code> attribute (e.g., PyTorch tensors).</p>
-<p>The body of a JIT-compiled function cannot access arbitrary Python global state or libraries. It is limited to:</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="triton.jit">
+<span class="sig-prename descclassname"><span class="pre">triton.</span></span><span class="sig-name descname"><span class="pre">jit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fn</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">version</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">repr</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">launch_metadata</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">do_not_specialize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">do_not_specialize_on_alignment</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">debug</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">noinline</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#triton.jit" title="Link to this definition">¶</a></dt>
+<dd><p>Decorator for JIT-compiling a Python function into a GPU kernel using the Triton compiler.</p>
+<p>When applied to a function, <code class="docutils literal notranslate"><span class="pre">&#64;triton.jit</span></code> transforms it into a <a class="reference internal" href="triton.JITFunction.html#triton.JITFunction" title="triton.JITFunction"><code class="xref py py-class docutils literal notranslate"><span class="pre">JITFunction</span></code></a> that can be launched on the GPU with a grid specification. The decorated function is compiled just-in-time based on the types and values of its arguments.</p>
+<section id="parameters">
+<h2>Parameters<a class="headerlink" href="#parameters" title="Link to this heading">¶</a></h2>
+<dl class="simple">
+<dt>fn<span class="classifier">callable, optional</span></dt><dd><p>The function to be JIT-compiled. When used as <code class="docutils literal notranslate"><span class="pre">&#64;triton.jit</span></code> without parentheses, this is passed directly. When used as <code class="docutils literal notranslate"><span class="pre">&#64;triton.jit(...)</span></code> with keyword arguments, this is passed as the first positional argument.</p>
+</dd>
+<dt>version<span class="classifier">int, optional</span></dt><dd><p>Version number for the kernel. Used for cache invalidation when kernel logic changes.</p>
+</dd>
+<dt>repr<span class="classifier">callable, optional</span></dt><dd><p>Custom function to generate string representation of the kernel for debugging and logging.</p>
+</dd>
+<dt>launch_metadata<span class="classifier">callable, optional</span></dt><dd><p>Custom function to generate metadata for kernel launches.</p>
+</dd>
+<dt>do_not_specialize<span class="classifier">iterable of int or str, optional</span></dt><dd><p>Parameter indices or names that should not be used for kernel specialization. Arguments at these positions will not trigger recompilation when their values change.</p>
+</dd>
+<dt>do_not_specialize_on_alignment<span class="classifier">iterable of int or str, optional</span></dt><dd><p>Parameter indices or names that should not be specialized based on memory alignment.</p>
+</dd>
+<dt>debug<span class="classifier">bool, optional</span></dt><dd><p>Enable debug mode for the kernel. When True, additional runtime checks and debugging information are enabled.</p>
+</dd>
+<dt>noinline<span class="classifier">bool, optional</span></dt><dd><p>Prevent the compiler from inlining this function when called from other JIT functions.</p>
+</dd>
+</dl>
+</section>
+<section id="returns">
+<h2>Returns<a class="headerlink" href="#returns" title="Link to this heading">¶</a></h2>
+<dl class="simple">
+<dt>JITFunction or callable</dt><dd><p>If <code class="docutils literal notranslate"><span class="pre">fn</span></code> is provided, returns a <a class="reference internal" href="triton.JITFunction.html#triton.JITFunction" title="triton.JITFunction"><code class="xref py py-class docutils literal notranslate"><span class="pre">JITFunction</span></code></a> wrapping the decorated function. If <code class="docutils literal notranslate"><span class="pre">fn</span></code> is not provided, returns a decorator function that can be applied to a function.</p>
+</dd>
+</dl>
+</section>
+<section id="notes">
+<h2>Notes<a class="headerlink" href="#notes" title="Link to this heading">¶</a></h2>
+<p>When a JIT-decorated function is called, tensor arguments are implicitly converted to pointers if they have a <code class="docutils literal notranslate"><span class="pre">.data_ptr()</span></code> method and a <code class="docutils literal notranslate"><span class="pre">.dtype</span></code> attribute. This allows seamless integration with PyTorch tensors and other array libraries.</p>
+<p>The decorated function will be compiled and executed on the GPU. It has access only to:</p>
 <ul class="simple">
-<li><p>Python primitives (e.g., <code class="docutils literal notranslate"><span class="pre">int</span></code>, <code class="docutils literal notranslate"><span class="pre">float</span></code>, <code class="docutils literal notranslate"><span class="pre">range</span></code>).</p></li>
-<li><p>Builtins within the <code class="docutils literal notranslate"><span class="pre">triton.language</span></code> package.</p></li>
-<li><p>Arguments passed directly to the function.</p></li>
-<li><p>Other functions decorated with <code class="docutils literal notranslate"><span class="pre">&#64;triton.jit</span></code>.</p></li>
+<li><p>Python primitives (int, float, bool, etc.)</p></li>
+<li><p>Builtins within the <code class="docutils literal notranslate"><span class="pre">triton.language</span></code> package</p></li>
+<li><p>Arguments passed to the function</p></li>
+<li><p>Other <code class="docutils literal notranslate"><span class="pre">&#64;triton.jit</span></code> decorated functions</p></li>
 </ul>
-<p class="rubric">Parameters</p>
-<dl class="simple">
-<dt><strong>fn</strong><span class="classifier">Callable, optional</span></dt><dd><p>The function to be JIT-compiled. If provided, the decorator is applied immediately. If omitted, the decorator returns a configuration function allowing keyword arguments.</p>
-</dd>
-<dt><strong>version</strong><span class="classifier">any, optional</span></dt><dd><p>Version identifier for the kernel. Used to manage kernel cache invalidation.</p>
-</dd>
-<dt><strong>repr</strong><span class="classifier">Callable, optional</span></dt><dd><p>A custom function to generate a string representation of the kernel for debugging or logging.</p>
-</dd>
-<dt><strong>launch_metadata</strong><span class="classifier">Callable, optional</span></dt><dd><p>A function to attach custom metadata to the kernel launch.</p>
-</dd>
-<dt><strong>do_not_specialize</strong><span class="classifier">Iterable of int or str, optional</span></dt><dd><p>Indices or parameter names of arguments that should not trigger kernel specialization. By default, Triton generates specialized kernels for different argument values; this option disables that behavior for specific arguments.</p>
-</dd>
-<dt><strong>do_not_specialize_on_alignment</strong><span class="classifier">Iterable of int or str, optional</span></dt><dd><p>Indices or parameter names of arguments for which alignment information should not trigger specialization.</p>
-</dd>
-<dt><strong>debug</strong><span class="classifier">bool, optional</span></dt><dd><p>If <code class="docutils literal notranslate"><span class="pre">True</span></code>, enables debug mode, preserving source line information and potentially disabling certain optimizations for easier debugging.</p>
-</dd>
-<dt><strong>noinline</strong><span class="classifier">bool, optional</span></dt><dd><p>If <code class="docutils literal notranslate"><span class="pre">True</span></code>, prevents the compiler from inlining this function when called by other kernels.</p>
-</dd>
-</dl>
-<p class="rubric">Returns</p>
-<dl class="simple">
-<dt><strong>KernelInterface</strong></dt><dd><p>A callable proxy representing the compiled kernel. When called with <code class="docutils literal notranslate"><span class="pre">[grid]</span></code>, it returns a launch configuration. Direct execution via <code class="docutils literal notranslate"><span class="pre">.run()</span></code> requires a <code class="docutils literal notranslate"><span class="pre">grid</span></code> argument.</p>
-</dd>
-</dl>
-<p class="rubric">Examples</p>
+<p>Standard Python library functions and modules outside of Triton are not available within the kernel body.</p>
+<p>Kernels are launched using the grid syntax: <code class="docutils literal notranslate"><span class="pre">kernel[grid](*args,</span> <span class="pre">**kwargs)</span></code> where <code class="docutils literal notranslate"><span class="pre">grid</span></code> is a tuple of 3 integers (or a function returning such a tuple) specifying the number of thread blocks in each dimension.</p>
+</section>
+<section id="examples">
+<h2>Examples<a class="headerlink" href="#examples" title="Link to this heading">¶</a></h2>
+<p>Basic kernel definition and launch:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">triton</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">triton.language</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">tl</span>
-<span class="kn">import</span><span class="w"> </span><span class="nn">torch</span>
 
 <span class="nd">@triton</span><span class="o">.</span><span class="n">jit</span>
-<span class="k">def</span><span class="w"> </span><span class="nf">add_kernel</span><span class="p">(</span>
-    <span class="n">x_ptr</span><span class="p">,</span>
-    <span class="n">y_ptr</span><span class="p">,</span>
-    <span class="n">output_ptr</span><span class="p">,</span>
-    <span class="n">n_elements</span><span class="p">,</span>
-    <span class="n">BLOCK_SIZE</span><span class="p">:</span> <span class="n">tl</span><span class="o">.</span><span class="n">constexpr</span><span class="p">,</span>
-<span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">add_kernel</span><span class="p">(</span><span class="n">x_ptr</span><span class="p">,</span> <span class="n">y_ptr</span><span class="p">,</span> <span class="n">output_ptr</span><span class="p">,</span> <span class="n">n</span><span class="p">):</span>
     <span class="n">pid</span> <span class="o">=</span> <span class="n">tl</span><span class="o">.</span><span class="n">program_id</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
-    <span class="n">block_start</span> <span class="o">=</span> <span class="n">pid</span> <span class="o">*</span> <span class="n">BLOCK_SIZE</span>
-    <span class="n">offsets</span> <span class="o">=</span> <span class="n">block_start</span> <span class="o">+</span> <span class="n">tl</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">BLOCK_SIZE</span><span class="p">)</span>
-    <span class="n">mask</span> <span class="o">=</span> <span class="n">offsets</span> <span class="o">&lt;</span> <span class="n">n_elements</span>
-    <span class="n">x</span> <span class="o">=</span> <span class="n">tl</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">x_ptr</span> <span class="o">+</span> <span class="n">offsets</span><span class="p">,</span> <span class="n">mask</span><span class="o">=</span><span class="n">mask</span><span class="p">)</span>
-    <span class="n">y</span> <span class="o">=</span> <span class="n">tl</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">y_ptr</span> <span class="o">+</span> <span class="n">offsets</span><span class="p">,</span> <span class="n">mask</span><span class="o">=</span><span class="n">mask</span><span class="p">)</span>
-    <span class="n">output</span> <span class="o">=</span> <span class="n">x</span> <span class="o">+</span> <span class="n">y</span>
-    <span class="n">tl</span><span class="o">.</span><span class="n">store</span><span class="p">(</span><span class="n">output_ptr</span> <span class="o">+</span> <span class="n">offsets</span><span class="p">,</span> <span class="n">output</span><span class="p">,</span> <span class="n">mask</span><span class="o">=</span><span class="n">mask</span><span class="p">)</span>
+    <span class="n">mask</span> <span class="o">=</span> <span class="n">pid</span> <span class="o">&lt;</span> <span class="n">n</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="n">tl</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">x_ptr</span> <span class="o">+</span> <span class="n">pid</span><span class="p">,</span> <span class="n">mask</span><span class="o">=</span><span class="n">mask</span><span class="p">)</span>
+    <span class="n">y</span> <span class="o">=</span> <span class="n">tl</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">y_ptr</span> <span class="o">+</span> <span class="n">pid</span><span class="p">,</span> <span class="n">mask</span><span class="o">=</span><span class="n">mask</span><span class="p">)</span>
+    <span class="n">tl</span><span class="o">.</span><span class="n">store</span><span class="p">(</span><span class="n">output_ptr</span> <span class="o">+</span> <span class="n">pid</span><span class="p">,</span> <span class="n">x</span> <span class="o">+</span> <span class="n">y</span><span class="p">,</span> <span class="n">mask</span><span class="o">=</span><span class="n">mask</span><span class="p">)</span>
 
-<span class="c1"># Define grid size</span>
-<span class="n">n_elements</span> <span class="o">=</span> <span class="mi">1024</span>
-<span class="n">BLOCK_SIZE</span> <span class="o">=</span> <span class="mi">128</span>
-<span class="n">grid</span> <span class="o">=</span> <span class="p">(</span><span class="n">triton</span><span class="o">.</span><span class="n">cdiv</span><span class="p">(</span><span class="n">n_elements</span><span class="p">,</span> <span class="n">BLOCK_SIZE</span><span class="p">),)</span>
-
-<span class="c1"># Allocate tensors</span>
-<span class="n">x</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">n_elements</span><span class="p">,</span> <span class="n">device</span><span class="o">=</span><span class="s1">&#39;cuda&#39;</span><span class="p">)</span>
-<span class="n">y</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">n_elements</span><span class="p">,</span> <span class="n">device</span><span class="o">=</span><span class="s1">&#39;cuda&#39;</span><span class="p">)</span>
-<span class="n">output</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">empty_like</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
-
-<span class="c1"># Launch kernel</span>
-<span class="n">add_kernel</span><span class="p">[</span><span class="n">grid</span><span class="p">](</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">output</span><span class="p">,</span> <span class="n">n_elements</span><span class="p">,</span> <span class="n">BLOCK_SIZE</span><span class="o">=</span><span class="n">BLOCK_SIZE</span><span class="p">)</span>
-
-<span class="c1"># Using keyword arguments for configuration</span>
-<span class="nd">@triton</span><span class="o">.</span><span class="n">jit</span><span class="p">(</span><span class="n">do_not_specialize</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;n_elements&quot;</span><span class="p">],</span> <span class="n">debug</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-<span class="k">def</span><span class="w"> </span><span class="nf">flexible_kernel</span><span class="p">(</span><span class="o">...</span><span class="p">):</span>
-    <span class="o">...</span>
+<span class="c1"># Launch the kernel with a 1D grid</span>
+<span class="n">n</span> <span class="o">=</span> <span class="mi">1024</span>
+<span class="n">grid</span> <span class="o">=</span> <span class="p">(</span><span class="n">n</span><span class="p">,)</span>
+<span class="n">add_kernel</span><span class="p">[</span><span class="n">grid</span><span class="p">](</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">output</span><span class="p">,</span> <span class="n">n</span><span class="p">)</span>
 </pre></div>
 </div>
+<p>Using keyword arguments for customization:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nd">@triton</span><span class="o">.</span><span class="n">jit</span><span class="p">(</span>
+    <span class="n">do_not_specialize</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;n&#39;</span><span class="p">],</span>
+    <span class="n">debug</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="n">noinline</span><span class="o">=</span><span class="kc">False</span>
+<span class="p">)</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">matmul_kernel</span><span class="p">(</span><span class="n">a_ptr</span><span class="p">,</span> <span class="n">b_ptr</span><span class="p">,</span> <span class="n">c_ptr</span><span class="p">,</span> <span class="n">M</span><span class="p">,</span> <span class="n">N</span><span class="p">,</span> <span class="n">K</span><span class="p">):</span>
+    <span class="c1"># Kernel implementation</span>
+    <span class="k">pass</span>
+</pre></div>
+</div>
+<p>Custom representation function:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">custom_repr</span><span class="p">(</span><span class="n">kernel</span><span class="p">):</span>
+    <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;CustomKernel[</span><span class="si">{</span><span class="n">kernel</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">]&quot;</span>
+
+<span class="nd">@triton</span><span class="o">.</span><span class="n">jit</span><span class="p">(</span><span class="nb">repr</span><span class="o">=</span><span class="n">custom_repr</span><span class="p">)</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">my_kernel</span><span class="p">(</span><span class="n">x_ptr</span><span class="p">,</span> <span class="n">n</span><span class="p">):</span>
+    <span class="k">pass</span>
+</pre></div>
+</div>
+</section>
+</dd></dl>
+
 </section>
 
 
@@ -184,7 +226,7 @@
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
         <a href="../triton.html" class="btn btn-neutral float-left" title="triton" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="triton.autotune.html" class="btn btn-neutral float-right" title="Parameters" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="triton.autotune.html" class="btn btn-neutral float-right" title="triton.autotune" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>

@@ -1,0 +1,43 @@
+arrive
+======
+
+.. py:function:: arrive(mbarrier, *, pred=True, _semantic=None)
+
+   Signal arrival at a memory barrier, incrementing the arrival count.
+
+   Parameters
+   ----------
+   mbarrier : ttgl.shared_memory_descriptor
+       The memory barrier object to signal. Must be allocated in shared memory.
+   pred : bool or tensor, optional
+       Predicate controlling the execution of the arrive instruction. If False,
+       the operation is skipped. Defaults to True.
+   _semantic : GluonSemantic, optional
+       Internal semantic context. Do not set manually.
+
+   Returns
+   -------
+   None
+
+   Notes
+   -----
+   This operation is specific to NVIDIA Ampere architecture (and compatible with
+   Hopper/Blackwell). It increments the barrier's arrival count by 1. Threads
+   must arrive at the barrier before waiting on it using :func:`ttgl.nvidia.ampere.mbarrier.wait`.
+
+   The predicate argument allows for conditional signaling, useful for control
+   flow divergence within warps. The internal count increment is fixed to 1.
+
+   Examples
+   --------
+   .. code-block:: python
+
+      import triton.experimental.gluon as gluon
+      import triton.experimental.gluon.language as ttgl
+
+      @gluon.jit
+      def kernel(mbarrier):
+          # Signal arrival at the barrier
+          ttgl.nvidia.ampere.mbarrier.arrive(mbarrier)
+          # Wait for all threads to arrive
+          ttgl.nvidia.ampere.mbarrier.wait(mbarrier, 1)

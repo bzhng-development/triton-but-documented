@@ -1,0 +1,55 @@
+num_programs
+============
+
+.. currentmodule:: triton.experimental.gluon.language
+
+.. function:: num_programs(axis, _semantic=None)
+
+   Returns the number of program instances launched along the given axis.
+
+   Parameters
+   ----------
+   axis : int
+       The axis of the 3D launch grid. Must be 0, 1, or 2.
+   _semantic : GluonSemantic, optional
+       Internal semantic argument. Do not pass directly.
+
+   Returns
+   -------
+   int
+       The number of programs along the specified axis.
+
+   Notes
+   -----
+   This function is typically used within Gluon kernels decorated with
+   ``@gluon.jit``. The ``_semantic`` parameter is automatically provided
+   by the JIT compiler and should not be passed by users.
+
+   Valid axis values correspond to the grid dimensions:
+   
+   - ``axis=0``: X dimension
+   - ``axis=1``: Y dimension
+   - ``axis=2``: Z dimension
+
+   Examples
+   --------
+   .. code-block:: python
+
+      import triton.experimental.gluon as gluon
+      import triton.experimental.gluon.language as ttgl
+
+      @gluon.jit
+      def kernel(x_ptr, N):
+          # Get the number of programs along the X axis
+          num_prog_x = ttgl.num_programs(0)
+          
+          # Get the number of programs along the Y axis
+          num_prog_y = ttgl.num_programs(1)
+          
+          # Program ID within the grid
+          pid = ttgl.program_id(0)
+          
+          # Use num_programs for bounds checking
+          if pid < num_prog_x:
+              # Process data
+              pass

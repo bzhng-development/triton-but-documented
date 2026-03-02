@@ -1,32 +1,45 @@
-.. py:function:: view(input, *shape, _semantic=None)
+triton.language.view
+====================
 
-   Returns a tensor with the same elements as `input` but a different shape.
-   The order of the elements may not be preserved.
+.. function:: view(input, *shape, _semantic=None)
 
-   .. deprecated::
-      `view` is deprecated. Please use :py:func:`reshape` with `can_reorder=True`.
+    Returns a tensor with the same elements as ``input`` but a different shape.
 
-   Parameters
-   ----------
-   input : tl.tensor
-       The input tensor.
-   shape : int or tuple of ints
-       The desired shape. Can be passed as a tuple or as individual parameters.
+    Parameters
+    ----------
+    input : tensor
+        The input tensor to reshape.
+    shape : int or tuple of ints
+        The desired shape. Can be passed as a tuple or as individual parameters.
 
-   Returns
-   -------
-   tl.tensor
-       A tensor with the specified shape.
+    Returns
+    -------
+    tensor
+        A view of the input tensor with the new shape.
 
-   Notes
-   -----
-   This function can also be called as a member function on :py:class:`tl.tensor`,
-   as ``x.view(...)`` instead of ``view(x, ...)``.
+    Notes
+    -----
+    The order of the elements may not be preserved. This function is deprecated;
+    use :py:func:`triton.language.reshape` with ``can_reorder=True`` instead.
 
-   Examples
-   --------
-   .. code-block:: python
+    ``shape`` can be passed as a tuple or as individual parameters.
 
-      # These are equivalent
-      view(x, (32, 32))
-      view(x, 32, 32)
+    This function can also be called as a member function on :py:class:`tensor`,
+    as ``x.view(...)`` instead of ``view(x, ...)``.
+
+    Examples
+    --------
+    .. code-block:: python
+
+        import triton.language as tl
+
+        @triton.jit
+        def kernel(x_ptr, y_ptr, BLOCK_SIZE: tl.constexpr):
+            x = tl.load(x_ptr + tl.arange(0, BLOCK_SIZE))
+            # Reshape from 1D to 2D
+            y = tl.view(x, (BLOCK_SIZE // 2, 2))
+            tl.store(y_ptr + tl.arange(0, BLOCK_SIZE), y)
+
+        # These are equivalent
+        view(x, (32, 32))
+        view(x, 32, 32)

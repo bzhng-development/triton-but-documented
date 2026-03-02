@@ -1,0 +1,42 @@
+fast_tanf
+=========
+
+Compute the tangent of the input element-wise using a fast approximation.
+
+Parameters
+----------
+arg0 : tensor
+    Input tensor of floating-point values. Must be ``fp32`` dtype.
+_semantic : optional
+    Internal parameter for Triton semantics. Do not set manually.
+
+Returns
+-------
+tensor
+    Output tensor of ``fp32`` dtype containing the tangent of each element.
+
+Notes
+-----
+This function calls the CUDA libdevice ``__nv_fast_tanf`` intrinsic, providing
+a fast approximation of the tangent function with reduced precision compared
+to the standard ``tan`` operation.
+
+The function is marked as pure (no side effects) and supports only ``fp32``
+input and output types.
+
+For higher precision tangent computation, use :py:func:`triton.language.tan`
+if available for your target architecture.
+
+Examples
+--------
+.. code-block:: python
+
+    import triton
+    import triton.language as tl
+
+    @triton.jit
+    def tan_kernel(x_ptr, y_ptr, BLOCK_SIZE: tl.constexpr):
+        offsets = tl.arange(0, BLOCK_SIZE)
+        x = tl.load(x_ptr + offsets)
+        y = tl.extra.cuda.libdevice.fast_tanf(x)
+        tl.store(y_ptr + offsets, y)

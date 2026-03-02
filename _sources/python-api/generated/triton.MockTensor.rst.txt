@@ -1,39 +1,65 @@
-MockTensor
-==========
+class triton.MockTensor
+==================
 
-.. currentmodule:: triton
+Mock tensor object for kernel warmup testing without allocating real GPU memory.
 
-.. class:: MockTensor(dtype, shape=None)
+Parameters
+----------
+dtype : dtype
+    Data type of the mock tensor (e.g., ``torch.float32``).
+shape : list of int, optional
+    Shape of the mock tensor. Default is ``[1]``.
 
-   Mock tensor object used for kernel warmup without allocating real GPU memory.
+Attributes
+----------
+dtype : dtype
+    The data type of the mock tensor.
+shape : list of int
+    The shape of the mock tensor.
 
-   This class mimics the interface of a real tensor (providing ``dtype``, ``shape``,
-   ``stride``, ``data_ptr``, etc.) to allow ``kernel.warmup`` to perform type
-   specialization and compilation without requiring actual tensor data.
+Methods
+-------
+stride()
+    Returns the strides for the mock tensor.
+data_ptr()
+    Returns a mock data pointer (always 0).
+ptr_range()
+    Returns a mock pointer range (always 0).
 
-   Parameters
-   ----------
-   dtype : dtype
-       The data type of the mock tensor (e.g., ``torch.float32``).
-   shape : list[int], optional
-       The shape of the mock tensor. If None, defaults to ``[1]``.
+Notes
+-----
+``MockTensor`` is designed to be used with ``kernel.warmup()`` to test kernel
+compilation without allocating actual GPU memory. It mimics the tensor interface
+by providing ``dtype``, ``shape``, ``stride()``, and ``data_ptr()`` methods that
+the Triton compiler expects during warmup.
 
-   Examples
-   --------
-   .. code-block:: python
+The ``data_ptr()`` and ``ptr_range()`` methods return optimistic values (0)
+assuming proper alignment and 32-bit pointer range. This is sufficient for
+warmup purposes where no actual memory access occurs.
 
-      import torch
-      import triton
-      import triton.language as tl
+Examples
+--------
+.. code-block:: python
 
-      @triton.jit
-      def kernel(x_ptr, n):
-          # Kernel implementation
-          pass
+    import torch
+    import triton
+    import triton.language as tl
 
-      # Warmup the kernel without allocating real memory
-      kernel.warmup(
-          triton.MockTensor(torch.float32, shape=[1024]),
-          1024,
-          grid=(1,)
-      )
+    @triton.jit
+    def my_kernel(x_ptr, y_ptr, n: tl.constexpr):
+        # Kernel implementation
+        pass
+
+    # Warmup the kernel without allocating real tensors
+    my_kernel.warmup(
+        MockTensor(torch.float32, [1024]),
+        MockTensor(torch.float32, [1024]),
+        n=1024,
+        grid=(1,)
+    )
+
+    # Can also wrap torch dtypes directly
+    my_kernel.warmup(
+        MockTensor.wrap_dtype(torch.float32),
+        grid=(1,)
+    )

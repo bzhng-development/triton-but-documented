@@ -1,0 +1,48 @@
+triton.language.extra.cuda.libdevice.scalbn
+===========================================
+
+.. currentmodule:: triton.language.extra.cuda.libdevice
+
+.. function:: scalbn(arg0, arg1, _semantic=None)
+
+    Compute :code:`arg0 * 2**arg1` efficiently.
+
+    Parameters
+    ----------
+    arg0 : tl.tensor
+        Floating-point input tensor. Must be of type ``fp32`` or ``fp64``.
+    arg1 : tl.tensor
+        Integer exponent tensor. Must be of type ``int32``.
+    _semantic : optional
+        Internal parameter for Triton semantic analysis. Do not set manually.
+
+    Returns
+    -------
+    result : tl.tensor
+        Tensor of the same floating-point type as ``arg0`` containing
+        :code:`arg0 * 2**arg1`.
+
+    Notes
+    -----
+    This function maps to CUDA libdevice functions:
+
+    - ``__nv_scalbnf`` for ``fp32`` inputs
+    - ``__nv_scalbn`` for ``fp64`` inputs
+
+    More efficient than explicit multiplication by :code:`2**arg1` as it
+    directly manipulates the floating-point exponent.
+
+    Examples
+    --------
+    .. code-block:: python
+
+        import triton
+        import triton.language as tl
+
+        @triton.jit
+        def scale_kernel(X, Y, SCALE_EXP, BLOCK_SIZE: tl.constexpr):
+            offsets = tl.arange(0, BLOCK_SIZE)
+            x = tl.load(X + offsets)
+            exp = tl.load(SCALE_EXP + offsets)
+            y = tl.extra.cuda.libdevice.scalbn(x, exp)
+            tl.store(Y + offsets, y)

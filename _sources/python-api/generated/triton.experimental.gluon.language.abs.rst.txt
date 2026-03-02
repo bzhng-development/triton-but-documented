@@ -1,0 +1,42 @@
+abs
+===
+
+Compute the element-wise absolute value of a tensor.
+
+.. function:: abs(x, _semantic=None)
+
+   Computes the element-wise absolute value of :code:`x`.
+
+   Parameters
+   ----------
+   x : tensor
+       The input tensor. Can be any dtype (floating, signed integer, unsigned integer, or fp8).
+   _semantic : GluonSemantic, optional
+       Internal semantic context. Do not set manually; automatically provided by the Gluon JIT.
+
+   Returns
+   -------
+   tensor
+       A tensor containing the absolute value of each element in :code:`x`. Has the same shape and dtype as the input.
+
+   Notes
+   -----
+   This function can also be called as a member function on :py:class:`tensor`, as :code:`x.abs()` instead of :code:`abs(x)`.
+
+   For unsigned integer types, this operation is a no-op since values are already non-negative.
+
+   For fp8e4b15 dtype, absolute value is computed via bitwise AND with 0x7F mask. For other floating types, uses FABS instruction. For signed integers, uses IABS instruction.
+
+   Examples
+   --------
+   .. code-block:: python
+
+      import triton.experimental.gluon as gluon
+      import triton.experimental.gluon.language as ttgl
+
+      @gluon.jit
+      def kernel(x_ptr, y_ptr, BLOCK_SIZE: ttgl.constexpr):
+          pid = ttgl.program_id(0)
+          x = ttgl.load(x_ptr + pid * BLOCK_SIZE)
+          y = ttgl.abs(x)  # or equivalently: y = x.abs()
+          ttgl.store(y_ptr + pid * BLOCK_SIZE, y)

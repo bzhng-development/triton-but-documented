@@ -1,0 +1,40 @@
+float8e5b16
+===========
+
+.. py:data:: triton.experimental.gluon.language.float8e5b16
+
+   8-bit floating point data type with 5 exponent bits and bias 16 (E5M2).
+
+   This dtype instance represents the NVIDIA FP8 E5M2 format, commonly used for
+   high-performance matrix operations and memory bandwidth optimization on
+   modern GPU architectures. It is available for use in Gluon kernel signatures,
+   shared memory allocations, and explicit layout specifications.
+
+   .. rubric:: Notes
+
+   Hardware support is required for native FP8 operations. This type is
+   primarily targeted at NVIDIA Hopper (H100) and Blackwell architectures,
+   as well as AMD CDNA3/CDNA4 accelerators. On hardware lacking native FP8
+   support, operations may emulate behavior via conversion to ``float16``
+   or ``float32``.
+
+   .. rubric:: Examples
+
+   .. code-block:: python
+
+      import triton.experimental.gluon as gluon
+      import triton.experimental.gluon.language as ttgl
+
+      @gluon.jit
+      def fp8_kernel(
+          x_ptr,
+          y_ptr,
+          n_elements,
+      ):
+          pid = gluon.program_id(0)
+          x = gluon.load(x_ptr + pid, dtype=ttgl.float8e5b16)
+          y = x * 2.0
+          gluon.store(y_ptr + pid, y)
+
+      # Allocate shared memory with explicit FP8 layout
+      sm = gluon.alloc((128,), dtype=ttgl.float8e5b16, layout=gluon.swizzle_layout())

@@ -1,0 +1,42 @@
+full_like
+=========
+
+.. py:function:: full_like(input, value, shape=None, dtype=None, layout=None)
+
+    Create a tensor filled with a specific value, inheriting properties from a reference tensor.
+
+    Parameters
+    ----------
+    input : tensor
+        Reference tensor to infer default shape, dtype, and layout.
+    value : int or float
+        The fill value assigned to every element.
+    shape : Sequence[int], optional
+        Target shape of the output tensor. Defaults to ``input.shape``.
+    dtype : dtype, optional
+        Target data type of the output tensor. Defaults to ``input.dtype``.
+    layout : DistributedLayout, optional
+        Target distributed layout of the output tensor. Defaults to ``input.layout``.
+
+    Returns
+    -------
+    tensor
+        A tensor where every element equals ``value``.
+
+    Notes
+    -----
+    This function is a JIT-compiled Gluon kernel primitive. It provides explicit control
+    over memory layout via the ``layout`` argument, distinguishing it from standard
+    Triton or NumPy equivalents.
+
+    Examples
+    --------
+    .. code-block:: python
+
+        import triton.experimental.gluon as gluon
+        import triton.experimental.gluon.language as ttgl
+
+        @gluon.jit
+        def kernel(X, Y):
+            ones = ttgl.full_like(X, 1.0)
+            ttgl.store(Y, ones)

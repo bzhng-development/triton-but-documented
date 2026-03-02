@@ -1,0 +1,48 @@
+triton.language.extra.cuda.libdevice.y1
+=======================================
+
+Compute the Bessel function of the second kind of order 1.
+
+Parameters
+----------
+arg0 : tl.tensor
+    Input tensor. Must be of floating-point type (``fp32`` or ``fp64``).
+_semantic :
+    Internal parameter, do not use.
+
+Returns
+-------
+tl.tensor
+    Tensor of the same type as ``arg0`` containing the Y1 Bessel function
+    values.
+
+Notes
+-----
+This function is a wrapper around CUDA libdevice functions:
+
+- ``__nv_y1f`` for 32-bit floating-point (``fp32``)
+- ``__nv_y1`` for 64-bit floating-point (``fp64``)
+
+The Bessel function of the second kind (Y1) is a solution to Bessel's
+differential equation. It is singular at ``x = 0``.
+
+Examples
+--------
+.. code-block:: python
+
+    import torch
+    import triton
+    import triton.language as tl
+
+    @triton.jit
+    def y1_kernel(x_ptr, y_ptr, n_elements, BLOCK_SIZE: tl.constexpr):
+        offsets = tl.arange(0, BLOCK_SIZE)
+        mask = offsets < n_elements
+        x = tl.load(x_ptr + offsets, mask=mask)
+        y = tl.extra.cuda.libdevice.y1(x)
+        tl.store(y_ptr + offsets, y, mask=mask)
+
+    n_elements = 1024
+    x = torch.randn(n_elements, device='cuda', dtype=torch.float32)
+    y = torch.empty(n_elements, device='cuda', dtype=torch.float32)
+    y1_kernel[(1,)](x, y, n_elements, BLOCK_SIZE=1024)

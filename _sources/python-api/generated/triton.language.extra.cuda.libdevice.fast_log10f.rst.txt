@@ -1,0 +1,37 @@
+triton.language.extra.cuda.libdevice.fast_log10f
+=================================================
+
+.. function:: fast_log10f(arg0, _semantic=None)
+
+    Compute the base-10 logarithm of :code:`arg0` approximately.
+
+    Parameters
+    ----------
+    arg0 : tl.tensor
+        Input tensor of type :code:`tl.float32`.
+
+    Returns
+    -------
+    tl.tensor
+        Tensor of type :code:`tl.float32` containing the base-10 logarithm of each element.
+
+    Notes
+    -----
+    This is a fast approximation of :code:`log10` using the CUDA libdevice function
+    :code:`__nv_fast_log10f`. The result may have reduced precision compared to
+    :code:`tl.libdevice.log10`. Only supports :code:`fp32` input type.
+
+    This function is pure (no side effects).
+
+    Example
+    -------
+    .. code-block:: python
+
+        import triton
+        import triton.language as tl
+
+        @triton.jit
+        def kernel(x_ptr, y_ptr, BLOCK_SIZE: tl.constexpr):
+            x = tl.load(x_ptr + tl.arange(0, BLOCK_SIZE))
+            y = tl.extra.cuda.libdevice.fast_log10f(x)
+            tl.store(y_ptr + tl.arange(0, BLOCK_SIZE), y)

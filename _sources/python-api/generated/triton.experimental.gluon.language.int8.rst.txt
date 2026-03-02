@@ -1,0 +1,20 @@
+int8
+====
+
+8-bit signed integer data type.
+
+Represents the signed 8-bit integer type in Gluon kernels. This dtype is
+used for type annotations, pointer definitions, and shared memory
+allocations. It is supported across all Gluon backends (NVIDIA Hopper/Blackwell,
+AMD CDNA/RDNA).
+
+Examples
+--------
+.. code-block:: python
+
+    import triton.experimental.gluon as gluon
+    import triton.experimental.gluon.language as ttgl
+
+    @gluon.jit
+    def kernel(ptr: ttgl.pointer[ttgl.int8]):
+        pass

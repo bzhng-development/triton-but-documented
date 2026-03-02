@@ -1,0 +1,38 @@
+get_mfma_scale_layout
+=====================
+
+.. py:function:: get_mfma_scale_layout(dot_operand_layout, shape)
+
+   Compute the distributed linear layout for scale tensors required by AMD MFMA scaled operations.
+
+   This constexpr function derives the correct memory layout for scale factors associated with microscaling formats (MX) on AMD CDNA4 architectures. The layout depends on the operand index (A or B) and the parent MFMA instruction configuration.
+
+   Parameters
+   ----------
+   dot_operand_layout : DotOperandLayout
+       The layout of the scaled operand (A or B). The parent layout must be an instance of :class:`AMDMFMALayout`.
+   shape : list[int]
+       The logical shape of the scale tensor.
+
+   Returns
+   -------
+   DistributedLinearLayout
+       The layout describing the distribution of scale elements across threads and warps.
+
+   Notes
+   -----
+   This function is specific to AMD CDNA4 hardware. It is typically used internally by :func:`mfma_scaled` but exposed for advanced layout manipulation.
+
+   The operand index is inferred from ``dot_operand_layout``. Ensure the parent layout matches the accumulator layout used in the MFMA operation.
+
+   Examples
+   --------
+   .. code-block:: python
+
+      import triton.experimental.gluon as gluon
+      import triton.experimental.gluon.language as ttgl
+
+      @gluon.jit
+      def kernel(...):
+          # Assume dot_layout is derived from accumulator layout
+          scale_layout = ttgl.amd.cdna4.get_mfma_scale_layout(dot_layout, scale_shape)

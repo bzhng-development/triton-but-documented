@@ -1,62 +1,51 @@
 permute
 =======
 
-.. currentmodule:: triton.language
+Permutes the dimensions of a tensor.
 
-.. function:: permute(input, *dims, _semantic=None)
+Parameters
+----------
+input : Block
+    The input tensor.
+dims : int or tuple of ints
+    The desired ordering of dimensions. For example, ``(2, 1, 0)`` reverses
+    the order of dims in a 3D tensor. Can be passed as a tuple or as
+    individual parameters.
 
-   Permutes the dimensions of a tensor.
+Returns
+-------
+tensor
+    The permuted tensor with dimensions reordered according to ``dims``.
 
-   Parameters
-   ----------
-   input : Block
-       The input tensor.
-   *dims : int or tuple of ints
-       The desired ordering of dimensions. For example, ``(2, 1, 0)`` reverses
-       the order of dims in a 3D tensor.
+Notes
+-----
+This function can be called as a free function or as a member function on
+:class:`tensor`, as ``x.permute(...)`` instead of ``permute(x, ...)``.
 
-       ``dims`` can be passed as a tuple or as individual parameters.
+:func:`trans` is equivalent to this function, except when ``dims`` is empty,
+it tries to swap the last two axes.
 
-   Returns
-   -------
-   Block
-       A tensor with the dimensions permuted according to ``dims``.
+Examples
+--------
+.. code-block:: python
 
-   Notes
-   -----
-   ``dims`` can be passed as a tuple or as individual parameters:
+    import triton
+    import triton.language as tl
 
-   .. code-block:: python
+    @triton.jit
+    def kernel(x_ptr, y_ptr, M: tl.constexpr, N: tl.constexpr, K: tl.constexpr):
+        # Load 3D tensor
+        x = tl.load(x_ptr + tl.arange(0, M)[:, None, None] * N * K
+                    + tl.arange(0, N)[None, :, None] * K
+                    + tl.arange(0, K)[None, None, :])
 
-      # These are equivalent
-      permute(x, (2, 1, 0))
-      permute(x, 2, 1, 0)
+        # Reverse dimension order: (M, N, K) -> (K, N, M)
+        y = tl.permute(x, 2, 1, 0)
 
-   :py:func:`trans` is equivalent to this function, except when ``dims`` is
-   empty, it tries to swap the last two axes.
+        # Equivalent using tuple
+        y = tl.permute(x, (2, 1, 0))
 
-   This function can also be called as a member function on :py:class:`tensor`,
-   as ``x.permute(...)`` instead of ``permute(x, ...)``.
+        # Equivalent using member function
+        y = x.permute(2, 1, 0)
 
-   Examples
-   --------
-   .. code-block:: python
-
-      import triton
-      import triton.language as tl
-
-      @triton.jit
-      def kernel(X_ptr, Y_ptr, stride_x0, stride_x1, stride_y0, stride_y1,
-                 BLOCK_M: tl.constexpr, BLOCK_N: tl.constexpr):
-          offs_m = tl.arange(0, BLOCK_M)
-          offs_n = tl.arange(0, BLOCK_N)
-          mask = (offs_m[:, None] < BLOCK_M) & (offs_n[None, :] < BLOCK_N)
-
-          # Load a 2D block: shape [BLOCK_M, BLOCK_N]
-          x = tl.load(X_ptr + offs_m[:, None] * stride_x0 + offs_n[None, :] * stride_x1, mask=mask)
-
-          # Permute dimensions: transpose from [M, N] to [N, M]
-          y = tl.permute(x, 1, 0)
-
-          # Store the transposed result
-          tl.store(Y_ptr + offs_n[:, None] * stride_y0 + offs_m[None, :] * stride_y1, y, mask=mask)
+        tl.store(y_ptr, y)

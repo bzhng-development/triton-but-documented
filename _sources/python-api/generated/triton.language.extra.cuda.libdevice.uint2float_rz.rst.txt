@@ -1,0 +1,50 @@
+uint2float_rz
+=============
+
+.. currentmodule:: triton.language.extra.cuda.libdevice
+
+.. autofunction:: uint2float_rz
+
+Converts an unsigned 32-bit integer to a 32-bit floating-point value using round-towards-zero rounding mode.
+
+Parameters
+----------
+arg0 : tl.tensor
+    Input tensor of unsigned 32-bit integers (``tl.uint32``).
+
+Returns
+-------
+tl.tensor
+    Tensor of 32-bit floating-point values (``tl.fp32``).
+
+Notes
+-----
+This function calls the CUDA libdevice function ``__nv_uint2float_rz`` which performs
+unsigned integer to float conversion with round-towards-zero (RTZ) rounding mode.
+
+The conversion is exact for all uint32 values that can be represented exactly in fp32.
+For values requiring rounding, the result is rounded towards zero (truncation).
+
+This function is pure (no side effects) and can be used in device code within
+:py:func:`@triton.jit <triton.jit>` decorated kernels.
+
+Examples
+--------
+.. code-block:: python
+
+    import triton
+    import triton.language as tl
+
+    @triton.jit
+    def convert_kernel(input_ptr, output_ptr, BLOCK_SIZE: tl.constexpr):
+        pid = tl.program_id(0)
+        offsets = pid * BLOCK_SIZE + tl.arange(0, BLOCK_SIZE)
+        uint_vals = tl.load(input_ptr + offsets)
+        float_vals = tl.extra.cuda.libdevice.uint2float_rz(uint_vals)
+        tl.store(output_ptr + offsets, float_vals)
+
+    # Usage
+    import torch
+    input_tensor = torch.tensor([0, 100, 1000, 2**32 - 1], dtype=torch.uint32, device='cuda')
+    output_tensor = torch.empty_like(input_tensor, dtype=torch.float32)
+    convert_kernel[(1,)](input_ptr, output_ptr, BLOCK_SIZE=4)

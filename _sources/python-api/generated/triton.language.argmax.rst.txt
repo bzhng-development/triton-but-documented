@@ -5,45 +5,46 @@ argmax
 
 .. function:: argmax(input, axis, tie_break_left=True, keep_dims=False)
 
-   Returns the indices of the maximum values along a given axis.
+   Returns the indices of the maximum values along an axis.
 
    Parameters
    ----------
    input : tensor
        Input tensor.
    axis : int
-       Axis along which to reduce. If ``None``, reduces all dimensions.
+       Axis along which to find the maximum index. If None, reduce all dimensions.
    tie_break_left : bool, optional
-       If ``True``, in case of a tie (i.e., multiple elements have the same
-       maximum value), return the left-most index. If ``False``, behavior
-       is undefined. Default is ``True``.
+       If True (default), in case of a tie (multiple elements have the same maximum
+       value), return the left-most index for values that aren't NaN.
    keep_dims : bool, optional
-       If ``True``, the reduced axes are retained with length 1.
-       Default is ``False``.
+       If True, keep the reduced dimensions with length 1 (default is False).
 
    Returns
    -------
-   tensor
-       Tensor of indices corresponding to the maximum values.
+   indices : tensor
+       Tensor of indices corresponding to the maximum values along the specified axis.
 
    Notes
    -----
    This function can also be called as a member function on :py:class:`tensor`,
    as ``x.argmax(...)`` instead of ``argmax(x, ...)``.
 
-   The reduction operation requires the axis to be statically known and the
-   underlying combination logic to be associative.
+   The reduction operation is associative and commutative. When ``tie_break_left=True``,
+   ties are broken by selecting the smallest index (left-most). When ``tie_break_left=False``,
+   tie-breaking behavior is implementation-defined.
 
    Examples
    --------
    .. code-block:: python
 
-       import triton.language as tl
+      import triton.language as tl
 
-       @triton.jit
-       def kernel(X, INDEXS, stride):
-           pid = tl.program_id(0)
-           x = tl.load(X + pid * stride + tl.arange(0, 16))
-           # Find index of max value in the row
-           idx = tl.argmax(x, axis=0)
-           tl.store(INDEXS + pid, idx)
+      # Find index of maximum value along axis 0
+      x = tl.arange(0, 8).reshape((2, 4))
+      indices = tl.argmax(x, axis=0)  # Returns indices of max values in each column
+
+      # Find index of maximum value along axis 1
+      indices = tl.argmax(x, axis=1)  # Returns indices of max values in each row
+
+      # Keep reduced dimensions
+      indices = tl.argmax(x, axis=0, keep_dims=True)  # Output shape matches input except reduced axis

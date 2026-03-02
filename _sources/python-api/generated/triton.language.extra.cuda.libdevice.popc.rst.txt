@@ -1,0 +1,44 @@
+popc
+====
+
+popc(arg0, _semantic=None)
+
+    Count the number of set bits (population count) in an integer.
+
+    Parameters
+    ----------
+    arg0 : tensor
+        Input tensor of integer type. Supported dtypes are ``int32`` and ``int64``.
+    _semantic
+        Internal parameter, do not use directly.
+
+    Returns
+    -------
+    result : tensor
+        Tensor of ``int32`` containing the population count (number of 1-bits) for each element.
+
+    Notes
+    -----
+    This function wraps CUDA libdevice population count intrinsics:
+    
+    - ``__nv_popc`` for ``int32`` inputs
+    - ``__nv_popcll`` for ``int64`` inputs
+    
+    The operation is pure (no side effects) and elementwise.
+
+    Examples
+    --------
+    .. code-block:: python
+
+        import triton
+        import triton.language as tl
+
+        @triton.jit
+        def popc_kernel(x_ptr, y_ptr, BLOCK_SIZE: tl.constexpr):
+            x = tl.load(x_ptr + tl.arange(0, BLOCK_SIZE))
+            y = tl.extra.cuda.libdevice.popc(x)
+            tl.store(y_ptr + tl.arange(0, BLOCK_SIZE), y)
+
+        # Count set bits in input values
+        # Input:  [0b0001, 0b0011, 0b0111, 0b1111]
+        # Output: [1,      2,      3,      4     ]

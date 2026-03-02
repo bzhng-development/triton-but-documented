@@ -1,0 +1,89 @@
+tensor_memory_descriptor_type
+=============================
+
+.. currentmodule:: triton.experimental.gluon.language.nvidia.blackwell
+
+.. class:: tensor_memory_descriptor_type(element_ty, shape, layout, alloc_shape)
+
+   Type descriptor for tensor memory in NVIDIA Blackwell architecture.
+
+   Represents the type of a tensor memory descriptor used for Tensor Core Gen5
+   (tcgen05) operations. Encapsulates element type, tensor shape, memory layout,
+   and allocation shape for tensor memory regions.
+
+   Parameters
+   ----------
+   element_ty : dtype
+       The element data type of the tensor (e.g., ``ttgl.float16``, ``ttgl.bfloat16``).
+   shape : Sequence[int]
+       The logical shape of the tensor as a sequence of integers.
+   layout : TensorMemoryLayout or TensorMemoryScalesLayout
+       The memory layout describing how elements are arranged in tensor memory.
+       Must be an instance of ``TensorMemoryLayout`` or ``TensorMemoryScalesLayout``.
+   alloc_shape : Sequence[int]
+       The allocation shape, which may differ from the logical shape for
+       memory allocation purposes.
+
+   Attributes
+   ----------
+   element_ty : dtype
+       The element data type.
+   shape : Tuple[int, ...]
+       The tensor shape.
+   layout : TensorMemoryLayout or TensorMemoryScalesLayout
+       The memory layout configuration.
+   alloc_shape : Tuple[int, ...]
+       The allocation shape.
+
+   Methods
+   -------
+   get_reg_layout(num_warps=None, instr_variant="32x32b")
+       Return a DistributedLinearLayout compatible with TMEM load/store
+       instructions for this descriptor type.
+   to_ir(builder)
+       Convert the type descriptor to IR representation.
+   mangle()
+       Return a mangled string representation for type identification.
+
+   Notes
+   -----
+   This type is used internally by Gluon to represent tensor memory descriptors
+   for Blackwell GPU architectures. Users typically interact with
+   ``tensor_memory_descriptor`` instances rather than constructing this type
+   directly.
+
+   The layout parameter must specify either a ``TensorMemoryLayout`` for regular
+   tensor memory or ``TensorMemoryScalesLayout`` for scale factors in scaled
+   MMA operations.
+
+   Examples
+   --------
+   .. code-block:: python
+
+      import triton.experimental.gluon as gluon
+      import triton.experimental.gluon.language as ttgl
+      from triton.experimental.gluon.language.nvidia.blackwell import (
+          tensor_memory_descriptor_type,
+          TensorMemoryLayout,
+      )
+
+      # Create a tensor memory layout for 32x32 blocks
+      layout = TensorMemoryLayout(block=(32, 32), col_stride=1)
+
+      # Create a type descriptor for a 128x128 FP16 tensor
+      ty = tensor_memory_descriptor_type(
+          element_ty=ttgl.float16,
+          shape=(128, 128),
+          layout=layout,
+          alloc_shape=(128, 128),
+      )
+
+      # Get the register layout for 4 warps with 32x32b instruction variant
+      reg_layout = ty.get_reg_layout(num_warps=4, instr_variant="32x32b")
+
+   See Also
+   --------
+   tensor_memory_descriptor : The runtime handle for tensor memory regions.
+   TensorMemoryLayout : Layout configuration for tensor memory.
+   TensorMemoryScalesLayout : Layout configuration for tensor memory scales.
+   allocate_tensor_memory : Function to allocate tensor memory with this type.

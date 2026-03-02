@@ -1,0 +1,87 @@
+class triton.experimental.gluon.language.nvidia.blackwell.TensorMemoryLayout
+================================================================================
+
+Describes the layout for tensor memory in NVIDIA Blackwell architecture.
+
+Parameters
+----------
+block : Tuple[int, int]
+    Number of contiguous elements per row and column in a CTA. Must be a
+    2-tuple of integers.
+col_stride : int
+    Number of 32-bit columns to advance between logically adjacent columns.
+    Packed layouts use a stride of 1. Unpacked layouts use
+    ``32 / bitwidth``. Must be a power of two.
+cga_layout : List[List[int]], optional
+    CGA (Cooperative Group Array) layout bases. Each basis must be a
+    2-element list. Defaults to empty list.
+two_ctas : bool, optional
+    Whether the layout is for two-CTA mode. Defaults to False.
+
+Raises
+------
+AssertionError
+    If ``block`` is not length 2, if any basis in ``cga_layout`` is not
+    length 2, or if ``col_stride`` is not a power of two.
+
+Notes
+-----
+The ``col_stride`` parameter must be a power of two (e.g., 1, 2, 4, 8, ...).
+This is enforced at construction time.
+
+The ``block`` tuple specifies the tiling dimensions within a CTA, where
+``block[0]`` is the row dimension and ``block[1]`` is the column dimension.
+
+CGA layout bases define how tensor memory is distributed across cooperative
+groups. Each basis is a 2-element list representing strides in the row and
+column dimensions.
+
+This class is frozen (immutable) and uses value equality for comparisons.
+
+Examples
+--------
+Create a packed tensor memory layout with 32x32 block tiling:
+
+.. code-block:: python
+
+    import triton.experimental.gluon as gluon
+    import triton.experimental.gluon.language as ttgl
+
+    @gluon.jit
+    def kernel():
+        layout = gluon.language.nvidia.blackwell.TensorMemoryLayout(
+            block=(32, 32),
+            col_stride=1,
+        )
+        # Use layout with allocate_tensor_memory or tensor_memory_descriptor
+
+Create an unpacked layout for FP8 data (4 bits per element):
+
+.. code-block:: python
+
+    @gluon.jit
+    def kernel():
+        # FP8 unpacked: 32 / 4 = 8 columns per 32-bit word
+        layout = gluon.language.nvidia.blackwell.TensorMemoryLayout(
+            block=(64, 32),
+            col_stride=8,
+        )
+
+Create a layout with CGA distribution across 2 CTAs:
+
+.. code-block:: python
+
+    @gluon.jit
+    def kernel():
+        layout = gluon.language.nvidia.blackwell.TensorMemoryLayout(
+            block=(32, 32),
+            col_stride=1,
+            cga_layout=[[1, 0]],  # Distribute along row dimension
+            two_ctas=True,
+        )
+
+See Also
+--------
+tensor_memory_descriptor : Create a tensor memory descriptor with a layout.
+allocate_tensor_memory : Allocate tensor memory with a specified layout.
+TensorMemoryScalesLayout : Layout for tensor memory scales.

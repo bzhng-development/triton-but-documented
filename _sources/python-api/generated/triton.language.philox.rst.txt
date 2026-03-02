@@ -1,75 +1,41 @@
 philox
 ======
 
-.. currentmodule:: triton.language
+.. py:function:: triton.language.philox(seed, c0, c1, c2, c3, n_rounds=10)
 
-.. function:: philox(seed, c0, c1, c2, c3, n_rounds=10)
-
-   Apply the Philox pseudo-random number generator to a state vector.
-
-   This function performs `n_rounds` of the Philox encryption algorithm on the
-   input state (`c0`, `c1`, `c2`, `c3`) using the provided `seed` as the key.
-   It supports both 32-bit and 64-bit integer arithmetic, automatically casting
-   inputs to the appropriate precision based on the dtype of `c0`.
+   Apply Philox pseudo-random number generator rounds.
 
    Parameters
    ----------
-   seed : tl.tensor
-       The seed value used to initialize the generator key. Must be an integer
-       type. If 64-bit, it is split into high and low 32-bit parts for 32-bit
-       modes, or used directly as the low part for 64-bit modes.
-   c0 : tl.tensor
-       First element of the state vector. Determines the output precision
-       (uint32 or uint64).
-   c1 : tl.tensor
-       Second element of the state vector.
-   c2 : tl.tensor
-       Third element of the state vector.
-   c3 : tl.tensor
-       Fourth element of the state vector.
-   n_rounds : tl.constexpr, optional
-       Number of encryption rounds to perform. Default is 10.
+   seed : tensor
+       The seed for generating random numbers.
+   c0 : tensor
+       First counter tensor. Determines the integer width (32 or 64 bits).
+   c1 : tensor
+       Second counter tensor.
+   c2 : tensor
+       Third counter tensor.
+   c3 : tensor
+       Fourth counter tensor.
+   n_rounds : constexpr, optional
+       Number of mixing rounds. Default is 10.
 
    Returns
    -------
-   tl.tensor
-       A tuple of four tensors `(c0, c1, c2, c3)` representing the transformed
-       state vector after applying the Philox rounds. The dtype matches the
-       input dtype of `c0`.
+   tuple of tensors
+       A tuple of four tensors representing the updated random state.
 
    Notes
    -----
-   This is a low-level primitive typically used by higher-level random number
-   generation functions like `randint4x` or `rand4x`. Direct usage requires
-   managing the state vector and offsets manually.
-
-   The function asserts that the bitwidth of `c0` is either 32 or 64. Mixed
-   precision or unsupported bitwidths will raise a compilation error.
+   The integer width (32 or 64 bits) is inferred from the dtype of :code:`c0`.
+   The :code:`seed` is cast to :code:`uint64` internally.
+   This is a low-level primitive; consider using :code:`randint` or :code:`rand` for typical use cases.
 
    Examples
    --------
-   Generate a block of random uint32 values using explicit state management:
-
    .. code-block:: python
 
-       import triton
-       import triton.language as tl
-
-       @triton.jit
-       def my_kernel(seed_ptr, output_ptr, BLOCK_SIZE: tl.constexpr):
-           pid = tl.program_id(0)
-           offset = pid * BLOCK_SIZE + tl.arange(0, BLOCK_SIZE)
-           
-           # Initialize state with offsets
-           c0 = offset
-           c1 = tl.zeros([BLOCK_SIZE], dtype=tl.uint32)
-           c2 = tl.zeros([BLOCK_SIZE], dtype=tl.uint32)
-           c3 = tl.zeros([BLOCK_SIZE], dtype=tl.uint32)
-           
-           seed = tl.load(seed_ptr)
-           
-           # Apply Philox rounds
-           r0, r1, r2, r3 = tl.philox(seed, c0, c1, c2, c3)
-           
-           # Use the first stream of random numbers
-           tl.store(output_ptr + offset, r0)
+      @triton.jit
+      def kernel(...):
+          offsets = tl.program_id(0) * BLOCK
+          r0, r1, r2, r3 = tl.philox(seed, offsets, 0, 0, 0)

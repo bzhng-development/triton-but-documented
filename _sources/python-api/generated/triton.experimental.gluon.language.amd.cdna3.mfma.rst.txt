@@ -1,0 +1,60 @@
+mfma
+====
+
+.. currentmodule:: triton.experimental.gluon.language.amd.cdna3
+
+.. function:: mfma(a, b, acc, _semantic=None)
+
+    Computes matrix-multiplication of ``a * b + acc`` using AMD CDNA3 matrix core units.
+
+    Emits AMD MFMA (Matrix Fused Multiply-Add) instructions for CDNA3 architecture.
+
+    Parameters
+    ----------
+    a : tensor
+        The first operand of MFMA. Must have a :class:`DotOperandLayout` with operand index 0.
+    b : tensor
+        The second operand of MFMA. Must have a :class:`DotOperandLayout` with operand index 1.
+    acc : tensor
+        The accumulator tensor. Must have a :class:`BlockedLayout`. The output tensor will have
+        the same type as ``acc``.
+    _semantic : GluonSemantic, optional
+        Internal semantic object. Do not set manually.
+
+    Returns
+    -------
+    tensor
+        A Gluon tensor containing the result of ``a * b + acc`` with the same type as ``acc``.
+
+    Raises
+    ------
+    AssertionError
+        If ``acc`` is None, or if the layouts of ``a``, ``b``, and ``acc`` are incompatible
+        for matrix multiplication.
+
+    Notes
+    -----
+    This function is hardware-specific to AMD CDNA3 GPUs. The layouts of ``a``, ``b``, and
+    ``acc`` must satisfy the following constraints:
+
+    - ``a`` must have a :class:`DotOperandLayout` with ``operand_index=0``
+    - ``b`` must have a :class:`DotOperandLayout` with ``operand_index=1``
+    - ``acc`` must have a :class:`BlockedLayout`
+    - Both ``a`` and ``b`` layouts must have the same parent as ``acc`` layout
+
+    The operation computes ``a @ b + acc`` using native matrix core instructions.
+
+    Examples
+    --------
+    >>> import triton.experimental.gluon as gluon
+    >>> import triton.experimental.gluon.language as ttgl
+    >>> @gluon.jit
+    ... def matmul_kernel(a_ptr, b_ptr, c_ptr, BLOCK_M: tl.constexpr, BLOCK_N: tl.constexpr, BLOCK_K: tl.constexpr):
+    ...     # Load tiles from global memory
+    ...     a = ttgl.load(a_ptr)
+    ...     b = ttgl.load(b_ptr)
+    ...     # Initialize accumulator
+    ...     acc = ttgl.full((BLOCK_M, BLOCK_N), 0.0, dtype=ttgl.float16)
+    ...     # Perform matrix multiplication using CDNA3 MFMA
+    ...     result = ttgl.amd.cdna3.mfma(a, b, acc)
+    ...     ttgl.store(c_ptr, result)

@@ -1,0 +1,34 @@
+zeros_like
+==========
+
+.. py:function:: zeros_like(input, shape=None, dtype=None, layout=None)
+
+   Create a tensor with the same properties as a given tensor, filled with zeros.
+
+   Parameters
+   ----------
+   input : ttgl.tensor
+       Reference tensor to infer default shape, dtype, and layout.
+   shape : Sequence[int], optional
+       Target shape. Defaults to ``input.shape``.
+   dtype : ttgl.dtype, optional
+       Target data type. Defaults to ``input.dtype``.
+   layout : ttgl.DistributedLayout, optional
+       Target layout. Defaults to ``input.layout``.
+
+   Returns
+   -------
+   ttgl.tensor
+       A tensor where every element is zero.
+
+   Examples
+   --------
+   .. code-block:: python
+
+      import triton.experimental.gluon as gluon
+      import triton.experimental.gluon.language as ttgl
+
+      @gluon.jit
+      def kernel(x):
+          # Create a zero tensor matching x's properties
+          z = ttgl.zeros_like(x)

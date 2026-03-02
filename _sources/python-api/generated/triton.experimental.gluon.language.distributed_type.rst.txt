@@ -1,0 +1,65 @@
+distributed_type
+================
+
+.. class:: distributed_type(element_ty, shape, layout)
+
+   A distributed tensor type with explicit layout information for Gluon kernels.
+
+   This type extends :class:`block_type` to include layout metadata, enabling
+   explicit control over how tensor data is distributed across GPU threads,
+   warps, and memory hierarchies. Used internally by Gluon to represent typed
+   tensors with known distribution patterns.
+
+   Parameters
+   ----------
+   element_ty : dtype
+       The scalar element data type (e.g., ``ttgl.float16``, ``ttgl.int32``).
+   shape : List[int]
+       The dimensions of the tensor block.
+   layout : DistributedLayout
+       The distribution layout describing how elements map to threads/warps.
+       Must be an instance of :class:`DistributedLayout`.
+
+   Attributes
+   ----------
+   element_ty : dtype
+       The scalar element type.
+   shape : List[int]
+       The tensor shape.
+   layout : DistributedLayout
+       The distribution layout.
+   name : str
+       String representation of the type.
+
+   Methods
+   -------
+   to_ir(builder)
+       Convert to LLVM IR type.
+   mangle()
+       Generate a mangled name string for type identification.
+   with_element_ty(scalar_ty)
+       Create a new distributed_type with a different element type.
+
+   Notes
+   -----
+   - The layout must be a :class:`DistributedLayout` instance.
+   - For non-AutoLayout and non-CoalescedLayout layouts, the shape rank must
+     match the layout rank.
+   - This type is typically constructed internally by Gluon operations rather
+     than directly by users.
+
+   Examples
+   --------
+   >>> import triton.experimental.gluon as gluon
+   >>> import triton.experimental.gluon.language as ttgl
+   >>> from triton.experimental.gluon.language._layouts import BlockedLayout
+   >>>
+   >>> # Create a distributed type for a 128x64 float16 tensor
+   >>> layout = BlockedLayout([1, 1], [128, 64], [4, 8], [1, 0])
+   >>> dtype = ttgl.distributed_type(ttgl.float16, [128, 64], layout)
+   >>> print(dtype.name)
+   <[128, 64], float16, BlockedLayout(...)>
+
+   See Also
+   --------
+   block_type, DistributedLayout, AutoLayout, CoalescedLayout

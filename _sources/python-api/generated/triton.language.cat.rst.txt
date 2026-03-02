@@ -1,52 +1,76 @@
+tl.cat
+======
+
 Concatenate two tensors along a specified dimension.
+
+.. code-block:: python
+
+    tl.cat(input, other, can_reorder=False, dim=0, _semantic=None)
 
 Parameters
 ----------
+
 input : tensor
     The first input tensor.
+
 other : tensor
     The second input tensor.
+
 can_reorder : bool, optional
-    Compiler hint. If ``True``, the compiler is allowed to reorder elements
-    while concatenating inputs. Only use if the order does not matter
-    (e.g., result is only used in reduction ops). Default is ``False``.
+    Compiler hint. If true, the compiler is allowed to reorder elements while
+    concatenating inputs. Only use if the order does not matter (e.g., result
+    is only used in reduction ops). Default is ``False``.
+
 dim : int, optional
-    The dimension to concatenate along. Used when ``can_reorder`` is
-    ``False``. Default is ``0``.
+    The dimension to concatenate along. Used when ``can_reorder`` is ``False``.
+    Default is ``0``.
 
 Returns
 -------
+
 tensor
     The concatenated tensor.
 
 Notes
 -----
-When ``can_reorder`` is ``False``, the input tensors must have the same
-rank and matching shapes in all dimensions except ``dim``. The size of
-the output in dimension ``dim`` will be the sum of the input sizes in
-that dimension.
 
-If ``can_reorder`` is ``True``, shape constraints are relaxed to allow
-the compiler to optimize memory access patterns, but the semantic order
-of elements is not guaranteed.
+When ``can_reorder=False``, the following constraints apply:
+
+- Both tensors must have the same rank.
+- All dimensions except the concatenation dimension must match.
+
+When ``can_reorder=True``, the compiler may optimize the concatenation by
+reordering elements, which can improve performance but does not preserve
+element order. Use this only when the result is consumed by order-independent
+operations (e.g., reductions).
 
 Examples
 --------
+
+Concatenate two tensors along dimension 0:
+
 .. code-block:: python
 
     @triton.jit
-    def concat_kernel(x_ptr, y_ptr, out_ptr, N: tl.constexpr):
-        x = tl.load(x_ptr + tl.arange(0, N))
-        y = tl.load(y_ptr + tl.arange(0, N))
-        # Concatenate along the first dimension (default)
-        z = tl.cat(x, y)
-        tl.store(out_ptr + tl.arange(0, 2 * N), z)
+    def kernel(x_ptr, y_ptr, out_ptr, M, N, BLOCK_M: tl.constexpr):
+        pid = tl.program_id(0)
+        offs_m = pid * BLOCK_M + tl.arange(0, BLOCK_M)
+        offs_n = tl.arange(0, N)
+        mask = offs_m[:, None] < M
+        x = tl.load(x_ptr + offs_m[:, None] * N + offs_n[None, :], mask=mask)
+        y = tl.load(y_ptr + offs_m[:, None] * N + offs_n[None, :], mask=mask)
+        out = tl.cat(x, y, dim=0)
+        tl.store(out_ptr + offs_m[:, None] * N + offs_n[None, :], out, mask=mask)
+
+Concatenate with reordering allowed (for reduction operations):
+
+.. code-block:: python
 
     @triton.jit
-    def reorder_concat_kernel(x_ptr, y_ptr, out_ptr, N: tl.constexpr):
-        x = tl.load(x_ptr + tl.arange(0, N))
-        y = tl.load(y_ptr + tl.arange(0, N))
-        # Allow reordering for potential performance gains in reductions
-        z = tl.cat(x, y, can_reorder=True)
-        sum_val = tl.sum(z, axis=0)
-        tl.store(out_ptr, sum_val)
+    def kernel(x_ptr, y_ptr, out_ptr, N, BLOCK_N: tl.constexpr):
+        offs_n = tl.arange(0, BLOCK_N)
+        x = tl.load(x_ptr + offs_n)
+        y = tl.load(y_ptr + offs_n)
+        combined = tl.cat(x, y, can_reorder=True)
+        result = tl.sum(combined, axis=0)
+        tl.store(out_ptr, result)

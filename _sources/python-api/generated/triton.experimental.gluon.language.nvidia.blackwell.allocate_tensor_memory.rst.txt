@@ -1,0 +1,54 @@
+allocate_tensor_memory
+======================
+
+.. currentmodule:: triton.experimental.gluon.language.nvidia.blackwell
+
+.. function:: allocate_tensor_memory(element_ty, shape, layout, value=None, _semantic=None)
+
+   Allocate tensor memory on NVIDIA Blackwell GPUs.
+
+   Parameters
+   ----------
+   element_ty : dtype
+       The element data type of the tensor memory.
+   shape : Sequence[int]
+       The shape of the tensor memory descriptor.
+   layout : TensorMemoryLayout
+       The layout specification for the tensor memory.
+   value : tensor, optional
+       Initial tensor to copy into the allocated memory. Defaults to ``None``.
+   _semantic : GluonSemantic, optional
+       Internal semantic context. Do not set manually.
+
+   Returns
+   -------
+   tensor_memory_descriptor
+       Descriptor for the allocated tensor memory.
+
+   Notes
+   -----
+   This function is specific to NVIDIA Blackwell architecture (compute capability 90+).
+   Tensor memory provides high-bandwidth access for tensor operations and is distinct
+   from shared memory. Use :func:`triton.experimental.gluon.language.allocate_shared_memory`
+   for shared memory allocations.
+
+   The returned descriptor can be used with tensor memory load/store operations
+   in subsequent kernel code.
+
+   Examples
+   --------
+   .. code-block:: python
+
+      import triton.experimental.gluon as gluon
+      import triton.experimental.gluon.language as ttgl
+      from triton.experimental.gluon.language.nvidia.blackwell import allocate_tensor_memory
+      from triton.experimental.gluon.language._layouts import TensorMemoryLayout
+
+      @gluon.jit
+      def kernel():
+          # Allocate tensor memory for a 128x128 float32 tensor
+          desc = allocate_tensor_memory(
+              ttgl.float32,
+              (128, 128),
+              TensorMemoryLayout()
+          )

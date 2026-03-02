@@ -1,0 +1,42 @@
+ceil
+====
+
+Compute the ceiling of the input element-wise.
+
+Parameters
+----------
+arg0 : tensor
+    Input tensor. Must be a floating-point type (``fp32`` or ``fp64``).
+
+Returns
+-------
+tensor
+    Tensor of the same shape as ``arg0`` containing the ceiling values.
+    The output dtype matches the input dtype.
+
+Notes
+-----
+This function is CUDA-specific and wraps the NVIDIA libdevice functions
+``__nv_ceil`` (for ``fp64``) and ``__nv_ceilf`` (for ``fp32``). The ceiling
+operation rounds each element to the nearest integer not less than the input
+value (i.e., rounds toward positive infinity).
+
+This is an extern function that compiles directly to GPU machine code.
+
+Examples
+--------
+.. code-block:: python
+
+    import triton
+    import triton.language as tl
+
+    @triton.jit
+    def kernel(X_ptr, Y_ptr, BLOCK_SIZE: tl.constexpr):
+        x = tl.load(X_ptr + tl.arange(0, BLOCK_SIZE))
+        y = tl.ceil(x)
+        tl.store(Y_ptr + tl.arange(0, BLOCK_SIZE), y)
+
+    # Usage with fp32 input
+    import torch
+    x = torch.tensor([1.2, 2.7, -0.5, 3.0], dtype=torch.float32, device='cuda')
+    # Result: [2.0, 3.0, -0.0, 3.0]

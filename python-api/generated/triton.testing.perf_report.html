@@ -18,8 +18,8 @@
     <script src="../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
-    <link rel="next" title="assert_close" href="triton.testing.assert_close.html" />
-    <link rel="prev" title="Parameters" href="triton.testing.do_bench_cudagraph.html" /> 
+    <link rel="next" title="triton.testing.assert_close" href="triton.testing.assert_close.html" />
+    <link rel="prev" title="triton.testing.do_bench_cudagraph" href="triton.testing.do_bench_cudagraph.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -52,21 +52,46 @@
 <li class="toctree-l1"><a class="reference internal" href="../triton.language.html">triton.language</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="../triton.testing.html">triton.testing</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="triton.testing.Benchmark.html">class triton.testing.Benchmark</a></li>
-<li class="toctree-l2"><a class="reference internal" href="triton.testing.do_bench.html"><code class="docutils literal notranslate"><span class="pre">triton.testing.do_bench()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="triton.testing.do_bench_cudagraph.html"><code class="docutils literal notranslate"><span class="pre">triton.testing.do_bench_cudagraph()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="triton.testing.do_bench.html">do_bench</a></li>
+<li class="toctree-l2"><a class="reference internal" href="triton.testing.do_bench_cudagraph.html">triton.testing.do_bench_cudagraph</a></li>
 <li class="toctree-l2 current"><a class="current reference internal" href="#">perf_report</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#triton.testing.perf_report"><code class="docutils literal notranslate"><span class="pre">perf_report()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="#parameters">Parameters</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#returns">Returns</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#notes">Notes</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#examples">Examples</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#perf_report"><code class="docutils literal notranslate"><span class="pre">perf_report()</span></code></a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="triton.testing.assert_close.html">assert_close</a></li>
+<li class="toctree-l2"><a class="reference internal" href="triton.testing.assert_close.html">triton.testing.assert_close</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../triton.testing.html#utilities">Utilities</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../triton-semantics.html">Triton Semantics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.language.extra.cuda.html">triton.language.extra.cuda</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.language.extra.cuda.libdevice.html">triton.language.extra.cuda.libdevice</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.runtime.html">triton.runtime</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.tools.html">triton.tools</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Gluon (Experimental) API</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.html">triton.experimental.gluon</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.html">triton.experimental.gluon.language</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.nvidia.ampere.html">triton.experimental.gluon.language.nvidia.ampere</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.nvidia.ampere.async_copy.html">triton.experimental.gluon.language.nvidia.ampere.async_copy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.nvidia.ampere.mbarrier.html">triton.experimental.gluon.language.nvidia.ampere.mbarrier</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.nvidia.hopper.html">triton.experimental.gluon.language.nvidia.hopper</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.nvidia.hopper.tma.html">triton.experimental.gluon.language.nvidia.hopper.tma</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.nvidia.hopper.mbarrier.html">triton.experimental.gluon.language.nvidia.hopper.mbarrier</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.nvidia.hopper.cluster.html">triton.experimental.gluon.language.nvidia.hopper.cluster</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.nvidia.blackwell.html">triton.experimental.gluon.language.nvidia.blackwell</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.nvidia.blackwell.tma.html">triton.experimental.gluon.language.nvidia.blackwell.tma</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.nvidia.blackwell.clc.html">triton.experimental.gluon.language.nvidia.blackwell.clc</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.amd.html">triton.experimental.gluon.language.amd</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.amd.gfx1250.html">triton.experimental.gluon.language.amd.gfx1250</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.amd.gfx1250.async_copy.html">triton.experimental.gluon.language.amd.gfx1250.async_copy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.amd.gfx1250.mbarrier.html">triton.experimental.gluon.language.amd.gfx1250.mbarrier</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.amd.gfx1250.cluster.html">triton.experimental.gluon.language.amd.gfx1250.cluster</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.amd.gfx1250.tdm.html">triton.experimental.gluon.language.amd.gfx1250.tdm</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.amd.cdna3.html">triton.experimental.gluon.language.amd.cdna3</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.amd.cdna4.html">triton.experimental.gluon.language.amd.cdna4</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.amd.rdna3.html">triton.experimental.gluon.language.amd.rdna3</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.amd.rdna4.html">triton.experimental.gluon.language.amd.rdna4</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Triton MLIR Dialects</span></p>
 <ul>
@@ -107,87 +132,82 @@
   <section id="perf-report">
 <h1>perf_report<a class="headerlink" href="#perf-report" title="Link to this heading">¶</a></h1>
 <dl class="py function">
-<dt class="sig sig-object py" id="triton.testing.perf_report">
-<span class="sig-prename descclassname"><span class="pre">triton.testing.</span></span><span class="sig-name descname"><span class="pre">perf_report</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">benchmarks</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#triton.testing.perf_report" title="Link to this definition">¶</a></dt>
-<dd><p>Mark a function for benchmarking. The benchmark can then be executed by using the <code class="code docutils literal notranslate"><span class="pre">.run</span></code> method on the return value.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>benchmarks</strong> (List of <code class="xref py py-class docutils literal notranslate"><span class="pre">Benchmark</span></code>) – Benchmarking configurations.</p>
-</dd>
-</dl>
-</dd></dl>
-
-<p>Decorator that marks a function for benchmarking using the provided <code class="xref py py-class docutils literal notranslate"><span class="pre">Benchmark</span></code> configurations.
-The returned object exposes a <code class="xref py py-meth docutils literal notranslate"><span class="pre">run()</span></code> method to execute the benchmarks, generate performance plots,
-and export results to CSV.</p>
+<dt class="sig sig-object py" id="perf_report">
+<span class="sig-name descname"><span class="pre">perf_report</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">benchmarks</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#perf_report" title="Link to this definition">¶</a></dt>
+<dd><p>Mark a function for benchmarking.</p>
+<p>Decorator that wraps a function with benchmarking configurations. The
+returned object provides a <code class="code docutils literal notranslate"><span class="pre">.run</span></code> method to execute the benchmarks
+and generate performance reports with plots and data.</p>
 <section id="parameters">
 <h2>Parameters<a class="headerlink" href="#parameters" title="Link to this heading">¶</a></h2>
-<dl>
-<dt>benchmarks<span class="classifier"><code class="xref py py-class docutils literal notranslate"><span class="pre">Benchmark</span></code> or list of <code class="xref py py-class docutils literal notranslate"><span class="pre">Benchmark</span></code></span></dt><dd><p>Benchmarking configurations defining the parameters to sweep (x-axis),
-the line arguments (series), and plot metadata.</p>
+<dl class="simple">
+<dt>benchmarks<span class="classifier">Benchmark or list of Benchmark</span></dt><dd><p>Benchmarking configurations. Can be a single <code class="xref py py-class docutils literal notranslate"><span class="pre">Benchmark</span></code>
+instance or a list of <code class="xref py py-class docutils literal notranslate"><span class="pre">Benchmark</span></code> instances defining the
+parameters to sweep during benchmarking.</p>
 </dd>
 </dl>
 </section>
 <section id="returns">
 <h2>Returns<a class="headerlink" href="#returns" title="Link to this heading">¶</a></h2>
 <dl class="simple">
-<dt>callable</dt><dd><p>A decorator wrapper. When applied to a benchmark target function, it returns
-a <code class="xref py py-class docutils literal notranslate"><span class="pre">Mark</span></code> object containing the function and configurations.</p>
+<dt>wrapper<span class="classifier">callable</span></dt><dd><p>A decorator function that wraps the target benchmark function. The
+wrapped function returns a <code class="xref py py-class docutils literal notranslate"><span class="pre">Mark</span></code> object with a <code class="code docutils literal notranslate"><span class="pre">run</span></code>
+method to execute the benchmarks.</p>
 </dd>
 </dl>
 </section>
 <section id="notes">
 <h2>Notes<a class="headerlink" href="#notes" title="Link to this heading">¶</a></h2>
-<p>The decorated function must accept arguments corresponding to the <code class="docutils literal notranslate"><span class="pre">x_names</span></code>
-and <code class="docutils literal notranslate"><span class="pre">line_arg</span></code> defined in the <code class="xref py py-class docutils literal notranslate"><span class="pre">Benchmark</span></code> objects. The function should
-return execution time metrics (typically mean, min, and max).</p>
-<p>Calling <code class="xref py py-meth docutils literal notranslate"><span class="pre">Mark.run()</span></code> executes the kernel for each configuration combination,
-measures latency using <a class="reference internal" href="triton.testing.do_bench.html#triton.testing.do_bench" title="triton.testing.do_bench"><code class="xref py py-func docutils literal notranslate"><span class="pre">do_bench()</span></code></a>, and optionally saves plots and data
-if <code class="docutils literal notranslate"><span class="pre">save_path</span></code> is provided.</p>
+<p>The benchmark function should accept the parameters defined in
+<code class="code docutils literal notranslate"><span class="pre">benchmarks</span></code> (x_names, line_arg, and args). The function should
+return timing measurements, typically from <code class="xref py py-func docutils literal notranslate"><span class="pre">do_bench()</span></code> or
+<a class="reference internal" href="triton.testing.do_bench_cudagraph.html#do_bench_cudagraph" title="do_bench_cudagraph"><code class="xref py py-func docutils literal notranslate"><span class="pre">do_bench_cudagraph()</span></code></a>.</p>
+<p>The <code class="code docutils literal notranslate"><span class="pre">run</span></code> method supports the following options:</p>
+<ul class="simple">
+<li><p><code class="code docutils literal notranslate"><span class="pre">show_plots</span></code> : Display matplotlib plots</p></li>
+<li><p><code class="code docutils literal notranslate"><span class="pre">print_data</span></code> : Print benchmark results to stdout</p></li>
+<li><p><code class="code docutils literal notranslate"><span class="pre">save_path</span></code> : Directory to save plots and CSV data</p></li>
+<li><p><code class="code docutils literal notranslate"><span class="pre">return_df</span></code> : Return pandas DataFrame with results</p></li>
+</ul>
 </section>
 <section id="examples">
 <h2>Examples<a class="headerlink" href="#examples" title="Link to this heading">¶</a></h2>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">triton</span>
-<span class="kn">import</span><span class="w"> </span><span class="nn">triton.testing</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">tt</span>
-
-<span class="c1"># Define benchmark configuration</span>
-<span class="n">bench</span> <span class="o">=</span> <span class="n">tt</span><span class="o">.</span><span class="n">Benchmark</span><span class="p">(</span>
-    <span class="n">x_names</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;SIZE&#39;</span><span class="p">],</span>
-    <span class="n">x_vals</span><span class="o">=</span><span class="p">[</span><span class="mi">2</span><span class="o">**</span><span class="n">i</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">20</span><span class="p">)],</span>
-    <span class="n">line_arg</span><span class="o">=</span><span class="s1">&#39;provider&#39;</span><span class="p">,</span>
-    <span class="n">line_vals</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;triton&#39;</span><span class="p">,</span> <span class="s1">&#39;torch&#39;</span><span class="p">],</span>
-    <span class="n">line_names</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;Triton&#39;</span><span class="p">,</span> <span class="s1">&#39;PyTorch&#39;</span><span class="p">],</span>
-    <span class="n">plot_name</span><span class="o">=</span><span class="s1">&#39;vector-add&#39;</span><span class="p">,</span>
-    <span class="n">args</span><span class="o">=</span><span class="p">{},</span>
-    <span class="n">xlabel</span><span class="o">=</span><span class="s1">&#39;Vector Size&#39;</span><span class="p">,</span>
-    <span class="n">ylabel</span><span class="o">=</span><span class="s1">&#39;GB/s&#39;</span><span class="p">,</span>
-<span class="p">)</span>
-
-<span class="nd">@tt</span><span class="o">.</span><span class="n">perf_report</span><span class="p">(</span><span class="n">bench</span><span class="p">)</span>
-<span class="k">def</span><span class="w"> </span><span class="nf">benchmark</span><span class="p">(</span><span class="n">SIZE</span><span class="p">,</span> <span class="n">provider</span><span class="p">):</span>
-    <span class="c1"># Setup tensors</span>
-    <span class="n">x</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="n">SIZE</span><span class="p">,</span> <span class="n">device</span><span class="o">=</span><span class="s1">&#39;cuda&#39;</span><span class="p">)</span>
-    <span class="n">y</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="n">SIZE</span><span class="p">,</span> <span class="n">device</span><span class="o">=</span><span class="s1">&#39;cuda&#39;</span><span class="p">)</span>
-    <span class="k">if</span> <span class="n">provider</span> <span class="o">==</span> <span class="s1">&#39;triton&#39;</span><span class="p">:</span>
-        <span class="c1"># Call triton kernel</span>
-        <span class="k">return</span> <span class="n">triton_kernel</span><span class="p">[</span><span class="n">x</span><span class="o">.</span><span class="n">stride</span><span class="p">(</span><span class="mi">0</span><span class="p">)](</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">SIZE</span><span class="p">)</span>
-    <span class="k">else</span><span class="p">:</span>
-        <span class="c1"># Call torch operator</span>
-        <span class="k">return</span> <span class="n">x</span> <span class="o">+</span> <span class="n">y</span>
-
-<span class="c1"># Execute benchmarks and save results</span>
-<span class="n">benchmark</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">save_path</span><span class="o">=</span><span class="s1">&#39;.&#39;</span><span class="p">,</span> <span class="n">show_plots</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span><span class="w"> </span><span class="nn">triton</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span><span class="w"> </span><span class="nn">triton.testing</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">tt</span>
+<span class="gp">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># Define benchmark configuration</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">benchmark</span> <span class="o">=</span> <span class="n">tt</span><span class="o">.</span><span class="n">Benchmark</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="n">x_names</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;size&#39;</span><span class="p">],</span>
+<span class="gp">... </span>    <span class="n">x_vals</span><span class="o">=</span><span class="p">[</span><span class="mi">2</span><span class="o">**</span><span class="n">i</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">20</span><span class="p">)],</span>
+<span class="gp">... </span>    <span class="n">line_arg</span><span class="o">=</span><span class="s1">&#39;provider&#39;</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">line_vals</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;triton&#39;</span><span class="p">,</span> <span class="s1">&#39;torch&#39;</span><span class="p">],</span>
+<span class="gp">... </span>    <span class="n">line_names</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;Triton&#39;</span><span class="p">,</span> <span class="s1">&#39;PyTorch&#39;</span><span class="p">],</span>
+<span class="gp">... </span>    <span class="n">plot_name</span><span class="o">=</span><span class="s1">&#39;vector-add-performance&#39;</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">args</span><span class="o">=</span><span class="p">{},</span>
+<span class="gp">... </span>    <span class="n">ylabel</span><span class="o">=</span><span class="s1">&#39;GB/s&#39;</span><span class="p">,</span>
+<span class="gp">... </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># Mark function for benchmarking</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nd">@triton</span><span class="o">.</span><span class="n">testing</span><span class="o">.</span><span class="n">perf_report</span><span class="p">(</span><span class="n">benchmark</span><span class="p">)</span>
+<span class="gp">... </span><span class="k">def</span><span class="w"> </span><span class="nf">benchmark_kernel</span><span class="p">(</span><span class="n">size</span><span class="p">,</span> <span class="n">provider</span><span class="p">):</span>
+<span class="gp">... </span>    <span class="c1"># Benchmark implementation</span>
+<span class="gp">... </span>    <span class="k">return</span> <span class="n">tt</span><span class="o">.</span><span class="n">do_bench</span><span class="p">(</span><span class="k">lambda</span><span class="p">:</span> <span class="n">kernel_fn</span><span class="p">(</span><span class="n">size</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># Run benchmarks and save results</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">benchmark_kernel</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">save_path</span><span class="o">=</span><span class="s1">&#39;results&#39;</span><span class="p">,</span> <span class="n">print_data</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </pre></div>
 </div>
 </section>
+</dd></dl>
+
 </section>
 
 
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="triton.testing.do_bench_cudagraph.html" class="btn btn-neutral float-left" title="Parameters" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="triton.testing.assert_close.html" class="btn btn-neutral float-right" title="assert_close" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="triton.testing.do_bench_cudagraph.html" class="btn btn-neutral float-left" title="triton.testing.do_bench_cudagraph" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="triton.testing.assert_close.html" class="btn btn-neutral float-right" title="triton.testing.assert_close" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>

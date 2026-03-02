@@ -1,0 +1,47 @@
+fdiv
+====
+
+.. currentmodule:: triton.experimental.gluon.language
+
+.. autofunction:: fdiv
+
+Computes the element-wise fast division of :code:`x` and :code:`y`.
+
+Parameters
+----------
+x : Block
+    The dividend input values.
+y : Block
+    The divisor input values.
+ieee_rounding : bool, optional
+    If True, use IEEE rounding mode. Default is False (fast division).
+
+Returns
+-------
+Block
+    A tensor containing the element-wise division result :code:`x / y`.
+
+Notes
+-----
+Fast division may have reduced precision compared to standard IEEE 754
+division. Set :code:`ieee_rounding=True` for IEEE-compliant behavior at
+the cost of performance.
+
+Examples
+--------
+.. code-block:: python
+
+    import triton.experimental.gluon as gluon
+    import triton.experimental.gluon.language as ttgl
+
+    @gluon.jit
+    def kernel(x_ptr, y_ptr, out_ptr, BLOCK_SIZE: ttgl.constexpr):
+        pid = ttgl.program_id(0)
+        offs = pid * BLOCK_SIZE + ttgl.arange(0, BLOCK_SIZE)
+        x = ttgl.load(x_ptr + offs)
+        y = ttgl.load(y_ptr + offs)
+        # Fast division (default)
+        result = ttgl.fdiv(x, y)
+        # IEEE-compliant division
+        result_ieee = ttgl.fdiv(x, y, ieee_rounding=True)
+        ttgl.store(out_ptr + offs, result)

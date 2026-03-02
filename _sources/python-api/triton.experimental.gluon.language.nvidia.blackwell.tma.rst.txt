@@ -1,0 +1,20 @@
+triton.experimental.gluon.language.nvidia.blackwell.tma
+=======================================================
+
+.. currentmodule:: triton.experimental.gluon.language.nvidia.blackwell.tma
+
+TMA
+---
+
+.. autosummary::
+    :toctree: generated
+    :nosignatures:
+
+    async_copy_global_to_shared
+    async_copy_shared_to_global
+    async_gather
+    async_scatter
+    make_tensor_descriptor
+    store_wait
+    tensor_descriptor
+    tensor_descriptor_type

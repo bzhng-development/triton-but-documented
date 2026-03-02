@@ -1,0 +1,40 @@
+ll2double_rd
+============
+
+Convert 64-bit signed integer to double-precision floating point with round-down rounding.
+
+Parameters
+----------
+arg0 : tensor of int64
+    Input 64-bit signed integer value(s) to convert.
+_semantic : optional
+    Internal semantic parameter (do not pass manually).
+
+Returns
+-------
+tensor of fp64
+    Double-precision floating point representation of the input integer(s).
+
+Notes
+-----
+This function wraps the CUDA libdevice function ``__nv_ll2double_rd`` which
+converts a 64-bit signed integer to a double-precision floating point value
+using round-down (toward negative infinity) rounding mode.
+
+This is an external elementwise operation that is pure (no side effects).
+The function is typically used within :code:`@triton.jit` decorated kernel
+functions.
+
+Examples
+--------
+.. code-block:: python
+
+    import triton
+    import triton.language as tl
+
+    @triton.jit
+    def convert_kernel(int_ptr, float_ptr, BLOCK_SIZE: tl.constexpr):
+        offsets = tl.arange(0, BLOCK_SIZE)
+        int_vals = tl.load(int_ptr + offsets)
+        float_vals = tl.extra.cuda.libdevice.ll2double_rd(int_vals)
+        tl.store(float_ptr + offsets, float_vals)

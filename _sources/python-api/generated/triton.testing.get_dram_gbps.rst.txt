@@ -1,45 +1,37 @@
-get_dram_gbps
-=============
+triton.testing.get_dram_gbps
+============================
 
-.. currentmodule:: triton.testing
+.. function:: get_dram_gbps(device=None)
 
-.. autofunction:: get_dram_gbps
+   Return the DRAM bandwidth in GB/s for a GPU device.
 
-Return the theoretical DRAM bandwidth of the active GPU device in gigabytes per second (GB/s).
+   Parameters
+   ----------
+   device : int, optional
+       Device index to query. If ``None``, uses the currently active device.
 
-The bandwidth is calculated using the device's memory clock rate and memory bus width, assuming a double data rate (DDR) interface.
+   Returns
+   -------
+   bw_gbps : float
+       DRAM bandwidth in gigabytes per second (GB/s).
 
-Parameters
-----------
-device : int, optional
-    The CUDA device ID to query. If ``None``, the currently active device is used.
+   Notes
+   -----
+   The bandwidth is calculated from device properties using the formula:
 
-Returns
--------
-bw_gbps : float
-    The peak DRAM bandwidth in GB/s.
+   .. math::
 
-Notes
------
-The calculation follows the formula:
+      \text{BW} = \frac{\text{mem\_clock\_khz} \times \text{bus\_width} \times 2}{10^6 \times 8}
 
-.. math::
+   where ``mem_clock_rate`` is in kHz and ``mem_bus_width`` is in bits.
 
-   \text{Bandwidth (GB/s)} = \frac{\text{Memory Clock (kHz)} \times \text{Bus Width} \times 2}{10^6 \times 8}
+   Examples
+   --------
+   >>> import triton.testing as tt
+   >>> bw = tt.get_dram_gbps()
+   >>> print(f"DRAM bandwidth: {bw:.2f} GB/s")
+   DRAM bandwidth: 1935.00 GB/s
 
-where the factor of 2 accounts for double data rate (DDR) signaling, and division by 8 converts bits to bytes.
+   Specify a device index:
 
-Examples
---------
-.. code-block:: python
-
-    import triton
-    import triton.testing
-
-    # Get DRAM bandwidth for the current active device
-    bandwidth = triton.testing.get_dram_gbps()
-    print(f"Peak DRAM Bandwidth: {bandwidth:.2f} GB/s")
-
-    # Get DRAM bandwidth for a specific device (e.g., device 1)
-    bandwidth_dev1 = triton.testing.get_dram_gbps(device=1)
-    print(f"Device 1 Bandwidth: {bandwidth_dev1:.2f} GB/s")
+   >>> bw = tt.get_dram_gbps(device=0)

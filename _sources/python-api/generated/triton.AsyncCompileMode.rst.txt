@@ -1,77 +1,66 @@
 AsyncCompileMode
 ================
 
-Context manager for enabling asynchronous kernel compilation in Triton.
+.. class:: triton.AsyncCompileMode(executor, *, ignore_errors=False)
 
-This class manages a pool of compilation tasks submitted to a concurrent
-executor, allowing kernels to be compiled in the background while the
-main program continues execution. It ensures that all pending compilations
-are finalized upon exiting the context.
+   Context manager for managing asynchronous kernel compilation.
 
-Parameters
-----------
-executor : concurrent.futures.Executor
-    The executor instance (e.g., ``ThreadPoolExecutor`` or
-    ``ProcessPoolExecutor``) used to submit compilation tasks.
-ignore_errors : bool, optional
-    If ``True``, exceptions raised during compilation are suppressed
-    and ``None`` is returned for failed kernels. If ``False`` (default),
-    exceptions are re-raised. Default is ``False``.
+   Submits compilation tasks to a concurrent executor and ensures all
+   outstanding futures are finalized upon exiting the context. Only one
+   instance may be active within a given context scope.
 
-Attributes
-----------
-executor : concurrent.futures.Executor
-    The underlying executor managing worker threads/processes.
-ignore_errors : bool
-    Flag indicating whether compilation errors should be ignored.
-raw_futures : list
-    Internal list of raw ``Future`` objects submitted to the executor.
-future_kernels : dict
-    Mapping from compilation keys to ``FutureKernel`` wrapper objects.
+   Parameters
+   ----------
+   executor : concurrent.futures.Executor
+       The executor used to submit compilation tasks asynchronously.
+   ignore_errors : bool, optional
+       If True, exceptions raised during compilation are suppressed and
+       ``None`` is returned instead of raising. Default is False.
 
-Methods
--------
-submit(key, compile_fn, finalize_fn)
-    Submit a compilation task if not already pending for the given key.
-    Returns a ``FutureKernel`` proxy that behaves like the compiled kernel.
+   Methods
+   -------
+   submit(key, compile_fn, finalize_fn)
+       Submit a compilation task to the executor.
 
-Notes
------
-Only one ``AsyncCompileMode`` can be active per context at a time.
-Attempting to enter a nested context while one is already active raises
-a ``RuntimeError``.
+   Raises
+   ------
+   RuntimeError
+       If entering a context while another ``AsyncCompileMode`` is already
+       active in the same scope.
 
-The ``FutureKernel`` objects returned by ``submit`` transparently delegate
-attribute access to the underlying compiled kernel, allowing users to
-interact with them as if they were already compiled.
+   .. method:: submit(key, compile_fn, finalize_fn)
 
-Examples
---------
-.. code-block:: python
+      Submit a kernel compilation task for asynchronous execution.
 
-    from concurrent.futures import ThreadPoolExecutor
-    import triton
-    from triton.runtime import AsyncCompileMode
+      Parameters
+      ----------
+      key : hashable
+           Unique identifier for the compilation task. Used to deduplicate
+           concurrent submissions for the same key.
+      compile_fn : Callable
+           Function that performs the compilation and returns the kernel.
+      finalize_fn : Callable
+           Function called with the compiled kernel result upon completion.
 
-    def my_compile_fn():
-        # Simulate expensive compilation
-        return "compiled_kernel_object"
+      Returns
+      -------
+      FutureKernel
+           A wrapper object that resolves to the compiled kernel. Attribute
+           access is deferred to the underlying kernel upon resolution.
 
-    def my_finalize_fn(kernel):
-        # Post-processing step
-        pass
+   Examples
+   --------
+   .. code-block:: python
 
-    with ThreadPoolExecutor(max_workers=4) as executor:
-        with AsyncCompileMode(executor) as mode:
-            # Submit compilation asynchronously
-            kernel_proxy = mode.submit(
-                key="my_kernel",
-                compile_fn=my_compile_fn,
-                finalize_fn=my_finalize_fn
-            )
+      from concurrent.futures import ThreadPoolExecutor
+      from triton.runtime import AsyncCompileMode
 
-            # Use proxy immediately; blocks only if result is needed
-            # and compilation is not yet complete
-            print(kernel_proxy)  # Triggers wait if necessary
-
-    # All pending compilations are finalized automatically on exit
+      with ThreadPoolExecutor() as executor:
+          with AsyncCompileMode(executor) as mode:
+              future_kernel = mode.submit(
+                  key="my_kernel",
+                  compile_fn=compile_my_kernel,
+                  finalize_fn=finalize_my_kernel
+              )
+              # Kernel is accessible after context exits
+              kernel = future_kernel.result()

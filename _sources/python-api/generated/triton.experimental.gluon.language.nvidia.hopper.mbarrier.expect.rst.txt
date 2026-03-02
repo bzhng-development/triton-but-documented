@@ -1,0 +1,55 @@
+expect
+======
+
+Expect a specific number of bytes to be copied before signaling the mbarrier.
+
+When the expected byte count is reached, the barrier is automatically signaled,
+allowing synchronization between asynchronous copy operations and compute.
+
+Parameters
+----------
+mbarrier : shared_memory_descriptor
+    Barrier that will be signaled when the expected byte count is reached.
+    Must be a shared memory descriptor allocated for mbarrier use.
+bytes_per_cta : int, optional
+    Expected byte count per CTA (Cooperative Thread Array). If None,
+    uses a default value determined by the backend.
+pred : bool, optional
+    Scalar predicate controlling execution. Operation is skipped if
+    predicate is False. Defaults to True.
+
+Returns
+-------
+None
+    This function operates via side effects on the mbarrier state.
+
+Notes
+-----
+This function is specific to NVIDIA Hopper architecture and requires Gluon JIT
+context. The ``_semantic`` parameter is automatically provided by the Gluon JIT
+infrastructure and should not be passed by users.
+
+The mbarrier must be properly allocated before calling this function. The
+byte count represents the total expected transfers across all participating
+warps in the CTA.
+
+Examples
+--------
+.. code-block:: python
+
+    import triton.experimental.gluon as gluon
+    import triton.experimental.gluon.language as ttgl
+    from triton.experimental.gluon.language.nvidia.hopper import mbarrier
+
+    @gluon.jit
+    def kernel(...):
+        # Allocate shared memory for mbarrier
+        mb = mbarrier.alloc(shape=[1], dtype=ttgl.uint64)
+        
+        # Expect 256 bytes to be copied via TMA
+        mbarrier.expect(mb, bytes_per_cta=256)
+        
+        # ... initiate async copy operations ...
+        
+        # Wait until the expected bytes are copied
+        mbarrier.wait(mb, 0)

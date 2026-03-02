@@ -1,0 +1,45 @@
+triton.language.extra.cuda.libdevice.finitef
+=============================================
+
+.. currentmodule:: triton.language.extra.cuda.libdevice
+
+.. function:: finitef(arg0, _semantic=None)
+
+    Test whether a floating-point value is finite.
+
+    Returns 1 if :code:`arg0` is finite (not infinity or NaN), and 0 otherwise.
+    This function wraps the CUDA libdevice function :code:`__nv_finitef`.
+
+    Parameters
+    ----------
+    arg0 : tl.tensor
+        Input tensor of floating-point values (fp32).
+    _semantic : optional
+        Internal semantic argument; do not set manually.
+
+    Returns
+    -------
+    result : tl.tensor
+        Tensor of int1 (boolean) values. Each element is 1 if the corresponding
+        input element is finite, and 0 otherwise.
+
+    Notes
+    -----
+    This function is pure (has no side effects) and operates elementwise on
+    the input tensor. It is typically used within :code:`@triton.jit` decorated
+    kernel functions.
+
+    Examples
+    --------
+    .. code-block:: python
+
+        import triton
+        import triton.language as tl
+
+        @triton.jit
+        def kernel(x_ptr, out_ptr, BLOCK_SIZE: tl.constexpr):
+            offsets = tl.arange(0, BLOCK_SIZE)
+            x = tl.load(x_ptr + offsets)
+            # Check if values are finite
+            is_finite = tl.extra.cuda.libdevice.finitef(x)
+            tl.store(out_ptr + offsets, is_finite)

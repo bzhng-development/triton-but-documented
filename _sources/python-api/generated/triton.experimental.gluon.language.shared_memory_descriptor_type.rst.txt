@@ -1,0 +1,70 @@
+shared_memory_descriptor_type
+=============================
+
+.. currentmodule:: triton.experimental.gluon.language
+
+.. class:: shared_memory_descriptor_type(element_ty, shape, layout, alloc_shape)
+
+   Type descriptor for shared memory allocations in Gluon IR.
+
+   Represents the type of a shared memory descriptor, specifying the element
+   data type, logical shape, shared memory layout, and physical allocation
+   shape. This type is used to statically describe shared memory regions for
+   explicit GPU memory management.
+
+   Parameters
+   ----------
+   element_ty : dtype
+       The element data type stored in shared memory (e.g., ``float16``,
+       ``int32``).
+   shape : Sequence[int]
+       The logical dimensions of the shared memory region.
+   layout : SharedLayout
+       The shared memory layout describing how elements are distributed
+       across memory banks. Must be an instance of ``SharedLayout``.
+   alloc_shape : Sequence[int]
+       The physical allocation shape, which may differ from the logical
+       shape to accommodate padding or swizzling.
+
+   Attributes
+   ----------
+   element_ty : dtype
+       The element data type.
+   shape : Tuple[int, ...]
+       The logical shape of the shared memory region.
+   layout : SharedLayout
+       The shared memory layout.
+   alloc_shape : Tuple[int, ...]
+       The physical allocation shape.
+
+   Notes
+   -----
+   The ``layout`` parameter must be a ``SharedLayout`` instance (e.g.,
+   ``BlockedLayout``, ``CoalescedLayout``). The ``alloc_shape`` may be
+   larger than ``shape`` to accommodate hardware requirements such as
+   bank conflict avoidance or TMA swizzling.
+
+   This type is typically constructed via ``allocate_shared_memory`` and
+   used to type-check shared memory operations.
+
+   Examples
+   --------
+   >>> import triton.experimental.gluon as gluon
+   >>> import triton.experimental.gluon.language as ttgl
+   >>> from triton.experimental.gluon.language._layouts import BlockedLayout
+   >>>
+   >>> @gluon.jit
+   >>> def kernel():
+   ...     layout = BlockedLayout([1, 32], [128, 128], [4, 1], [1, 1])
+   ...     smem_ty = ttgl.shared_memory_descriptor_type(
+   ...         element_ty=ttgl.float16,
+   ...         shape=[128, 128],
+   ...         layout=layout,
+   ...         alloc_shape=[128, 128]
+   ...     )
+   ...     # Use smem_ty for type annotations or static checks
+
+   See Also
+   --------
+   allocate_shared_memory : Allocate shared memory with given type.
+   shared_memory_descriptor : Runtime handle to shared memory allocation.

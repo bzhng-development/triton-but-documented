@@ -1,0 +1,83 @@
+triton.experimental.gluon.language.amd.gfx1250.wmma
+==================================================
+
+.. currentmodule:: triton.experimental.gluon.language.amd.gfx1250
+
+.. function:: wmma(a, b, acc, _semantic=None)
+
+   Computes matrix multiplication of :code:`a @ b + acc` using the AMD WMMA instruction.
+
+   Performs a warp-level matrix multiply-accumulate operation on AMD GFX1250 (RDNA4)
+   GPUs. This is a hardware-specific intrinsic that provides accelerated matrix
+   multiplication for supported data types.
+
+   Parameters
+   ----------
+   a : tensor
+      The first operand tensor to be multiplied. Must have a :code:`DotOperandLayout`
+      with operand index 0.
+   b : tensor
+      The second operand tensor to be multiplied. Must have a :code:`DotOperandLayout`
+      with operand index 1.
+   acc : tensor
+      The accumulator tensor. Must have a :code:`BlockedLayout` compatible with the
+      parent layout of operands :code:`a` and :code:`b`.
+   _semantic : GluonSemantic, optional
+      Internal semantic handler. Do not set manually; this is provided automatically
+      by the :code:`@gluon.jit` decorator.
+
+   Returns
+   -------
+   tensor
+      A tensor containing the result of the matrix multiply-accumulate operation
+      :code:`a @ b + acc`. Has the same shape and type as :code:`acc`.
+
+   Notes
+   -----
+   This function is specific to AMD GFX1250 (RDNA4) architecture. The operands must
+   satisfy layout constraints:
+
+   - :code:`a` must have a :code:`DotOperandLayout` with operand index 0
+   - :code:`b` must have a :code:`DotOperandLayout` with operand index 1
+   - :code:`acc` must have a :code:`BlockedLayout` that is the parent layout of both
+     operands
+   - All tensors must have matching batch dimensions (2D or 3D)
+
+   The WMMA instruction provides hardware-accelerated matrix multiplication for
+   specific data type combinations (e.g., FP16, INT8, BF16 depending on GPU
+   capabilities).
+
+   Examples
+   --------
+   .. code-block:: python
+
+      import triton.experimental.gluon as gluon
+      import triton.experimental.gluon.language as ttgl
+      from triton.experimental.gluon.language.amd import gfx1250
+
+      @gluon.jit
+      def matmul_kernel(a_ptr, b_ptr, c_ptr, M, N, K):
+          # Program ID
+          pid = ttgl.program_id(0)
+
+          # Define block sizes
+          BLOCK_M = 64
+          BLOCK_N = 64
+          BLOCK_K = 32
+
+          # Compute starting positions
+          m = pid * BLOCK_M
+          n = 0
+
+          # Allocate accumulators
+          acc = ttgl.full((BLOCK_M, BLOCK_N), 0.0, dtype=ttgl.float16)
+
+          # Load tiles from global memory
+          a = ttgl.load(a_ptr + m * K + ttgl.arange(0, BLOCK_K)[:, None])
+          b = ttgl.load(b_ptr + ttgl.arange(0, BLOCK_K)[None, :] * N)
+
+          # Perform WMMA operation
+          result = gfx1250.wmma(a, b, acc)
+
+          # Store result
+          ttgl.store(c_ptr + m * N, result)

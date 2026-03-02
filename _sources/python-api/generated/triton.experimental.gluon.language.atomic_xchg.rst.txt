@@ -1,0 +1,70 @@
+atomic_xchg
+=============
+
+.. currentmodule:: triton.experimental.gluon.language
+
+.. function:: atomic_xchg(pointer, val, mask=None, sem=None, scope=None, _semantic=None)
+
+   Perform an atomic exchange at the specified memory location.
+
+   Atomically exchanges the value at ``pointer`` with ``val`` and returns the
+   original value stored at ``pointer`` before the operation.
+
+   Parameters
+   ----------
+   pointer : tensor of pointer type
+       The memory location(s) to operate on. Must be a block of pointer type.
+   val : tensor
+       The value(s) to exchange with the memory location. Must have the same
+       element dtype as ``pointer``.
+   mask : tensor, optional
+       Boolean tensor indicating which threads participate in the atomic
+       operation. If None, all threads participate.
+   sem : str, optional
+       Memory semantics for the operation. Acceptable values are "acquire",
+       "release", "acq_rel" (ACQUIRE_RELEASE), or "relaxed". Defaults to
+       "acq_rel".
+   scope : str, optional
+       Scope of threads that observe the synchronizing effect. Acceptable
+       values are "gpu" (default), "cta" (cooperative thread array), or "sys"
+       (SYSTEM).
+
+   Returns
+   -------
+   tensor
+       The value stored at ``pointer`` before the atomic exchange operation.
+       Has the same dtype and shape as ``val``.
+
+   Notes
+   -----
+   This function can be called as a standalone function or as a member function
+   on a tensor object. When used as a member function, call as
+   ``x.atomic_xchg(...)`` instead of ``atomic_xchg(x, ...)``.
+
+   The operation is atomic across all participating threads. Only threads where
+   ``mask`` is True (or all threads if ``mask`` is None) will perform the
+   exchange.
+
+   Examples
+   --------
+   .. code-block:: python
+
+      import triton.experimental.gluon as gluon
+      import triton.experimental.gluon.language as ttgl
+
+      @gluon.jit
+      def kernel(ptr, val):
+          # Atomic exchange: swap memory value with val, return old value
+          old_val = ttgl.atomic_xchg(ptr, val)
+          # old_val now contains the value that was in memory before the swap
+          # memory now contains val
+
+      @gluon.jit
+      def kernel_with_mask(ptr, val, mask):
+          # Only threads where mask is True will perform the exchange
+          old_val = ttgl.atomic_xchg(ptr, val, mask=mask)
+
+      @gluon.jit
+      def kernel_member_fn(tensor_ptr, val):
+          # Can also be called as a member function
+          old_val = tensor_ptr.atomic_xchg(val)

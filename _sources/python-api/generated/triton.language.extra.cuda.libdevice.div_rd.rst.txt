@@ -1,0 +1,45 @@
+div_rd
+======
+
+.. currentmodule:: triton.language.extra.cuda.libdevice
+
+.. function:: div_rd(arg0, arg1, _semantic=None)
+
+    Divide arg0 by arg1 with round-down (toward negative infinity) rounding mode.
+
+    Parameters
+    ----------
+    arg0 : tl.tensor
+        The dividend. Must be floating-point type (fp32 or fp64).
+    arg1 : tl.tensor
+        The divisor. Must be floating-point type (fp32 or fp64).
+    _semantic : optional
+        Internal parameter, do not set manually.
+
+    Returns
+    -------
+    result : tl.tensor
+        The quotient arg0 / arg1 with round-down rounding mode. Same dtype as inputs.
+
+    Notes
+    -----
+    This function calls CUDA libdevice functions ``__nv_fdiv_rd`` for fp32 and
+    ``__nv_ddiv_rd`` for fp64. The rounding mode is round-down (toward negative
+    infinity), which differs from the default round-to-nearest-even mode.
+
+    Only available on CUDA targets.
+
+    Examples
+    --------
+    .. code-block:: python
+
+        import triton
+        import triton.language as tl
+
+        @triton.jit
+        def kernel(x_ptr, y_ptr, out_ptr, n):
+            pid = tl.program_id(0)
+            x = tl.load(x_ptr + pid)
+            y = tl.load(y_ptr + pid)
+            result = tl.extra.cuda.libdevice.div_rd(x, y)
+            tl.store(out_ptr + pid, result)

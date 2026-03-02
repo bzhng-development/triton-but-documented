@@ -1,0 +1,96 @@
+class tensor
+==============
+
+.. currentmodule:: triton.experimental.gluon.language
+
+.. autoclass:: tensor
+
+   Represents an N-dimensional array of values or pointers.
+
+   ``tensor`` is the fundamental data structure in Gluon programs. Most functions
+   in :py:mod:`triton.experimental.gluon.language` operate on and return tensors.
+
+   Most named member functions are duplicates of free functions in
+   :py:mod:`triton.experimental.gluon.language`. For example,
+   ``triton.experimental.gluon.language.sqrt(x)`` is equivalent to ``x.sqrt()``.
+
+   ``tensor`` defines magic/dunder methods for arithmetic and comparison operations,
+   enabling expressions like ``x + y``, ``x << 2``, ``x == y``, etc.
+
+   Parameters
+   ----------
+   handle : ir.value
+       Internal IR handle representing the tensor value.
+   type : dtype
+       Tensor type, which may be a scalar dtype or block_type with shape information.
+
+   Attributes
+   ----------
+   handle : ir.value
+       Low-level IR handle for the tensor.
+   shape : tuple[constexpr]
+       Block shape of the tensor. Empty tuple for scalars.
+   numel : constexpr
+       Total number of elements in the tensor.
+   type : dtype
+       Tensor type (can be block_type).
+   dtype : dtype
+       Scalar element type of the tensor.
+
+   Notes
+   -----
+   The ``__init__`` method is not called by user code. Tensors are typically created
+   through Gluon operations like :py:func:`arange`, :py:func:`full`, :py:func:`load`,
+   or :py:func:`make_block_ptr`.
+
+   Member functions listed in the class body are type stubs. Actual implementations
+   are added via the ``_tensor_member_fn`` decorator and forward to corresponding
+   free functions.
+
+   Supported operations include:
+
+   - Arithmetic: ``+``, ``-``, ``*``, ``/``, ``//``, ``%``, ``**``
+   - Bitwise: ``&``, ``|``, ``^``, ``<<``, ``>>``, ``~``
+   - Comparison: ``<``, ``<=``, ``>``, ``>=``, ``==``, ``!=``
+   - Unary: ``-``, ``~``, ``not``
+   - Indexing: ``__getitem__`` (limited to expand_dims operations)
+
+   Examples
+   --------
+   .. code-block:: python
+
+      import triton.experimental.gluon as gluon
+      import triton.experimental.gluon.language as ttgl
+
+      @gluon.jit
+      def kernel(x_ptr, y_ptr, BLOCK: ttgl.constexpr):
+          # Load tensor from global memory
+          x = ttgl.load(x_ptr + ttgl.arange(0, BLOCK))
+
+          # Arithmetic operations
+          y = x * 2.0 + 1.0
+
+          # Element-wise functions
+          z = ttgl.sqrt(y)
+
+          # Reduction
+          sum_z = ttgl.sum(z, axis=0)
+
+          # Store result
+          ttgl.store(y_ptr + ttgl.arange(0, BLOCK), z)
+
+   .. code-block:: python
+
+      # Tensor properties
+      @gluon.jit
+      def inspect_tensor(x: ttgl.tensor):
+          # Access dtype and shape
+          dtype = x.dtype  # e.g., ttgl.float32
+          shape = x.shape  # e.g., (16, 32)
+          numel = x.numel  # e.g., 512
+
+          # Type casting
+          x_fp16 = x.to(ttgl.float16)
+
+          # Reshaping
+          x_reshaped = x.reshape(32, 16)

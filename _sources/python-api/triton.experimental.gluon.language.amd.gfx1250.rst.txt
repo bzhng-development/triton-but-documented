@@ -1,0 +1,18 @@
+triton.experimental.gluon.language.amd.gfx1250
+==============================================
+
+.. currentmodule:: triton.experimental.gluon.language.amd.gfx1250
+
+AMD GFX1250
+-----------
+
+.. autosummary::
+    :toctree: generated
+    :nosignatures:
+
+    PartitionedSharedLayout
+    buffer_load
+    buffer_store
+    get_wmma_scale_layout
+    wmma
+    wmma_scaled

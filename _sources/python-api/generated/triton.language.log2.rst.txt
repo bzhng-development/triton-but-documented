@@ -1,36 +1,38 @@
-.. py:function:: triton.language.log2(x, _semantic=None)
+log2
+====
 
-   Computes the element-wise base-2 logarithm of the input tensor.
+log2(x, _semantic=None)
 
-   Parameters
-   ----------
-   x : tl.tensor
-       Input tensor. Must have a floating-point data type (``fp32`` or ``fp64``).
+Computes the element-wise base-2 logarithm of the input tensor.
 
-   Returns
-   -------
-   tl.tensor
-       A tensor containing the base-2 logarithm of each element in ``x``.
+Parameters
+----------
+x : tl.tensor
+    Input tensor. Must have floating-point dtype (``fp32`` or ``fp64``).
 
-   Notes
-   -----
-   This function can also be called as a member function on :py:class:`tensor`,
-   as ``x.log2()`` instead of ``tl.log2(x)``.
+Returns
+-------
+tl.tensor
+    Tensor containing the base-2 logarithm of each element in ``x``.
 
-   The operation is only defined for positive values. Behavior for zero or negative
-   inputs follows IEEE 754 semantics (returns ``-inf`` or ``NaN`` respectively).
+Notes
+-----
+This function is only supported for floating-point types (``fp32``, ``fp64``).
+The result is undefined for negative or zero input values.
 
-   Examples
-   --------
-   .. code-block:: python
+This function can also be called as a member function on :py:class:`tensor`,
+as :code:`x.log2()` instead of :code:`tl.log2(x)`.
 
-      import triton
-      import triton.language as tl
+Examples
+--------
+.. code-block:: python
 
-      @triton.jit
-      def log2_kernel(x_ptr, out_ptr, BLOCK_SIZE: tl.constexpr):
-          pid = tl.program_id(0)
-          offsets = pid * BLOCK_SIZE + tl.arange(0, BLOCK_SIZE)
-          x = tl.load(x_ptr + offsets)
-          out = tl.log2(x)
-          tl.store(out_ptr + offsets, out)
+    @triton.jit
+    def log2_kernel(in_ptr, out_ptr, n_elements, BLOCK: tl.constexpr):
+        pid = tl.program_id(axis=0)
+        block_start = pid * BLOCK
+        offsets = block_start + tl.arange(0, BLOCK)
+        mask = offsets < n_elements
+        x = tl.load(in_ptr + offsets, mask=mask)
+        y = tl.log2(x)
+        tl.store(out_ptr + offsets, y, mask=mask)

@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>dtype &mdash; Triton  documentation</title>
+  <title>class dtype &mdash; Triton  documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=03e43079" />
       <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="../../_static/css/custom.css" />
@@ -18,8 +18,8 @@
     <script src="../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
-    <link rel="next" title="Parameters" href="triton.language.pointer_type.html" />
-    <link rel="prev" title="Parameters" href="triton.language.constexpr_type.html" /> 
+    <link rel="next" title="pointer_type" href="triton.language.pointer_type.html" />
+    <link rel="prev" title="constexpr_type" href="triton.language.constexpr_type.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -51,23 +51,26 @@
 <li class="toctree-l1"><a class="reference internal" href="../triton.html">triton</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="../triton.language.html">triton.language</a><ul class="current">
 <li class="toctree-l2 current"><a class="reference internal" href="../triton.language.html#programming-model">Programming Model</a><ul class="current">
-<li class="toctree-l3"><a class="reference internal" href="triton.language.tensor.html"><code class="docutils literal notranslate"><span class="pre">triton.language.tensor</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.language.tensor.html">class triton.language.tensor</a></li>
 <li class="toctree-l3"><a class="reference internal" href="triton.language.tensor_descriptor.html">tensor_descriptor</a></li>
 <li class="toctree-l3"><a class="reference internal" href="triton.language.program_id.html">program_id</a></li>
-<li class="toctree-l3"><a class="reference internal" href="triton.language.num_programs.html">num_programs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.language.num_programs.html">triton.language.num_programs</a></li>
 <li class="toctree-l3"><a class="reference internal" href="triton.language.block_type.html">block_type</a></li>
-<li class="toctree-l3"><a class="reference internal" href="triton.language.condition.html"><code class="docutils literal notranslate"><span class="pre">triton.language.condition</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="triton.language.const.html"><code class="docutils literal notranslate"><span class="pre">triton.language.const</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="triton.language.constexpr.html">class constexpr</a></li>
-<li class="toctree-l3"><a class="reference internal" href="triton.language.constexpr_type.html"><code class="docutils literal notranslate"><span class="pre">constexpr_type</span></code></a></li>
-<li class="toctree-l3 current"><a class="current reference internal" href="#">dtype</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="#triton.language.dtype"><code class="docutils literal notranslate"><span class="pre">dtype</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.language.condition.html">class triton.language.condition</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.language.const.html">const</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.language.constexpr.html">constexpr</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.language.constexpr_type.html">constexpr_type</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">class dtype</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#parameters">Parameters</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#attributes">Attributes</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#methods">Methods</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#notes">Notes</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#examples">Examples</a></li>
 </ul>
 </li>
-<li class="toctree-l3"><a class="reference internal" href="triton.language.pointer_type.html"><code class="docutils literal notranslate"><span class="pre">pointer_type</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.language.pointer_type.html">pointer_type</a></li>
 <li class="toctree-l3"><a class="reference internal" href="triton.language.slice.html">slice</a></li>
-<li class="toctree-l3"><a class="reference internal" href="triton.language.tensor_descriptor_type.html">triton.language.tensor_descriptor_type</a></li>
-<li class="toctree-l3"><a class="reference internal" href="triton.language.tuple.html"><code class="docutils literal notranslate"><span class="pre">triton.language.tuple</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.language.tuple.html">class triton.language.tuple</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../triton.language.html#creation-ops">Creation Ops</a></li>
@@ -89,6 +92,35 @@
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../triton.testing.html">triton.testing</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../triton-semantics.html">Triton Semantics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.language.extra.cuda.html">triton.language.extra.cuda</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.language.extra.cuda.libdevice.html">triton.language.extra.cuda.libdevice</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.runtime.html">triton.runtime</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.tools.html">triton.tools</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Gluon (Experimental) API</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.html">triton.experimental.gluon</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.html">triton.experimental.gluon.language</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.nvidia.ampere.html">triton.experimental.gluon.language.nvidia.ampere</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.nvidia.ampere.async_copy.html">triton.experimental.gluon.language.nvidia.ampere.async_copy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.nvidia.ampere.mbarrier.html">triton.experimental.gluon.language.nvidia.ampere.mbarrier</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.nvidia.hopper.html">triton.experimental.gluon.language.nvidia.hopper</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.nvidia.hopper.tma.html">triton.experimental.gluon.language.nvidia.hopper.tma</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.nvidia.hopper.mbarrier.html">triton.experimental.gluon.language.nvidia.hopper.mbarrier</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.nvidia.hopper.cluster.html">triton.experimental.gluon.language.nvidia.hopper.cluster</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.nvidia.blackwell.html">triton.experimental.gluon.language.nvidia.blackwell</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.nvidia.blackwell.tma.html">triton.experimental.gluon.language.nvidia.blackwell.tma</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.nvidia.blackwell.clc.html">triton.experimental.gluon.language.nvidia.blackwell.clc</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.amd.html">triton.experimental.gluon.language.amd</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.amd.gfx1250.html">triton.experimental.gluon.language.amd.gfx1250</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.amd.gfx1250.async_copy.html">triton.experimental.gluon.language.amd.gfx1250.async_copy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.amd.gfx1250.mbarrier.html">triton.experimental.gluon.language.amd.gfx1250.mbarrier</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.amd.gfx1250.cluster.html">triton.experimental.gluon.language.amd.gfx1250.cluster</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.amd.gfx1250.tdm.html">triton.experimental.gluon.language.amd.gfx1250.tdm</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.amd.cdna3.html">triton.experimental.gluon.language.amd.cdna3</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.amd.cdna4.html">triton.experimental.gluon.language.amd.cdna4</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.amd.rdna3.html">triton.experimental.gluon.language.amd.rdna3</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.amd.rdna4.html">triton.experimental.gluon.language.amd.rdna4</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Triton MLIR Dialects</span></p>
 <ul>
@@ -116,7 +148,7 @@
   <ul class="wy-breadcrumbs">
       <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
           <li class="breadcrumb-item"><a href="../triton.language.html">triton.language</a></li>
-      <li class="breadcrumb-item active">dtype</li>
+      <li class="breadcrumb-item active">class dtype</li>
       <li class="wy-breadcrumbs-aside">
             <a href="../../_sources/python-api/generated/triton.language.dtype.rst.txt" rel="nofollow"> View page source</a>
       </li>
@@ -126,119 +158,116 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <section id="dtype">
-<h1>dtype<a class="headerlink" href="#dtype" title="Link to this heading">¶</a></h1>
-<dl class="py class">
-<dt class="sig sig-object py" id="triton.language.dtype">
-<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">triton.language.</span></span><span class="sig-name descname"><span class="pre">dtype</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#triton.language.dtype" title="Link to this definition">¶</a></dt>
-<dd><p>Represents a scalar data type in Triton IR.</p>
-<p>This class encapsulates properties of primitive types such as bitwidth,
-signedness (for integers), and floating-point format details (mantissa width,
-exponent bias). It is used to define the element type of tensors and pointers.</p>
+  <section id="class-dtype">
+<h1>class dtype<a class="headerlink" href="#class-dtype" title="Link to this heading">¶</a></h1>
+<p>Data type descriptor for Triton tensors.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">dtype</span></code> class represents scalar data types used in Triton GPU kernels. It encapsulates type information including bitwidth, signedness, and floating-point characteristics.</p>
 <section id="parameters">
 <h2>Parameters<a class="headerlink" href="#parameters" title="Link to this heading">¶</a></h2>
 <dl class="simple">
-<dt>name<span class="classifier">str</span></dt><dd><p>The string name of the data type. Supported values include:
-<code class="docutils literal notranslate"><span class="pre">int1</span></code>, <code class="docutils literal notranslate"><span class="pre">int8</span></code>, <code class="docutils literal notranslate"><span class="pre">int16</span></code>, <code class="docutils literal notranslate"><span class="pre">int32</span></code>, <code class="docutils literal notranslate"><span class="pre">int64</span></code>,
-<code class="docutils literal notranslate"><span class="pre">uint8</span></code>, <code class="docutils literal notranslate"><span class="pre">uint16</span></code>, <code class="docutils literal notranslate"><span class="pre">uint32</span></code>, <code class="docutils literal notranslate"><span class="pre">uint64</span></code>,
-<code class="docutils literal notranslate"><span class="pre">fp8e4b15</span></code>, <code class="docutils literal notranslate"><span class="pre">fp8e4nv</span></code>, <code class="docutils literal notranslate"><span class="pre">fp8e4b8</span></code>, <code class="docutils literal notranslate"><span class="pre">fp8e5</span></code>, <code class="docutils literal notranslate"><span class="pre">fp8e5b16</span></code>,
-<code class="docutils literal notranslate"><span class="pre">fp16</span></code>, <code class="docutils literal notranslate"><span class="pre">bf16</span></code>, <code class="docutils literal notranslate"><span class="pre">fp32</span></code>, <code class="docutils literal notranslate"><span class="pre">fp64</span></code>, and <code class="docutils literal notranslate"><span class="pre">void</span></code>.</p>
+<dt>name<span class="classifier">str</span></dt><dd><p>The name of the data type. Must be one of the supported type strings:
+<code class="docutils literal notranslate"><span class="pre">'int1'</span></code>, <code class="docutils literal notranslate"><span class="pre">'int8'</span></code>, <code class="docutils literal notranslate"><span class="pre">'int16'</span></code>, <code class="docutils literal notranslate"><span class="pre">'int32'</span></code>, <code class="docutils literal notranslate"><span class="pre">'int64'</span></code>,
+<code class="docutils literal notranslate"><span class="pre">'uint8'</span></code>, <code class="docutils literal notranslate"><span class="pre">'uint16'</span></code>, <code class="docutils literal notranslate"><span class="pre">'uint32'</span></code>, <code class="docutils literal notranslate"><span class="pre">'uint64'</span></code>,
+<code class="docutils literal notranslate"><span class="pre">'fp8e4b15'</span></code>, <code class="docutils literal notranslate"><span class="pre">'fp8e4nv'</span></code>, <code class="docutils literal notranslate"><span class="pre">'fp8e4b8'</span></code>, <code class="docutils literal notranslate"><span class="pre">'fp8e5'</span></code>, <code class="docutils literal notranslate"><span class="pre">'fp8e5b16'</span></code>,
+<code class="docutils literal notranslate"><span class="pre">'fp16'</span></code>, <code class="docutils literal notranslate"><span class="pre">'bf16'</span></code>, <code class="docutils literal notranslate"><span class="pre">'fp32'</span></code>, <code class="docutils literal notranslate"><span class="pre">'fp64'</span></code>, or <code class="docutils literal notranslate"><span class="pre">'void'</span></code>.</p>
 </dd>
 </dl>
 </section>
 <section id="attributes">
 <h2>Attributes<a class="headerlink" href="#attributes" title="Link to this heading">¶</a></h2>
 <dl class="simple">
-<dt>name<span class="classifier">str</span></dt><dd><p>The string identifier of the type.</p>
+<dt>name<span class="classifier">str</span></dt><dd><p>The type name string.</p>
 </dd>
-<dt>primitive_bitwidth<span class="classifier">int</span></dt><dd><p>The size of the type in bits.</p>
+<dt>primitive_bitwidth<span class="classifier">int</span></dt><dd><p>The bitwidth of the primitive type.</p>
 </dd>
-<dt>itemsize<span class="classifier">int</span></dt><dd><p>The size of the type in bytes.</p>
+<dt>itemsize<span class="classifier">int</span></dt><dd><p>The size in bytes (<code class="docutils literal notranslate"><span class="pre">primitive_bitwidth</span> <span class="pre">//</span> <span class="pre">8</span></code>).</p>
 </dd>
-<dt>int_signedness<span class="classifier">SIGNEDNESS</span></dt><dd><p>Enum indicating if the type is signed or unsigned (only for integer types).</p>
+<dt>int_signedness<span class="classifier">SIGNEDNESS</span></dt><dd><p>Signedness for integer types (<code class="docutils literal notranslate"><span class="pre">SIGNED</span></code> or <code class="docutils literal notranslate"><span class="pre">UNSIGNED</span></code>).</p>
 </dd>
-<dt>int_bitwidth<span class="classifier">int</span></dt><dd><p>The bitwidth of the integer component (only for integer types).</p>
+<dt>int_bitwidth<span class="classifier">int</span></dt><dd><p>Bitwidth for integer types.</p>
 </dd>
-<dt>fp_mantissa_width<span class="classifier">int</span></dt><dd><p>The width of the mantissa in bits (only for floating-point types).</p>
+<dt>fp_mantissa_width<span class="classifier">int</span></dt><dd><p>Mantissa width for floating-point types.</p>
 </dd>
-<dt>exponent_bias<span class="classifier">int</span></dt><dd><p>The exponent bias value (only for floating-point types).</p>
+<dt>exponent_bias<span class="classifier">int</span></dt><dd><p>Exponent bias for floating-point types.</p>
 </dd>
 </dl>
 </section>
 <section id="methods">
 <h2>Methods<a class="headerlink" href="#methods" title="Link to this heading">¶</a></h2>
 <dl class="simple">
-<dt>is_fp8()</dt><dd><p>Returns True if the type is an fp8 variant.</p>
+<dt>is_fp8()</dt><dd><p>Returns <code class="docutils literal notranslate"><span class="pre">True</span></code> if this is an fp8 type.</p>
 </dd>
-<dt>is_fp16(), is_bf16(), is_fp32(), is_fp64()</dt><dd><p>Returns True if the type matches the specific floating-point format.</p>
+<dt>is_fp16(), is_bf16(), is_fp32(), is_fp64()</dt><dd><p>Returns <code class="docutils literal notranslate"><span class="pre">True</span></code> if this matches the specific floating-point type.</p>
 </dd>
-<dt>is_int8(), is_int16(), is_int32(), is_int64()</dt><dd><p>Returns True if the type matches the specific signed integer format.</p>
+<dt>is_int8(), is_int16(), is_int32(), is_int64()</dt><dd><p>Returns <code class="docutils literal notranslate"><span class="pre">True</span></code> if this matches the specific signed integer type.</p>
 </dd>
-<dt>is_uint8(), is_uint16(), is_uint32(), is_uint64()</dt><dd><p>Returns True if the type matches the specific unsigned integer format.</p>
+<dt>is_uint8(), is_uint16(), is_uint32(), is_uint64()</dt><dd><p>Returns <code class="docutils literal notranslate"><span class="pre">True</span></code> if this matches the specific unsigned integer type.</p>
 </dd>
-<dt>is_floating()</dt><dd><p>Returns True if the type is any floating-point type.</p>
+<dt>is_int()</dt><dd><p>Returns <code class="docutils literal notranslate"><span class="pre">True</span></code> if this is any integer type (signed or unsigned).</p>
 </dd>
-<dt>is_standard_floating()</dt><dd><p>Returns True if the type is a standard floating-point type (fp16, bf16, fp32, fp64).</p>
+<dt>is_floating()</dt><dd><p>Returns <code class="docutils literal notranslate"><span class="pre">True</span></code> if this is any floating-point type.</p>
 </dd>
-<dt>is_int_signed(), is_int_unsigned()</dt><dd><p>Returns True if the type is a signed or unsigned integer respectively.</p>
+<dt>is_standard_floating()</dt><dd><p>Returns <code class="docutils literal notranslate"><span class="pre">True</span></code> if this is a standard floating-point type (fp16, bf16, fp32, fp64).</p>
 </dd>
-<dt>is_int()</dt><dd><p>Returns True if the type is any integer type.</p>
+<dt>is_bool()</dt><dd><p>Returns <code class="docutils literal notranslate"><span class="pre">True</span></code> if this is <code class="docutils literal notranslate"><span class="pre">int1</span></code> (boolean type).</p>
 </dd>
-<dt>is_bool()</dt><dd><p>Returns True if the type is int1 (boolean).</p>
+<dt>kind()</dt><dd><p>Returns the type kind (<code class="docutils literal notranslate"><span class="pre">KIND.BOOLEAN</span></code>, <code class="docutils literal notranslate"><span class="pre">KIND.INTEGRAL</span></code>, or <code class="docutils literal notranslate"><span class="pre">KIND.FLOATING</span></code>).</p>
 </dd>
-<dt>kind()</dt><dd><p>Returns the type kind (BOOLEAN, INTEGRAL, or FLOATING).</p>
+<dt>get_int_max_value()</dt><dd><p>Returns the maximum representable integer value for this type.</p>
 </dd>
-<dt>get_int_max_value(), get_int_min_value()</dt><dd><p>Returns the maximum or minimum representable value for integer types.</p>
+<dt>get_int_min_value()</dt><dd><p>Returns the minimum representable integer value for this type.</p>
 </dd>
-<dt>to_ir(builder)</dt><dd><p>Converts the dtype to the corresponding MLIR type using the given builder.</p>
+<dt>to_ir(builder)</dt><dd><p>Converts this dtype to an MLIR type using the given builder.</p>
 </dd>
 </dl>
 </section>
 <section id="notes">
 <h2>Notes<a class="headerlink" href="#notes" title="Link to this heading">¶</a></h2>
-<p>Instantiating this class directly is typically done via module-level constants
-(e.g., <code class="docutils literal notranslate"><span class="pre">tl.int32</span></code>, <code class="docutils literal notranslate"><span class="pre">tl.float16</span></code>) rather than calling the constructor with
-a string, though both are supported.</p>
-<p>Floating-point formats like <code class="docutils literal notranslate"><span class="pre">fp8e4nv</span></code> refer to specific hardware
-implementations (e.g., NVIDIA Hopper FP8 formats).</p>
+<p>Predefined dtype instances are available as module-level constants:
+<code class="docutils literal notranslate"><span class="pre">tl.int1</span></code>, <code class="docutils literal notranslate"><span class="pre">tl.int8</span></code>, <code class="docutils literal notranslate"><span class="pre">tl.int16</span></code>, <code class="docutils literal notranslate"><span class="pre">tl.int32</span></code>, <code class="docutils literal notranslate"><span class="pre">tl.int64</span></code>,
+<code class="docutils literal notranslate"><span class="pre">tl.uint8</span></code>, <code class="docutils literal notranslate"><span class="pre">tl.uint16</span></code>, <code class="docutils literal notranslate"><span class="pre">tl.uint32</span></code>, <code class="docutils literal notranslate"><span class="pre">tl.uint64</span></code>,
+<code class="docutils literal notranslate"><span class="pre">tl.float8e5</span></code>, <code class="docutils literal notranslate"><span class="pre">tl.float8e5b16</span></code>, <code class="docutils literal notranslate"><span class="pre">tl.float8e4nv</span></code>, <code class="docutils literal notranslate"><span class="pre">tl.float8e4b8</span></code>,
+<code class="docutils literal notranslate"><span class="pre">tl.float8e4b15</span></code>, <code class="docutils literal notranslate"><span class="pre">tl.float16</span></code>, <code class="docutils literal notranslate"><span class="pre">tl.bfloat16</span></code>, <code class="docutils literal notranslate"><span class="pre">tl.float32</span></code>, <code class="docutils literal notranslate"><span class="pre">tl.float64</span></code>.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">dtype</span></code> class is typically not instantiated directly by user code. Instead, use the predefined constants or pass dtype strings to functions that accept dtype parameters.</p>
 </section>
 <section id="examples">
 <h2>Examples<a class="headerlink" href="#examples" title="Link to this heading">¶</a></h2>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">triton.language</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">tl</span>
 
-<span class="c1"># Using predefined constants (recommended)</span>
-<span class="n">t1</span> <span class="o">=</span> <span class="n">tl</span><span class="o">.</span><span class="n">int32</span>
-<span class="n">t2</span> <span class="o">=</span> <span class="n">tl</span><span class="o">.</span><span class="n">float16</span>
+<span class="c1"># Using predefined dtype constants</span>
+<span class="n">dtype</span> <span class="o">=</span> <span class="n">tl</span><span class="o">.</span><span class="n">int32</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">dtype</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>              <span class="c1"># &#39;int32&#39;</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">dtype</span><span class="o">.</span><span class="n">primitive_bitwidth</span><span class="p">)</span>  <span class="c1"># 32</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">dtype</span><span class="o">.</span><span class="n">itemsize</span><span class="p">)</span>          <span class="c1"># 4</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">dtype</span><span class="o">.</span><span class="n">is_int</span><span class="p">())</span>          <span class="c1"># True</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">dtype</span><span class="o">.</span><span class="n">is_floating</span><span class="p">())</span>     <span class="c1"># False</span>
 
-<span class="c1"># Constructing from string name</span>
-<span class="n">t3</span> <span class="o">=</span> <span class="n">tl</span><span class="o">.</span><span class="n">dtype</span><span class="p">(</span><span class="s2">&quot;bf16&quot;</span><span class="p">)</span>
+<span class="c1"># Creating dtype from string</span>
+<span class="n">dtype</span> <span class="o">=</span> <span class="n">tl</span><span class="o">.</span><span class="n">dtype</span><span class="p">(</span><span class="s1">&#39;fp16&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">dtype</span><span class="o">.</span><span class="n">is_fp16</span><span class="p">())</span>         <span class="c1"># True</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">dtype</span><span class="o">.</span><span class="n">fp_mantissa_width</span><span class="p">)</span> <span class="c1"># 10</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">dtype</span><span class="o">.</span><span class="n">exponent_bias</span><span class="p">)</span>     <span class="c1"># 15</span>
 
-<span class="c1"># Inspecting properties</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">t3</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>                <span class="c1"># &quot;bf16&quot;</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">t3</span><span class="o">.</span><span class="n">primitive_bitwidth</span><span class="p">)</span>  <span class="c1"># 16</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">t3</span><span class="o">.</span><span class="n">is_floating</span><span class="p">())</span>       <span class="c1"># True</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">t3</span><span class="o">.</span><span class="n">fp_mantissa_width</span><span class="p">)</span>   <span class="c1"># 7</span>
-
-<span class="c1"># Type checking in a kernel</span>
+<span class="c1"># Type inspection in kernel code</span>
 <span class="nd">@triton</span><span class="o">.</span><span class="n">jit</span>
-<span class="k">def</span><span class="w"> </span><span class="nf">kernel</span><span class="p">(</span><span class="n">x_ptr</span><span class="p">,</span> <span class="n">n</span><span class="p">,</span> <span class="n">BLOCK</span><span class="p">:</span> <span class="n">tl</span><span class="o">.</span><span class="n">constexpr</span><span class="p">):</span>
-    <span class="n">dtype</span> <span class="o">=</span> <span class="n">x_ptr</span><span class="o">.</span><span class="n">dtype</span><span class="o">.</span><span class="n">element_ty</span>
-    <span class="k">if</span> <span class="n">dtype</span><span class="o">.</span><span class="n">is_fp16</span><span class="p">():</span>
-        <span class="c1"># Specialized logic for fp16</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">kernel</span><span class="p">(</span><span class="n">x_ptr</span><span class="p">,</span> <span class="n">dtype</span><span class="p">:</span> <span class="n">tl</span><span class="o">.</span><span class="n">constexpr</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">dtype</span><span class="o">.</span><span class="n">is_floating</span><span class="p">():</span>
+        <span class="c1"># Handle floating-point types</span>
+        <span class="k">pass</span>
+    <span class="k">elif</span> <span class="n">dtype</span><span class="o">.</span><span class="n">is_int</span><span class="p">():</span>
+        <span class="c1"># Handle integer types</span>
         <span class="k">pass</span>
 </pre></div>
 </div>
 </section>
-</dd></dl>
-
 </section>
 
 
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="triton.language.constexpr_type.html" class="btn btn-neutral float-left" title="Parameters" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="triton.language.pointer_type.html" class="btn btn-neutral float-right" title="Parameters" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="triton.language.constexpr_type.html" class="btn btn-neutral float-left" title="constexpr_type" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="triton.language.pointer_type.html" class="btn btn-neutral float-right" title="pointer_type" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>

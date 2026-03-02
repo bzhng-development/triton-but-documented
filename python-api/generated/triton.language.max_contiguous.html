@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Parameters &mdash; Triton  documentation</title>
+  <title>max_contiguous &mdash; Triton  documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=03e43079" />
       <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="../../_static/css/custom.css" />
@@ -18,8 +18,8 @@
     <script src="../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
-    <link rel="next" title="Parameters" href="triton.language.multiple_of.html" />
-    <link rel="prev" title="Parameters" href="triton.language.max_constancy.html" /> 
+    <link rel="next" title="triton.language.multiple_of" href="triton.language.multiple_of.html" />
+    <link rel="prev" title="triton.language.max_constancy" href="triton.language.max_constancy.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -64,11 +64,19 @@
 <li class="toctree-l2"><a class="reference internal" href="../triton.language.html#iterators">Iterators</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../triton.language.html#inline-assembly">Inline Assembly</a></li>
 <li class="toctree-l2 current"><a class="reference internal" href="../triton.language.html#compiler-hint-ops">Compiler Hint Ops</a><ul class="current">
-<li class="toctree-l3"><a class="reference internal" href="triton.language.assume.html">assume</a></li>
-<li class="toctree-l3"><a class="reference internal" href="triton.language.debug_barrier.html"><code class="docutils literal notranslate"><span class="pre">triton.language.debug_barrier()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="triton.language.max_constancy.html"><code class="docutils literal notranslate"><span class="pre">triton.language.max_constancy()</span></code></a></li>
-<li class="toctree-l3 current"><a class="current reference internal" href="#"><code class="docutils literal notranslate"><span class="pre">triton.language.max_contiguous()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="triton.language.multiple_of.html"><code class="docutils literal notranslate"><span class="pre">triton.language.multiple_of()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.language.assume.html">triton.language.assume</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.language.debug_barrier.html">debug_barrier</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.language.max_constancy.html">triton.language.max_constancy</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">max_contiguous</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#triton.language.max_contiguous"><code class="docutils literal notranslate"><span class="pre">max_contiguous()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#parameters">Parameters</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#returns">Returns</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#notes">Notes</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#examples">Examples</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#see-also">See Also</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="triton.language.multiple_of.html">triton.language.multiple_of</a></li>
 <li class="toctree-l3"><a class="reference internal" href="triton.language.map_elementwise.html">map_elementwise</a></li>
 </ul>
 </li>
@@ -78,6 +86,35 @@
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../triton.testing.html">triton.testing</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../triton-semantics.html">Triton Semantics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.language.extra.cuda.html">triton.language.extra.cuda</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.language.extra.cuda.libdevice.html">triton.language.extra.cuda.libdevice</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.runtime.html">triton.runtime</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.tools.html">triton.tools</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Gluon (Experimental) API</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.html">triton.experimental.gluon</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.html">triton.experimental.gluon.language</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.nvidia.ampere.html">triton.experimental.gluon.language.nvidia.ampere</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.nvidia.ampere.async_copy.html">triton.experimental.gluon.language.nvidia.ampere.async_copy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.nvidia.ampere.mbarrier.html">triton.experimental.gluon.language.nvidia.ampere.mbarrier</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.nvidia.hopper.html">triton.experimental.gluon.language.nvidia.hopper</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.nvidia.hopper.tma.html">triton.experimental.gluon.language.nvidia.hopper.tma</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.nvidia.hopper.mbarrier.html">triton.experimental.gluon.language.nvidia.hopper.mbarrier</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.nvidia.hopper.cluster.html">triton.experimental.gluon.language.nvidia.hopper.cluster</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.nvidia.blackwell.html">triton.experimental.gluon.language.nvidia.blackwell</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.nvidia.blackwell.tma.html">triton.experimental.gluon.language.nvidia.blackwell.tma</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.nvidia.blackwell.clc.html">triton.experimental.gluon.language.nvidia.blackwell.clc</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.amd.html">triton.experimental.gluon.language.amd</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.amd.gfx1250.html">triton.experimental.gluon.language.amd.gfx1250</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.amd.gfx1250.async_copy.html">triton.experimental.gluon.language.amd.gfx1250.async_copy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.amd.gfx1250.mbarrier.html">triton.experimental.gluon.language.amd.gfx1250.mbarrier</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.amd.gfx1250.cluster.html">triton.experimental.gluon.language.amd.gfx1250.cluster</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.amd.gfx1250.tdm.html">triton.experimental.gluon.language.amd.gfx1250.tdm</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.amd.cdna3.html">triton.experimental.gluon.language.amd.cdna3</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.amd.cdna4.html">triton.experimental.gluon.language.amd.cdna4</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.amd.rdna3.html">triton.experimental.gluon.language.amd.rdna3</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.amd.rdna4.html">triton.experimental.gluon.language.amd.rdna4</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Triton MLIR Dialects</span></p>
 <ul>
@@ -105,7 +142,7 @@
   <ul class="wy-breadcrumbs">
       <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
           <li class="breadcrumb-item"><a href="../triton.language.html">triton.language</a></li>
-      <li class="breadcrumb-item active">Parameters</li>
+      <li class="breadcrumb-item active">max_contiguous</li>
       <li class="wy-breadcrumbs-aside">
             <a href="../../_sources/python-api/generated/triton.language.max_contiguous.rst.txt" rel="nofollow"> View page source</a>
       </li>
@@ -115,65 +152,79 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <dl class="py function">
+  <section id="max-contiguous">
+<h1>max_contiguous<a class="headerlink" href="#max-contiguous" title="Link to this heading">¶</a></h1>
+<dl class="py function">
 <dt class="sig sig-object py" id="triton.language.max_contiguous">
 <span class="sig-prename descclassname"><span class="pre">triton.language.</span></span><span class="sig-name descname"><span class="pre">max_contiguous</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">values</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">_semantic</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#triton.language.max_contiguous" title="Link to this definition">¶</a></dt>
-<dd><p>Let the compiler know that the first <cite>value</cite> elements in <code class="code docutils literal notranslate"><span class="pre">input</span></code> are contiguous in memory.</p>
-<p>This is a compiler hint that can enable additional optimizations for memory access patterns. It asserts that a prefix of the input tensor consists of sequentially adjacent memory addresses.</p>
+<dd><p>Let the compiler know that the <cite>value</cite> first values in <code class="code docutils literal notranslate"><span class="pre">input</span></code> are contiguous.</p>
+</dd></dl>
+
+<p>Let the compiler know that the first values in <code class="code docutils literal notranslate"><span class="pre">input</span></code> are contiguous.</p>
 <section id="parameters">
-<h1>Parameters<a class="headerlink" href="#parameters" title="Link to this heading">¶</a></h1>
+<h2>Parameters<a class="headerlink" href="#parameters" title="Link to this heading">¶</a></h2>
 <dl class="simple">
-<dt>input<span class="classifier">tl.tensor</span></dt><dd><p>The input tensor for which to assert contiguity.</p>
+<dt>input<span class="classifier">tensor</span></dt><dd><p>The input tensor.</p>
 </dd>
-<dt>values<span class="classifier">list of tl.constexpr[int]</span></dt><dd><p>A list of compile-time constants indicating the number of leading elements assumed to be contiguous. Each element must be a <cite>tl.constexpr</cite> wrapping an integer.</p>
+<dt>values<span class="classifier">constexpr or list of constexpr</span></dt><dd><p>Compile-time constant values indicating the number of contiguous elements.
+Each element must be a <code class="code docutils literal notranslate"><span class="pre">constexpr[int]</span></code>.</p>
 </dd>
-<dt>_semantic<span class="classifier">optional</span></dt><dd><p>Internal semantic context; do not set manually.</p>
+<dt>_semantic<span class="classifier">optional</span></dt><dd><p>Internal parameter used by Triton compiler. Do not set manually.</p>
 </dd>
 </dl>
 </section>
 <section id="returns">
-<h1>Returns<a class="headerlink" href="#returns" title="Link to this heading">¶</a></h1>
+<h2>Returns<a class="headerlink" href="#returns" title="Link to this heading">¶</a></h2>
 <dl class="simple">
-<dt>tl.tensor</dt><dd><p>The same input tensor, annotated with the contiguity property.</p>
-</dd>
-</dl>
-</section>
-<section id="raises">
-<h1>Raises<a class="headerlink" href="#raises" title="Link to this heading">¶</a></h1>
-<dl class="simple">
-<dt>TypeError</dt><dd><p>If any element in <cite>values</cite> is not a <cite>tl.constexpr</cite> or does not wrap an integer value.</p>
+<dt>tensor</dt><dd><p>The input tensor (unchanged). This function is a compiler hint and does not
+modify the tensor values.</p>
 </dd>
 </dl>
 </section>
 <section id="notes">
-<h1>Notes<a class="headerlink" href="#notes" title="Link to this heading">¶</a></h1>
-<p>This function is typically used to inform the compiler about memory layout guarantees that are known at compile time but not inferable from the IR alone. Passing non-constexpr values to <cite>values</cite> will result in a compilation error.</p>
+<h2>Notes<a class="headerlink" href="#notes" title="Link to this heading">¶</a></h2>
+<p>This is a compiler hint that helps the Triton compiler optimize memory access
+patterns. It informs the compiler that the first N values in the input tensor
+are stored contiguously in memory, which can enable more efficient load/store
+operations and memory coalescing.</p>
+<p>The <code class="code docutils literal notranslate"><span class="pre">values</span></code> parameter must contain only <code class="code docutils literal notranslate"><span class="pre">constexpr[int]</span></code> elements.
+Passing non-constexpr or non-integer values will raise a <code class="code docutils literal notranslate"><span class="pre">TypeError</span></code>.</p>
+<p>This function is similar to <a class="reference internal" href="triton.experimental.gluon.language.multiple_of.html#multiple_of" title="multiple_of"><code class="xref py py-func docutils literal notranslate"><span class="pre">multiple_of()</span></code></a> and <a class="reference internal" href="triton.language.max_constancy.html#triton.language.max_constancy" title="triton.language.max_constancy"><code class="xref py py-func docutils literal notranslate"><span class="pre">max_constancy()</span></code></a>,
+which provide other types of compiler hints about tensor properties.</p>
 </section>
 <section id="examples">
-<h1>Examples<a class="headerlink" href="#examples" title="Link to this heading">¶</a></h1>
+<h2>Examples<a class="headerlink" href="#examples" title="Link to this heading">¶</a></h2>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">triton</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">triton.language</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">tl</span>
 
 <span class="nd">@triton</span><span class="o">.</span><span class="n">jit</span>
-<span class="k">def</span><span class="w"> </span><span class="nf">kernel</span><span class="p">(</span><span class="n">ptr</span><span class="p">,</span> <span class="n">BLOCK_SIZE</span><span class="p">:</span> <span class="n">tl</span><span class="o">.</span><span class="n">constexpr</span><span class="p">):</span>
-    <span class="n">offsets</span> <span class="o">=</span> <span class="n">tl</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">BLOCK_SIZE</span><span class="p">)</span>
-    <span class="n">mask</span> <span class="o">=</span> <span class="n">offsets</span> <span class="o">&lt;</span> <span class="mi">128</span>
-    <span class="c1"># Assert that the first 128 elements are contiguous</span>
-    <span class="n">offsets</span> <span class="o">=</span> <span class="n">tl</span><span class="o">.</span><span class="n">max_contiguous</span><span class="p">(</span><span class="n">offsets</span><span class="p">,</span> <span class="p">[</span><span class="n">tl</span><span class="o">.</span><span class="n">constexpr</span><span class="p">(</span><span class="mi">128</span><span class="p">)])</span>
-    <span class="n">vals</span> <span class="o">=</span> <span class="n">tl</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">ptr</span> <span class="o">+</span> <span class="n">offsets</span><span class="p">,</span> <span class="n">mask</span><span class="o">=</span><span class="n">mask</span><span class="p">)</span>
-    <span class="n">tl</span><span class="o">.</span><span class="n">store</span><span class="p">(</span><span class="n">ptr</span> <span class="o">+</span> <span class="n">offsets</span><span class="p">,</span> <span class="n">vals</span> <span class="o">*</span> <span class="mf">2.0</span><span class="p">,</span> <span class="n">mask</span><span class="o">=</span><span class="n">mask</span><span class="p">)</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">kernel</span><span class="p">(</span><span class="n">x_ptr</span><span class="p">,</span> <span class="n">BLOCK</span><span class="p">:</span> <span class="n">tl</span><span class="o">.</span><span class="n">constexpr</span><span class="p">):</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="n">tl</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">x_ptr</span> <span class="o">+</span> <span class="n">tl</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">BLOCK</span><span class="p">))</span>
+    <span class="c1"># Inform compiler that first 16 elements are contiguous</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="n">tl</span><span class="o">.</span><span class="n">max_contiguous</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">tl</span><span class="o">.</span><span class="n">constexpr</span><span class="p">([</span><span class="mi">16</span><span class="p">]))</span>
+    <span class="c1"># ... rest of kernel</span>
+
+<span class="nd">@triton</span><span class="o">.</span><span class="n">jit</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">kernel_multi</span><span class="p">(</span><span class="n">x_ptr</span><span class="p">,</span> <span class="n">BLOCK</span><span class="p">:</span> <span class="n">tl</span><span class="o">.</span><span class="n">constexpr</span><span class="p">):</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="n">tl</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">x_ptr</span> <span class="o">+</span> <span class="n">tl</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">BLOCK</span><span class="p">))</span>
+    <span class="c1"># Multiple hints can be provided</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="n">tl</span><span class="o">.</span><span class="n">max_contiguous</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">tl</span><span class="o">.</span><span class="n">constexpr</span><span class="p">([</span><span class="mi">16</span><span class="p">,</span> <span class="mi">32</span><span class="p">]))</span>
+    <span class="c1"># ... rest of kernel</span>
 </pre></div>
 </div>
 </section>
-</dd></dl>
-
+<section id="see-also">
+<h2>See Also<a class="headerlink" href="#see-also" title="Link to this heading">¶</a></h2>
+<p>multiple_of, max_constancy</p>
+</section>
+</section>
 
 
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="triton.language.max_constancy.html" class="btn btn-neutral float-left" title="Parameters" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="triton.language.multiple_of.html" class="btn btn-neutral float-right" title="Parameters" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="triton.language.max_constancy.html" class="btn btn-neutral float-left" title="triton.language.max_constancy" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="triton.language.multiple_of.html" class="btn btn-neutral float-right" title="triton.language.multiple_of" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>

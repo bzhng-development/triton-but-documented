@@ -1,63 +1,47 @@
 reshape
 =======
 
-.. currentmodule:: triton.language
+.. function:: triton.language.reshape(input, *shape, can_reorder=False)
 
-.. autofunction:: reshape
+    Returns a tensor with the same number of elements as ``input`` but with the
+    provided shape.
 
-.. function:: reshape(input, *shape, can_reorder=False)
+    Parameters
+    ----------
+    input : tl.tensor
+        The input tensor to reshape.
+    *shape : int or tuple of ints
+        The new shape dimensions. Can be passed as a tuple or as individual
+        parameters.
+    can_reorder : bool, optional
+        If True, allows the compiler to reorder elements during reshaping.
+        Only set to True if element order does not matter (e.g., result is only
+        used in reduction ops). Default is False.
 
-   Returns a tensor with the same number of elements as ``input`` but with the
-   provided ``shape``.
+    Returns
+    -------
+    tl.tensor
+        A tensor with the same elements as ``input`` but with the new shape.
 
-   Parameters
-   ----------
-   input : triton.language.tensor
-       The input tensor to reshape.
-   *shape : int or tuple of ints
-       The desired shape of the output tensor. Can be passed as individual
-       integers or as a single tuple/list.
-   can_reorder : bool, optional
-       If ``True``, the compiler is allowed to reorder elements in memory to
-       achieve the new shape. This should only be set to ``True`` if the order
-       of elements does not affect correctness (e.g., the result is only used
-       in reduction operations). Default is ``False``, which preserves the
-       linear index ordering of elements.
+    Notes
+    -----
+    This function can also be called as a member function on ``tensor``,
+    as ``x.reshape(...)`` instead of ``reshape(x, ...)``.
 
-   Returns
-   -------
-   tensor
-       A view of the input tensor with the specified shape.
+    The total number of elements must remain the same before and after reshaping.
 
-   Notes
-   -----
-   The product of the new shape dimensions must equal the number of elements
-   in the input tensor.
+    When ``can_reorder=True``, this is equivalent to :py:func:`view`.
 
-   This function can also be called as a member function on ``tensor``:
-   ``x.reshape(...)`` instead of ``reshape(x, ...)``.
+    Examples
+    --------
+    .. code-block:: python
 
-   If ``can_reorder=True``, this operation is equivalent to ``view``.
+        # These are equivalent
+        reshape(x, (32, 32))
+        reshape(x, 32, 32)
 
-   Examples
-   --------
-   .. code-block:: python
+        # Can also use member function syntax
+        x.reshape(32, 32)
 
-      import triton
-      import triton.language as tl
-
-      @triton.jit
-      def kernel(X_ptr, Y_ptr, BLOCK_SIZE: tl.constexpr):
-          # Load a 1D block
-          x = tl.load(X_ptr + tl.arange(0, BLOCK_SIZE))
-          
-          # Reshape to 2D (8, 4) assuming BLOCK_SIZE=32
-          x_2d = tl.reshape(x, (8, 4))
-          
-          # Equivalent usage with separate arguments
-          x_2d_alt = tl.reshape(x, 8, 4)
-          
-          # Reshape allowing reordering (use with caution)
-          x_shuffled = tl.reshape(x, (4, 8), can_reorder=True)
-          
-          tl.store(Y_ptr + tl.arange(0, BLOCK_SIZE), x_2d)
+        # Allow element reordering for reduction ops
+        reshape(x, 64, can_reorder=True)

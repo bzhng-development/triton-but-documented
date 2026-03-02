@@ -1,0 +1,52 @@
+triton.language.extra.cuda.libdevice.rnorm4d
+=============================================
+
+.. currentmodule:: triton.language.extra.cuda.libdevice
+
+.. function:: rnorm4d(arg0, arg1, arg2, arg3, _semantic=None)
+
+   Compute the reciprocal of the 4D Euclidean norm.
+
+   Computes :code:`1 / sqrt(arg0^2 + arg1^2 + arg2^2 + arg3^2)` element-wise.
+
+   Parameters
+   ----------
+   arg0 : tl.tensor
+       First component of the 4D vector.
+   arg1 : tl.tensor
+       Second component of the 4D vector.
+   arg2 : tl.tensor
+       Third component of the 4D vector.
+   arg3 : tl.tensor
+       Fourth component of the 4D vector.
+
+   Returns
+   -------
+   tl.tensor
+       Reciprocal norm of the 4D vector. Has the same dtype as the inputs.
+
+   Notes
+   -----
+   This function dispatches to CUDA libdevice:
+
+   - :code:`__nv_rnorm4df` for float32 inputs
+   - :code:`__nv_rnorm4d` for float64 inputs
+
+   All inputs must have the same dtype (either all fp32 or all fp64). The function
+   is pure (no side effects).
+
+   Examples
+   --------
+   .. code-block:: python
+
+       import triton
+       import triton.language as tl
+
+       @triton.jit
+       def kernel(x_ptr, y_ptr, z_ptr, w_ptr, out_ptr, BLOCK_SIZE: tl.constexpr):
+           x = tl.load(x_ptr + tl.arange(0, BLOCK_SIZE))
+           y = tl.load(y_ptr + tl.arange(0, BLOCK_SIZE))
+           z = tl.load(z_ptr + tl.arange(0, BLOCK_SIZE))
+           w = tl.load(w_ptr + tl.arange(0, BLOCK_SIZE))
+           rnorm = tl.extra.cuda.libdevice.rnorm4d(x, y, z, w)
+           tl.store(out_ptr + tl.arange(0, BLOCK_SIZE), rnorm)

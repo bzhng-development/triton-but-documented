@@ -1,0 +1,67 @@
+min
+===
+
+.. currentmodule:: triton.experimental.gluon.language
+
+.. function:: min(input, axis=None, return_indices=False, return_indices_tie_break_left=True, keep_dims=False)
+
+   Returns the minimum value of elements in the input tensor along the specified axis.
+
+   Parameters
+   ----------
+   input : tensor
+       The input tensor to reduce.
+   axis : int, optional
+       The dimension along which to compute the minimum. If ``None``, reduces all dimensions.
+   return_indices : bool, optional
+       If ``True``, also return the index of the minimum value. Default is ``False``.
+   return_indices_tie_break_left : bool, optional
+       If ``True`` and there are multiple minimum values, return the left-most index.
+       Default is ``True``.
+   keep_dims : bool, optional
+       If ``True``, the reduced axis is retained with length 1. Default is ``False``.
+
+   Returns
+   -------
+   min_vals : tensor
+       The minimum values. If ``return_indices`` is ``True``, returns a tuple of
+       ``(min_vals, min_indices)``.
+
+   Notes
+   -----
+   - For floating-point types with bitwidth less than 32, values are promoted to
+     ``float32`` before reduction.
+   - For integer types with bitwidth less than 32, values are promoted to ``int32``
+     before reduction.
+   - ``bfloat16`` is always promoted to ``float32``.
+   - The reduction operation is associative and commutative.
+   - This function can be called as a member function: ``x.min(...)`` instead of
+     ``min(x, ...)``.
+
+   Examples
+   --------
+   .. code-block:: python
+
+      import triton.experimental.gluon as gluon
+      import triton.experimental.gluon.language as ttgl
+
+      @gluon.jit
+      def kernel(X, Y, BLOCK_SIZE: ttgl.constexpr):
+          x = ttgl.load(X + ttgl.arange(0, BLOCK_SIZE))
+          min_val = ttgl.min(x, axis=0)
+          ttgl.store(Y, min_val)
+
+      # Get minimum value and its index
+      @gluon.jit
+      def kernel_with_index(X, Y, Z, BLOCK_SIZE: ttgl.constexpr):
+          x = ttgl.load(X + ttgl.arange(0, BLOCK_SIZE))
+          min_val, min_idx = ttgl.min(x, axis=0, return_indices=True)
+          ttgl.store(Y, min_val)
+          ttgl.store(Z, min_idx)
+
+      # Reduce along specific axis with keep_dims
+      @gluon.jit
+      def kernel_2d(X, Y, BLOCK_M: ttgl.constexpr, BLOCK_N: ttgl.constexpr):
+          x = ttgl.load(X + ttgl.arange(0, BLOCK_M)[:, None] * BLOCK_N + ttgl.arange(0, BLOCK_N)[None, :])
+          min_val = ttgl.min(x, axis=1, keep_dims=True)  # Shape: [BLOCK_M, 1]
+          ttgl.store(Y, min_val)

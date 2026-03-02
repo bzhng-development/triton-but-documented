@@ -1,0 +1,38 @@
+LinearLayout
+============
+
+.. py:class:: triton.tools.LinearLayout
+
+    Enumeration of memory layout types for tensor operations.
+
+    Attributes
+    ----------
+    ROW_MAJOR : LinearLayout
+        Row-major memory ordering (C-style).
+    COLUMN_MAJOR : LinearLayout
+        Column-major memory ordering (Fortran-style).
+
+    Notes
+    -----
+    ``LinearLayout`` specifies how multi-dimensional tensor indices are mapped
+    to linear memory addresses. Selecting the appropriate layout is critical
+    for memory coalescing and shared memory bank conflict avoidance in GPU
+    kernels.
+
+    This enumeration is typically used in conjunction with pointer creation
+    or memory access utilities within ``triton.tools`` to enforce specific
+    access patterns during compilation.
+
+    Examples
+    --------
+    Specify a layout for memory access configuration:
+
+    .. code-block:: python
+
+        import triton.tools as tt
+
+        # Select row-major layout for standard tensor access
+        layout = tt.LinearLayout.ROW_MAJOR
+
+        # Use layout in kernel configuration or analysis tools
+        print(layout)

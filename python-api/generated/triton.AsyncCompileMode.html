@@ -19,7 +19,7 @@
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
     <link rel="next" title="CompilationError" href="triton.CompilationError.html" />
-    <link rel="prev" title="class triton.Config" href="triton.Config.html" /> 
+    <link rel="prev" title="triton.Config" href="triton.Config.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -50,34 +50,24 @@
 <ul class="current">
 <li class="toctree-l1 current"><a class="reference internal" href="../triton.html">triton</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="triton.jit.html">triton.jit</a></li>
-<li class="toctree-l2"><a class="reference internal" href="triton.autotune.html"><code class="docutils literal notranslate"><span class="pre">triton.autotune()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="triton.heuristics.html">Parameters</a></li>
-<li class="toctree-l2"><a class="reference internal" href="triton.heuristics.html#returns">Returns</a></li>
-<li class="toctree-l2"><a class="reference internal" href="triton.heuristics.html#notes">Notes</a></li>
-<li class="toctree-l2"><a class="reference internal" href="triton.heuristics.html#examples">Examples</a></li>
-<li class="toctree-l2"><a class="reference internal" href="triton.Config.html">class triton.Config</a></li>
+<li class="toctree-l2"><a class="reference internal" href="triton.autotune.html">triton.autotune</a></li>
+<li class="toctree-l2"><a class="reference internal" href="triton.heuristics.html">triton.heuristics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="triton.Config.html">triton.Config</a></li>
 <li class="toctree-l2 current"><a class="reference internal" href="../triton.html#runtime-and-compiler">Runtime and Compiler</a><ul class="current">
 <li class="toctree-l3 current"><a class="current reference internal" href="#">AsyncCompileMode</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="#parameters">Parameters</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#attributes">Attributes</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#methods">Methods</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#notes">Notes</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#examples">Examples</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#triton.AsyncCompileMode"><code class="docutils literal notranslate"><span class="pre">triton.AsyncCompileMode</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="triton.CompilationError.html">CompilationError</a></li>
-<li class="toctree-l3"><a class="reference internal" href="triton.InterpreterError.html">triton.InterpreterError</a></li>
-<li class="toctree-l3"><a class="reference internal" href="triton.TritonError.html">triton.TritonError</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.InterpreterError.html">InterpreterError</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.TritonError.html">TritonError</a></li>
 <li class="toctree-l3"><a class="reference internal" href="triton.OutOfResources.html">OutOfResources</a></li>
 <li class="toctree-l3"><a class="reference internal" href="triton.JITFunction.html">JITFunction</a></li>
-<li class="toctree-l3"><a class="reference internal" href="triton.KernelInterface.html">class KernelInterface</a></li>
-<li class="toctree-l3"><a class="reference internal" href="triton.FutureKernel.html"><code class="docutils literal notranslate"><span class="pre">FutureKernel</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="triton.MockTensor.html">MockTensor</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.KernelInterface.html">triton.KernelInterface</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.FutureKernel.html">FutureKernel</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.MockTensor.html">class triton.MockTensor</a></li>
 <li class="toctree-l3"><a class="reference internal" href="triton.TensorWrapper.html">TensorWrapper</a></li>
-<li class="toctree-l3"><a class="reference internal" href="triton.compile.html">Parameters</a></li>
-<li class="toctree-l3"><a class="reference internal" href="triton.compile.html#returns">Returns</a></li>
-<li class="toctree-l3"><a class="reference internal" href="triton.compile.html#notes">Notes</a></li>
-<li class="toctree-l3"><a class="reference internal" href="triton.compile.html#examples">Examples</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.compile.html">compile</a></li>
 <li class="toctree-l3"><a class="reference internal" href="triton.constexpr_function.html">constexpr_function</a></li>
 <li class="toctree-l3"><a class="reference internal" href="triton.must_use_result.html">must_use_result</a></li>
 <li class="toctree-l3"><a class="reference internal" href="triton.reinterpret.html">reinterpret</a></li>
@@ -91,6 +81,35 @@
 <li class="toctree-l1"><a class="reference internal" href="../triton.language.html">triton.language</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../triton.testing.html">triton.testing</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../triton-semantics.html">Triton Semantics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.language.extra.cuda.html">triton.language.extra.cuda</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.language.extra.cuda.libdevice.html">triton.language.extra.cuda.libdevice</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.runtime.html">triton.runtime</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.tools.html">triton.tools</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Gluon (Experimental) API</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.html">triton.experimental.gluon</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.html">triton.experimental.gluon.language</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.nvidia.ampere.html">triton.experimental.gluon.language.nvidia.ampere</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.nvidia.ampere.async_copy.html">triton.experimental.gluon.language.nvidia.ampere.async_copy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.nvidia.ampere.mbarrier.html">triton.experimental.gluon.language.nvidia.ampere.mbarrier</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.nvidia.hopper.html">triton.experimental.gluon.language.nvidia.hopper</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.nvidia.hopper.tma.html">triton.experimental.gluon.language.nvidia.hopper.tma</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.nvidia.hopper.mbarrier.html">triton.experimental.gluon.language.nvidia.hopper.mbarrier</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.nvidia.hopper.cluster.html">triton.experimental.gluon.language.nvidia.hopper.cluster</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.nvidia.blackwell.html">triton.experimental.gluon.language.nvidia.blackwell</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.nvidia.blackwell.tma.html">triton.experimental.gluon.language.nvidia.blackwell.tma</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.nvidia.blackwell.clc.html">triton.experimental.gluon.language.nvidia.blackwell.clc</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.amd.html">triton.experimental.gluon.language.amd</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.amd.gfx1250.html">triton.experimental.gluon.language.amd.gfx1250</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.amd.gfx1250.async_copy.html">triton.experimental.gluon.language.amd.gfx1250.async_copy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.amd.gfx1250.mbarrier.html">triton.experimental.gluon.language.amd.gfx1250.mbarrier</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.amd.gfx1250.cluster.html">triton.experimental.gluon.language.amd.gfx1250.cluster</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.amd.gfx1250.tdm.html">triton.experimental.gluon.language.amd.gfx1250.tdm</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.amd.cdna3.html">triton.experimental.gluon.language.amd.cdna3</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.amd.cdna4.html">triton.experimental.gluon.language.amd.cdna4</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.amd.rdna3.html">triton.experimental.gluon.language.amd.rdna3</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.amd.rdna4.html">triton.experimental.gluon.language.amd.rdna4</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Triton MLIR Dialects</span></p>
 <ul>
@@ -130,91 +149,90 @@
              
   <section id="asynccompilemode">
 <h1>AsyncCompileMode<a class="headerlink" href="#asynccompilemode" title="Link to this heading">¶</a></h1>
-<p>Context manager for enabling asynchronous kernel compilation in Triton.</p>
-<p>This class manages a pool of compilation tasks submitted to a concurrent
-executor, allowing kernels to be compiled in the background while the
-main program continues execution. It ensures that all pending compilations
-are finalized upon exiting the context.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="triton.AsyncCompileMode">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">triton.</span></span><span class="sig-name descname"><span class="pre">AsyncCompileMode</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">executor</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">ignore_errors</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#triton.AsyncCompileMode" title="Link to this definition">¶</a></dt>
+<dd><p>Context manager for managing asynchronous kernel compilation.</p>
+<p>Submits compilation tasks to a concurrent executor and ensures all
+outstanding futures are finalized upon exiting the context. Only one
+instance may be active within a given context scope.</p>
 <section id="parameters">
 <h2>Parameters<a class="headerlink" href="#parameters" title="Link to this heading">¶</a></h2>
 <dl class="simple">
-<dt>executor<span class="classifier">concurrent.futures.Executor</span></dt><dd><p>The executor instance (e.g., <code class="docutils literal notranslate"><span class="pre">ThreadPoolExecutor</span></code> or
-<code class="docutils literal notranslate"><span class="pre">ProcessPoolExecutor</span></code>) used to submit compilation tasks.</p>
+<dt>executor<span class="classifier">concurrent.futures.Executor</span></dt><dd><p>The executor used to submit compilation tasks asynchronously.</p>
 </dd>
-<dt>ignore_errors<span class="classifier">bool, optional</span></dt><dd><p>If <code class="docutils literal notranslate"><span class="pre">True</span></code>, exceptions raised during compilation are suppressed
-and <code class="docutils literal notranslate"><span class="pre">None</span></code> is returned for failed kernels. If <code class="docutils literal notranslate"><span class="pre">False</span></code> (default),
-exceptions are re-raised. Default is <code class="docutils literal notranslate"><span class="pre">False</span></code>.</p>
-</dd>
-</dl>
-</section>
-<section id="attributes">
-<h2>Attributes<a class="headerlink" href="#attributes" title="Link to this heading">¶</a></h2>
-<dl class="simple">
-<dt>executor<span class="classifier">concurrent.futures.Executor</span></dt><dd><p>The underlying executor managing worker threads/processes.</p>
-</dd>
-<dt>ignore_errors<span class="classifier">bool</span></dt><dd><p>Flag indicating whether compilation errors should be ignored.</p>
-</dd>
-<dt>raw_futures<span class="classifier">list</span></dt><dd><p>Internal list of raw <code class="docutils literal notranslate"><span class="pre">Future</span></code> objects submitted to the executor.</p>
-</dd>
-<dt>future_kernels<span class="classifier">dict</span></dt><dd><p>Mapping from compilation keys to <code class="docutils literal notranslate"><span class="pre">FutureKernel</span></code> wrapper objects.</p>
+<dt>ignore_errors<span class="classifier">bool, optional</span></dt><dd><p>If True, exceptions raised during compilation are suppressed and
+<code class="docutils literal notranslate"><span class="pre">None</span></code> is returned instead of raising. Default is False.</p>
 </dd>
 </dl>
 </section>
 <section id="methods">
 <h2>Methods<a class="headerlink" href="#methods" title="Link to this heading">¶</a></h2>
 <dl class="simple">
-<dt>submit(key, compile_fn, finalize_fn)</dt><dd><p>Submit a compilation task if not already pending for the given key.
-Returns a <code class="docutils literal notranslate"><span class="pre">FutureKernel</span></code> proxy that behaves like the compiled kernel.</p>
+<dt>submit(key, compile_fn, finalize_fn)</dt><dd><p>Submit a compilation task to the executor.</p>
 </dd>
 </dl>
 </section>
-<section id="notes">
-<h2>Notes<a class="headerlink" href="#notes" title="Link to this heading">¶</a></h2>
-<p>Only one <code class="docutils literal notranslate"><span class="pre">AsyncCompileMode</span></code> can be active per context at a time.
-Attempting to enter a nested context while one is already active raises
-a <code class="docutils literal notranslate"><span class="pre">RuntimeError</span></code>.</p>
-<p>The <code class="docutils literal notranslate"><span class="pre">FutureKernel</span></code> objects returned by <code class="docutils literal notranslate"><span class="pre">submit</span></code> transparently delegate
-attribute access to the underlying compiled kernel, allowing users to
-interact with them as if they were already compiled.</p>
+<section id="raises">
+<h2>Raises<a class="headerlink" href="#raises" title="Link to this heading">¶</a></h2>
+<dl class="simple">
+<dt>RuntimeError</dt><dd><p>If entering a context while another <code class="docutils literal notranslate"><span class="pre">AsyncCompileMode</span></code> is already
+active in the same scope.</p>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="triton.AsyncCompileMode.submit">
+<span class="sig-name descname"><span class="pre">submit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">key</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">compile_fn</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">finalize_fn</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#triton.AsyncCompileMode.submit" title="Link to this definition">¶</a></dt>
+<dd><p>Submit a kernel compilation task for asynchronous execution.</p>
+<section id="id1">
+<h3>Parameters<a class="headerlink" href="#id1" title="Link to this heading">¶</a></h3>
+<dl class="simple">
+<dt>key<span class="classifier">hashable</span></dt><dd><p>Unique identifier for the compilation task. Used to deduplicate
+concurrent submissions for the same key.</p>
+</dd>
+<dt>compile_fn<span class="classifier">Callable</span></dt><dd><p>Function that performs the compilation and returns the kernel.</p>
+</dd>
+<dt>finalize_fn<span class="classifier">Callable</span></dt><dd><p>Function called with the compiled kernel result upon completion.</p>
+</dd>
+</dl>
+</section>
+<section id="returns">
+<h3>Returns<a class="headerlink" href="#returns" title="Link to this heading">¶</a></h3>
+<dl class="simple">
+<dt>FutureKernel</dt><dd><p>A wrapper object that resolves to the compiled kernel. Attribute
+access is deferred to the underlying kernel upon resolution.</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
 </section>
 <section id="examples">
 <h2>Examples<a class="headerlink" href="#examples" title="Link to this heading">¶</a></h2>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">concurrent.futures</span><span class="w"> </span><span class="kn">import</span> <span class="n">ThreadPoolExecutor</span>
-<span class="kn">import</span><span class="w"> </span><span class="nn">triton</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">triton.runtime</span><span class="w"> </span><span class="kn">import</span> <span class="n">AsyncCompileMode</span>
 
-<span class="k">def</span><span class="w"> </span><span class="nf">my_compile_fn</span><span class="p">():</span>
-    <span class="c1"># Simulate expensive compilation</span>
-    <span class="k">return</span> <span class="s2">&quot;compiled_kernel_object&quot;</span>
-
-<span class="k">def</span><span class="w"> </span><span class="nf">my_finalize_fn</span><span class="p">(</span><span class="n">kernel</span><span class="p">):</span>
-    <span class="c1"># Post-processing step</span>
-    <span class="k">pass</span>
-
-<span class="k">with</span> <span class="n">ThreadPoolExecutor</span><span class="p">(</span><span class="n">max_workers</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span> <span class="k">as</span> <span class="n">executor</span><span class="p">:</span>
+<span class="k">with</span> <span class="n">ThreadPoolExecutor</span><span class="p">()</span> <span class="k">as</span> <span class="n">executor</span><span class="p">:</span>
     <span class="k">with</span> <span class="n">AsyncCompileMode</span><span class="p">(</span><span class="n">executor</span><span class="p">)</span> <span class="k">as</span> <span class="n">mode</span><span class="p">:</span>
-        <span class="c1"># Submit compilation asynchronously</span>
-        <span class="n">kernel_proxy</span> <span class="o">=</span> <span class="n">mode</span><span class="o">.</span><span class="n">submit</span><span class="p">(</span>
+        <span class="n">future_kernel</span> <span class="o">=</span> <span class="n">mode</span><span class="o">.</span><span class="n">submit</span><span class="p">(</span>
             <span class="n">key</span><span class="o">=</span><span class="s2">&quot;my_kernel&quot;</span><span class="p">,</span>
-            <span class="n">compile_fn</span><span class="o">=</span><span class="n">my_compile_fn</span><span class="p">,</span>
-            <span class="n">finalize_fn</span><span class="o">=</span><span class="n">my_finalize_fn</span>
+            <span class="n">compile_fn</span><span class="o">=</span><span class="n">compile_my_kernel</span><span class="p">,</span>
+            <span class="n">finalize_fn</span><span class="o">=</span><span class="n">finalize_my_kernel</span>
         <span class="p">)</span>
-
-        <span class="c1"># Use proxy immediately; blocks only if result is needed</span>
-        <span class="c1"># and compilation is not yet complete</span>
-        <span class="nb">print</span><span class="p">(</span><span class="n">kernel_proxy</span><span class="p">)</span>  <span class="c1"># Triggers wait if necessary</span>
-
-<span class="c1"># All pending compilations are finalized automatically on exit</span>
+        <span class="c1"># Kernel is accessible after context exits</span>
+        <span class="n">kernel</span> <span class="o">=</span> <span class="n">future_kernel</span><span class="o">.</span><span class="n">result</span><span class="p">()</span>
 </pre></div>
 </div>
 </section>
+</dd></dl>
+
 </section>
 
 
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="triton.Config.html" class="btn btn-neutral float-left" title="class triton.Config" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="triton.Config.html" class="btn btn-neutral float-left" title="triton.Config" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
         <a href="triton.CompilationError.html" class="btn btn-neutral float-right" title="CompilationError" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 

@@ -1,0 +1,56 @@
+join
+====
+
+Join two tensors along a new minor dimension.
+
+Combines two input tensors by stacking them along a new innermost dimension of
+size 2. The inputs are broadcasted to match shapes before joining. This
+operation is the inverse of :func:`split`.
+
+Parameters
+----------
+a : tensor
+    The first input tensor.
+b : tensor
+    The second input tensor.
+
+Returns
+-------
+tensor
+    A tensor with shape equal to the broadcasted shape of ``a`` and ``b``,
+    plus a new minor dimension of size 2.
+
+Notes
+-----
+The two input tensors are broadcasted to the same shape before joining. The
+output tensor has one additional dimension compared to the inputs, with size 2
+in that dimension.
+
+To join more than two tensors, chain multiple calls to this function. This
+reflects Triton's constraint that tensor dimensions must have power-of-two
+sizes.
+
+Examples
+--------
+.. code-block:: python
+
+    import triton.experimental.gluon as gluon
+    import triton.experimental.gluon.language as ttgl
+
+    @gluon.jit
+    def kernel(X_ptr, Y_ptr, Z_ptr, BLOCK: tl.constexpr):
+        a = ttgl.load(X_ptr + ttgl.arange(0, BLOCK))
+        b = ttgl.load(Y_ptr + ttgl.arange(0, BLOCK))
+        # Join two 1D tensors of shape (BLOCK,) into (BLOCK, 2)
+        c = ttgl.join(a, b)
+        ttgl.store(Z_ptr, c)
+
+    # Given two scalars, returns a tensor of shape (2,)
+    scalar_a = ttgl.full([], 1.0, ttgl.float32)
+    scalar_b = ttgl.full([], 2.0, ttgl.float32)
+    joined = ttgl.join(scalar_a, scalar_b)  # shape: (2,)
+
+    # Given two tensors of shape (4, 8), produces (4, 8, 2)
+    tensor_a = ttgl.full([4, 8], 1.0, ttgl.float32)
+    tensor_b = ttgl.full([4, 8], 2.0, ttgl.float32)
+    joined = ttgl.join(tensor_a, tensor_b)  # shape: (4, 8, 2)

@@ -12,3 +12,18 @@ Programmatic Dependent Launch
 
     gdc_wait
     gdc_launch_dependents
+
+
+CUDA Intrinsics
+---------------
+
+.. autosummary::
+    :toctree: generated
+    :nosignatures:
+
+    convert_custom_float8_sm70
+    convert_custom_float8_sm80
+    globaltimer
+    num_threads
+    num_warps
+    smid

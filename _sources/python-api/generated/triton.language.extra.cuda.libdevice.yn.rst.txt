@@ -1,0 +1,51 @@
+yn
+==
+
+yn
+==
+
+Compute the Bessel function of the second kind of order :code:`n`.
+
+Parameters
+----------
+arg0 : tl.int32
+    The order of the Bessel function.
+arg1 : tl.float32 or tl.float64
+    The input value at which to evaluate the Bessel function.
+_semantic : optional
+    Internal parameter for Triton semantic handling. Do not set manually.
+
+Returns
+-------
+tl.float32 or tl.float64
+    The value of the Bessel function of the second kind :code:`Y_n(arg1)`.
+    Returns float32 if arg1 is float32, float64 if arg1 is float64.
+
+Notes
+-----
+This function computes the Bessel function of the second kind (also known as
+the Weber function or Neumann function). It is implemented using CUDA libdevice
+functions: :code:`__nv_ynf` for single precision and :code:`__nv_yn` for
+double precision.
+
+The function is pure (no side effects) and supports elementwise operations on
+tensors.
+
+For large orders or arguments, numerical precision may degrade. The function
+is undefined for negative integer orders in some implementations.
+
+Examples
+--------
+.. code-block:: python
+
+    import triton
+    import triton.language as tl
+
+    @triton.jit
+    def bessel_kernel(x_ptr, out_ptr, BLOCK_SIZE: tl.constexpr):
+        pid = tl.program_id(0)
+        offsets = pid * BLOCK_SIZE + tl.arange(0, BLOCK_SIZE)
+        x = tl.load(x_ptr + offsets)
+        # Compute Y_2(x) - Bessel function of second kind, order 2
+        y = tl.extra.cuda.libdevice.yn(2, x)
+        tl.store(out_ptr + offsets, y)

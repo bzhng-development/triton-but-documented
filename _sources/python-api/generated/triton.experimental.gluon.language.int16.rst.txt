@@ -1,0 +1,35 @@
+int16
+=====
+
+.. py:data:: int16
+   :module: triton.experimental.gluon.language
+
+   16-bit signed integer data type.
+
+   Represents a 16-bit signed integer scalar or tensor element type within
+   Gluon kernels. Use this dtype to specify precision for pointers, memory
+   operations, and arithmetic.
+
+   Examples
+   --------
+   Specify ``int16`` precision when loading or storing data:
+
+   .. code-block:: python
+
+       import triton.experimental.gluon as gluon
+       import triton.experimental.gluon.language as ttgl
+
+       @gluon.jit
+       def load_kernel(ptr, n):
+           idx = ttgl.arange(0, n)
+           mask = idx < n
+           # Load 16-bit signed integers
+           data = ttgl.load(ptr + idx, mask=mask, dtype=ttgl.int16)
+           ttgl.store(ptr + idx, data, mask=mask)
+
+   Notes
+   -----
+   *   **Bit width**: 16
+   *   **Signedness**: Signed
+   *   **Range**: -32768 to 32767
+   *   **Alignment**: 2 bytes

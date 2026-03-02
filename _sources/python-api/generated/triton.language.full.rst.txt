@@ -1,39 +1,48 @@
-full
-====
+triton.language.full
+====================
 
 .. currentmodule:: triton.language
 
-.. function:: full(shape, value, dtype, _semantic=None)
+.. autofunction:: full
 
-   Returns a tensor filled with the scalar value for the given ``shape`` and ``dtype``.
+Create a tensor filled with a scalar value.
 
-   Parameters
-   ----------
-   shape : tuple of ints
-       Shape of the new array, e.g., ``(8, 16)`` or ``(8,)``.
-   value : scalar
-       A scalar value to fill the array with.
-   dtype : tl.dtype
-       Data type of the new array, e.g., ``tl.float16``.
+Returns a tensor of the specified shape and dtype, with all elements set to the given scalar value.
 
-   Returns
-   -------
-   tensor
-       A tensor of the specified ``shape`` and ``dtype`` where every element equals ``value``.
+Parameters
+----------
+shape : tuple of ints
+    Shape of the new tensor, e.g., ``(8, 16)`` or ``(8,)``.
+value : scalar
+    A scalar value to fill the tensor with.
+dtype : tl.dtype
+    Data type of the new tensor, e.g., :code:`tl.float16`, :code:`tl.int32`.
 
-   Examples
-   --------
-   .. code-block:: python
+Returns
+-------
+tensor
+    A tensor of the specified shape and dtype filled with the scalar value.
 
-      import triton
-      import triton.language as tl
+Notes
+-----
+This function is analogous to :func:`numpy.full`. The shape must satisfy Triton's
+block shape constraints (power-of-two sizes, maximum numel limited by
+:code:`TRITON_MAX_TENSOR_NUMEL`).
 
-      @triton.jit
-      def kernel(ptr, BLOCK_SIZE: tl.constexpr):
-          # Create a 1D tensor of size BLOCK_SIZE filled with 1.0 (float32)
-          ones = tl.full((BLOCK_SIZE,), 1.0, tl.float32)
-          
-          # Create a 2D tensor (4x4) filled with 0 (int32)
-          zeros = tl.full((4, 4), 0, tl.int32)
-          
-          tl.store(ptr + tl.arange(0, BLOCK_SIZE), ones)
+Examples
+--------
+.. code-block:: python
+
+    import triton
+    import triton.language as tl
+
+    @triton.jit
+    def kernel():
+        # Create a 4x4 tensor filled with 1.0 (float32)
+        ones = tl.full((4, 4), 1.0, tl.float32)
+
+        # Create a 1D tensor of 8 zeros (int32)
+        zeros = tl.full((8,), 0, tl.int32)
+
+        # Use in computation
+        result = ones + zeros  # element-wise addition

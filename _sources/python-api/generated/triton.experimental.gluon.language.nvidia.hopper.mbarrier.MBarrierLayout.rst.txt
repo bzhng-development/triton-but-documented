@@ -1,0 +1,52 @@
+MBarrierLayout
+==============
+
+.. class:: MBarrierLayout(cga_layout=None)
+
+    Layout descriptor for hardware mbarrier synchronization on NVIDIA Ampere 
+    and later architectures.
+
+    Parameters
+    ----------
+    cga_layout : list of list of int, optional
+        CGA layout bases. Defaults to ``[]``.
+
+    .. staticmethod:: multicta(num_ctas, two_cta=False)
+
+        Create a multi-CTA mbarrier layout.
+
+        Parameters
+        ----------
+        num_ctas : int
+            Number of CTAs. Must be a power of two.
+        two_cta : bool, optional
+            Whether the barrier should synchronize every other CTA. 
+            Defaults to ``False``.
+
+        Returns
+        -------
+        MBarrierLayout
+            The configured layout instance.
+
+        Notes
+        -----
+        If ``two_cta`` is ``True``, ``num_ctas`` must be even.
+
+    Notes
+    -----
+    Inherits from :class:`SwizzledSharedLayout`. This layout is typically 
+    used with :func:`triton.experimental.gluon.language.allocate_shared_memory` 
+    to create mbarrier objects for cross-CTA synchronization.
+
+    Examples
+    --------
+    .. code-block:: python
+
+        import triton.experimental.gluon.language as ttgl
+        from triton.experimental.gluon.language.nvidia.hopper.mbarrier import MBarrierLayout
+
+        # Basic instantiation
+        layout = MBarrierLayout()
+
+        # Using the multicta helper for multi-CTA synchronization
+        layout = MBarrierLayout.multicta(num_ctas=4)

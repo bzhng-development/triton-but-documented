@@ -1,0 +1,45 @@
+triton.language.extra.cuda.libdevice.float2int_ru
+==================================================
+
+.. currentmodule:: triton.language.extra.cuda.libdevice
+
+.. function:: float2int_ru(arg0, _semantic=None)
+
+    Convert floating-point values to 32-bit integers with round-up rounding mode.
+
+    Parameters
+    ----------
+    arg0 : tl.tensor
+        Input tensor of floating-point values (fp32).
+
+    Returns
+    -------
+    tl.tensor
+        Tensor of 32-bit signed integers (int32) with values rounded towards
+        positive infinity.
+
+    Notes
+    -----
+    This function wraps the CUDA libdevice intrinsic ``__nv_float2int_ru``, which
+    performs floating-point to integer conversion with round-up (towards positive
+    infinity) rounding mode. For positive values, this behaves like ceiling.
+    For negative values, it truncates towards zero.
+
+    The operation is pure (no side effects) and compiles to a single GPU
+    instruction on CUDA devices.
+
+    Examples
+    --------
+    .. code-block:: python
+
+        import triton
+        import triton.language as tl
+
+        @triton.jit
+        def kernel(x_ptr, y_ptr, BLOCK_SIZE: tl.constexpr):
+            pid = tl.program_id(0)
+            offs = pid * BLOCK_SIZE + tl.arange(0, BLOCK_SIZE)
+            x = tl.load(x_ptr + offs)
+            # Convert float to int with round-up rounding
+            y = tl.extra.cuda.libdevice.float2int_ru(x)
+            tl.store(y_ptr + offs, y)

@@ -1,0 +1,54 @@
+triton.experimental.gluon.language.nvidia.ampere.mbarrier.init
+=============================================================
+
+.. currentmodule:: triton.experimental.gluon.language.nvidia.ampere
+
+.. function:: init(mbarrier, count, _semantic=None)
+
+   Initialize a memory barrier (mbarrier) in shared memory with a specified thread count.
+
+   Parameters
+   ----------
+   mbarrier : shared_memory_descriptor
+       The barrier object to initialize. Must be a shared memory descriptor allocated
+       for mbarrier use on NVIDIA Ampere architecture GPUs.
+   count : int
+       The initial thread count for the barrier. Represents the number of threads
+       expected to arrive at the barrier before it is released.
+   _semantic : GluonSemantic, optional
+       Internal semantic context. Do not pass explicitly; automatically provided
+       by the ``@gluon.jit`` decorator.
+
+   Returns
+   -------
+   None
+
+   Notes
+   -----
+   This function is specific to NVIDIA Ampere architecture (SM80) and later.
+   The mbarrier is a hardware synchronization primitive that enables efficient
+   thread coordination within a CTA. After initialization, threads can use
+   :func:`mbarrier.arrive` and :func:`mbarrier.wait` to synchronize.
+
+   The ``count`` parameter should match the number of threads that will participate
+   in the barrier synchronization. Typical usage sets this to the number of
+   threads in a warp or CTA.
+
+   Examples
+   --------
+   .. code-block:: python
+
+      import triton.experimental.gluon as gluon
+      import triton.experimental.gluon.language as ttgl
+      from triton.experimental.gluon.language.nvidia.ampere import mbarrier
+
+      @gluon.jit
+      def kernel():
+          # Allocate shared memory for mbarrier (128 bytes on Ampere)
+          mb = ttgl.allocate_shared_memory(
+              ttgl.int64, [128],
+              ttgl.SharedLayout(128, 1)
+          )
+          # Initialize barrier with thread count of 128
+          mbarrier.init(mb, 128)
+          # ... use mbarrier.arrive/wait for synchronization ...

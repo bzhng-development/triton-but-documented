@@ -1,0 +1,45 @@
+triton.language.extra.cuda.libdevice.double2uint_rn
+====================================================
+
+.. currentmodule:: triton.language.extra.cuda.libdevice
+
+.. function:: double2uint_rn(arg0, _semantic=None)
+
+   Convert double-precision floating-point value to unsigned 32-bit integer with round-to-nearest rounding.
+
+   Parameters
+   ----------
+   arg0 : tl.tensor
+       Input tensor of double-precision floating-point values (``tl.float64``).
+   _semantic : optional
+       Internal semantic argument, do not provide manually.
+
+   Returns
+   -------
+   tl.tensor
+       Tensor of unsigned 32-bit integers (``tl.int32``).
+
+   Notes
+   -----
+   This function wraps the CUDA libdevice intrinsic ``__nv_double2uint_rn``.
+   The ``rn`` suffix indicates round-to-nearest-even rounding mode.
+
+   Values outside the representable range of uint32 (0 to 4294967295) produce
+   undefined behavior. NaN and infinity inputs also produce undefined results.
+
+   This function is CUDA-specific and requires a GPU backend.
+
+   Examples
+   --------
+   .. code-block:: python
+
+      import triton
+      import triton.language as tl
+
+      @triton.jit
+      def kernel(x_ptr, y_ptr, BLOCK_SIZE: tl.constexpr):
+          pid = tl.program_id(0)
+          offset = pid * BLOCK_SIZE + tl.arange(0, BLOCK_SIZE)
+          x = tl.load(x_ptr + offset)  # fp64 values
+          y = tl.extra.cuda.libdevice.double2uint_rn(x)  # convert to uint32
+          tl.store(y_ptr + offset, y)

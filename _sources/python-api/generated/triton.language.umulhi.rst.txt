@@ -1,54 +1,43 @@
 umulhi
-========
+======
 
 .. currentmodule:: triton.language
 
 .. function:: umulhi(x, y, _semantic=None)
 
-   Computes the element-wise most significant N bits of the 2N-bit product of
-   :code:`x` and :code:`y`.
-
-   For an N-bit integer type, this returns the upper N bits of the 2N-bit
-   result of multiplying :code:`x` and :code:`y`. This is useful for
-   implementing high-precision multiplication or specific numerical algorithms
-   requiring the high word of a product.
+   Computes the element-wise most significant N bits of the 2N-bit product of :code:`x` and :code:`y`.
 
    Parameters
    ----------
    x : Block
-       The first input tensor. Must be of integer type (int32, int64, uint32,
-       or uint64).
+       The first input tensor. Must be of type :code:`int32`, :code:`int64`, :code:`uint32`, or :code:`uint64`.
    y : Block
-       The second input tensor. Must be of the same integer type as :code:`x`.
+       The second input tensor. Must be of type :code:`int32`, :code:`int64`, :code:`uint32`, or :code:`uint64`.
 
    Returns
    -------
    Block
-       A tensor containing the most significant N bits of the 2N-bit product
-       for each element. The dtype matches the input dtype.
+       A tensor containing the most significant N bits of the 2N-bit product of :code:`x` and :code:`y`. The dtype matches the input dtype.
 
    Notes
    -----
-   Supported dtypes are :code:`int32`, :code:`int64`, :code:`uint32`, and
-   :code:`uint64`. Inputs are broadcasted to a common shape if necessary.
+   For N-bit inputs, the full product is 2N bits. This function returns the upper N bits of that product. This is useful for high-precision multiplication where the full 2N-bit result is needed but only the high bits are required.
 
-   This function can also be called as a member function on :py:class:`tensor`,
-   as :code:`x.umulhi(y)` instead of :code:`tl.umulhi(x, y)`.
+   Supported dtypes: :code:`int32`, :code:`int64`, :code:`uint32`, :code:`uint64`.
 
    Examples
    --------
    .. code-block:: python
 
-       import triton
-       import triton.language as tl
+      import triton
+      import triton.language as tl
 
-       @triton.jit
-       def kernel(x_ptr, y_ptr, out_ptr, BLOCK_SIZE: tl.constexpr):
-           pid = tl.program_id(0)
-           offs = pid * BLOCK_SIZE + tl.arange(0, BLOCK_SIZE)
-           x = tl.load(x_ptr + offs)
-           y = tl.load(y_ptr + offs)
-
-           # Compute high 32 bits of 64-bit product for uint32 inputs
-           res = tl.umulhi(x, y)
-           tl.store(out_ptr + offs, res)
+      @triton.jit
+      def kernel(x_ptr, y_ptr, out_ptr, BLOCK_SIZE: tl.constexpr):
+          pid = tl.program_id(0)
+          offs = pid * BLOCK_SIZE + tl.arange(0, BLOCK_SIZE)
+          x = tl.load(x_ptr + offs)
+          y = tl.load(y_ptr + offs)
+          # Compute high 32 bits of 64-bit product
+          hi = tl.umulhi(x, y)
+          tl.store(out_ptr + offs, hi)

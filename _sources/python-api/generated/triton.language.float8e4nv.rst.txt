@@ -1,61 +1,36 @@
-triton.language.float8e4nv
-=========================
+float8e4nv
+==========
 
-.. currentmodule:: triton.language
+.. py:data:: triton.language.float8e4nv
 
-8-bit floating point type (E4M3) compatible with NVIDIA Hopper architecture.
+    NVIDIA FP8 (E4M3) data type instance.
 
-This dtype represents the `float8_e4m3fn` format defined in the NVIDIA Hopper
-architecture, consisting of 1 sign bit, 4 exponent bits, and 3 mantissa bits.
-It supports NaN values but does not support infinities. This type is optimized
-for deep learning workloads on H100 and later GPUs.
+    Represents an 8-bit floating point format with 4 exponent bits and 3
+    mantissa bits, compliant with the NVIDIA Hopper FP8 specification.
 
-Parameters
-----------
-None
-    This is a dtype instance and does not accept runtime parameters.
+    Notes
+    -----
+    This dtype corresponds to the ``E4M3`` format (1 sign bit, 4 exponent bits,
+    3 mantissa bits). It supports finite values and NaN, but does not support
+    infinities. Hardware execution requires NVIDIA GPUs with Compute
+    Capability >= 9.0 (Hopper architecture). This type is commonly used as
+    input operand for mixed-precision matrix multiplications via ``tl.dot``.
 
-Returns
--------
-dtype
-    A scalar type object representing the 8-bit E4M3 floating point format.
+    Examples
+    --------
+    Use this dtype to cast tensors or define pointer types in Triton kernels:
 
-Notes
------
-*   This type is only supported on GPUs with compute capability >= 9.0 (Hopper).
-*   Attempting to use this type on unsupported hardware will result in a
-    compilation error.
-*   The range of representable values is approximately ``[0.0, 448.0]`` with
-    subnormal support.
-*   In Triton kernels, variables typed with this dtype are stored in registers
-    or shared memory as 8-bit values, enabling higher throughput for matrix
-    operations compared to ``float16`` or ``float32``.
+    .. code-block:: python
 
-Examples
---------
-.. code-block:: python
+        import triton
+        import triton.language as tl
 
-    import triton
-    import triton.language as tl
-
-    @triton.jit
-    def fp8_kernel(
-        X_ptr, Y_ptr, N,
-        BLOCK_SIZE: tl.constexpr,
-    ):
-        pid = tl.program_id(axis=0)
-        offs = pid * BLOCK_SIZE + tl.arange(0, BLOCK_SIZE)
-        mask = offs < N
-
-        # Load data as float8e4nv
-        x = tl.load(X_ptr + offs, mask=mask, other=0.0).to(tl.float8e4nv)
-
-        # Perform computation in FP8
-        y = x * 2.0
-
-        # Store result
-        tl.store(Y_ptr + offs, y, mask=mask)
-
-    # Launch configuration requires Hopper GPU (sm_90+)
-    # grid = lambda meta: (triton.cdiv(N, meta['BLOCK_SIZE']),)
-    # fp8_kernel[grid](x_ptr, y_ptr, N, BLOCK_SIZE=128)
+        @triton.jit
+        def fp8_kernel(x_ptr, out_ptr, BLOCK_SIZE: tl.constexpr):
+            pid = tl.program_id(0)
+            offs = pid * BLOCK_SIZE + tl.arange(0, BLOCK_SIZE)
+            mask = offs < BLOCK_SIZE
+            x = tl.load(x_ptr + offs, mask=mask)
+            # Cast to FP8 E4M3
+            x_fp8 = x.to(tl.float8e4nv)
+            tl.store(out_ptr + offs, x_fp8, mask=mask)

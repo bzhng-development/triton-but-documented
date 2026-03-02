@@ -1,0 +1,55 @@
+triton.language.extra.cuda.libdevice.sin
+=========================================
+
+.. currentmodule:: triton.language.extra.cuda.libdevice
+
+.. autofunction:: sin
+
+Compute the sine of each element in the input tensor.
+
+Parameters
+----------
+arg0 : tl.tensor
+    Input tensor. Must have dtype ``fp32`` or ``fp64``.
+_semantic : optional
+    Internal semantic argument. Do not set manually.
+
+Returns
+-------
+result : tl.tensor
+    Tensor containing the sine of each element in ``arg0``. Has the same dtype
+    as ``arg0``.
+
+Notes
+-----
+This function is an external wrapper around CUDA libdevice sine functions:
+
+- ``__nv_sinf`` for ``fp32`` inputs
+- ``__nv_sin`` for ``fp64`` inputs
+
+The operation is pure (no side effects) and supports element-wise computation
+on tensors. Input values are expected to be in radians.
+
+For ``fp32`` inputs, the result has single-precision accuracy. For ``fp64``
+inputs, the result has double-precision accuracy.
+
+Examples
+--------
+.. code-block:: python
+
+    import triton
+    import triton.language as tl
+
+    @triton.jit
+    def sine_kernel(x_ptr, y_ptr, BLOCK_SIZE: tl.constexpr):
+        pid = tl.program_id(0)
+        offsets = pid * BLOCK_SIZE + tl.arange(0, BLOCK_SIZE)
+        x = tl.load(x_ptr + offsets)
+        y = tl.extra.cuda.libdevice.sin(x)
+        tl.store(y_ptr + offsets, y)
+
+    # Compute sine of values in radians
+    import torch
+    x = torch.linspace(0, 2 * torch.pi, 1024, device='cuda')
+    y = torch.empty_like(x)
+    sine_kernel[(1024 // 256,)](x, y, BLOCK_SIZE=256)

@@ -1,0 +1,48 @@
+reinterpret
+===========
+
+.. py:function:: triton.runtime.reinterpret(tensor, dtype)
+
+    Reinterpret a tensor object as a specific data type.
+
+    Creates a ``TensorWrapper`` around the input tensor with the specified
+    ``dtype``, or returns the base tensor if the dtype matches.
+
+    Parameters
+    ----------
+    tensor : tensor-like or TensorWrapper
+        Input tensor object. Must have a ``data_ptr`` method or be an
+        existing ``TensorWrapper``.
+    dtype : dtype
+        Target data type for the reinterpreted tensor.
+
+    Returns
+    -------
+    TensorWrapper or tensor
+        A ``TensorWrapper`` view of the tensor with the specified ``dtype``.
+        If ``tensor`` is a ``TensorWrapper`` and ``dtype`` matches the base
+        tensor's dtype, the base tensor is returned directly.
+
+    Raises
+    ------
+    TypeError
+        If ``tensor`` does not have a ``data_ptr`` method and is not a
+        ``TensorWrapper``.
+
+    Notes
+    -----
+    This function is primarily used internally for mocking tensor types
+    during kernel warmup or testing scenarios. It does not change the
+    underlying data pointer, only the perceived data type.
+
+    Examples
+    --------
+    .. code-block:: python
+
+        import torch
+        import triton.runtime
+
+        tensor = torch.zeros((10,), dtype=torch.float32)
+        wrapped = triton.runtime.reinterpret(tensor, torch.int32)
+        print(wrapped.dtype)  # torch.int32
+        print(wrapped.data_ptr() == tensor.data_ptr())  # True

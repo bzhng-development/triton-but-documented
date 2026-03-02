@@ -1,6 +1,53 @@
-﻿triton.language.extra.cuda.gdc\_wait
+triton.language.extra.cuda.gdc_wait
 ====================================
 
 .. currentmodule:: triton.language.extra.cuda
 
-.. autofunction:: gdc_wait
+.. function:: gdc_wait()
+
+   Insert a grid dependency control wait barrier.
+
+   This blocking instruction waits for all instructions in a prior kernel to
+   complete before continuing execution. Ensures memory operations before the
+   wait are visible to subsequent instructions.
+
+   Parameters
+   ----------
+   None
+
+   Returns
+   -------
+   None
+
+   Notes
+   -----
+   This instruction implements CUDA's ``griddepcontrol.wait`` PTX instruction.
+   It provides cross-kernel synchronization by ensuring all memory writes from
+   prior kernels are visible before proceeding.
+
+   The instruction is safe to execute even when programmatic dependent launch
+   is disabled. Use this when you need explicit synchronization between
+   independent kernel launches that access shared memory locations.
+
+   For example, if a prior kernel writes to address ``x``, the new values will
+   be visible in this kernel after calling ``gdc_wait()``.
+
+   References
+   ----------
+   NVIDIA PTX Documentation:
+   https://docs.nvidia.com/cuda/parallel-thread-execution/index.html#parallel-synchronization-and-communication-instructions-griddepcontrol
+
+   Examples
+   --------
+   .. code-block:: python
+
+      import triton
+      import triton.language as tl
+
+      @triton.jit
+      def kernel_with_sync(...):
+          # Wait for prior kernel to complete
+          tl.extra.cuda.gdc_wait()
+          # Now safe to read memory written by prior kernel
+          value = tl.load(ptr)
+          ...

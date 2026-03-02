@@ -1,0 +1,481 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>class PaddedSharedLayout &mdash; Triton  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=03e43079" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/custom.css" />
+
+  
+      <script src="../../_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="SharedLinearLayout" href="triton.experimental.gluon.language.SharedLinearLayout.html" />
+    <link rel="prev" title="class triton.experimental.gluon.language.NVMMASharedLayout" href="triton.experimental.gluon.language.NVMMASharedLayout.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            Triton
+              <img src="https://cdn.openai.com/triton/assets/triton-logo.png" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../getting-started/installation.html">Installation</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Python API</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../triton.html">triton</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.language.html">triton.language</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.testing.html">triton.testing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton-semantics.html">Triton Semantics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.language.extra.cuda.html">triton.language.extra.cuda</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.language.extra.cuda.libdevice.html">triton.language.extra.cuda.libdevice</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.runtime.html">triton.runtime</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.tools.html">triton.tools</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Gluon (Experimental) API</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.html">triton.experimental.gluon</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../triton.experimental.gluon.language.html">triton.experimental.gluon.language</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="../triton.experimental.gluon.language.html#language-primitives">Language Primitives</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="triton.experimental.gluon.language.AutoLayout.html">AutoLayout</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.experimental.gluon.language.BlockedLayout.html">BlockedLayout</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.experimental.gluon.language.CoalescedLayout.html">class triton.experimental.gluon.language.CoalescedLayout</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.experimental.gluon.language.DistributedLinearLayout.html">DistributedLinearLayout</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.experimental.gluon.language.DotOperandLayout.html">class triton.experimental.gluon.language.DotOperandLayout</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.experimental.gluon.language.NVMMADistributedLayout.html">class triton.experimental.gluon.language.NVMMADistributedLayout</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.experimental.gluon.language.NVMMASharedLayout.html">class triton.experimental.gluon.language.NVMMASharedLayout</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">class PaddedSharedLayout</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#triton.experimental.gluon.language.PaddedSharedLayout"><code class="docutils literal notranslate"><span class="pre">PaddedSharedLayout</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="triton.experimental.gluon.language.SharedLinearLayout.html">SharedLinearLayout</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.experimental.gluon.language.SliceLayout.html">class triton.experimental.gluon.language.SliceLayout</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.experimental.gluon.language.SwizzledSharedLayout.html">class triton.experimental.gluon.language.SwizzledSharedLayout</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.experimental.gluon.language.abs.html">abs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.experimental.gluon.language.add.html">add</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.experimental.gluon.language.allocate_shared_memory.html">allocate_shared_memory</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.experimental.gluon.language.arange.html">arange</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.experimental.gluon.language.associative_scan.html">associative_scan</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.experimental.gluon.language.assume.html">assume</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.experimental.gluon.language.atomic_add.html">atomic_add</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.experimental.gluon.language.atomic_and.html">atomic_and</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.experimental.gluon.language.atomic_cas.html">atomic_cas</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.experimental.gluon.language.atomic_max.html">atomic_max</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.experimental.gluon.language.atomic_min.html">atomic_min</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.experimental.gluon.language.atomic_or.html">atomic_or</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.experimental.gluon.language.atomic_xchg.html">atomic_xchg</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.experimental.gluon.language.atomic_xor.html">atomic_xor</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.experimental.gluon.language.bank_conflicts.html">bank_conflicts</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.experimental.gluon.language.barrier.html">gluon.language.barrier</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.experimental.gluon.language.base_type.html">base_type</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.experimental.gluon.language.base_value.html">base_value</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.experimental.gluon.language.bfloat16.html">bfloat16</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.experimental.gluon.language.block_type.html">block_type</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.experimental.gluon.language.broadcast.html">broadcast</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.experimental.gluon.language.cast.html">cast</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.experimental.gluon.language.cdiv.html">cdiv</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.experimental.gluon.language.ceil.html">ceil</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.experimental.gluon.language.constexpr.html">constexpr</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.experimental.gluon.language.convert_layout.html">convert_layout</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.experimental.gluon.language.cos.html">cos</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.experimental.gluon.language.device_assert.html">device_assert</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.experimental.gluon.language.device_print.html">device_print</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.experimental.gluon.language.distributed_type.html">distributed_type</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.experimental.gluon.language.div_rn.html">div_rn</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.experimental.gluon.language.dot_fma.html">dot_fma</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.experimental.gluon.language.dtype.html">dtype</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.experimental.gluon.language.erf.html">erf</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.experimental.gluon.language.exp.html">exp</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.experimental.gluon.language.exp2.html">exp2</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.experimental.gluon.language.expand_dims.html">expand_dims</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.experimental.gluon.language.fdiv.html">fdiv</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.experimental.gluon.language.float16.html">float16</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.experimental.gluon.language.float32.html">float32</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.experimental.gluon.language.float64.html">float64</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.experimental.gluon.language.float8e4b15.html">float8e4b15</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.experimental.gluon.language.float8e4b8.html">float8e4b8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.experimental.gluon.language.float8e4nv.html">float8e4nv</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.experimental.gluon.language.float8e5.html">float8e5</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.experimental.gluon.language.float8e5b16.html">float8e5b16</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.experimental.gluon.language.floor.html">floor</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.experimental.gluon.language.fma.html">fma</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.experimental.gluon.language.fp4_to_fp.html">fp4_to_fp</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.experimental.gluon.language.full.html">full</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.experimental.gluon.language.full_like.html">full_like</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.experimental.gluon.language.gather.html">gather</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.experimental.gluon.language.histogram.html">histogram</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.experimental.gluon.language.inline_asm_elementwise.html">inline_asm_elementwise</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.experimental.gluon.language.int1.html">int1</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.experimental.gluon.language.int16.html">int16</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.experimental.gluon.language.int32.html">int32</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.experimental.gluon.language.int64.html">int64</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.experimental.gluon.language.int8.html">int8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.experimental.gluon.language.join.html">join</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.experimental.gluon.language.load.html">load</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.experimental.gluon.language.log.html">log</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.experimental.gluon.language.log2.html">log2</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.experimental.gluon.language.map_elementwise.html">map_elementwise</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.experimental.gluon.language.max.html">ttgl.max</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.experimental.gluon.language.max_constancy.html">max_constancy</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.experimental.gluon.language.max_contiguous.html">max_contiguous</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.experimental.gluon.language.maximum.html">maximum</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.experimental.gluon.language.min.html">min</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.experimental.gluon.language.minimum.html">minimum</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.experimental.gluon.language.mul.html">mul</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.experimental.gluon.language.multiple_of.html">multiple_of</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.experimental.gluon.language.num_ctas.html">num_ctas</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.experimental.gluon.language.num_programs.html">num_programs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.experimental.gluon.language.num_warps.html">num_warps</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.experimental.gluon.language.permute.html">permute</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.experimental.gluon.language.pointer_type.html">pointer_type</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.experimental.gluon.language.program_id.html">program_id</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.experimental.gluon.language.ravel.html">ravel</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.experimental.gluon.language.reduce.html">reduce</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.experimental.gluon.language.reduce_or.html">reduce_or</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.experimental.gluon.language.reshape.html">reshape</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.experimental.gluon.language.rsqrt.html">rsqrt</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.experimental.gluon.language.set_auto_layout.html">set_auto_layout</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.experimental.gluon.language.shared_memory_descriptor.html">shared_memory_descriptor</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.experimental.gluon.language.shared_memory_descriptor_type.html">shared_memory_descriptor_type</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.experimental.gluon.language.sin.html">sin</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.experimental.gluon.language.split.html">split</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.experimental.gluon.language.sqrt.html">sqrt</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.experimental.gluon.language.sqrt_rn.html">sqrt_rn</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.experimental.gluon.language.static_assert.html">static_assert</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.experimental.gluon.language.static_print.html">static_print</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.experimental.gluon.language.static_range.html">static_range</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.experimental.gluon.language.store.html">store</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.experimental.gluon.language.sub.html">sub</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.experimental.gluon.language.sum.html">sum</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.experimental.gluon.language.tensor.html">class tensor</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.experimental.gluon.language.to_linear_layout.html">to_linear_layout</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.experimental.gluon.language.to_tensor.html">to_tensor</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.experimental.gluon.language.tuple.html">tuple</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.experimental.gluon.language.tuple_type.html">tuple_type</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.experimental.gluon.language.uint16.html">uint16</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.experimental.gluon.language.uint32.html">uint32</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.experimental.gluon.language.uint64.html">uint64</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.experimental.gluon.language.uint8.html">uint8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.experimental.gluon.language.umulhi.html">umulhi</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.experimental.gluon.language.void.html">void</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.experimental.gluon.language.warp_specialize.html">warp_specialize</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.experimental.gluon.language.where.html">ttgl.where</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.experimental.gluon.language.xor_sum.html">xor_sum</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.experimental.gluon.language.zeros.html">zeros</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.experimental.gluon.language.zeros_like.html">zeros_like</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.nvidia.ampere.html">triton.experimental.gluon.language.nvidia.ampere</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.nvidia.ampere.async_copy.html">triton.experimental.gluon.language.nvidia.ampere.async_copy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.nvidia.ampere.mbarrier.html">triton.experimental.gluon.language.nvidia.ampere.mbarrier</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.nvidia.hopper.html">triton.experimental.gluon.language.nvidia.hopper</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.nvidia.hopper.tma.html">triton.experimental.gluon.language.nvidia.hopper.tma</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.nvidia.hopper.mbarrier.html">triton.experimental.gluon.language.nvidia.hopper.mbarrier</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.nvidia.hopper.cluster.html">triton.experimental.gluon.language.nvidia.hopper.cluster</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.nvidia.blackwell.html">triton.experimental.gluon.language.nvidia.blackwell</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.nvidia.blackwell.tma.html">triton.experimental.gluon.language.nvidia.blackwell.tma</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.nvidia.blackwell.clc.html">triton.experimental.gluon.language.nvidia.blackwell.clc</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.amd.html">triton.experimental.gluon.language.amd</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.amd.gfx1250.html">triton.experimental.gluon.language.amd.gfx1250</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.amd.gfx1250.async_copy.html">triton.experimental.gluon.language.amd.gfx1250.async_copy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.amd.gfx1250.mbarrier.html">triton.experimental.gluon.language.amd.gfx1250.mbarrier</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.amd.gfx1250.cluster.html">triton.experimental.gluon.language.amd.gfx1250.cluster</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.amd.gfx1250.tdm.html">triton.experimental.gluon.language.amd.gfx1250.tdm</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.amd.cdna3.html">triton.experimental.gluon.language.amd.cdna3</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.amd.cdna4.html">triton.experimental.gluon.language.amd.cdna4</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.amd.rdna3.html">triton.experimental.gluon.language.amd.rdna3</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.amd.rdna4.html">triton.experimental.gluon.language.amd.rdna4</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Triton MLIR Dialects</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../dialects/dialects.html">Triton MLIR Dialects and Ops</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Programming Guide</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../programming-guide/chapter-1/introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../programming-guide/chapter-2/related-work.html">Related Work</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../programming-guide/chapter-3/debugging.html">Debugging Triton</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">Triton</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../triton.experimental.gluon.language.html">triton.experimental.gluon.language</a></li>
+      <li class="breadcrumb-item active">class PaddedSharedLayout</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../_sources/python-api/generated/triton.experimental.gluon.language.PaddedSharedLayout.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="class-paddedsharedlayout">
+<h1>class PaddedSharedLayout<a class="headerlink" href="#class-paddedsharedlayout" title="Link to this heading">¶</a></h1>
+<dl class="py class">
+<dt class="sig sig-object py" id="triton.experimental.gluon.language.PaddedSharedLayout">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">triton.experimental.gluon.language.</span></span><span class="sig-name descname"><span class="pre">PaddedSharedLayout</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">interval_padding_pairs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">offset_bases</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cga_layout</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">shape</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#triton.experimental.gluon.language.PaddedSharedLayout" title="Link to this definition">¶</a></dt>
+<dd><p>Represents a layout for the access to shared memory. Compared to SwizzledSharedLayout,
+it combined padding and element reordering via linear transformation (e.g. row permutation)
+to avoid shared memory bank conflicts. After every interval tensor elements, the
+corresponding number of padding elements are inserted. If a position corresponds to
+multiple intervals, the padding amounts are summed.</p>
+<p>In the following example of a tensor,
+<cite>eM</cite> represents original elements in the and <cite>pN</cite> represents padded element.</p>
+<p>Before padding, the shared memory looks like:
+[e0, e1,</p>
+<blockquote>
+<div><p>e2, e3,
+e4, e5,
+e6, e7,
+…]</p>
+</div></blockquote>
+<p>After padding with interval-padding list [[2, 1], [4, 2]] with an identity remapping,
+the shared memory will be
+[e0, e1, p0,</p>
+<blockquote>
+<div><p>e2, e3, p1, p2, p3,
+e4, e5, p4,
+e6, e7, p5, p6, p7,
+…]</p>
+</div></blockquote>
+<p>Furthermore this encoding allows for a linear remapping from the 1-D shared
+memory offset to logical n-D tensor elements. The remapping is given in the form
+of linear bases mapping from offset to [dim0, dim1…dimN-1].
+See LinearLayout.h for more details how linear layouts are applied to remap
+elements.
+Some concrete examples using <cite>xN</cite> and <cite>yN</cite> to mean the logical n-D tensor elements
+and <cite>pN</cite> to mean padding:</p>
+<p>After padding for shape = [8] with interval-padding list [[2, 2]], offset_bases = [[2], [1]] and cga_layout = []:
+[x0, x2, p0 p1, x1, x3]</p>
+<p>After padding for shape = [8, 4] with interval_padding_pairs = [[8, 1]], offset_bases = [[0, 1], [0, 2], /<em>gap, stride by 2 rows</em>/[2, 0], [4, 0], [1, 0]]] and cga_layout = []:
+[</p>
+<blockquote>
+<div><p>x0y0, x0y1, x0y2, x0y3,
+x2y0, x2y1, x2y2, x2y3,
+p0,
+x4y0, x4y1, x4y2, x4y3,
+x6y0, x6y1, x6y2, x6y3,
+p1,
+x1y0, x1y1, x1y2, x1y3,
+x3y0, x3y1, x3y2, x3y3,
+p2,
+x5y0, x5y1, x5y2, x5y3,
+x7y0, x7y1, x7y2, x7y3,</p>
+</div></blockquote>
+<p>]</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>interval_padding_pairs</strong> (<em>List</em><em>[</em><em>int</em><em>]</em>) – List of [interval, padding] pair and both interval and padding must be powers of 2.</p></li>
+<li><p><strong>offset_bases</strong> (<em>List</em><em>[</em><em>int</em><em>]</em>) – Bases for shared memory offsets</p></li>
+<li><p><strong>cga_layout</strong> (<em>List</em><em>[</em><em>List</em><em>[</em><em>int</em><em>]</em><em>]</em>) – Bases for block-level shared memory offsets.</p></li>
+<li><p><strong>shape</strong> (<em>List</em><em>[</em><em>int</em><em>]</em>) – n-D logical shared memory shape</p></li>
+</ul>
+</dd>
+</dl>
+<p>Represents a shared memory layout that combines padding and element reordering via
+linear transformation to avoid shared memory bank conflicts.</p>
+<section id="parameters">
+<h2>Parameters<a class="headerlink" href="#parameters" title="Link to this heading">¶</a></h2>
+<dl class="simple">
+<dt>interval_padding_pairs<span class="classifier">List[List[int]]</span></dt><dd><p>List of [interval, padding] pairs. Both interval and padding values must be
+powers of 2. After every <code class="docutils literal notranslate"><span class="pre">interval</span></code> tensor elements, <code class="docutils literal notranslate"><span class="pre">padding</span></code> elements
+are inserted. If a position corresponds to multiple intervals, the padding
+amounts are summed.</p>
+</dd>
+<dt>offset_bases<span class="classifier">List[List[int]]</span></dt><dd><p>Bases for shared memory offsets. Each basis is a list of length equal to
+the tensor rank, defining the linear remapping from 1-D shared memory offset
+to logical n-D tensor elements.</p>
+</dd>
+<dt>cga_layout<span class="classifier">List[List[int]], optional</span></dt><dd><p>Bases for block-level shared memory offsets. Default is empty list.</p>
+</dd>
+<dt>shape<span class="classifier">List[int]</span></dt><dd><p>The n-D logical shared memory shape.</p>
+</dd>
+</dl>
+</section>
+<section id="notes">
+<h2>Notes<a class="headerlink" href="#notes" title="Link to this heading">¶</a></h2>
+<p>Compared to <code class="xref py py-class docutils literal notranslate"><span class="pre">SwizzledSharedLayout</span></code>, this layout combines padding with
+element reordering through linear transformations (e.g., row permutation) to
+prevent shared memory bank conflicts.</p>
+<p>The encoding allows for a linear remapping from 1-D shared memory offsets to
+logical n-D tensor elements. The remapping is specified via linear bases that
+map offsets to tensor dimensions.</p>
+<p>All interval and padding values must be powers of 2. The tensor rank must be
+greater than 0.</p>
+</section>
+<section id="examples">
+<h2>Examples<a class="headerlink" href="#examples" title="Link to this heading">¶</a></h2>
+<p>Create a padded shared layout with custom interval-padding pairs:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">triton.experimental.gluon</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">gluon</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">triton.experimental.gluon.language</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">ttgl</span>
+
+<span class="c1"># Define interval-padding pairs: [interval, padding]</span>
+<span class="n">interval_padding_pairs</span> <span class="o">=</span> <span class="p">[[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="p">[</span><span class="mi">4</span><span class="p">,</span> <span class="mi">2</span><span class="p">]]</span>
+
+<span class="c1"># Define offset bases for 2D tensor (rank=2)</span>
+<span class="n">offset_bases</span> <span class="o">=</span> <span class="p">[[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]]</span>
+
+<span class="c1"># Define shape</span>
+<span class="n">shape</span> <span class="o">=</span> <span class="p">[</span><span class="mi">8</span><span class="p">,</span> <span class="mi">4</span><span class="p">]</span>
+
+<span class="n">layout</span> <span class="o">=</span> <span class="n">ttgl</span><span class="o">.</span><span class="n">PaddedSharedLayout</span><span class="p">(</span>
+    <span class="n">interval_padding_pairs</span><span class="o">=</span><span class="n">interval_padding_pairs</span><span class="p">,</span>
+    <span class="n">offset_bases</span><span class="o">=</span><span class="n">offset_bases</span><span class="p">,</span>
+    <span class="n">cga_layout</span><span class="o">=</span><span class="p">[],</span>
+    <span class="n">shape</span><span class="o">=</span><span class="n">shape</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<p>Use the convenience constructor for identity mapping:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Create layout with identity linear mapping</span>
+<span class="n">layout</span> <span class="o">=</span> <span class="n">ttgl</span><span class="o">.</span><span class="n">PaddedSharedLayout</span><span class="o">.</span><span class="n">with_identity_for</span><span class="p">(</span>
+    <span class="n">interval_padding_pairs</span><span class="o">=</span><span class="p">[[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">]],</span>
+    <span class="n">shape</span><span class="o">=</span><span class="p">[</span><span class="mi">8</span><span class="p">],</span>
+    <span class="n">order</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+    <span class="n">cga_layout</span><span class="o">=</span><span class="p">[]</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Methods</p>
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#triton.experimental.gluon.language.PaddedSharedLayout.with_identity_for" title="triton.experimental.gluon.language.PaddedSharedLayout.with_identity_for"><code class="xref py py-obj docutils literal notranslate"><span class="pre">with_identity_for</span></code></a></p></td>
+<td><p>Returns a PaddedSharedLayout with the given interval and padding pairs and an identity mapping as the linear component for the given shape and order.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#triton.experimental.gluon.language.PaddedSharedLayout.verify" title="triton.experimental.gluon.language.PaddedSharedLayout.verify"><code class="xref py py-obj docutils literal notranslate"><span class="pre">verify</span></code></a>(self)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">_to_ir</span></code>(self, builder)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">mangle</span></code>(self)</p></td>
+<td><p></p></td>
+</tr>
+</tbody>
+</table>
+<dl class="py method">
+<dt class="sig sig-object py" id="triton.experimental.gluon.language.PaddedSharedLayout.with_identity_for">
+<span class="property"><span class="k"><span class="pre">static</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">with_identity_for</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#triton.experimental.gluon.language.PaddedSharedLayout.with_identity_for" title="Link to this definition">¶</a></dt>
+<dd><p>Returns a PaddedSharedLayout with the given interval and padding pairs and an identity mapping as the linear component for the given shape and order.</p>
+<p>Returns a <a class="reference internal" href="#triton.experimental.gluon.language.PaddedSharedLayout" title="triton.experimental.gluon.language.PaddedSharedLayout"><code class="xref py py-class docutils literal notranslate"><span class="pre">PaddedSharedLayout</span></code></a> with the given interval and padding
+pairs and an identity mapping as the linear component for the given shape
+and order.</p>
+<section id="id1">
+<h3>Parameters<a class="headerlink" href="#id1" title="Link to this heading">¶</a></h3>
+<dl class="simple">
+<dt>interval_padding_pairs<span class="classifier">List[List[int]]</span></dt><dd><p>List of [interval, padding] pairs.</p>
+</dd>
+<dt>shape<span class="classifier">List[int]</span></dt><dd><p>The tensor shape. All dimensions must be powers of 2.</p>
+</dd>
+<dt>order<span class="classifier">List[int]</span></dt><dd><p>Dimension ordering for the identity mapping.</p>
+</dd>
+<dt>cga_layout<span class="classifier">List[List[int]], optional</span></dt><dd><p>Bases for block-level shared memory offsets. Default is empty list.</p>
+</dd>
+</dl>
+</section>
+<section id="returns">
+<h3>Returns<a class="headerlink" href="#returns" title="Link to this heading">¶</a></h3>
+<dl class="simple">
+<dt>PaddedSharedLayout</dt><dd><p>A new padded shared layout instance with identity linear mapping.</p>
+</dd>
+</dl>
+</section>
+<section id="id2">
+<h3>Notes<a class="headerlink" href="#id2" title="Link to this heading">¶</a></h3>
+<p>This convenience method constructs offset bases automatically based on
+the shape and order, creating an identity linear transformation.</p>
+</section>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="triton.experimental.gluon.language.PaddedSharedLayout.verify">
+<span class="sig-name descname"><span class="pre">verify</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#triton.experimental.gluon.language.PaddedSharedLayout.verify" title="Link to this definition">¶</a></dt>
+<dd><p>Validates the layout configuration.</p>
+<section id="raises">
+<h3>Raises<a class="headerlink" href="#raises" title="Link to this heading">¶</a></h3>
+<dl class="simple">
+<dt>AssertionError</dt><dd><p>If interval_padding_pairs is empty, intervals or paddings are not
+powers of 2, or shape rank is invalid.</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+</section>
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="triton.experimental.gluon.language.NVMMASharedLayout.html" class="btn btn-neutral float-left" title="class triton.experimental.gluon.language.NVMMASharedLayout" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="triton.experimental.gluon.language.SharedLinearLayout.html" class="btn btn-neutral float-right" title="SharedLinearLayout" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2020, Philippe Tillet.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

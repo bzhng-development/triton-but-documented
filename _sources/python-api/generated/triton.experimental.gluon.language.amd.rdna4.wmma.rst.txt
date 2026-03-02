@@ -1,0 +1,91 @@
+ttgl.amd.rdna4.wmma
+====================
+
+.. currentmodule:: triton.experimental.gluon.language
+
+.. function:: wmma(a, b, acc, _semantic=None)
+
+   Computes matrix multiplication ``a @ b + acc`` using the AMD RDNA4 WMMA 
+   (Wave Matrix Multiply Accumulate) instruction.
+
+   Parameters
+   ----------
+   a : tensor
+       First operand tensor with ``DotOperandLayout`` (operand index 0).
+   b : tensor
+       Second operand tensor with ``DotOperandLayout`` (operand index 1).
+   acc : tensor
+       Accumulator tensor with ``BlockedLayout``. Must have compatible shape 
+       and dtype for the matrix multiply-accumulate operation.
+   _semantic : GluonSemantic, optional
+       Internal semantic handler. Must be provided automatically by the 
+       ``@gluon.jit`` decorator. Do not set manually.
+
+   Returns
+   -------
+   tensor
+       Result tensor containing ``a @ b + acc`` with the same layout and dtype 
+       as ``acc``.
+
+   Notes
+   -----
+   This function is specific to AMD RDNA4 GPUs (GFX1250 and later). The WMMA 
+   instruction provides hardware-accelerated matrix multiplication with 
+   accumulation.
+
+   Layout requirements:
+   
+   - ``a`` must have ``DotOperandLayout`` with ``operand_index=0``
+   - ``b`` must have ``DotOperandLayout`` with ``operand_index=1``
+   - ``acc`` must have ``BlockedLayout``
+   - All three tensors must share the same parent layout
+   - Shapes must be compatible for matrix multiplication (2D or 3D batched)
+
+   This is a low-level primitive. For most use cases, prefer higher-level 
+   ``ttgl.dot`` operations when available.
+
+   Must be called within a function decorated with ``@gluon.jit``. The 
+   ``_semantic`` parameter is injected automatically by the JIT compiler.
+
+   Examples
+   --------
+   .. code-block:: python
+
+      import triton.experimental.gluon as gluon
+      import triton.experimental.gluon.language as ttgl
+      from triton.experimental.gluon.language import amd
+
+      @gluon.jit
+      def matmul_kernel(a_ptr, b_ptr, c_ptr, M, N, K, BLOCK_M, BLOCK_N, BLOCK_K):
+          pid = ttgl.program_id(0)
+          
+          # Allocate shared memory
+          a_shared = ttgl.allocate_shared_memory(
+              ttgl.float16, [BLOCK_M, BLOCK_K], 
+              ttgl.SharedLayout.make_swizzled_layout(BLOCK_M, BLOCK_K)
+          )
+          b_shared = ttgl.allocate_shared_memory(
+              ttgl.float16, [BLOCK_K, BLOCK_N],
+              ttgl.SharedLayout.make_swizzled_layout(BLOCK_K, BLOCK_N)
+          )
+          
+          # Load tiles from global memory
+          offsets_m = ttgl.arange(0, BLOCK_M, layout=ttgl.AutoLayout())
+          offsets_n = ttgl.arange(0, BLOCK_N, layout=ttgl.AutoLayout())
+          offsets_k = ttgl.arange(0, BLOCK_K, layout=ttgl.AutoLayout())
+          
+          # Initialize accumulator
+          acc = ttgl.full([BLOCK_M, BLOCK_N], 0.0, ttgl.float16, 
+                         layout=ttgl.BlockedLayout([1, 1]))
+          
+          # Matrix multiply-accumulate loop
+          for k in range(0, K, BLOCK_K):
+              # Load tiles into shared memory (omitted for brevity)
+              a_tile = a_shared.load(ttgl.DotOperandLayout.make_operand_layout(0))
+              b_tile = b_shared.load(ttgl.DotOperandLayout.make_operand_layout(1))
+              
+              # WMMA operation
+              acc = amd.rdna4.wmma(a_tile, b_tile, acc)
+          
+          # Store result
+          # ... (store logic omitted)

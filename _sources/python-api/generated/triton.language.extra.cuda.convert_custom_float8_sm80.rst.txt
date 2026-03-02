@@ -1,0 +1,58 @@
+triton.language.extra.cuda.convert_custom_float8_sm80
+======================================================
+
+.. currentmodule:: triton.language.extra.cuda
+
+.. function:: convert_custom_float8_sm80(arg, dst_ty, fp_downcast_rounding=None, _semantic=None)
+
+    Convert a tensor to custom FP8 format for SM80+ GPUs.
+
+    This function converts floating-point values to custom 8-bit floating-point
+    formats supported on NVIDIA Ampere (SM80) and later architectures. It uses
+    minx2 scaling for improved numerical range.
+
+    Parameters
+    ----------
+    arg : tl.tensor
+        Input tensor to convert. Must be a floating-point type (fp16, bf16, fp32).
+    dst_ty : tl.dtype
+        Destination FP8 type. Supported types: ``fp8e4nv``, ``fp8e4b8``, 
+        ``fp8e4b15``, ``fp8e5``, ``fp8e5b16``.
+    fp_downcast_rounding : str, optional
+        Rounding mode for downcasting. Supported values: ``"rtne"`` 
+        (round to nearest, ties to even), ``"rtz"`` (round towards zero).
+        Default is None (uses hardware default).
+    _semantic : internal, optional
+        Internal semantic parameter. Do not set manually.
+
+    Returns
+    -------
+    tl.tensor
+        Tensor converted to the specified FP8 format.
+
+    Notes
+    -----
+    This function is specific to NVIDIA GPUs with compute capability 8.0 or 
+    higher (Ampere, Ada, Hopper, Blackwell). The ``has_minx2=True`` parameter
+    enables minx2 scaling which provides better numerical range for certain
+    workloads.
+
+    For optimal results, ensure the input values are within the representable
+    range of the target FP8 format to minimize overflow/underflow.
+
+    Examples
+    --------
+    .. code-block:: python
+
+        import triton
+        import triton.language as tl
+        from triton.language.extra.cuda import convert_custom_float8_sm80
+
+        @triton.jit
+        def fp8_convert_kernel(x_ptr, y_ptr, M: tl.constexpr):
+            pid = tl.program_id(0)
+            offset = pid * M
+            x = tl.load(x_ptr + offset + tl.arange(0, M))
+            # Convert fp32 to fp8e4nv with round-to-nearest-even
+            y = convert_custom_float8_sm80(x, tl.float8e4nv, fp_downcast_rounding="rtne")
+            tl.store(y_ptr + offset + tl.arange(0, M), y)

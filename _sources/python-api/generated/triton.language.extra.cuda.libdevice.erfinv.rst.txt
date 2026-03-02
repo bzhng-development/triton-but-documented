@@ -1,0 +1,45 @@
+erfinv
+======
+
+Compute the inverse error function element-wise.
+
+Parameters
+----------
+arg0 : tensor
+    Input tensor of floating-point type (fp32 or fp64).
+_semantic : optional
+    Internal parameter for Triton semantics. Do not set manually.
+
+Returns
+-------
+tensor
+    Tensor of the same dtype as ``arg0`` containing the inverse error function
+    values.
+
+Notes
+-----
+This function is implemented using CUDA libdevice intrinsics:
+
+- ``__nv_erfinvf`` for 32-bit floating-point (fp32)
+- ``__nv_erfinv`` for 64-bit floating-point (fp64)
+
+The inverse error function ``erfinv(x)`` is the inverse of the error function
+``erf(x)``. The domain of ``erfinv`` is ``[-1, 1]``, and the range is
+``(-inf, inf)``. Values outside the domain ``[-1, 1]`` may return NaN.
+
+This is a pure function with no side effects.
+
+Examples
+--------
+.. code-block:: python
+
+    import triton
+    import triton.language as tl
+
+    @triton.jit
+    def kernel(X_ptr, Y_ptr, BLOCK_SIZE: tl.constexpr):
+        pid = tl.program_id(0)
+        offsets = pid * BLOCK_SIZE + tl.arange(0, BLOCK_SIZE)
+        x = tl.load(X_ptr + offsets)
+        y = tl.extra.cuda.libdevice.erfinv(x)
+        tl.store(Y_ptr + offsets, y)

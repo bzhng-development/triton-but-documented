@@ -1,44 +1,62 @@
-.. py:function:: triton.language.max_contiguous(input, values, _semantic=None)
+max_contiguous
+==============
 
-   Let the compiler know that the first `value` elements in :code:`input` are contiguous in memory.
+.. currentmodule:: triton.language
 
-   This is a compiler hint that can enable additional optimizations for memory access patterns. It asserts that a prefix of the input tensor consists of sequentially adjacent memory addresses.
+.. autofunction:: max_contiguous
 
-   Parameters
-   ----------
-   input : tl.tensor
-       The input tensor for which to assert contiguity.
-   values : list of tl.constexpr[int]
-       A list of compile-time constants indicating the number of leading elements assumed to be contiguous. Each element must be a `tl.constexpr` wrapping an integer.
-   _semantic : optional
-       Internal semantic context; do not set manually.
+Let the compiler know that the first values in :code:`input` are contiguous.
 
-   Returns
-   -------
-   tl.tensor
-       The same input tensor, annotated with the contiguity property.
+Parameters
+----------
+input : tensor
+    The input tensor.
+values : constexpr or list of constexpr
+    Compile-time constant values indicating the number of contiguous elements.
+    Each element must be a :code:`constexpr[int]`.
+_semantic : optional
+    Internal parameter used by Triton compiler. Do not set manually.
 
-   Raises
-   ------
-   TypeError
-       If any element in `values` is not a `tl.constexpr` or does not wrap an integer value.
+Returns
+-------
+tensor
+    The input tensor (unchanged). This function is a compiler hint and does not
+    modify the tensor values.
 
-   Notes
-   -----
-   This function is typically used to inform the compiler about memory layout guarantees that are known at compile time but not inferable from the IR alone. Passing non-constexpr values to `values` will result in a compilation error.
+Notes
+-----
+This is a compiler hint that helps the Triton compiler optimize memory access
+patterns. It informs the compiler that the first N values in the input tensor
+are stored contiguously in memory, which can enable more efficient load/store
+operations and memory coalescing.
 
-   Examples
-   --------
-   .. code-block:: python
+The :code:`values` parameter must contain only :code:`constexpr[int]` elements.
+Passing non-constexpr or non-integer values will raise a :code:`TypeError`.
 
-      import triton
-      import triton.language as tl
+This function is similar to :py:func:`multiple_of` and :py:func:`max_constancy`,
+which provide other types of compiler hints about tensor properties.
 
-      @triton.jit
-      def kernel(ptr, BLOCK_SIZE: tl.constexpr):
-          offsets = tl.arange(0, BLOCK_SIZE)
-          mask = offsets < 128
-          # Assert that the first 128 elements are contiguous
-          offsets = tl.max_contiguous(offsets, [tl.constexpr(128)])
-          vals = tl.load(ptr + offsets, mask=mask)
-          tl.store(ptr + offsets, vals * 2.0, mask=mask)
+Examples
+--------
+.. code-block:: python
+
+    import triton
+    import triton.language as tl
+
+    @triton.jit
+    def kernel(x_ptr, BLOCK: tl.constexpr):
+        x = tl.load(x_ptr + tl.arange(0, BLOCK))
+        # Inform compiler that first 16 elements are contiguous
+        x = tl.max_contiguous(x, tl.constexpr([16]))
+        # ... rest of kernel
+
+    @triton.jit
+    def kernel_multi(x_ptr, BLOCK: tl.constexpr):
+        x = tl.load(x_ptr + tl.arange(0, BLOCK))
+        # Multiple hints can be provided
+        x = tl.max_contiguous(x, tl.constexpr([16, 32]))
+        # ... rest of kernel
+
+See Also
+--------
+multiple_of, max_constancy

@@ -1,0 +1,49 @@
+AMDMFMALayout
+=============
+
+.. class:: AMDMFMALayout(version: 'int', instr_shape: 'List[int]', transposed: 'bool', warps_per_cta: 'List[int]', element_bitwidth: 'Optional[int]' = None, tiles_per_warp: 'Optional[List[int]]' = None, cga_layout: 'List[List[int]]' = <factory>)
+
+   Represents a layout for AMD MFMA (matrix core) operations.
+
+   Parameters
+   ----------
+   version : int
+       The GPU architecture version. Supported values are 1 to 4.
+   instr_shape : List[int]
+       The shape in the form of ``(M, N, K)`` of the matrix. Valid ``(M, N)`` pairs are ``[32, 32]``, ``[16, 16]``, ``[64, 4]``, and ``[4, 64]``.
+   transposed : bool
+       Indicates whether the result tensor is transposed. If ``True``, each thread holds consecutive elements in the same row instead of column, optimizing chained dot products and global writes.
+   warps_per_cta : List[int]
+       The warp layout in the block. Determines the rank of the layout.
+   element_bitwidth : Optional[int], optional
+       Bit width of the output element type. Supported values are 32 and 64. Defaults to 32.
+   tiles_per_warp : Optional[List[int]], optional
+       The tile layout within a warp. Defaults to unit tile layout (i.e., single tile on all dimensions).
+   cga_layout : List[List[int]], optional
+       Bases describing CTA tiling. Defaults to an empty list.
+
+   Notes
+   -----
+   Current supported ``version`` values correspond to the following architectures:
+
+   - 1: gfx908
+   - 2: gfx90a
+   - 3: gfx942
+   - 4: gfx950
+
+   The ``rank`` property is derived from the length of ``warps_per_cta``.
+
+   Examples
+   --------
+   .. code-block:: python
+
+      import triton.experimental.gluon.language as ttgl
+
+      # Create a layout for gfx942 (version 3) with 16x16x16 matrix shape
+      layout = ttgl.amd.AMDMFMALayout(
+          version=3,
+          instr_shape=[16, 16, 16],
+          transposed=False,
+          warps_per_cta=[4, 2],
+          element_bitwidth=32
+      )

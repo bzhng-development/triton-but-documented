@@ -1,0 +1,76 @@
+buffer_atomic_or
+================
+
+.. currentmodule:: triton.experimental.gluon.language.amd.cdna4
+
+.. function:: buffer_atomic_or(ptr, offsets, value, mask=None, sem=None, scope=None, _semantic=None)
+
+   Perform an atomic bitwise OR on buffer memory for AMD CDNA4 GPUs.
+
+   Executes a read-modify-write operation that atomically computes ``memory[offset] |= value``
+   using AMD CDNA4 buffer atomic instructions. This operation is useful for implementing
+   lock-free synchronization primitives and atomic flag updates in GPU kernels.
+
+   Parameters
+   ----------
+   ptr : pointer
+       Pointer to the buffer memory region. Must be a pointer type obtained from
+       :func:`triton.experimental.gluon.language.make_block_ptr` or similar.
+   offsets : tensor
+       Tensor of offsets specifying which memory locations to operate on. Can be
+       scalar or vector depending on the operation granularity.
+   value : tensor
+       The value to OR with the memory contents. Must have the same dtype as the
+       memory region.
+   mask : tensor, optional
+       Boolean tensor controlling which offsets are active. If provided, only
+       offsets where mask is True will execute the atomic operation.
+   sem : str, optional
+       Memory semantics for the atomic operation. Options include:
+       - ``"acquire"``: Acquire semantics
+       - ``"release"``: Release semantics
+       - ``"acq_rel"``: Acquire-release semantics
+       - ``"relaxed"``: Relaxed semantics (default)
+   scope : str, optional
+       Memory scope for the atomic operation. Options include:
+       - ``"cta"``: CTA scope (default)
+       - ``"cluster"``: Cluster scope
+       - ``"gpu"``: GPU scope
+   _semantic : GluonSemantic, optional
+       Internal semantic object. Do not set manually; this is handled by the
+       :func:`@gluon.jit` decorator.
+
+   Returns
+   -------
+   tensor
+       Tensor containing the original values from memory before the OR operation
+       was applied. This allows for compare-and-swap style patterns.
+
+   Notes
+   -----
+   This function is specific to AMD CDNA4 architecture and uses the buffer
+   atomic instruction set. For other architectures, use the appropriate
+   architecture-specific atomic functions or the generic :func:`atomic_or`.
+
+   The operation is lock-free and provides atomicity guarantees within the
+   specified memory scope. Performance characteristics depend on memory
+   coalescing and contention levels.
+
+   Requires Gluon kernels decorated with :func:`@gluon.jit`.
+
+   Examples
+   --------
+   .. code-block:: python
+
+      import triton.experimental.gluon as gluon
+      import triton.experimental.gluon.language as ttgl
+      from triton.experimental.gluon.language.amd import cdna4
+
+      @gluon.jit
+      def atomic_or_kernel(ptr, offsets, value):
+          # Perform atomic OR on buffer memory
+          old_value = cdna4.buffer_atomic_or(ptr, offsets, value)
+          return old_value
+
+      # Launch kernel
+      # atomic_or_kernel[grid](ptr, offsets, value)

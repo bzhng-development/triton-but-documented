@@ -1,0 +1,62 @@
+triton.language.extra.cuda.libdevice.erfcx
+===========================================
+
+.. currentmodule:: triton.language.extra.cuda.libdevice
+
+.. autofunction:: erfcx
+
+Compute the scaled complementary error function.
+
+The scaled complementary error function is defined as
+:math:`\text{erfcx}(x) = e^{x^2} \cdot \text{erfc}(x)`, where
+:math:`\text{erfc}(x) = 1 - \text{erf}(x)` is the complementary error
+function. This scaling avoids overflow for large positive values of
+:math:`x`.
+
+Parameters
+----------
+arg0 : tensor
+    Input tensor. Must be of floating-point type (``fp32`` or ``fp64``).
+
+Returns
+-------
+tensor
+    Output tensor of the same dtype as ``arg0``, containing the scaled
+    complementary error function values.
+
+Notes
+-----
+This function dispatches to CUDA libdevice intrinsics:
+
+- ``__nv_erfcxf`` for ``fp32`` inputs
+- ``__nv_erfcx`` for ``fp64`` inputs
+
+The function is pure (no side effects) and supports element-wise
+operation on tensors.
+
+For large positive :math:`x`, :math:`\text{erfcx}(x) \approx
+\frac{1}{\sqrt{\pi} \cdot x}`, which avoids the overflow that would
+occur when computing :math:`e^{x^2}` and :math:`\text{erfc}(x)`
+separately.
+
+Examples
+--------
+.. code-block:: python
+
+    import triton
+    import triton.language as tl
+    import torch
+
+    @triton.jit
+    def kernel(x_ptr, y_ptr, BLOCK_SIZE: tl.constexpr):
+        pid = tl.program_id(0)
+        offsets = pid * BLOCK_SIZE + tl.arange(0, BLOCK_SIZE)
+        x = tl.load(x_ptr + offsets)
+        y = tl.extra.cuda.libdevice.erfcx(x)
+        tl.store(y_ptr + offsets, y)
+
+    # Example usage
+    BLOCK_SIZE = 1024
+    x = torch.randn(BLOCK_SIZE, dtype=torch.float32, device='cuda')
+    y = torch.empty_like(x)
+    kernel[(1,)](x, y, BLOCK_SIZE=BLOCK_SIZE)

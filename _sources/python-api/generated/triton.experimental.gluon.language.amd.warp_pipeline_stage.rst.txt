@@ -1,0 +1,53 @@
+warp_pipeline_stage
+===================
+
+.. class:: warp_pipeline_stage(label=None, *, priority=None, **_internal)
+
+    Marks a warp-pipeline stage inside a Gluon kernel.
+
+    Parameters
+    ----------
+    label : str, optional
+        Name of the pipeline stage (e.g., "load", "compute"). Used for identification
+        and diagnostics without affecting program semantics.
+    priority : int, optional
+        Relative scheduling priority of the warp. Valid values range from 0 (lowest)
+        to 3 (highest). Corresponds to the operand of ``s_setprio``. If unspecified,
+        priority resets to zero when any other stage in the loop uses explicit
+        priority.
+
+    Notes
+    -----
+    This class is used as a context manager. Each block semantically defines a distinct
+    stage of a warp pipeline. All operations inside the block belong to the same
+    pipeline cluster and are intended to execute as a unit relative to other stages.
+
+    Priority is a performance hint to the hardware scheduler. Its effect may vary
+    depending on the dynamic interaction of instruction streams across different warps.
+    It should be used judiciously, only when explicit scheduling guidance is beneficial.
+
+    Examples
+    --------
+    .. code-block:: python
+
+        import triton.experimental.gluon as gluon
+        import triton.experimental.gluon.language as ttgl
+
+        @gluon.jit
+        def kernel(...):
+            for k in ttgl.range(0, K, 1):
+                # Stage 0: prefetch tiles
+                with ttgl.amd.warp_pipeline_stage("load", priority=3):
+                    a = ttgl.amd.buffer_load(a_ptr, offs_a)
+                    b = ttgl.amd.buffer_load(b_ptr, offs_b)
+
+                # Stage 1: prepare MFMA operands
+                with ttgl.amd.warp_pipeline_stage("prep"):
+                    a_tile = a.load(layout=...)
+                    b_tile = b.load(layout=...)
+
+                # Stage 2: compute
+                with ttgl.amd.warp_pipeline_stage("compute", priority=0):
+                    acc = ttgl.amd.mfma(a_tile, b_tile, acc)
+                    offs_a += strideA
+                    offs_b += strideB

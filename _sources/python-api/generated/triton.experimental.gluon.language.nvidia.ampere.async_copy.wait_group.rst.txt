@@ -1,0 +1,48 @@
+wait_group
+==========
+
+Wait for outstanding asynchronous copy group operations to complete.
+
+This primitive stalls the pipeline until the number of in-flight async copy groups
+drops to the specified threshold. It is used to synchronize memory operations
+initiated via asynchronous copy instructions (e.g., TMA) on supported hardware.
+
+Parameters
+----------
+num_outstanding : int, optional
+    The maximum number of async copy groups allowed to remain in-flight
+    after the wait returns. Defaults to 0, which waits for all outstanding
+    groups to complete.
+
+Returns
+-------
+None
+
+Notes
+-----
+This operation is specific to NVIDIA Ampere architecture and later
+(including Hopper and Blackwell) when using asynchronous copy mechanisms.
+It interacts directly with hardware status registers regarding Tensor Memory
+Accelerator (TMA) or async copy queues.
+
+Excessive use of :func:`wait_group` with ``num_outstanding=0`` may
+serialize memory operations and reduce bandwidth utilization. Prefer
+double-buffering or software pipelining patterns where possible to
+overlap computation and memory transfers.
+
+Examples
+--------
+.. code-block:: python
+
+    import triton.experimental.gluon as gluon
+    import triton.experimental.gluon.language as ttgl
+
+    @gluon.jit
+    def kernel(...):
+        # Issue async copy group 0
+        ttgl.nvidia.ampere.async_copy.copy_global_to_shared(...)
+        # Issue async copy group 1
+        ttgl.nvidia.ampere.async_copy.copy_global_to_shared(...)
+        # Wait until 0 groups are in-flight (all complete)
+        ttgl.nvidia.ampere.async_copy.wait_group(num_outstanding=0)
+        # Proceed with computation on shared memory

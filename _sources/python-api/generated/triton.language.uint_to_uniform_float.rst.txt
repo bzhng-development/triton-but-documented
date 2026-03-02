@@ -1,47 +1,38 @@
 uint_to_uniform_float
 =====================
 
-.. currentmodule:: triton.language
+.. py:function:: triton.language.uint_to_uniform_float(x)
 
-.. autofunction:: uint_to_uniform_float
+   Numerically stable function to convert a random uint into a random float
+   uniformly sampled in [0, 1).
 
-Converts a random unsigned integer into a floating-point value uniformly sampled in the range :math:`[0, 1)`.
+   Parameters
+   ----------
+   x : tl.tensor
+      Input tensor of integer type. Supported dtypes are ``tl.uint32``,
+      ``tl.int32``, ``tl.uint64``, or ``tl.int64``.
 
-This function provides a numerically stable conversion by handling both 32-bit and 64-bit integer inputs, applying a bitcast to signed integers to handle the full range of values, and scaling by a precomputed constant to ensure the result remains strictly less than 1.0.
+   Returns
+   -------
+   tl.tensor
+      Tensor of floating-point values uniformly sampled in the range [0, 1).
 
-Parameters
-----------
-x : tl.tensor
-    Input tensor containing random unsigned integers. Must be of type ``tl.uint32``, ``tl.int32``, ``tl.uint64``, or ``tl.int64``.
+   Notes
+   -----
+   The function handles both 32-bit and 64-bit integers using specific scaling
+   factors to ensure the result remains strictly less than 1.0. Typically used
+   internally by random number generation functions like :code:`rand` and
+   :code:`randn`.
 
-Returns
--------
-tl.tensor
-    A tensor of floating-point values (``tl.float32``) uniformly distributed in :math:`[0, 1)`.
+   Examples
+   --------
+   .. code-block:: python
 
-Notes
------
-The implementation uses different scaling factors depending on the input bitwidth:
+      import triton
+      import triton.language as tl
 
-* For 32-bit inputs, the scale factor is approximately :math:`4.6566 \times 10^{-10}`.
-* For 64-bit inputs, the scale factor is approximately :math:`1.0842 \times 10^{-19}`.
-
-Negative values resulting from the bitcast are mapped to the positive range using the transformation ``-x - 1`` to preserve uniformity.
-
-Examples
---------
-
-.. code-block:: python
-
-    import triton
-    import triton.language as tl
-
-    @triton.jit
-    def kernel(RandomPtr, OutputPtr, BLOCK_SIZE: tl.constexpr):
-        # Generate random uint32 values (e.g., from a PRNG)
-        random_ints = tl.load(RandomPtr + tl.arange(0, BLOCK_SIZE))
-        
-        # Convert to uniform float in [0, 1)
-        random_floats = tl.uint_to_uniform_float(random_ints)
-        
-        tl.store(OutputPtr + tl.arange(0, BLOCK_SIZE), random_floats)
+      @triton.jit
+      def kernel(ptr, seed, offset):
+          rand_int = tl.randint(seed, offset)
+          rand_float = tl.uint_to_uniform_float(rand_int)
+          tl.store(ptr, rand_float)

@@ -1,0 +1,51 @@
+uint2float_ru
+=============
+
+.. currentmodule:: triton.language.extra.cuda.libdevice
+
+.. function:: uint2float_ru(arg0, _semantic=None)
+
+   Convert unsigned 32-bit integer to 32-bit float using round-up rounding mode.
+
+   Calls the CUDA libdevice function ``__nv_uint2float_ru`` which performs
+   unsigned integer to float conversion with round-up (toward positive infinity)
+   rounding semantics.
+
+   Parameters
+   ----------
+   arg0 : tensor
+       Input tensor of unsigned 32-bit integers (``uint32`` dtype).
+
+   _semantic : optional
+       Internal semantic argument used by Triton compiler. Do not set manually.
+
+   Returns
+   -------
+   tensor
+       Tensor of 32-bit floating-point values (``fp32`` dtype) with the same
+       shape as the input.
+
+   Notes
+   -----
+   This function is pure (no side effects) and compiles to a single GPU
+   instruction using CUDA libdevice. The rounding mode is round-up (toward
+   positive infinity), which differs from the default round-to-nearest-even
+   mode used by standard type casting.
+
+   This function is only available on CUDA targets. For other targets, use
+   standard type casting via :py:func:`triton.language.cast`.
+
+   Examples
+   --------
+   .. code-block:: python
+
+      import triton
+      import triton.language as tl
+
+      @triton.jit
+      def kernel(x_ptr, y_ptr, BLOCK_SIZE: tl.constexpr):
+          pid = tl.program_id(0)
+          offsets = pid * BLOCK_SIZE + tl.arange(0, BLOCK_SIZE)
+          uint_vals = tl.load(x_ptr + offsets)
+          float_vals = tl.extra.cuda.libdevice.uint2float_ru(uint_vals)
+          tl.store(y_ptr + offsets, float_vals)

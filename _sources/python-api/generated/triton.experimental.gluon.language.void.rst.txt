@@ -1,0 +1,23 @@
+void
+====
+
+.. py:data:: triton.experimental.gluon.language.void
+
+    Represents the void data type.
+
+    Used to specify the absence of a return value or an opaque memory type within
+    Gluon kernels. This instance is a singleton in the Gluon type system and aligns
+    with Triton's intermediate representation for non-returning functions.
+
+    Notes
+    -----
+    Accessible via the ``ttgl`` namespace alias (``ttgl.void``). Typically used
+    internally by the compiler to represent kernels without return values. Explicit
+    usage is rare in user code but available for type introspection.
+
+    Examples
+    --------
+    >>> import triton.experimental.gluon as gluon
+    >>> import triton.experimental.gluon.language as ttgl
+    >>> ttgl.void
+    void

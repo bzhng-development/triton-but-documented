@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>triton.language.randint &mdash; Triton  documentation</title>
+  <title>randint &mdash; Triton  documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=03e43079" />
       <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="../../_static/css/custom.css" />
@@ -18,7 +18,7 @@
     <script src="../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
-    <link rel="next" title="rand" href="triton.language.rand.html" />
+    <link rel="next" title="triton.language.rand" href="triton.language.rand.html" />
     <link rel="prev" title="randint4x" href="triton.language.randint4x.html" /> 
 </head>
 
@@ -62,18 +62,17 @@
 <li class="toctree-l2"><a class="reference internal" href="../triton.language.html#atomic-ops">Atomic Ops</a></li>
 <li class="toctree-l2 current"><a class="reference internal" href="../triton.language.html#random-number-generation">Random Number Generation</a><ul class="current">
 <li class="toctree-l3"><a class="reference internal" href="triton.language.randint4x.html">randint4x</a></li>
-<li class="toctree-l3 current"><a class="current reference internal" href="#">triton.language.randint</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="#triton.language.randint"><code class="docutils literal notranslate"><span class="pre">randint()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#id0"><code class="docutils literal notranslate"><span class="pre">randint()</span></code></a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">randint</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#triton.language.randint"><code class="docutils literal notranslate"><span class="pre">triton.language.randint()</span></code></a></li>
 </ul>
 </li>
-<li class="toctree-l3"><a class="reference internal" href="triton.language.rand.html">rand</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.language.rand.html">triton.language.rand</a></li>
 <li class="toctree-l3"><a class="reference internal" href="triton.language.randn.html">randn</a></li>
 <li class="toctree-l3"><a class="reference internal" href="triton.language.pair_uniform_to_normal.html">pair_uniform_to_normal</a></li>
 <li class="toctree-l3"><a class="reference internal" href="triton.language.philox.html">philox</a></li>
 <li class="toctree-l3"><a class="reference internal" href="triton.language.philox_impl.html">philox_impl</a></li>
 <li class="toctree-l3"><a class="reference internal" href="triton.language.rand4x.html">rand4x</a></li>
-<li class="toctree-l3"><a class="reference internal" href="triton.language.randn4x.html">triton.language.randn4x</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.language.randn4x.html">randn4x</a></li>
 <li class="toctree-l3"><a class="reference internal" href="triton.language.uint_to_uniform_float.html">uint_to_uniform_float</a></li>
 </ul>
 </li>
@@ -86,6 +85,35 @@
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../triton.testing.html">triton.testing</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../triton-semantics.html">Triton Semantics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.language.extra.cuda.html">triton.language.extra.cuda</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.language.extra.cuda.libdevice.html">triton.language.extra.cuda.libdevice</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.runtime.html">triton.runtime</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.tools.html">triton.tools</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Gluon (Experimental) API</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.html">triton.experimental.gluon</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.html">triton.experimental.gluon.language</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.nvidia.ampere.html">triton.experimental.gluon.language.nvidia.ampere</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.nvidia.ampere.async_copy.html">triton.experimental.gluon.language.nvidia.ampere.async_copy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.nvidia.ampere.mbarrier.html">triton.experimental.gluon.language.nvidia.ampere.mbarrier</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.nvidia.hopper.html">triton.experimental.gluon.language.nvidia.hopper</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.nvidia.hopper.tma.html">triton.experimental.gluon.language.nvidia.hopper.tma</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.nvidia.hopper.mbarrier.html">triton.experimental.gluon.language.nvidia.hopper.mbarrier</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.nvidia.hopper.cluster.html">triton.experimental.gluon.language.nvidia.hopper.cluster</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.nvidia.blackwell.html">triton.experimental.gluon.language.nvidia.blackwell</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.nvidia.blackwell.tma.html">triton.experimental.gluon.language.nvidia.blackwell.tma</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.nvidia.blackwell.clc.html">triton.experimental.gluon.language.nvidia.blackwell.clc</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.amd.html">triton.experimental.gluon.language.amd</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.amd.gfx1250.html">triton.experimental.gluon.language.amd.gfx1250</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.amd.gfx1250.async_copy.html">triton.experimental.gluon.language.amd.gfx1250.async_copy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.amd.gfx1250.mbarrier.html">triton.experimental.gluon.language.amd.gfx1250.mbarrier</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.amd.gfx1250.cluster.html">triton.experimental.gluon.language.amd.gfx1250.cluster</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.amd.gfx1250.tdm.html">triton.experimental.gluon.language.amd.gfx1250.tdm</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.amd.cdna3.html">triton.experimental.gluon.language.amd.cdna3</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.amd.cdna4.html">triton.experimental.gluon.language.amd.cdna4</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.amd.rdna3.html">triton.experimental.gluon.language.amd.rdna3</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.amd.rdna4.html">triton.experimental.gluon.language.amd.rdna4</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Triton MLIR Dialects</span></p>
 <ul>
@@ -113,7 +141,7 @@
   <ul class="wy-breadcrumbs">
       <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
           <li class="breadcrumb-item"><a href="../triton.language.html">triton.language</a></li>
-      <li class="breadcrumb-item active">triton.language.randint</li>
+      <li class="breadcrumb-item active">randint</li>
       <li class="wy-breadcrumbs-aside">
             <a href="../../_sources/python-api/generated/triton.language.randint.rst.txt" rel="nofollow"> View page source</a>
       </li>
@@ -123,64 +151,51 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <section id="triton-language-randint">
-<h1>triton.language.randint<a class="headerlink" href="#triton-language-randint" title="Link to this heading">¶</a></h1>
+  <section id="randint">
+<h1>randint<a class="headerlink" href="#randint" title="Link to this heading">¶</a></h1>
 <dl class="py function">
 <dt class="sig sig-object py" id="triton.language.randint">
-<span class="sig-prename descclassname"><span class="pre">triton.language.</span></span><span class="sig-name descname"><span class="pre">randint</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">seed</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">offset</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_rounds</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="triton.language.constexpr.html#triton.language.constexpr" title="triton.language.core.constexpr"><span class="pre">constexpr</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">constexpr[10]</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#triton.language.randint" title="Link to this definition">¶</a></dt>
+<span class="sig-prename descclassname"><span class="pre">triton.language.</span></span><span class="sig-name descname"><span class="pre">randint</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">seed</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">offset</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_rounds</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#triton.language.randint" title="Link to this definition">¶</a></dt>
 <dd><p>Given a <code class="code docutils literal notranslate"><span class="pre">seed</span></code> scalar and an <code class="code docutils literal notranslate"><span class="pre">offset</span></code> block, returns a single
-block of random <code class="code docutils literal notranslate"><span class="pre">int32</span></code>.</p>
-<p>If you need multiple streams of random numbers,
-using <cite>randint4x</cite> is likely to be faster than calling <cite>randint</cite> 4 times.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>seed</strong> – The seed for generating random numbers.</p></li>
-<li><p><strong>offset</strong> – The offsets to generate random numbers for.</p></li>
-</ul>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="id0">
-<span class="sig-prename descclassname"><span class="pre">triton.language.</span></span><span class="sig-name descname"><span class="pre">randint</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">seed</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">offset</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_rounds</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#id0" title="Link to this definition">¶</a></dt>
-<dd><p>Given a <code class="docutils literal notranslate"><span class="pre">seed</span></code> scalar and an <code class="docutils literal notranslate"><span class="pre">offset</span></code> block, returns a single block of random <code class="docutils literal notranslate"><span class="pre">int32</span></code> values using the Philox pseudo-random number generator.</p>
-<p>If you need multiple independent streams of random numbers, using <a class="reference internal" href="triton.language.randint4x.html#triton.language.randint4x" title="triton.language.randint4x"><code class="xref py py-func docutils literal notranslate"><span class="pre">randint4x()</span></code></a> is likely to be faster than calling <a class="reference internal" href="#id0" title="triton.language.randint"><code class="xref py py-func docutils literal notranslate"><span class="pre">randint()</span></code></a> four times.</p>
+block of random <code class="code docutils literal notranslate"><span class="pre">int32</span></code> values using the Philox PRNG.</p>
 <section id="parameters">
 <h2>Parameters<a class="headerlink" href="#parameters" title="Link to this heading">¶</a></h2>
 <dl class="simple">
-<dt>seed<span class="classifier">tl.tensor</span></dt><dd><p>The seed for generating random numbers. Must be a scalar tensor.</p>
+<dt>seed<span class="classifier">tl.int32 or tl.int64</span></dt><dd><p>The seed for generating random numbers. Must be a scalar.</p>
 </dd>
-<dt>offset<span class="classifier">tl.tensor</span></dt><dd><p>The offsets to generate random numbers for. Defines the program counter state for each thread in the block.</p>
+<dt>offset<span class="classifier">tl.int32 or tl.int64</span></dt><dd><p>The offsets to generate random numbers for. Must be a block.</p>
 </dd>
-<dt>n_rounds<span class="classifier">tl.constexpr, optional</span></dt><dd><p>Number of rounds for the Philox cipher. Default is 10.</p>
+<dt>n_rounds<span class="classifier">tl.constexpr, optional</span></dt><dd><p>Number of Philox rounds. Default is 10.</p>
 </dd>
 </dl>
 </section>
 <section id="returns">
 <h2>Returns<a class="headerlink" href="#returns" title="Link to this heading">¶</a></h2>
 <dl class="simple">
-<dt>tl.tensor</dt><dd><p>A block of random <code class="docutils literal notranslate"><span class="pre">int32</span></code> values.</p>
+<dt>ret<span class="classifier">tl.int32</span></dt><dd><p>Block of random integers.</p>
 </dd>
 </dl>
 </section>
 <section id="notes">
 <h2>Notes<a class="headerlink" href="#notes" title="Link to this heading">¶</a></h2>
-<p>This function implements the Philox counter-based PRNG. The <code class="docutils literal notranslate"><span class="pre">offset</span></code> input typically corresponds to the global program index (e.g., <code class="docutils literal notranslate"><span class="pre">tl.program_id(0)</span></code> or a range of indices) to ensure statistical independence between threads.</p>
+<p>This function uses the Philox pseudo-random number generator.
+If you need multiple streams of random numbers, using <code class="xref py py-func docutils literal notranslate"><span class="pre">randint4x()</span></code>
+is likely to be faster than calling <a class="reference internal" href="#triton.language.randint" title="triton.language.randint"><code class="xref py py-func docutils literal notranslate"><span class="pre">randint()</span></code></a> four times.</p>
 </section>
 <section id="examples">
 <h2>Examples<a class="headerlink" href="#examples" title="Link to this heading">¶</a></h2>
-<p>Generate a block of random integers based on the program ID:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">triton</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">triton.language</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">tl</span>
 
 <span class="nd">@triton</span><span class="o">.</span><span class="n">jit</span>
-<span class="k">def</span><span class="w"> </span><span class="nf">kernel</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">seed</span><span class="p">):</span>
-    <span class="n">pid</span> <span class="o">=</span> <span class="n">tl</span><span class="o">.</span><span class="n">program_id</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
-    <span class="n">offset</span> <span class="o">=</span> <span class="n">pid</span> <span class="o">*</span> <span class="mi">128</span> <span class="o">+</span> <span class="n">tl</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">128</span><span class="p">)</span>
-    <span class="n">random_vals</span> <span class="o">=</span> <span class="n">tl</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="n">seed</span><span class="p">,</span> <span class="n">offset</span><span class="p">)</span>
-    <span class="c1"># Store or use random_vals...</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">kernel</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">stride</span><span class="p">,</span> <span class="n">n_elements</span><span class="p">,</span>
+           <span class="n">BLOCK_SIZE</span><span class="p">:</span> <span class="n">tl</span><span class="o">.</span><span class="n">constexpr</span><span class="p">):</span>
+    <span class="n">pid</span> <span class="o">=</span> <span class="n">tl</span><span class="o">.</span><span class="n">program_id</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+    <span class="n">offs</span> <span class="o">=</span> <span class="n">pid</span> <span class="o">*</span> <span class="n">BLOCK_SIZE</span> <span class="o">+</span> <span class="n">tl</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">BLOCK_SIZE</span><span class="p">)</span>
+    <span class="n">mask</span> <span class="o">=</span> <span class="n">offs</span> <span class="o">&lt;</span> <span class="n">n_elements</span>
+    <span class="n">seed</span> <span class="o">=</span> <span class="mi">123456</span>
+    <span class="n">random_vals</span> <span class="o">=</span> <span class="n">tl</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="n">seed</span><span class="p">,</span> <span class="n">offs</span><span class="p">)</span>
+    <span class="n">tl</span><span class="o">.</span><span class="n">store</span><span class="p">(</span><span class="n">X</span> <span class="o">+</span> <span class="n">offs</span><span class="p">,</span> <span class="n">random_vals</span><span class="p">,</span> <span class="n">mask</span><span class="o">=</span><span class="n">mask</span><span class="p">)</span>
 </pre></div>
 </div>
 </section>
@@ -193,7 +208,7 @@ using <cite>randint4x</cite> is likely to be faster than calling <cite>randint</
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
         <a href="triton.language.randint4x.html" class="btn btn-neutral float-left" title="randint4x" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="triton.language.rand.html" class="btn btn-neutral float-right" title="rand" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="triton.language.rand.html" class="btn btn-neutral float-right" title="triton.language.rand" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>

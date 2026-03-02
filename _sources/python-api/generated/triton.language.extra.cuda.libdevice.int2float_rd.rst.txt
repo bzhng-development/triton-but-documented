@@ -1,0 +1,48 @@
+int2float_rd
+============
+
+.. currentmodule:: triton.language.extra.cuda.libdevice
+
+.. function:: int2float_rd(arg0, _semantic=None)
+
+    Convert 32-bit signed integer to 32-bit float with round-down rounding mode.
+
+    Parameters
+    ----------
+    arg0 : tl.tensor
+        Input tensor of int32 values to convert to floating point.
+
+    Returns
+    -------
+    tl.tensor
+        Tensor of fp32 values converted from input integers using round-down
+        (toward negative infinity) rounding mode.
+
+    Notes
+    -----
+    This function wraps the CUDA libdevice function ``__nv_int2float_rd``.
+    The round-down rounding mode rounds toward negative infinity, which differs
+    from the default round-to-nearest-even mode used by standard integer-to-float
+    conversions.
+
+    For positive integers, the result is identical to standard conversion.
+    For negative integers that cannot be exactly represented in float32, the
+    result is rounded toward negative infinity.
+
+    This is an extern function and requires CUDA libdevice support.
+
+    Examples
+    --------
+    .. code-block:: python
+
+        import triton
+        import triton.language as tl
+        from triton.language.extra.cuda import libdevice
+
+        @triton.jit
+        def kernel(int_ptr, float_ptr, BLOCK_SIZE: tl.constexpr):
+            offsets = tl.arange(0, BLOCK_SIZE)
+            int_vals = tl.load(int_ptr + offsets)
+            # Convert with round-down rounding mode
+            float_vals = libdevice.int2float_rd(int_vals)
+            tl.store(float_ptr + offsets, float_vals)

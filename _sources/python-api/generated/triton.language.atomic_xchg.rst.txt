@@ -1,5 +1,5 @@
 atomic_xchg
-=============
+===========
 
 .. currentmodule:: triton.language
 
@@ -7,32 +7,27 @@ atomic_xchg
 
    Performs an atomic exchange at the memory location specified by ``pointer``.
 
-   Return the data stored at ``pointer`` before the atomic operation.
+   Atomically stores ``val`` at ``pointer`` and returns the value that was previously stored at that location.
 
    Parameters
    ----------
-   pointer : tensor of pointer type
+   pointer : triton.PointerType or block of triton.PointerType
        The memory locations to operate on.
-   val : tensor
-       The values with which to perform the atomic operation. Must have the same
-       dtype as ``pointer.dtype.element_ty``.
-   mask : tensor of bool, optional
-       If ``mask[idx]`` is false, do not perform the atomic operation at
-       ``pointer[idx]``.
+   val : block of pointer.dtype.element_ty
+       The values with which to perform the atomic operation.
+   mask : block of triton.int1, optional
+       If ``mask[idx]`` is false, do not perform the atomic operation at ``pointer[idx]``.
    sem : str, optional
-       Specifies the memory semantics for the operation. Acceptable values are
-       ``"acquire"``, ``"release"``, ``"acq_rel"`` (stands for "ACQUIRE_RELEASE"),
-       and ``"relaxed"``. If not provided, the function defaults to using
-       ``"acq_rel"`` semantics.
+       Specifies the memory semantics for the operation. Acceptable values are ``"acquire"``,
+       ``"release"``, ``"acq_rel"`` (ACQUIRE_RELEASE), and ``"relaxed"``. Defaults to ``"acq_rel"``.
    scope : str, optional
-       Defines the scope of threads that observe the synchronizing effect of the
-       atomic operation. Acceptable values are ``"gpu"`` (default), ``"cta"``
-       (cooperative thread array, thread block), or ``"sys"`` (stands for
-       "SYSTEM"). The default value is ``"gpu"``.
+       Defines the scope of threads that observe the synchronizing effect of the atomic operation.
+       Acceptable values are ``"gpu"`` (default), ``"cta"`` (cooperative thread array/thread block),
+       or ``"sys"`` (SYSTEM).
 
    Returns
    -------
-   tensor
+   block of pointer.dtype.element_ty
        The data stored at ``pointer`` before the atomic operation.
 
    Notes
@@ -45,7 +40,7 @@ atomic_xchg
    .. code-block:: python
 
       @triton.jit
-      def kernel(ptr, new_val, BLOCK: tl.constexpr):
+      def kernel(ptr, val, BLOCK: tl.constexpr):
           offs = tl.arange(0, BLOCK)
-          old_val = tl.atomic_xchg(ptr + offs, new_val)
+          old_val = tl.atomic_xchg(ptr + offs, val)
           # old_val contains the value before the exchange

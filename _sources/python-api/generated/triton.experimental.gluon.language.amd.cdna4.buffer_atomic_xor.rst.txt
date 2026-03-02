@@ -1,0 +1,64 @@
+buffer_atomic_xor
+=================
+
+.. currentmodule:: triton.experimental.gluon.language.amd.cdna4
+
+.. function:: buffer_atomic_xor(ptr, offsets, value, mask=None, sem=None, scope=None)
+
+    Perform an atomic bitwise XOR operation on buffer memory for AMD CDNA4 GPUs.
+
+    This function atomically reads a value from buffer memory, computes the bitwise
+    XOR with the provided value, and writes the result back. Returns the original
+    value read from memory before the operation.
+
+    Parameters
+    ----------
+    ptr : pointer
+        Pointer to the buffer memory location.
+    offsets : tensor
+        Tensor of offsets specifying which elements to operate on.
+    value : tensor
+        Tensor of values to XOR with the memory contents.
+    mask : tensor, optional
+        Boolean tensor mask for predicated execution. Elements where mask is False
+        are not processed.
+    sem : str, optional
+        Memory semantics for the atomic operation. Common values include ``"acq_rel"``
+        (acquire-release) or ``"relaxed"``. Defaults to hardware default.
+    scope : str, optional
+        Memory scope for the atomic operation. Common values include ``"cta"``
+        (block-level) or ``"gpu"`` (grid-level). Defaults to hardware default.
+
+    Returns
+    -------
+    tensor
+        Tensor containing the original values read from memory before the XOR
+        operation was applied.
+
+    Notes
+    -----
+    This operation is specific to AMD CDNA4 architecture and uses the buffer
+    atomic read-modify-write (RMW) instruction path. The operation is performed
+    element-wise for each active lane where the mask is True.
+
+    Memory consistency guarantees depend on the ``sem`` and ``scope`` parameters.
+    For correct synchronization across threads, appropriate memory semantics
+    and scope must be specified.
+
+    Examples
+    --------
+    .. code-block:: python
+
+        import triton.experimental.gluon as gluon
+        import triton.experimental.gluon.language as ttgl
+        from triton.experimental.gluon.language.amd import cdna4
+
+        @gluon.jit
+        def kernel(ptr, offsets, value, BLOCK_SIZE: ttgl.constexpr):
+            # Load offsets for each thread
+            offsets = ttgl.arange(0, BLOCK_SIZE, layout=...)
+            
+            # Perform atomic XOR on buffer memory
+            old_values = cdna4.buffer_atomic_xor(ptr, offsets, value, sem="acq_rel")
+            
+            # old_values contains the memory contents before XOR

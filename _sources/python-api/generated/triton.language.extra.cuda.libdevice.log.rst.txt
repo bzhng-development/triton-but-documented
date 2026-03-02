@@ -1,0 +1,43 @@
+triton.language.extra.cuda.libdevice.log
+========================================
+
+.. currentmodule:: triton.language.extra.cuda.libdevice
+
+.. function:: log(arg0, _semantic=None)
+
+    Compute the natural logarithm element-wise.
+
+    Parameters
+    ----------
+    arg0 : tl.tensor
+        Input tensor. Must be of floating-point type (``fp32`` or ``fp64``).
+    _semantic : optional
+        Internal parameter for semantic propagation. Do not set manually.
+
+    Returns
+    -------
+    out : tl.tensor
+        Tensor of the same shape as ``arg0`` containing the natural logarithm
+        of each element. The dtype matches the input dtype (``fp32`` or ``fp64``).
+
+    Notes
+    -----
+    This function dispatches to CUDA libdevice functions:
+
+    - ``__nv_logf`` for ``fp32`` inputs
+    - ``__nv_log`` for ``fp64`` inputs
+
+    The operation is pure (no side effects).
+
+    Examples
+    --------
+    .. code-block:: python
+
+        import triton
+        import triton.language as tl
+
+        @triton.jit
+        def log_kernel(x_ptr, y_ptr, BLOCK_SIZE: tl.constexpr):
+            x = tl.load(x_ptr + tl.arange(0, BLOCK_SIZE))
+            y = tl.extra.cuda.libdevice.log(x)
+            tl.store(y_ptr + tl.arange(0, BLOCK_SIZE), y)

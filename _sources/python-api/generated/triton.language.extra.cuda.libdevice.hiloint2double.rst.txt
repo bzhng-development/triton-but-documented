@@ -1,0 +1,56 @@
+hiloint2double
+==============
+
+.. currentmodule:: triton.language.extra.cuda.libdevice
+
+.. function:: hiloint2double(arg0, arg1, _semantic=None)
+
+   Reinterpret two 32-bit integers as a double-precision floating point value.
+
+   Parameters
+   ----------
+   arg0 : tl.tensor
+       First 32-bit integer (high bits of the double representation).
+   arg1 : tl.tensor
+       Second 32-bit integer (low bits of the double representation).
+   _semantic : optional
+       Internal parameter, do not set manually.
+
+   Returns
+   -------
+   tl.tensor
+       Double-precision floating point value (``tl.float64``) constructed from
+       the bit pattern of ``arg0`` and ``arg1``.
+
+   Notes
+   -----
+   This function calls the CUDA libdevice intrinsic ``__nv_hiloint2double``.
+   The two 32-bit integers are concatenated to form a 64-bit bit pattern,
+   which is then reinterpreted as an IEEE 754 double-precision floating
+   point value.
+
+   - ``arg0`` provides the high 32 bits
+   - ``arg1`` provides the low 32 bits
+
+   This is a pure function with no side effects. Both input tensors must
+   have dtype ``tl.int32``.
+
+   Examples
+   --------
+   .. code-block:: python
+
+       import triton
+       import triton.language as tl
+       from triton.language.extra.cuda.libdevice import hiloint2double
+
+       @triton.jit
+       def kernel(ptr, BLOCK: tl.constexpr):
+           # Load two int32 values
+           high = tl.load(ptr + tl.arange(0, BLOCK))
+           low = tl.load(ptr + tl.arange(0, BLOCK) + BLOCK)
+
+           # Reinterpret as double
+           value = hiloint2double(high, low)
+
+           # Use the double value
+           tl.store(ptr + tl.arange(0, BLOCK) * 2, value)

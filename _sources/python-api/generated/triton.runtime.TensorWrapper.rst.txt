@@ -1,0 +1,80 @@
+class TensorWrapper
+==================
+
+Wrapper class that reinterprets a tensor with a different dtype while preserving
+the underlying memory and tensor properties.
+
+Parameters
+----------
+base : tensor-like
+    The underlying tensor object to wrap. Must have ``data_ptr()``, ``dtype``,
+    ``device``, ``shape``, and ``stride`` methods or attributes.
+dtype : dtype
+    The new data type to interpret the tensor as.
+
+Attributes
+----------
+dtype
+    The reinterpret dtype.
+base
+    The underlying wrapped tensor.
+data
+    Reference to ``base.data``.
+device
+    Reference to ``base.device``.
+shape
+    Reference to ``base.shape``.
+
+Methods
+-------
+data_ptr()
+    Returns the memory address of the tensor data.
+stride(*args)
+    Returns the stride for the specified dimension(s).
+element_size()
+    Returns the size in bytes of a single element.
+cpu()
+    Returns a TensorWrapper with the base tensor moved to CPU.
+copy_(other)
+    Copies data from another TensorWrapper into this one.
+clone()
+    Returns a new TensorWrapper with a cloned base tensor.
+to(device)
+    Returns a TensorWrapper with the base tensor moved to specified device.
+new_empty(sizes)
+    Returns a new TensorWrapper with an empty tensor of given sizes.
+
+Notes
+-----
+TensorWrapper is primarily used internally by Triton for tensor reinterpretation
+and mocking during kernel warmup. It allows viewing the same memory with a
+different dtype without allocating new storage.
+
+The wrapper delegates most operations to the underlying ``base`` tensor,
+preserving the original tensor's memory layout while changing the dtype
+interpretation.
+
+Examples
+--------
+.. code-block:: python
+
+    import torch
+    import triton
+    import triton.language as tl
+
+    # Create a base tensor
+    base = torch.randn(1024, dtype=torch.float32, device='cuda')
+
+    # Wrap with different dtype
+    wrapper = TensorWrapper(base, tl.int32)
+
+    # Access tensor properties
+    print(wrapper.shape)      # torch.Size([1024])
+    print(wrapper.dtype)      # tl.int32
+    print(wrapper.data_ptr()) # memory address
+
+    # Move to different device
+    cpu_wrapper = wrapper.cpu()
+
+    # Create new empty tensor with same dtype
+    empty = wrapper.new_empty((512,))

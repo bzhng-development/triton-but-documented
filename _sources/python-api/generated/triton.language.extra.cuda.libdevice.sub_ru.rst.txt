@@ -1,0 +1,48 @@
+sub_ru
+======
+
+.. currentmodule:: triton.language.extra.cuda.libdevice
+
+.. function:: sub_ru(arg0, arg1, _semantic=None)
+
+    Subtract two floating-point values with round-up rounding mode.
+
+    Parameters
+    ----------
+    arg0 : tl.tensor
+        First input tensor. Must be fp32 or fp64 dtype.
+    arg1 : tl.tensor
+        Second input tensor. Must be fp32 or fp64 dtype.
+    _semantic : optional
+        Internal parameter, do not set manually.
+
+    Returns
+    -------
+    result : tl.tensor
+        Tensor of the same dtype as inputs containing ``arg0 - arg1`` computed
+        with round-up rounding mode (round toward positive infinity).
+
+    Notes
+    -----
+    This function maps to CUDA libdevice functions:
+
+    - ``__nv_fsub_ru`` for fp32 inputs
+    - ``__nv_dsub_ru`` for fp64 inputs
+
+    The round-up rounding mode rounds the exact result toward positive infinity.
+    This can produce different results than standard subtraction for values near
+    rounding boundaries.
+
+    Examples
+    --------
+    .. code-block:: python
+
+        import triton
+        import triton.language as tl
+
+        @triton.jit
+        def kernel(x_ptr, y_ptr, out_ptr, BLOCK_SIZE: tl.constexpr):
+            x = tl.load(x_ptr + tl.arange(0, BLOCK_SIZE))
+            y = tl.load(y_ptr + tl.arange(0, BLOCK_SIZE))
+            result = tl.extra.cuda.libdevice.sub_ru(x, y)
+            tl.store(out_ptr + tl.arange(0, BLOCK_SIZE), result)

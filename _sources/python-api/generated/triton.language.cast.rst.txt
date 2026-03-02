@@ -1,38 +1,67 @@
-.. py:function:: triton.language.cast(input, dtype, fp_downcast_rounding=None, bitcast=False)
+triton.language.cast
+====================
 
-   Casts a tensor to the given ``dtype``.
+.. currentmodule:: triton.language
 
-   :param input: The input tensor to cast.
-   :type input: tl.tensor
-   :param dtype: The target data type.
-   :type dtype: tl.dtype
-   :param fp_downcast_rounding: The rounding mode for downcasting floating-point values. This parameter is only used when ``input`` is a floating-point tensor and ``dtype`` is a floating-point type with a smaller bitwidth. Supported values are ``"rtne"`` (round to nearest, ties to even) and ``"rtz"`` (round towards zero).
-   :type fp_downcast_rounding: str, optional
-   :param bitcast: If true, the tensor is bitcasted to the given ``dtype``, instead of being numerically casted.
-   :type bitcast: bool, optional
-   :return: A tensor with the specified ``dtype``.
-   :rtype: tl.tensor
+.. function:: cast(input, dtype, fp_downcast_rounding=None, bitcast=False)
 
-   This function can also be called as a member function on :py:class:`tensor`, as ``x.cast(...)`` instead of ``cast(x, ...)``.
+    Casts a tensor to the given :code:`dtype`.
 
-   .. code-block:: python
+    Parameters
+    ----------
+    input : tensor
+        The input tensor to cast.
+    dtype : tl.dtype
+        The target data type.
+    fp_downcast_rounding : str, optional
+        The rounding mode for downcasting floating-point values. This parameter
+        is only used when input is a floating-point tensor and :code:`dtype` is
+        a floating-point type with a smaller bitwidth. Supported values are
+        :code:`"rtne"` (round to nearest, ties to even) and :code:`"rtz"`
+        (round towards zero).
+    bitcast : bool, optional
+        If true, the tensor is bitcasted to the given :code:`dtype`, instead of
+        being numerically casted. Default is :code:`False`.
 
-      import triton
-      import triton.language as tl
+    Returns
+    -------
+    tensor
+        A tensor with the same shape as :code:`input` but with the specified
+        :code:`dtype`.
 
-      @triton.jit
-      def kernel(x_ptr, y_ptr, BLOCK_SIZE: tl.constexpr):
-          pid = tl.program_id(axis=0)
-          offs = pid * BLOCK_SIZE + tl.arange(0, BLOCK_SIZE)
-          x = tl.load(x_ptr + offs)
+    Notes
+    -----
+    This function can also be called as a member function on :py:class:`tensor`,
+    as :code:`x.cast(...)` instead of :code:`cast(x, ...)`.
 
-          # Numerical cast: converts float32 values to int32 values
-          y_int = tl.cast(x, tl.int32)
+    When :code:`bitcast=True`, the bit representation of the input is
+    reinterpreted as the target dtype without numerical conversion. This is
+    useful for type-punning operations.
 
-          # Bitcast: reinterprets float32 bits as int32 without changing values
-          y_bits = tl.cast(x, tl.int32, bitcast=True)
+    Examples
+    --------
+    .. code-block:: python
 
-          # Downcast with specific rounding mode
-          y_fp16 = tl.cast(x, tl.float16, fp_downcast_rounding="rtne")
+        import triton
+        import triton.language as tl
 
-          tl.store(y_ptr + offs, y_int)
+        @triton.jit
+        def kernel(x_ptr, y_ptr, BLOCK: tl.constexpr):
+            x = tl.load(x_ptr + tl.arange(0, BLOCK))
+            # Cast float32 to float16
+            y = tl.cast(x, tl.float16)
+            tl.store(y_ptr + tl.arange(0, BLOCK), y)
+
+        # Using member function syntax
+        @triton.jit
+        def kernel2(x_ptr, y_ptr, BLOCK: tl.constexpr):
+            x = tl.load(x_ptr + tl.arange(0, BLOCK))
+            y = x.cast(tl.int32)
+            tl.store(y_ptr + tl.arange(0, BLOCK), y)
+
+        # Bitcast example: reinterpret float32 bits as int32
+        @triton.jit
+        def kernel3(x_ptr, y_ptr, BLOCK: tl.constexpr):
+            x = tl.load(x_ptr + tl.arange(0, BLOCK))
+            y = tl.cast(x, tl.int32, bitcast=True)
+            tl.store(y_ptr + tl.arange(0, BLOCK), y)

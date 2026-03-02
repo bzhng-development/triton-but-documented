@@ -1,0 +1,55 @@
+triton.language.extra.cuda.libdevice.add_rd
+=============================================
+
+.. currentmodule:: triton.language.extra.cuda.libdevice
+
+.. function:: add_rd(arg0, arg1, _semantic=None)
+
+    Perform floating-point addition with round-down (toward negative infinity) rounding mode.
+
+    This function calls the CUDA libdevice ``__nv_fadd_rd`` (for ``fp32``) or
+    ``__nv_dadd_rd`` (for ``fp64``) intrinsic, which computes ``arg0 + arg1``
+    with IEEE 754 round-down rounding semantics.
+
+    Parameters
+    ----------
+    arg0 : tl.tensor
+        First input tensor. Must be of type ``fp32`` or ``fp64``.
+    arg1 : tl.tensor
+        Second input tensor. Must be of type ``fp32`` or ``fp64``.
+    _semantic :
+        Internal parameter used by Triton compiler. Do not set manually.
+
+    Returns
+    -------
+    result : tl.tensor
+        Tensor containing the element-wise sum of ``arg0`` and ``arg1`` with
+        round-down rounding. Has the same dtype as the inputs.
+
+    Notes
+    -----
+    The ``_rd`` suffix indicates round-down rounding mode (toward negative
+    infinity). This differs from the default round-to-nearest-even mode used
+    by standard floating-point operations.
+
+    Supported input dtypes:
+
+    - ``fp32``: calls ``__nv_fadd_rd``
+    - ``fp64``: calls ``__nv_dadd_rd``
+
+    Both inputs must have the same dtype. Mixed precision is not supported.
+
+    Examples
+    --------
+    .. code-block:: python
+
+        import triton
+        import triton.language as tl
+
+        @triton.jit
+        def kernel(x_ptr, y_ptr, out_ptr, BLOCK: tl.constexpr):
+            x = tl.load(x_ptr + tl.arange(0, BLOCK))
+            y = tl.load(y_ptr + tl.arange(0, BLOCK))
+            # Perform addition with round-down rounding mode
+            result = tl.extra.cuda.libdevice.add_rd(x, y)
+            tl.store(out_ptr + tl.arange(0, BLOCK), result)

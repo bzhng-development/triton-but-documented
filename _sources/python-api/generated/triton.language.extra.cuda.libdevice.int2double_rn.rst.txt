@@ -1,0 +1,40 @@
+int2double_rn
+=============
+
+Convert 32-bit signed integer to double-precision floating-point with round-to-nearest rounding.
+
+Parameters
+----------
+arg0 : tl.tensor
+    Input tensor of 32-bit signed integers. Must have dtype ``tl.int32``.
+_semantic : tl.semantic, optional
+    Internal semantic object (automatically provided by Triton compiler).
+
+Returns
+-------
+tl.tensor
+    Tensor of double-precision floating-point values with dtype ``tl.float64``.
+
+Notes
+-----
+This function wraps the CUDA libdevice intrinsic ``__nv_int2double_rn``. The "rn"
+suffix indicates round-to-nearest-even rounding mode.
+
+The operation is pure (no side effects) and is applied element-wise on tensors.
+
+Only ``int32`` input type is supported.
+
+Examples
+--------
+.. code-block:: python
+
+    import triton
+    import triton.language as tl
+    from triton.language.extra.cuda import libdevice
+
+    @triton.jit
+    def kernel(int_ptr, out_ptr, BLOCK_SIZE: tl.constexpr):
+        offsets = tl.arange(0, BLOCK_SIZE)
+        int_vals = tl.load(int_ptr + offsets)
+        double_vals = libdevice.int2double_rn(int_vals)
+        tl.store(out_ptr + offsets, double_vals)

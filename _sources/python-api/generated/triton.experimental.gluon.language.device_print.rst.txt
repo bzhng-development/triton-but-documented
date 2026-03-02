@@ -1,0 +1,57 @@
+device_print
+============
+
+Print values at runtime from the GPU device.
+
+.. function:: device_print(prefix, *args, hex=False, _semantic=None)
+
+   Print the values at runtime from the device. String formatting does not work
+   for runtime values, so provide the values you want to print as arguments. The
+   first value must be a string, all following values must be scalars or tensors.
+
+   Calling the Python builtin :code:`print` is equivalent to calling this function,
+   and the argument requirements match this function (not the normal requirements
+   for :code:`print`).
+
+   Parameters
+   ----------
+   prefix : str
+       A prefix to print before the values. This is required to be a string
+       literal and must contain only ASCII printable characters.
+   *args : tensor or scalar
+       The values to print. They can be any tensor or scalar.
+   hex : bool, optional
+       If True, print all values as hex instead of decimal (default: False).
+   _semantic : GluonSemantic, optional
+       Internal parameter for semantic operations. Do not set manually.
+
+   Returns
+   -------
+   None
+
+   Notes
+   -----
+   On CUDA, printfs are streamed through a buffer of limited size (on one host,
+   the default was measured as 6912 KiB, but this may not be consistent across
+   GPUs and CUDA versions). If you notice some printfs are being dropped, you
+   can increase the buffer size by calling:
+
+   .. code-block:: python
+
+       triton.runtime.driver.active.utils.set_printf_fifo_size(size_bytes)
+
+   CUDA may raise an error if you try to change this value after running a
+   kernel that uses printfs. The value set here may only affect the current
+   device (so if you have multiple GPUs, you need to call it multiple times).
+
+   Examples
+   --------
+   .. code-block:: python
+
+       import triton.experimental.gluon as gluon
+       import triton.experimental.gluon.language as ttgl
+
+       @gluon.jit
+       def kernel(pid):
+           ttgl.device_print("pid", pid)
+           print("pid", pid)  # equivalent to device_print

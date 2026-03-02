@@ -1,76 +1,49 @@
 TensorWrapper
 =============
 
-.. currentmodule:: triton
+.. class:: triton.TensorWrapper(base, dtype)
 
-.. class:: TensorWrapper(base, dtype)
-
-   A lightweight wrapper around a tensor that overrides its ``dtype`` while
-   preserving the underlying data, device, and shape. This is used internally
-   by Triton to reinterpret tensor data types without copying memory.
+   Wrapper that overrides the ``dtype`` of a base tensor while delegating
+   memory and device properties.
 
    Parameters
    ----------
-   base : tensor
-       The underlying tensor object (e.g., PyTorch tensor) containing the data.
+   base : tensor-like
+       The underlying tensor object (e.g., ``torch.Tensor``).
    dtype : dtype
-       The new data type to expose for this tensor.
+       The data type to expose via this wrapper.
 
    Attributes
    ----------
    dtype : dtype
        The overridden data type.
-   base : tensor
-       The original wrapped tensor.
-   data : tensor.data
-       Reference to the underlying data.
+   base : tensor-like
+       The original underlying tensor.
+   data : memory
+       Points to ``base.data``.
    device : device
-       The device where the tensor resides.
+       Points to ``base.device``.
    shape : tuple
-       The shape of the tensor.
-
-   Methods
-   -------
-   data_ptr()
-       Returns the data pointer of the base tensor.
-   stride(*args)
-       Returns the stride of the base tensor for the given dimension(s).
-   element_size()
-       Returns the size in bytes of an element of the base tensor.
-   cpu()
-       Returns a new ``TensorWrapper`` with the base tensor moved to CPU.
-   copy_(other)
-       Copies data from another ``TensorWrapper`` into this one.
-   clone()
-       Returns a new ``TensorWrapper`` with a cloned base tensor.
-   to(device)
-       Returns a new ``TensorWrapper`` with the base tensor moved to the specified device.
-   new_empty(sizes)
-       Returns a new ``TensorWrapper`` wrapping an empty tensor of the given sizes.
+       Points to ``base.shape``.
 
    Notes
    -----
-   ``TensorWrapper`` does not allocate new memory; it simply reinterprets the
-   existing tensor with a different ``dtype``. Use :func:`triton.reinterpret`
-   to create or modify wrappers safely.
+   Methods such as ``data_ptr()``, ``stride()``, ``cpu()``, ``to()``, and
+   ``clone()`` delegate to the base tensor but preserve the wrapper's
+   ``dtype`` in returned objects where applicable.
+
+   Primarily used internally by Triton to reinterpret tensor dtypes without
+   altering the underlying memory allocation.
 
    Examples
    --------
    .. code-block:: python
 
-      import torch
-      import triton
-
-      # Create a float32 tensor
-      base_tensor = torch.randn(4, 4, device='cuda')
-
-      # Wrap it as int32 without copying data
-      wrapped = triton.TensorWrapper(base_tensor, torch.int32)
-
-      print(wrapped.dtype)  # torch.int32
-      print(wrapped.shape)  # torch.Size([4, 4])
-      assert wrapped.data_ptr() == base_tensor.data_ptr()
-
-      # Reinterpret using helper function
-      reinterpreted = triton.reinterpret(base_tensor, torch.float16)
-      assert isinstance(reinterpreted, triton.TensorWrapper)
+      >>> import torch
+      >>> import triton
+      >>> base = torch.zeros((10,), dtype=torch.float32)
+      >>> wrapper = triton.TensorWrapper(base, dtype=torch.int32)
+      >>> wrapper.dtype
+      torch.int32
+      >>> wrapper.shape
+      torch.Size([10])

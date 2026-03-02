@@ -1,0 +1,42 @@
+float_as_uint
+=============
+
+.. currentmodule:: triton.language.extra.cuda.libdevice
+
+.. function:: float_as_uint(arg0, _semantic=None)
+
+    Reinterpret the bit pattern of a 32-bit float as a 32-bit unsigned integer.
+
+    Parameters
+    ----------
+    arg0 : tl.tensor
+        Input tensor of 32-bit floating point values (``tl.float32``).
+
+    Returns
+    -------
+    tl.tensor
+        Tensor of 32-bit integers (``tl.int32``) with the same bit pattern as the input floats.
+
+    Notes
+    -----
+    This function performs a bitwise reinterpretation, not a numeric conversion.
+    The underlying CUDA libdevice function ``__nv_float_as_uint`` is used.
+    This operation is pure and has no side effects.
+
+    Equivalent to a bitcast from ``float32`` to ``int32``.
+
+    Examples
+    --------
+    .. code-block:: python
+
+        import triton
+        import triton.language as tl
+
+        @triton.jit
+        def kernel(x_ptr, out_ptr, BLOCK: tl.constexpr):
+            pid = tl.program_id(0)
+            offsets = pid * BLOCK + tl.arange(0, BLOCK)
+            x = tl.load(x_ptr + offsets)
+            # Reinterpret float bits as int
+            bits = tl.float_as_uint(x)
+            tl.store(out_ptr + offsets, bits)

@@ -1,0 +1,51 @@
+tgamma
+======
+
+Compute the gamma function element-wise.
+
+.. math::
+    \Gamma(x) = \int_0^\infty t^{x-1} e^{-t} dt
+
+Parameters
+----------
+arg0 : tensor
+    Input tensor of floating-point type (``fp32`` or ``fp64``).
+
+Returns
+-------
+result : tensor
+    Tensor of the same dtype as ``arg0`` containing :math:`\Gamma(x)` values.
+
+Notes
+-----
+The gamma function extends the factorial function to real numbers. For positive
+integers :math:`n`, :math:`\Gamma(n) = (n-1)!`.
+
+This function is implemented using CUDA libdevice:
+- ``__nv_tgammaf`` for ``fp32`` inputs
+- ``__nv_tgamma`` for ``fp64`` inputs
+
+The function is pure (no side effects) and supports automatic broadcasting.
+
+Examples
+--------
+.. code-block:: python
+
+    import torch
+    import triton
+    import triton.language as tl
+
+    @triton.jit
+    def gamma_kernel(x_ptr, out_ptr, n_elements, BLOCK_SIZE: tl.constexpr):
+        pid = tl.program_id(axis=0)
+        offsets = pid * BLOCK_SIZE + tl.arange(0, BLOCK_SIZE)
+        mask = offsets < n_elements
+        x = tl.load(x_ptr + offsets, mask=mask)
+        out = tl.extra.cuda.libdevice.tgamma(x)
+        tl.store(out_ptr + offsets, out, mask=mask)
+
+    # Compute gamma function for input values
+    x = torch.tensor([1.0, 2.0, 3.0, 4.0], dtype=torch.float32, device='cuda')
+    out = torch.empty_like(x)
+    gamma_kernel[(1,)](x, out, x.numel(), BLOCK_SIZE=4)
+    # out = [1.0, 1.0, 2.0, 6.0]  # Γ(1)=0!=1, Γ(2)=1!=1, Γ(3)=2!=2, Γ(4)=3!=6

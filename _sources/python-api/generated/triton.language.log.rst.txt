@@ -1,7 +1,5 @@
-log
-===
-
-.. currentmodule:: triton.language
+triton.language.log
+===================
 
 .. function:: log(x, _semantic=None)
 
@@ -10,7 +8,7 @@ log
    Parameters
    ----------
    x : tl.tensor
-       The input tensor. Must be a floating-point type (:code:`fp32` or :code:`fp64`).
+       The input tensor. Must have floating-point dtype (:code:`fp32` or :code:`fp64`).
 
    Returns
    -------
@@ -22,31 +20,27 @@ log
    This function can also be called as a member function on :py:class:`tensor`,
    as :code:`x.log()` instead of :code:`tl.log(x)`.
 
-   The operation is only defined for positive values. Behavior for non-positive
-   inputs (zero or negative) follows IEEE 754 semantics (returning :code:`-inf`
-   or :code:`nan`).
+   The natural logarithm is the logarithm to the base :code:`e` (Euler's number).
+   Only floating-point dtypes (:code:`fp32`, :code:`fp64`) are supported.
 
    Examples
    --------
    .. code-block:: python
 
-      import triton
-      import triton.language as tl
-      import torch
+       import triton
+       import triton.language as tl
 
-      @triton.jit
-      def log_kernel(x_ptr, out_ptr, n_elements, BLOCK_SIZE: tl.constexpr):
-          pid = tl.program_id(axis=0)
-          block_start = pid * BLOCK_SIZE
-          offsets = block_start + tl.arange(0, BLOCK_SIZE)
-          mask = offsets < n_elements
-          x = tl.load(x_ptr + offsets, mask=mask)
-          out = tl.log(x)
-          tl.store(out_ptr + offsets, out, mask=mask)
+       @triton.jit
+       def log_kernel(x_ptr, y_ptr, n, BLOCK_SIZE: tl.constexpr):
+           pid = tl.program_id(0)
+           offsets = pid * BLOCK_SIZE + tl.arange(0, BLOCK_SIZE)
+           mask = offsets < n
+           x = tl.load(x_ptr + offsets, mask=mask)
+           y = tl.log(x)
+           tl.store(y_ptr + offsets, y, mask=mask)
 
-      # Example usage
-      n_elements = 1024
-      x = torch.exp(torch.randn(n_elements, device='cuda'))  # Positive values
-      out = torch.empty_like(x)
-      grid = lambda meta: (triton.cdiv(n_elements, meta['BLOCK_SIZE']),)
-      log_kernel[grid](x, out, n_elements, BLOCK_SIZE=128)
+       # Call as a free function
+       y = tl.log(x)
+
+       # Call as a member function
+       y = x.log()

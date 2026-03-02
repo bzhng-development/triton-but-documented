@@ -1,0 +1,89 @@
+constexpr
+=========
+
+.. py:class:: constexpr(value)
+
+   Store a value that is known at compile-time.
+
+   :py:class:`constexpr` wraps Python values that can be resolved during kernel
+   compilation. These values are used for kernel parameters marked as
+   :code:`constexpr`, loop bounds, tensor shapes, and other compile-time
+   constants.
+
+   Parameters
+   ----------
+   value : int, float, bool, or str
+       The compile-time constant value to wrap. Nested :py:class:`constexpr`
+       instances are automatically unwrapped.
+
+   Attributes
+   ----------
+   value
+       The underlying Python value.
+   type
+       The :py:class:`constexpr_type` describing this constant's type.
+
+   Methods
+   -------
+   __index__()
+       Returns the underlying value, enabling use in indexing contexts.
+   __bool__()
+       Returns the boolean value of the underlying constant.
+   __iter__()
+       Enables iteration if the underlying value is iterable.
+   __call__(*args, **kwds)
+       Calls the underlying value if it is callable.
+   __getitem__(*args)
+       Supports indexing into the underlying value.
+
+   Notes
+   -----
+   :py:class:`constexpr` supports all standard Python arithmetic and comparison
+   operators (+, -, *, /, //, %, **, <<, >>, &, |, ^, <, <=, >, >=, ==, !=).
+   Operations between :py:class:`constexpr` and other values return a new
+   :py:class:`constexpr` instance.
+
+   In Gluon kernels, :py:class:`constexpr` values are typically passed via
+   kernel parameters annotated with :code:`: tl.constexpr` in the function
+   signature. They enable compile-time specialization and loop unrolling.
+
+   Examples
+   --------
+   .. code-block:: python
+
+      import triton.experimental.gluon as gluon
+      import triton.experimental.gluon.language as ttgl
+
+      @gluon.jit
+      def kernel(x_ptr, BLOCK_SIZE: ttgl.constexpr):
+          # BLOCK_SIZE is a constexpr, usable for compile-time shapes
+          offsets = ttgl.arange(0, BLOCK_SIZE)
+          mask = offsets < BLOCK_SIZE
+          value = ttgl.load(x_ptr + offsets, mask=mask)
+          ttgl.store(x_ptr + offsets, value, mask=mask)
+
+      # Launch with compile-time constant
+      BLOCK_SIZE = 128
+      kernel[(1,)](x_ptr, BLOCK_SIZE)
+
+   .. code-block:: python
+
+      # Manual constexpr construction
+      from triton.experimental.gluon.language import constexpr
+
+      c = constexpr(42)
+      print(c.value)  # 42
+      print(c + 8)    # constexpr[50]
+      print(c * 2)    # constexpr[84]
+
+   .. code-block:: python
+
+      # constexpr in compile-time control flow
+      @gluon.jit
+      def kernel_with_branch(x_ptr, USE_FAST_PATH: ttgl.constexpr):
+          if USE_FAST_PATH:
+              # Compiled only when USE_FAST_PATH is True
+              fast_compute(x_ptr)
+          else:
+              # Compiled only when USE_FAST_PATH is False
+              slow_compute(x_ptr)

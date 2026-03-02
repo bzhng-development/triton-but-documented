@@ -1,0 +1,40 @@
+longlong_as_double
+==================
+
+Reinterpret the bit pattern of a 64-bit integer as a double-precision floating point value.
+
+Parameters
+----------
+arg0 : tensor of int64
+    Input tensor containing 64-bit integers to reinterpret as doubles.
+_semantic : optional
+    Internal semantic argument, do not set manually.
+
+Returns
+-------
+tensor of float64
+    Tensor containing the bitcasted double-precision floating point values.
+
+Notes
+-----
+This function performs a bitwise reinterpretation without changing the underlying
+bits. It is equivalent to a bitcast operation from int64 to float64. The function
+is pure and has no side effects.
+
+This is a CUDA libdevice function that maps to ``__nv_longlong_as_double`` in
+PTX. It is typically used for low-level bit manipulation or when implementing
+custom floating point operations.
+
+Examples
+--------
+.. code-block:: python
+
+    import triton
+    import triton.language as tl
+
+    @triton.jit
+    def kernel(ptr_in, ptr_out, BLOCK: tl.constexpr):
+        offsets = tl.arange(0, BLOCK)
+        int_vals = tl.load(ptr_in + offsets).to(tl.int64)
+        float_vals = tl.extra.cuda.libdevice.longlong_as_double(int_vals)
+        tl.store(ptr_out + offsets, float_vals)

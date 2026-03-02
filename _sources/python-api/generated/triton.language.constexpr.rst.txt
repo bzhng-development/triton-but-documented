@@ -1,63 +1,78 @@
-class constexpr
-===============
+constexpr
+=========
 
-.. currentmodule:: triton.language
+.. py:class:: triton.language.constexpr(value)
 
-.. autoclass:: constexpr
+   Store a value that is known at compile-time.
 
-   Represents a value known at compile-time in Triton kernels.
-
-   Instances of this class wrap Python scalars (ints, floats, etc.) and enable
-   their use in compile-time control flow, shape specifications, and constant
-   expressions within ``@triton.jit`` functions. Operations on ``constexpr``
-   objects are evaluated at compile-time and return new ``constexpr`` objects.
+   This class wraps Python values to mark them as compile-time constants in Triton
+   JIT functions. constexpr values are resolved during compilation rather than at
+   runtime, enabling compile-time specialization and optimization.
 
    Parameters
    ----------
-   value : scalar
-       The compile-time constant value (e.g., int, float). If a ``constexpr``
-       is passed, it is unwrapped to its underlying value.
+   value : int, float, bool, or str
+       The compile-time constant value to wrap. Nested constexpr objects are
+       automatically unwrapped.
 
-   Returns
+   Attributes
+   ----------
+   value
+       The underlying Python value.
+   type
+       The constexpr_type associated with this value.
+
+   Methods
    -------
-   constexpr
-       A new constexpr object wrapping the provided value.
+   __repr__()
+       Returns string representation as ``constexpr[value]``.
+   __hash__()
+       Returns hash based on value and type.
+   __index__()
+       Returns the underlying value for indexing operations.
+   __bool__()
+       Returns boolean value of the underlying value.
 
    Notes
    -----
-   ``constexpr`` is essential for defining block shapes, loop ranges, and
-   conditional compilation flags in Triton. It supports standard arithmetic,
-   bitwise, and comparison operators, which are resolved during kernel
-   compilation rather than at runtime.
+   constexpr values are used throughout Triton to mark parameters that should be
+   treated as compile-time constants. Common use cases include:
 
-   In interpreter mode (when running Python code without compilation), values
-   may not be wrapped in ``constexpr``, so internal utilities handle unwrapping
-   transparently.
+   - Block sizes and shapes (e.g., ``BLOCK_SIZE: tl.constexpr``)
+   - Loop bounds known at compile-time
+   - Configuration flags for kernel specialization
+
+   Arithmetic and comparison operations on constexpr objects return new constexpr
+   objects, preserving compile-time knowledge. In interpreter mode, constant
+   values may not be wrapped in constexpr, so internal code uses helper functions
+   to handle both cases.
+
+   constexpr is typically used as a type annotation in JIT function signatures
+   rather than constructed directly in kernel code.
 
    Examples
    --------
-   .. code-block:: python
+   >>> import triton.language as tl
+   >>> @triton.jit
+   ... def kernel(x_ptr, BLOCK_SIZE: tl.constexpr):
+   ...     # BLOCK_SIZE is a compile-time constant
+   ...     pid = tl.program_id(0)
+   ...     offset = pid * BLOCK_SIZE
+   ...     # ... rest of kernel
 
-       import triton
-       import triton.language as tl
+   >>> # constexpr values support arithmetic
+   >>> a = tl.constexpr(8)
+   >>> b = tl.constexpr(4)
+   >>> c = a + b
+   >>> c
+   constexpr[12]
 
-       @triton.jit
-       def kernel(
-           X,
-           BLOCK_SIZE: tl.constexpr,
-       ):
-           # BLOCK_SIZE is a constexpr, usable for shape definition
-           pid = tl.program_id(0)
-           offset = pid * BLOCK_SIZE
-           mask = tl.arange(0, BLOCK_SIZE) < X.shape[0]
-           x = tl.load(X + offset, mask=mask)
-           # Arithmetic on constexprs happens at compile-time
-           HALF_BLOCK: tl.constexpr = BLOCK_SIZE // 2
-           if HALF_BLOCK > 16:
-               # Compile-time branch
-               x = x * 2.0
-           tl.store(X + offset, x)
+   >>> # Comparison operations return constexpr
+   >>> a > b
+   constexpr[True]
 
-       # Usage
-       BLOCK_SIZE = 128  # This will be wrapped as constexpr(128) in the kernel
-       # triton.compile or triton.run would handle the constexpr wrapping
+   >>> # Use in type annotations for JIT functions
+   >>> @triton.jit
+   ... def matmul(a, b, c, BLOCK_M: tl.constexpr, BLOCK_N: tl.constexpr):
+   ...     # BLOCK_M and BLOCK_N are compile-time constants
+   ...     pass

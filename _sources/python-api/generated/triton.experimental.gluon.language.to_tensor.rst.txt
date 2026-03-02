@@ -1,0 +1,39 @@
+to_tensor
+=========
+
+.. currentmodule:: triton.experimental.gluon.language
+
+.. function:: to_tensor(x, _semantic=None)
+
+    Convert a value to a Gluon tensor.
+
+    Parameters
+    ----------
+    x : scalar or tensor
+        The value to convert. Can be a Python scalar (int, float) or an existing tensor.
+    _semantic : GluonSemantic, optional
+        Internal semantic handler. Automatically provided by the JIT compiler.
+
+    Returns
+    -------
+    tensor
+        A Gluon tensor containing the converted value.
+
+    Notes
+    -----
+    This function is typically used internally by Gluon operations to ensure operands are
+    in tensor form. Users generally do not need to call this directly within JIT-compiled
+    kernels, as type conversion happens automatically.
+
+    Examples
+    --------
+    .. code-block:: python
+
+        import triton.experimental.gluon as gluon
+        import triton.experimental.gluon.language as ttgl
+
+        @gluon.jit
+        def kernel(x_ptr):
+            # Convert scalar to tensor
+            scalar_val = 1.0
+            tensor_val = ttgl.to_tensor(scalar_val)

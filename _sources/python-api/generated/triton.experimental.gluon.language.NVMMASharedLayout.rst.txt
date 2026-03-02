@@ -1,0 +1,88 @@
+class triton.experimental.gluon.language.NVMMASharedLayout
+=====================================================
+
+Shared memory layout optimized for NVIDIA tensor core (MMA) operations.
+
+This layout configures shared memory with swizzling patterns compatible with
+NVIDIA Hopper/Blackwell MMA instructions, supporting optional FP4 padding and
+CTA tiling via CGA layouts.
+
+Parameters
+----------
+swizzle_byte_width : int
+    Width in bytes for memory swizzling. Must be one of ``[0, 32, 64, 128]``.
+    Larger values reduce bank conflicts but require alignment.
+element_bitwidth : int
+    Bitwidth of the element type. Must be one of ``[8, 16, 32, 64]``.
+rank : int, optional
+    Rank of the tensor (default is 2).
+transposed : bool, optional
+    Whether the layout is transposed (default is ``False``).
+fp4_padded : bool, optional
+    Whether FP4 padding is used (default is ``False``). When enabled,
+    requires ``swizzle_byte_width=128`` and ``element_bitwidth=8``.
+cga_layout : list of list of int, optional
+    Bases describing CTA tiling for multi-CTA cooperation (default is empty list).
+    Each inner list must have length equal to ``rank``.
+
+Notes
+-----
+- ``element_bitwidth`` must be in ``[8, 16, 32, 64]``.
+- ``swizzle_byte_width`` must be in ``[0, 32, 64, 128]``.
+- When ``fp4_padded=True``, ``swizzle_byte_width`` must be 128 and
+  ``element_bitwidth`` must be 8.
+- If ``cga_layout`` is provided, each basis vector must have length equal to
+  ``rank``.
+- Use :meth:`get_default_for` to automatically select an optimal swizzle pattern
+  for a given block shape and dtype.
+
+Examples
+--------
+Create a basic NVMMASharedLayout for 16-bit elements with 64-byte swizzling:
+
+.. code-block:: python
+
+    import triton.experimental.gluon as gluon
+    import triton.experimental.gluon.language as ttgl
+
+    layout = ttgl.NVMMASharedLayout(
+        swizzle_byte_width=64,
+        element_bitwidth=16,
+        rank=2,
+        transposed=False,
+    )
+
+Create a layout with FP4 padding (requires 128-byte swizzle and 8-bit elements):
+
+.. code-block:: python
+
+    layout_fp4 = ttgl.NVMMASharedLayout(
+        swizzle_byte_width=128,
+        element_bitwidth=8,
+        rank=2,
+        fp4_padded=True,
+    )
+
+Use the helper method to get an optimal layout for a given block shape:
+
+.. code-block:: python
+
+    block_shape = [128, 64]
+    dtype = ttgl.float16
+    layout_auto = ttgl.NVMMASharedLayout.get_default_for(
+        block_shape=block_shape,
+        dtype=dtype,
+        transposed=False,
+    )
+
+Create a layout with CGA tiling for multi-CTA cooperation:
+
+.. code-block:: python
+
+    cga_layout = [[1, 0], [0, 1]]  # Identity tiling bases
+    layout_cga = ttgl.NVMMASharedLayout(
+        swizzle_byte_width=128,
+        element_bitwidth=32,
+        rank=2,
+        cga_layout=cga_layout,
+    )

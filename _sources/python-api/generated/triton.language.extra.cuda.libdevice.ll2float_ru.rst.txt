@@ -1,0 +1,39 @@
+ll2float_ru
+===========
+
+Convert a 64-bit signed integer to float32 with round-up rounding mode.
+
+Parameters
+----------
+arg0 : tl.int64
+    Input 64-bit signed integer tensor or scalar.
+
+Returns
+-------
+tl.float32
+    Floating-point representation of the input with round-up (toward positive
+    infinity) rounding mode.
+
+Notes
+-----
+This function wraps the CUDA libdevice function ``__nv_ll2float_ru``. The
+rounding mode "ru" (round up) rounds toward positive infinity. This operation
+is pure (no side effects).
+
+Only CUDA targets support this function. The input must be of type
+:code:`tl.int64`.
+
+Examples
+--------
+.. code-block:: python
+
+    import triton
+    import triton.language as tl
+
+    @triton.jit
+    def kernel(x_ptr, y_ptr, BLOCK_SIZE: tl.constexpr):
+        pid = tl.program_id(0)
+        offsets = pid * BLOCK_SIZE + tl.arange(0, BLOCK_SIZE)
+        int_vals = tl.load(x_ptr + offsets).to(tl.int64)
+        float_vals = tl.extra.cuda.libdevice.ll2float_ru(int_vals)
+        tl.store(y_ptr + offsets, float_vals)

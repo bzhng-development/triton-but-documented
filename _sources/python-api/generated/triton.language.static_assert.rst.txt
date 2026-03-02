@@ -1,20 +1,16 @@
 static_assert
 =============
 
-.. currentmodule:: triton.language
+.. py:function:: static_assert(cond, msg='', _semantic=None)
 
-.. function:: static_assert(cond, msg='', _semantic=None)
-
-   Assert the condition at compile time. Does not require that the ``TRITON_DEBUG`` environment variable is set.
+   Assert a condition at compile time.
 
    Parameters
    ----------
    cond : constexpr
-      The condition to assert. Must be a compile-time constant expression.
+       The condition to assert. Must be evaluable at compile time.
    msg : str, optional
-      The error message to display if the assertion fails.
-   _semantic : internal, optional
-      Internal argument used by the compiler; do not set manually.
+       Error message to display if the assertion fails. Default is empty string.
 
    Returns
    -------
@@ -22,21 +18,25 @@ static_assert
 
    Notes
    -----
-   This function triggers a compile-time error if ``cond`` evaluates to ``False``.
-   It is useful for validating ``constexpr`` values (e.g., block sizes, power-of-two constraints)
-   before kernel compilation proceeds. Unlike :func:`device_assert`, this check occurs during
-   compilation and does not inject runtime instructions.
+   This assertion is evaluated at compile time during kernel compilation, not at
+   runtime. It does not require the :code:`TRITON_DEBUG` environment variable to
+   be set, unlike :py:func:`device_assert` which performs runtime assertions.
+
+   If the condition evaluates to false at compile time, compilation will fail
+   with the provided error message.
 
    Examples
    --------
    .. code-block:: python
 
-      import triton
-      import triton.language as tl
+       import triton
+       import triton.language as tl
 
-      @triton.jit
-      def kernel(BLOCK_SIZE: tl.constexpr):
-          # Ensures BLOCK_SIZE is 1024 at compile time
-          tl.static_assert(BLOCK_SIZE == 1024, "BLOCK_SIZE must be 1024")
-          # Kernel logic...
-          pass
+       @triton.jit
+       def kernel(BLOCK_SIZE: tl.constexpr):
+           tl.static_assert(BLOCK_SIZE == 1024, "BLOCK_SIZE must be 1024")
+           # Kernel code here
+
+   See Also
+   --------
+   :py:func:`device_assert`, :py:func:`static_print`

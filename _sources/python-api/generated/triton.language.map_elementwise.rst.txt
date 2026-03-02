@@ -1,61 +1,78 @@
 map_elementwise
-================
+===============
 
 .. currentmodule:: triton.language
 
 .. function:: map_elementwise(scalar_fn, *args, pack=1)
 
-   Map a scalar function over a tensor.
+   Map a scalar function over input tensors elementwise.
 
-   The input tensors ``args`` are implicitly broadcasted to the same shape.
-
-   This operation enables control flow over single elements in a tensor, such as
-   multi-branch functions where one branch is computationally expensive. Unlike
-   :func:`where`, which eagerly evaluates both branches, ``map_elementwise``
-   executes only the taken branch for each element.
+   Applies ``scalar_fn`` to each element of the input tensors after broadcasting
+   them to a common shape. Unlike :func:`where`, this allows control flow that
+   only evaluates one branch per element, which can be more efficient for
+   multi-branch functions where branches have different costs.
 
    Parameters
    ----------
-   scalar_fn : Callable
-      A JIT-compiled function (decorated with ``@triton.jit``) that accepts
-      scalar arguments and returns a scalar tensor or a tuple of scalar tensors.
+   scalar_fn : Callable[..., Tuple[tensor, ...]]
+       A JIT-compiled function (decorated with ``@triton.jit``) that operates
+       on scalar values and returns one or more tensors. This function is
+       called once per element (or per ``pack`` elements) of the input tensors.
    *args : tensor
-      Input tensors to be mapped. These are broadcasted to a common shape before
-      the function is applied.
+       Input tensors to map over. All tensors are implicitly broadcasted to
+       the same shape before the function is applied.
    pack : int, optional
-      The number of elements processed by a single function call. Default is 1.
-      Increasing this value may improve instruction-level parallelism.
+       The number of elements to be processed by one function call. Default is 1.
+       Must be >= 1.
 
    Returns
    -------
-   tensor or tuple of tensors
-      The result of applying ``scalar_fn`` to each element of the input tensors.
-      If ``scalar_fn`` returns a single tensor, a single tensor is returned.
-      If it returns a tuple, a tuple of tensors is returned.
+   tensor or tuple of tensor
+       One tensor if ``scalar_fn`` returns a single tensor, or a tuple of
+       tensors if ``scalar_fn`` returns multiple values. The output shape
+       matches the broadcasted input shape.
 
    Notes
    -----
-   The ``scalar_fn`` must be decorated with ``@triton.jit``. Standard Python
-   control flow (e.g., ``if``/``else``) inside ``scalar_fn`` is converted to
-   predicated GPU machine code.
+   This function enables per-element control flow that avoids evaluating
+   inactive branches. With :func:`where`, both branches are always computed
+   regardless of the condition. With ``map_elementwise`` and Python ``if``
+   statements inside ``scalar_fn``, only the taken branch is executed.
+
+   The ``pack`` parameter allows processing multiple elements per function
+   call, which can improve performance by reducing call overhead. All
+   elements in a pack must have compatible types.
 
    Examples
    --------
-   >>> import triton
-   >>> import triton.language as tl
-   >>>
-   >>> @triton.jit
-   ... def selu_scalar(x, alpha):
-   ...     if x > 0:
-   ...         return x
-   ...     else:
-   ...         return alpha * (tl.exp(x) - 1)
-   >>>
-   >>> @triton.jit
-   ... def selu_kernel(x_ptr, alpha_ptr, out_ptr, BLOCK_SIZE: tl.constexpr):
-   ...     pid = tl.program_id(0)
-   ...     offsets = pid * BLOCK_SIZE + tl.arange(0, BLOCK_SIZE)
-   ...     x = tl.load(x_ptr + offsets)
-   ...     alpha = tl.load(alpha_ptr)
-   ...     out = tl.map_elementwise(selu_scalar, x, alpha)
-   ...     tl.store(out_ptr + offsets, out)
+   Define a scalar function with conditional logic:
+
+   .. code-block:: python
+
+       import triton
+       import triton.language as tl
+
+       @triton.jit
+       def selu_scalar(x, alpha):
+           if x > 0:
+               return x
+           else:
+               return alpha * (tl.exp(x) - 1)
+
+       @triton.jit
+       def selu(x, alpha):
+           return tl.map_elementwise(selu_scalar, x, alpha)
+
+   Use with multiple return values:
+
+   .. code-block:: python
+
+       @triton.jit
+       def abs_and_sign(x):
+           return tl.abs(x), tl.where(x > 0, 1, -1)
+
+       @triton.jit
+       def decompose(x):
+           return tl.map_elementwise(abs_and_sign, x)
+
+       # Returns a tuple of two tensors

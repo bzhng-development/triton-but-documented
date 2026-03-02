@@ -1,41 +1,56 @@
-.. py:function:: triton.language.where(condition, x, y, _semantic=None)
+triton.language.where
+====================
 
-   Returns a tensor of elements from either ``x`` or ``y``, depending on ``condition``.
+.. currentmodule:: triton.language
 
-   Note that ``x`` and ``y`` are always evaluated regardless of the value of ``condition``.
+.. function:: where(condition, x, y)
 
-   If you want to avoid unintended memory operations, use the ``mask`` arguments in :py:func:`triton.language.load` and :py:func:`triton.language.store` instead.
+    Return elements chosen from ``x`` or ``y`` depending on ``condition``.
 
-   The shape of ``x`` and ``y`` are both broadcast to the shape of ``condition``. ``x`` and ``y`` must have the same data type.
+    Parameters
+    ----------
+    condition : tensor
+        Where True, yield ``x``, otherwise yield ``y``. Must be a block of
+        ``triton.bool``.
+    x : tensor
+        Values selected at indices where ``condition`` is True.
+    y : tensor
+        Values selected at indices where ``condition`` is False. Must have the
+        same data type as ``x``.
 
-   Parameters
-   ----------
-   condition : Block of triton.bool
-       When True (nonzero), yield ``x``, otherwise yield ``y``.
-   x : Block
-       Values selected at indices where ``condition`` is True.
-   y : Block
-       Values selected at indices where ``condition`` is False.
+    Returns
+    -------
+    out : tensor
+        A tensor with elements from ``x`` where ``condition`` is True, and from
+        ``y`` where ``condition`` is False. The shape is broadcasted from the
+        inputs.
 
-   Returns
-   -------
-   tensor
-       A tensor containing elements from ``x`` or ``y`` based on ``condition``.
+    Notes
+    -----
+    Both ``x`` and ``y`` are always evaluated regardless of the value of
+    ``condition``. This means that if either ``x`` or ``y`` involves memory
+    operations (e.g., loads), those operations will execute even if their
+    values are not selected.
 
-   Examples
-   --------
-   .. code-block:: python
+    To avoid unintended memory operations, use the ``mask`` arguments in
+    :func:`triton.language.load` and :func:`triton.language.store` instead.
 
-      import triton
-      import triton.language as tl
+    The shapes of ``x`` and ``y`` are both broadcast to the shape of
+    ``condition``. ``x`` and ``y`` must have the same data type.
 
-      @triton.jit
-      def kernel(X_ptr, Y_ptr, Out_ptr, BLOCK_SIZE: tl.constexpr):
-          pid = tl.program_id(0)
-          offset = pid * BLOCK_SIZE + tl.arange(0, BLOCK_SIZE)
-          x = tl.load(X_ptr + offset)
-          y = tl.load(Y_ptr + offset)
-          # Select x if x > y, else y
-          condition = x > y
-          out = tl.where(condition, x, y)
-          tl.store(Out_ptr + offset, out)
+    Examples
+    --------
+    .. code-block:: python
+
+        import triton
+        import triton.language as tl
+
+        @triton.jit
+        def kernel(x_ptr, y_ptr, out_ptr, BLOCK_SIZE: tl.constexpr):
+            pid = tl.program_id(0)
+            offs = pid * BLOCK_SIZE + tl.arange(0, BLOCK_SIZE)
+            x = tl.load(x_ptr + offs)
+            y = tl.load(y_ptr + offs)
+            # Select x where x > 0, otherwise select y
+            out = tl.where(x > 0, x, y)
+            tl.store(out_ptr + offs, out)

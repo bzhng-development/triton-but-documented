@@ -1,0 +1,69 @@
+reduce
+======
+
+.. currentmodule:: triton.experimental.gluon.language
+
+.. function:: reduce(input, axis, combine_fn, keep_dims=False)
+
+   Applies a reduction operation to all elements in input tensors along the specified axis.
+
+   Parameters
+   ----------
+   input : tensor or tuple of tensors
+       The input tensor(s) to reduce.
+   axis : int or None
+       The dimension along which to perform the reduction. If ``None``, reduces across all dimensions.
+   combine_fn : callable
+       A JIT-compiled function (marked with ``@triton.jit``) that combines two scalar tensors. Must be associative and commutative.
+   keep_dims : bool, optional
+       If ``True``, the reduced dimensions are retained with length 1. Default is ``False``.
+
+   Returns
+   -------
+   tensor or tuple of tensors
+       The reduced tensor(s). If ``input`` is a tuple, returns a tuple of reduced tensors.
+
+   Notes
+   -----
+   This function can also be called as a member function on :py:class:`tensor` objects,
+   as ``x.reduce(...)`` instead of ``reduce(x, ...)``.
+
+   The ``combine_fn`` must be marked with ``@triton.jit`` and should take two scalar tensors
+   as arguments, returning their combination. Common operations include addition, multiplication,
+   maximum, or minimum.
+
+   Examples
+   --------
+   >>> import triton.experimental.gluon as gluon
+   >>> import triton.experimental.gluon.language as ttgl
+   >>>
+   >>> @gluon.jit
+   >>> def add_fn(a, b):
+   ...     return a + b
+   >>>
+   >>> @gluon.jit
+   >>> def kernel():
+   ...     x = ttgl.full([4, 8], 1.0, ttgl.float32)
+   ...     # Reduce along axis 1 (sum across columns)
+   ...     y = ttgl.reduce(x, axis=1, combine_fn=add_fn)
+   ...     # y has shape [4]
+   >>>
+   >>> # Using keep_dims to preserve reduced dimension
+   >>> @gluon.jit
+   >>> def kernel_keep_dims():
+   ...     x = ttgl.full([4, 8], 1.0, ttgl.float32)
+   ...     y = ttgl.reduce(x, axis=1, combine_fn=add_fn, keep_dims=True)
+   ...     # y has shape [4, 1]
+   >>>
+   >>> # Reduce across all dimensions
+   >>> @gluon.jit
+   >>> def kernel_all_dims():
+   ...     x = ttgl.full([4, 8], 1.0, ttgl.float32)
+   ...     y = ttgl.reduce(x, axis=None, combine_fn=add_fn)
+   ...     # y is a scalar (shape [])
+   >>>
+   >>> # Using as member function
+   >>> @gluon.jit
+   >>> def kernel_member():
+   ...     x = ttgl.full([4, 8], 1.0, ttgl.float32)
+   ...     y = x.reduce(axis=0, combine_fn=add_fn)

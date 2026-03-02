@@ -1,0 +1,47 @@
+triton.language.extra.cuda.libdevice.nextafter
+===============================================
+
+.. currentmodule:: triton.language.extra.cuda.libdevice
+
+.. function:: nextafter(arg0, arg1, _semantic=None)
+
+    Returns the next representable floating-point value after ``arg0`` in the direction of ``arg1``.
+
+    Parameters
+    ----------
+    arg0 : tl.tensor
+        Input tensor of floating-point values (fp32 or fp64).
+    arg1 : tl.tensor
+        Input tensor indicating the direction (fp32 or fp64).
+    _semantic : optional
+        Internal parameter for semantic propagation. Do not set manually.
+
+    Returns
+    -------
+    result : tl.tensor
+        Tensor of the same dtype as inputs containing the next representable values.
+
+    Notes
+    -----
+    This function wraps CUDA libdevice functions:
+
+    - ``__nv_nextafterf`` for 32-bit floating-point (fp32)
+    - ``__nv_nextafter`` for 64-bit floating-point (fp64)
+
+    Both inputs must have the same dtype. The function is pure (no side effects).
+
+    Examples
+    --------
+    .. code-block:: python
+
+        import triton
+        import triton.language as tl
+
+        @triton.jit
+        def kernel(x_ptr, y_ptr, n, BLOCK: tl.constexpr):
+            pid = tl.program_id(0)
+            offset = pid * BLOCK + tl.arange(0, BLOCK)
+            x = tl.load(x_ptr + offset)
+            y = tl.full((BLOCK,), 1.0, dtype=tl.float32)
+            result = tl.extra.cuda.libdevice.nextafter(x, y)
+            tl.store(y_ptr + offset, result)

@@ -1,0 +1,47 @@
+triton.language.extra.cuda.libdevice.float2ll_rz
+=================================================
+
+Convert 32-bit floating-point values to 64-bit signed integers with round-towards-zero rounding.
+
+Parameters
+----------
+arg0 : tl.tensor
+    Input tensor of 32-bit floating-point values (``tl.float32``).
+
+Returns
+-------
+tl.tensor
+    Tensor of 64-bit signed integers (``tl.int64``) with the same shape as
+    ``arg0``.
+
+Notes
+-----
+This function invokes the CUDA libdevice intrinsic ``__nv_float2ll_rz``. The
+rounding mode is "round towards zero" (rz), which truncates the fractional part
+of the floating-point value. For positive numbers this rounds down, for negative
+numbers this rounds up towards zero.
+
+This is a pure external function that compiles directly to GPU machine code via
+the CUDA libdevice library. Behavior is undefined for input values outside the
+representable range of 64-bit signed integers ([-2^63, 2^63-1]).
+
+Examples
+--------
+.. code-block:: python
+
+    import triton
+    import triton.language as tl
+    from triton.language.extra.cuda import libdevice
+
+    @triton.jit
+    def convert_kernel(x_ptr, y_ptr, BLOCK_SIZE: tl.constexpr):
+        offsets = tl.arange(0, BLOCK_SIZE)
+        x = tl.load(x_ptr + offsets).to(tl.float32)
+        y = libdevice.float2ll_rz(x)
+        tl.store(y_ptr + offsets, y)
+
+    # Launch kernel
+    BLOCK_SIZE = 1024
+    x = torch.randn(BLOCK_SIZE, dtype=torch.float32, device='cuda')
+    y = torch.empty(BLOCK_SIZE, dtype=torch.int64, device='cuda')
+    convert_kernel[(1,)](x, y, BLOCK_SIZE=BLOCK_SIZE)

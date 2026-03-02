@@ -1,58 +1,38 @@
 triton.language.float8e4b15
-==========================
+===========================
 
-.. currentmodule:: triton.language
+8-bit floating point type with 4 exponent bits and 3 mantissa bits (E4M3).
 
-8-bit floating point type with 4 exponent bits and 15 mantissa bits (including implicit bit).
-
-This data type follows the IEEE 754 half-precision format structure but compressed to 8 bits,
-specifically designed for high-dynamic-range low-precision workloads. It consists of:
-
-*   1 sign bit
-*   4 exponent bits (bias = 7)
-*   3 explicit mantissa bits (total precision including implicit bit = 4 bits)
-
-.. note::
-   This dtype is primarily used on NVIDIA Hopper (H100) and later architectures via Tensor Cores
-   supporting FP8 E4M3 or similar variants. Ensure target GPU capability matches before usage.
-
-Parameters
-----------
-None (Data type instance).
-
-Returns
--------
-dtype
-    An instance representing the ``float8e4b15`` data type for use in Triton kernel definitions.
+This data type instance represents the NVIDIA FP8 E4M3 format. It is designed
+for deep learning workloads on supported GPU architectures, such as NVIDIA
+Hopper (H100) and Ada Lovelace (L40). Compared to :obj:`triton.language.float8e5b16`,
+``float8e4b15`` provides higher precision near zero at the cost of reduced
+dynamic range.
 
 Notes
 -----
-*   The ``b15`` suffix indicates the bias configuration or specific encoding variant dependent on
-    the backend compiler target.
-*   Arithmetic operations on this type may incur conversion overhead if the underlying hardware
-    does not natively support FP8 compute.
-*   Range: Approximately ``[6e-5, 448]`` with subnormal support depending on implementation.
+Hardware support for this dtype requires compute capability 8.9 or 9.0+.
+When used in matrix multiplication operations via :obj:`triton.language.dot`,
+accumulation typically occurs in FP16 or FP32 depending on the target hardware
+and compiler flags.
 
 Examples
 --------
+Use ``float8e4b15`` to define tensor types in a kernel:
+
 .. code-block:: python
 
     import triton
     import triton.language as tl
 
     @triton.jit
-    def fp8_kernel(
-        X_ptr,
-        Y_ptr,
-        BLOCK_SIZE: tl.constexpr,
-    ):
-        # Define pointers with float8e4b15 dtype
-        x = tl.load(X_ptr + tl.arange(0, BLOCK_SIZE)).to(tl.float8e4b15)
-        
-        # Perform computation in FP8
-        y = x * 2.0
-        
-        # Store result
-        tl.store(Y_ptr + tl.arange(0, BLOCK_SIZE), y)
+    def fp8_kernel(x_ptr, y_ptr, out_ptr, BLOCK_SIZE: tl.constexpr):
+        # Load data as float8e4b15
+        x = tl.load(x_ptr, dtype=tl.float8e4b15)
+        y = tl.load(y_ptr, dtype=tl.float8e4b15)
 
-    # Launch configuration would require appropriate dtype casting in Python host code
+        # Perform computation (accumulation promoted to float32)
+        out = tl.dot(x, y)
+
+        # Store result
+        tl.store(out_ptr, out)

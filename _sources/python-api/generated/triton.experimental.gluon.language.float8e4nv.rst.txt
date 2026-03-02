@@ -1,0 +1,30 @@
+float8e4nv
+==========
+
+.. py:data:: triton.experimental.gluon.language.float8e4nv
+
+   NVIDIA FP8 (E4M3) data type instance.
+
+   Represents an 8-bit floating point format with 4 exponent bits and 3
+   mantissa bits, compliant with NVIDIA Hopper and Blackwell architecture
+   specifications. Equivalent to ``torch.float8_e4m3fn``.
+
+   Notes
+   -----
+   Supported on Compute Capability 9.0+ (Hopper) and later. This format
+   prioritizes precision over dynamic range compared to ``float8e5``.
+   Infinities are not represented; overflow results in NaN.
+
+   Examples
+   --------
+   Specify tensor element types in Gluon kernel signatures:
+
+   .. code-block:: python
+
+      import triton.experimental.gluon as gluon
+      import triton.experimental.gluon.language as ttgl
+
+      @gluon.jit
+      def process_fp8(X: ttgl.pointer[ttgl.float8e4nv], N: int):
+          # Explicit control over FP8 layout and memory
+          pass

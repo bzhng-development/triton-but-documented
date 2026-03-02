@@ -1,0 +1,62 @@
+buffer_atomic_max
+=================
+
+.. currentmodule:: triton.experimental.gluon.language.amd.cdna3
+
+.. function:: buffer_atomic_max(ptr, offsets, value, mask=None, sem=None, scope=None, _semantic=None)
+
+    Perform an atomic maximum operation on AMD CDNA3 GPU buffer memory.
+
+    Atomically computes ``max(*ptr[offsets], value)`` and stores the result back to
+    memory. This operation is specific to AMD CDNA3 architecture and uses buffer
+    atomic instructions.
+
+    Parameters
+    ----------
+    ptr : pointer
+        Pointer to the buffer memory location(s) to operate on.
+    offsets : tensor
+        Integer tensor specifying byte offsets from the base pointer.
+    value : tensor
+        Value(s) to compare atomically with memory contents.
+    mask : tensor, optional
+        Boolean tensor indicating which offsets to operate on. If None, all
+        offsets are processed.
+    sem : str, optional
+        Memory semantics for the atomic operation (e.g., ``"acquire"``,
+        ``"release"``, ``"acq_rel"``). Defaults to hardware default.
+    scope : str, optional
+        Scope of the atomic operation (e.g., ``"cta"``, ``"cluster"``, ``"gpu"``).
+        Defaults to CTA scope.
+    _semantic : GluonSemantic, optional
+        Internal semantic handler. Must be provided by the JIT compiler.
+
+    Returns
+    -------
+    tensor
+        The original values loaded from memory before the atomic operation.
+
+    Notes
+    -----
+    This function is only available on AMD CDNA3 GPUs (MI300 series). It requires
+    the kernel to be decorated with ``@gluon.jit`` rather than ``@triton.jit``.
+
+    The operation is equivalent to:
+    ``old_value = atomicMax(ptr[offset], value)``
+
+    Buffer atomics on CDNA3 provide improved performance over regular global
+    memory atomics for certain access patterns.
+
+    Examples
+    --------
+    .. code-block:: python
+
+        import triton.experimental.gluon as gluon
+        import triton.experimental.gluon.language as ttgl
+        from triton.experimental.gluon.language.amd import cdna3
+
+        @gluon.jit
+        def kernel(ptr, offsets, value):
+            # Perform atomic max on CDNA3 buffer memory
+            old_vals = cdna3.buffer_atomic_max(ptr, offsets, value)
+            return old_vals

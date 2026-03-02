@@ -1,54 +1,50 @@
-.. py:function:: triton.language.max_constancy(input, values, _semantic=None)
+triton.language.max_constancy
+==============================
 
-   Let the compiler know that groups of values in :code:`input` are constant.
+.. currentmodule:: triton.language
 
-   This hint informs the compiler that the input tensor consists of repeated
-   constant values within contiguous blocks of a specified size. This can
-   enable specific compiler optimizations for memory access patterns or
-   redundant computations.
+.. autofunction:: max_constancy
 
-   Parameters
-   ----------
-   input : tensor
-       The input tensor containing the data.
-   values : list[constexpr]
-       A list of compile-time constants defining the block sizes. Each element
-       specifies that the corresponding dimension of :code:`input` contains
-       repeated values in groups of that size. For example, if :code:`values`
-       is ``[4]``, the compiler assumes every group of 4 elements in
-       :code:`input` holds the same value (e.g., ``[0, 0, 0, 0, 1, 1, 1, 1]``).
-   _semantic :
-       Internal argument used by the compiler; do not set manually.
+Let the compiler know that groups of values in :code:`input` are constant.
 
-   Returns
-   -------
-   tensor
-       The same tensor as :code:`input`, annotated with constancy metadata for
-       the compiler.
+Parameters
+----------
+input : tensor
+    The input tensor.
+values : list of constexpr[int]
+    Compile-time constant integers specifying the group sizes. Each group of
+    :code:`d` values in :code:`input` should all be equal, for each :code:`d`
+    in :code:`values`.
+_semantic : optional
+    Internal parameter used by the Triton compiler. Do not set manually.
 
-   Notes
-   -----
-   Elements in :code:`values` must be of type :code:`constexpr[int]`. Passing
-   runtime values or non-integer constants will raise a :code:`TypeError`.
+Returns
+-------
+tensor
+    The input tensor, annotated with constancy information for the compiler.
 
-   This function is a no-op at runtime; it only affects compile-time
-   optimization passes.
+Notes
+-----
+This is a compiler hint that helps the Triton compiler optimize code by
+exploiting known constant patterns in the input data. The hint asserts that
+consecutive groups of values in the input are constant (all equal within each
+group).
 
-   Examples
-   --------
-   .. code-block:: python
+For example, if :code:`values` is :code:`[4]`, then each group of 4 values in
+:code:`input` should all be equal, such as :code:`[0, 0, 0, 0, 1, 1, 1, 1]`.
 
-      import triton
-      import triton.language as tl
+All elements in :code:`values` must be :code:`constexpr[int]` types.
 
-      @triton.jit
-      def kernel(ptr, BLOCK_SIZE: tl.constexpr):
-          offsets = tl.arange(0, BLOCK_SIZE)
-          data = tl.load(ptr + offsets)
+Examples
+--------
+.. code-block:: python
 
-          # Inform the compiler that data consists of groups of 4 identical values
-          data = tl.max_constancy(data, [4])
-
-          # Subsequent operations may be optimized based on this assumption
-          result = data * 2.0
-          tl.store(ptr + offsets, result)
+    @triton.jit
+    def kernel(x_ptr, BLOCK_SIZE: tl.constexpr):
+        offset = tl.arange(0, BLOCK_SIZE)
+        x = tl.load(x_ptr + offset)
+        
+        # Tell compiler that groups of 4 values are constant
+        x = tl.max_constancy(x, [4])
+        
+        # ... rest of kernel

@@ -1,0 +1,146 @@
+triton.runtime.Autotuner
+========================
+
+.. class:: triton.runtime.Autotuner(fn, arg_names, configs, key, reset_to_zero, restore_value, pre_hook=None, post_hook=None, prune_configs_by=None, warmup=None, rep=None, use_cuda_graph=False, do_bench=None, cache_results=False)
+
+   Auto-tuner wrapper for Triton JIT kernels that benchmarks multiple configurations
+   to find the optimal one at runtime.
+
+   The autotuner evaluates different kernel configurations (e.g., block sizes,
+   num_warps, num_stages) and caches the best performing configuration based on
+   tuning keys. Subsequent calls with the same key values reuse the cached result.
+
+   Parameters
+   ----------
+   fn : triton.JITFunction
+       The JIT-compiled kernel function to auto-tune.
+   arg_names : list of str
+       List of argument names for the kernel function.
+   configs : list of triton.Config
+       List of configurations to benchmark. Each config specifies meta-parameters
+       like BLOCK_SIZE, num_warps, num_stages, etc.
+   key : list of str
+       Argument names that form the tuning key. When these argument values change,
+       all configs are re-evaluated.
+   reset_to_zero : list of str, optional
+       Argument names whose corresponding tensors will be zeroed before running
+       each configuration. Prevents side effects from multiple kernel executions.
+   restore_value : list of str, optional
+       Argument names whose corresponding tensors will be restored to their
+       original values after benchmarking completes.
+   pre_hook : callable, optional
+       Function called before kernel execution. Signature:
+       ``pre_hook(kwargs, reset_only=False)``. Overrides default reset/restore hooks.
+   post_hook : callable, optional
+       Function called after kernel execution. Signature:
+       ``post_hook(kwargs, exception)``. Overrides default restore hooks.
+   prune_configs_by : dict, optional
+       Dictionary for config pruning with optional fields:
+       
+       * 'perf_model': callable that predicts runtime for configs
+       * 'top_k': number of configs to benchmark (int or float <= 1.0)
+       * 'early_config_prune': callable to filter configs before benchmarking
+       
+       The early_config_prune function signature:
+       ``early_config_prune(configs, named_args, **kwargs) -> list of Config``
+   warmup : int, optional
+       Warmup time in milliseconds for benchmarking (deprecated).
+   rep : int, optional
+       Repetition count for benchmarking (deprecated).
+   use_cuda_graph : bool, default False
+       Whether to use CUDA graphs for benchmarking (deprecated).
+   do_bench : callable, optional
+       Custom benchmark function. Signature: ``do_bench(kernel_call, quantiles)``.
+       Defaults to Triton's internal benchmarker.
+   cache_results : bool, default False
+       Whether to persist autotuning results to disk cache.
+
+   Attributes
+   ----------
+   configs : list of triton.Config
+       List of configurations to evaluate.
+   keys : tuple of str
+       Tuning key argument names.
+   cache : dict
+       Runtime cache mapping tuning keys to best configurations.
+   arg_names : list of str
+       Kernel argument names.
+   best_config : triton.Config
+       The best configuration found during autotuning.
+
+   Methods
+   -------
+   run(*args, **kwargs)
+       Execute the kernel with the best configuration for the given arguments.
+   prune_configs(kwargs)
+       Filter configurations using perf_model and early_config_prune.
+   warmup(*args, **kwargs)
+       Warmup the kernel for all pruned configurations.
+
+   Notes
+   -----
+   When multiple configurations are provided, the autotuner benchmarks each one
+   and caches the fastest. The tuning key determines when to re-benchmark:
+   if key argument values change, all configs are evaluated again.
+
+   If ``reset_to_zero`` or ``restore_value`` are specified, default pre/post hooks
+   are installed to manage tensor state. Custom hooks override this behavior.
+
+   Disk caching (when ``cache_results=True``) persists tuning results across
+   runs. Cache invalidation considers Triton version, backend hash, kernel IR,
+   environment variables, and tuning key.
+
+   The environment variable ``TRITON_PRINT_AUTOTUNING=1`` enables verbose output
+   showing autotuning time and selected configuration.
+
+   Deprecated parameters (warmup, rep, use_cuda_graph) trigger warnings and use
+   legacy benchmarking paths. Prefer ``do_bench`` for custom benchmarking.
+
+   Examples
+   --------
+   .. code-block:: python
+
+      import triton
+      import triton.language as tl
+
+      @triton.autotune(
+          configs=[
+              triton.Config(kwargs={'BLOCK_SIZE': 128}, num_warps=4),
+              triton.Config(kwargs={'BLOCK_SIZE': 256}, num_warps=8),
+              triton.Config(kwargs={'BLOCK_SIZE': 512}, num_warps=8),
+          ],
+          key=['x_size'],
+          reset_to_zero=['output_ptr'],
+      )
+      @triton.jit
+      def kernel(x_ptr, output_ptr, x_size, BLOCK_SIZE: tl.constexpr):
+          pid = tl.program_id(0)
+          offs = pid * BLOCK_SIZE + tl.arange(0, BLOCK_SIZE)
+          mask = offs < x_size
+          x = tl.load(x_ptr + offs, mask=mask)
+          tl.store(output_ptr + offs, x, mask=mask)
+
+      # First call triggers autotuning
+      kernel[x_grid, y_grid](x_ptr, output_ptr, x_size=1024)
+
+      # Subsequent calls with same x_size use cached best config
+      kernel[x_grid, y_grid](x_ptr, output_ptr, x_size=1024)
+
+      # Different x_size triggers re-benchmarking
+      kernel[x_grid, y_grid](x_ptr, output_ptr, x_size=2048)
+
+   .. code-block:: python
+
+      # Advanced usage with config pruning
+      @triton.autotune(
+          configs=[...],
+          key=['M', 'N', 'K'],
+          prune_configs_by={
+              'perf_model': lambda M, N, K, BLOCK_SIZE: ...,
+              'top_k': 3,  # Only benchmark top 3 configs
+          },
+          cache_results=True,  # Persist results to disk
+      )
+      @triton.jit
+      def matmul_kernel(...):
+          ...

@@ -1,0 +1,57 @@
+cyl_bessel_i1
+=============
+
+cyl_bessel_i1
+-------------
+
+.. function:: triton.language.extra.cuda.libdevice.cyl_bessel_i1(arg0, _semantic=None)
+
+   Compute the modified Bessel function of the first kind of order 1 (I₁).
+
+   Parameters
+   ----------
+   arg0 : tensor
+       Input tensor of floating-point type (``fp32`` or ``fp64``).
+   _semantic : optional
+       Internal parameter, do not set manually.
+
+   Returns
+   -------
+   result : tensor
+       Output tensor of the same dtype as input. Contains :math:`I_1(arg0)` for each element.
+
+   Notes
+   -----
+   This function dispatches to CUDA libdevice functions:
+
+   - ``__nv_cyl_bessel_i1f`` for ``fp32`` inputs
+   - ``__nv_cyl_bessel_i1`` for ``fp64`` inputs
+
+   The modified Bessel function of the first kind of order 1 is defined as:
+
+   .. math::
+
+       I_1(x) = \sum_{k=0}^{\infty} \frac{1}{k!(k+1)!} \left(\frac{x}{2}\right)^{2k+1}
+
+   For large positive arguments, :math:`I_1(x)` grows exponentially. For negative arguments, :math:`I_1(-x) = -I_1(x)`.
+
+   Examples
+   --------
+   .. code-block:: python
+
+       import triton
+       import triton.language as tl
+       from triton.language.extra.cuda import libdevice
+
+       @triton.jit
+       def bessel_kernel(x_ptr, y_ptr, BLOCK_SIZE: tl.constexpr):
+           offsets = tl.arange(0, BLOCK_SIZE)
+           x = tl.load(x_ptr + offsets)
+           y = libdevice.cyl_bessel_i1(x)
+           tl.store(y_ptr + offsets, y)
+
+   See Also
+   --------
+   cyl_bessel_i0 : Modified Bessel function of the first kind of order 0
+   cyl_bessel_j1 : Bessel function of the first kind of order 1
+   exp : Exponential function

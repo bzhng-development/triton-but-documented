@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Parameters &mdash; Triton  documentation</title>
+  <title>make_block_ptr &mdash; Triton  documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=03e43079" />
       <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="../../_static/css/custom.css" />
@@ -18,7 +18,7 @@
     <script src="../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
-    <link rel="next" title="advance" href="triton.language.advance.html" />
+    <link rel="next" title="triton.language.advance" href="triton.language.advance.html" />
     <link rel="prev" title="store_tensor_descriptor" href="triton.language.store_tensor_descriptor.html" /> 
 </head>
 
@@ -55,14 +55,17 @@
 <li class="toctree-l2"><a class="reference internal" href="../triton.language.html#shape-manipulation-ops">Shape Manipulation Ops</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../triton.language.html#linear-algebra-ops">Linear Algebra Ops</a></li>
 <li class="toctree-l2 current"><a class="reference internal" href="../triton.language.html#memory-pointer-ops">Memory/Pointer Ops</a><ul class="current">
-<li class="toctree-l3"><a class="reference internal" href="triton.language.load.html"><code class="docutils literal notranslate"><span class="pre">triton.language.load()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="triton.language.store.html"><code class="docutils literal notranslate"><span class="pre">triton.language.store()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.language.load.html">load</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.language.store.html">store</a></li>
 <li class="toctree-l3"><a class="reference internal" href="triton.language.make_tensor_descriptor.html">make_tensor_descriptor</a></li>
 <li class="toctree-l3"><a class="reference internal" href="triton.language.load_tensor_descriptor.html">load_tensor_descriptor</a></li>
 <li class="toctree-l3"><a class="reference internal" href="triton.language.store_tensor_descriptor.html">store_tensor_descriptor</a></li>
-<li class="toctree-l3 current"><a class="current reference internal" href="#"><code class="docutils literal notranslate"><span class="pre">triton.language.make_block_ptr()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="triton.language.advance.html">advance</a></li>
-<li class="toctree-l3"><a class="reference internal" href="triton.language.pi32_t.html">triton.language.pi32_t</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">make_block_ptr</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#triton.language.make_block_ptr"><code class="docutils literal notranslate"><span class="pre">triton.language.make_block_ptr()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="triton.language.advance.html">triton.language.advance</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.language.pi32_t.html">pi32_t</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../triton.language.html#indexing-ops">Indexing Ops</a></li>
@@ -80,6 +83,35 @@
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../triton.testing.html">triton.testing</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../triton-semantics.html">Triton Semantics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.language.extra.cuda.html">triton.language.extra.cuda</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.language.extra.cuda.libdevice.html">triton.language.extra.cuda.libdevice</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.runtime.html">triton.runtime</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.tools.html">triton.tools</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Gluon (Experimental) API</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.html">triton.experimental.gluon</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.html">triton.experimental.gluon.language</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.nvidia.ampere.html">triton.experimental.gluon.language.nvidia.ampere</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.nvidia.ampere.async_copy.html">triton.experimental.gluon.language.nvidia.ampere.async_copy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.nvidia.ampere.mbarrier.html">triton.experimental.gluon.language.nvidia.ampere.mbarrier</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.nvidia.hopper.html">triton.experimental.gluon.language.nvidia.hopper</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.nvidia.hopper.tma.html">triton.experimental.gluon.language.nvidia.hopper.tma</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.nvidia.hopper.mbarrier.html">triton.experimental.gluon.language.nvidia.hopper.mbarrier</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.nvidia.hopper.cluster.html">triton.experimental.gluon.language.nvidia.hopper.cluster</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.nvidia.blackwell.html">triton.experimental.gluon.language.nvidia.blackwell</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.nvidia.blackwell.tma.html">triton.experimental.gluon.language.nvidia.blackwell.tma</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.nvidia.blackwell.clc.html">triton.experimental.gluon.language.nvidia.blackwell.clc</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.amd.html">triton.experimental.gluon.language.amd</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.amd.gfx1250.html">triton.experimental.gluon.language.amd.gfx1250</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.amd.gfx1250.async_copy.html">triton.experimental.gluon.language.amd.gfx1250.async_copy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.amd.gfx1250.mbarrier.html">triton.experimental.gluon.language.amd.gfx1250.mbarrier</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.amd.gfx1250.cluster.html">triton.experimental.gluon.language.amd.gfx1250.cluster</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.amd.gfx1250.tdm.html">triton.experimental.gluon.language.amd.gfx1250.tdm</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.amd.cdna3.html">triton.experimental.gluon.language.amd.cdna3</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.amd.cdna4.html">triton.experimental.gluon.language.amd.cdna4</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.amd.rdna3.html">triton.experimental.gluon.language.amd.rdna3</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.experimental.gluon.language.amd.rdna4.html">triton.experimental.gluon.language.amd.rdna4</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Triton MLIR Dialects</span></p>
 <ul>
@@ -107,7 +139,7 @@
   <ul class="wy-breadcrumbs">
       <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
           <li class="breadcrumb-item"><a href="../triton.language.html">triton.language</a></li>
-      <li class="breadcrumb-item active">Parameters</li>
+      <li class="breadcrumb-item active">make_block_ptr</li>
       <li class="wy-breadcrumbs-aside">
             <a href="../../_sources/python-api/generated/triton.language.make_block_ptr.rst.txt" rel="nofollow"> View page source</a>
       </li>
@@ -117,92 +149,73 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <dl class="py function">
+  <section id="make-block-ptr">
+<h1>make_block_ptr<a class="headerlink" href="#make-block-ptr" title="Link to this heading">¶</a></h1>
+<dl class="py function">
 <dt class="sig sig-object py" id="triton.language.make_block_ptr">
 <span class="sig-prename descclassname"><span class="pre">triton.language.</span></span><span class="sig-name descname"><span class="pre">make_block_ptr</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">base</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">shape</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">strides</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">offsets</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">block_shape</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">order</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#triton.language.make_block_ptr" title="Link to this definition">¶</a></dt>
-<dd><p>Creates a pointer to a rectangular block within a parent tensor, enabling
-efficient block-wise memory access (e.g., via <code class="docutils literal notranslate"><span class="pre">tl.load</span></code> or <code class="docutils literal notranslate"><span class="pre">tl.store</span></code>).</p>
-<p>This function is typically used to define block pointers for matrices or
-higher-dimensional tensors, allowing the compiler to generate optimized
-memory instructions (such as NVIDIA’s TMA) when supported.</p>
+<dd><p>Returns a pointer to a block in a parent tensor.</p>
 <section id="parameters">
-<h1>Parameters<a class="headerlink" href="#parameters" title="Link to this heading">¶</a></h1>
+<h2>Parameters<a class="headerlink" href="#parameters" title="Link to this heading">¶</a></h2>
 <dl class="simple">
-<dt>base<span class="classifier">tensor</span></dt><dd><p>The base pointer to the parent tensor in global memory.</p>
+<dt>base<span class="classifier">tensor</span></dt><dd><p>The base pointer to the parent tensor.</p>
 </dd>
-<dt>shape<span class="classifier">sequence of int or constexpr</span></dt><dd><p>The shape of the parent tensor (e.g., <code class="docutils literal notranslate"><span class="pre">[M,</span> <span class="pre">N]</span></code>).</p>
+<dt>shape<span class="classifier">tuple of ints</span></dt><dd><p>The shape of the parent tensor.</p>
 </dd>
-<dt>strides<span class="classifier">sequence of int or constexpr</span></dt><dd><p>The strides of the parent tensor, defining the byte offset between
-consecutive elements along each dimension.</p>
+<dt>strides<span class="classifier">tuple of ints</span></dt><dd><p>The strides of the parent tensor.</p>
 </dd>
-<dt>offsets<span class="classifier">sequence of int or constexpr</span></dt><dd><p>The starting coordinates (offsets) of the block within the parent tensor.</p>
+<dt>offsets<span class="classifier">tuple of ints</span></dt><dd><p>The offsets to the block.</p>
 </dd>
-<dt>block_shape<span class="classifier">sequence of int or constexpr</span></dt><dd><p>The shape of the block to be loaded or stored (e.g., <code class="docutils literal notranslate"><span class="pre">[BLOCK_M,</span> <span class="pre">BLOCK_N]</span></code>).</p>
+<dt>block_shape<span class="classifier">tuple of ints</span></dt><dd><p>The shape of the block.</p>
 </dd>
-<dt>order<span class="classifier">sequence of int</span></dt><dd><p>The dimension order (layout) of the original data format, specifying how
-dimensions map to memory strides (e.g., <code class="docutils literal notranslate"><span class="pre">[0,</span> <span class="pre">1]</span></code> for row-major).</p>
+<dt>order<span class="classifier">tuple of ints</span></dt><dd><p>The order of the original data format (e.g., row-major or column-major).</p>
 </dd>
 </dl>
 </section>
 <section id="returns">
-<h1>Returns<a class="headerlink" href="#returns" title="Link to this heading">¶</a></h1>
+<h2>Returns<a class="headerlink" href="#returns" title="Link to this heading">¶</a></h2>
 <dl class="simple">
-<dt>tensor_descriptor</dt><dd><p>A block pointer object that can be passed to <code class="docutils literal notranslate"><span class="pre">tl.load</span></code>, <code class="docutils literal notranslate"><span class="pre">tl.store</span></code>,
-or advanced with <code class="docutils literal notranslate"><span class="pre">tl.advance</span></code>.</p>
+<dt>tensor_descriptor</dt><dd><p>A pointer to the specified block in the parent tensor.</p>
 </dd>
 </dl>
 </section>
 <section id="notes">
-<h1>Notes<a class="headerlink" href="#notes" title="Link to this heading">¶</a></h1>
-<p>The returned pointer is immutable. To move the pointer to a different block,
-use <code class="docutils literal notranslate"><span class="pre">tl.advance</span></code> and assign the result to a new variable.</p>
-<p>Block pointers are required for certain hardware-accelerated memory operations
-on modern GPU architectures (e.g., Hopper TMA units).</p>
+<h2>Notes<a class="headerlink" href="#notes" title="Link to this heading">¶</a></h2>
+<p>Block pointers enable efficient memory access patterns for tiled operations.
+They are commonly used with <code class="xref py py-func docutils literal notranslate"><span class="pre">triton.language.load()</span></code> and <code class="xref py py-func docutils literal notranslate"><span class="pre">triton.language.store()</span></code>
+when the <code class="docutils literal notranslate"><span class="pre">pointer</span></code> argument is a block pointer.</p>
+<p>Use <a class="reference internal" href="triton.language.advance.html#triton.language.advance" title="triton.language.advance"><code class="xref py py-func docutils literal notranslate"><span class="pre">triton.language.advance()</span></code></a> to move the block pointer to different positions.</p>
 </section>
 <section id="examples">
-<h1>Examples<a class="headerlink" href="#examples" title="Link to this heading">¶</a></h1>
+<h2>Examples<a class="headerlink" href="#examples" title="Link to this heading">¶</a></h2>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">triton</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">triton.language</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">tl</span>
 
 <span class="nd">@triton</span><span class="o">.</span><span class="n">jit</span>
-<span class="k">def</span><span class="w"> </span><span class="nf">copy_kernel</span><span class="p">(</span><span class="n">in_ptr</span><span class="p">,</span> <span class="n">out_ptr</span><span class="p">,</span> <span class="n">M</span><span class="p">,</span> <span class="n">N</span><span class="p">,</span> <span class="n">BLOCK_M</span><span class="p">:</span> <span class="n">tl</span><span class="o">.</span><span class="n">constexpr</span><span class="p">,</span> <span class="n">BLOCK_N</span><span class="p">:</span> <span class="n">tl</span><span class="o">.</span><span class="n">constexpr</span><span class="p">):</span>
-    <span class="c1"># Create a block pointer for the input matrix</span>
-    <span class="n">in_block</span> <span class="o">=</span> <span class="n">tl</span><span class="o">.</span><span class="n">make_block_ptr</span><span class="p">(</span>
-        <span class="n">base</span><span class="o">=</span><span class="n">in_ptr</span><span class="p">,</span>
-        <span class="n">shape</span><span class="o">=</span><span class="p">[</span><span class="n">M</span><span class="p">,</span> <span class="n">N</span><span class="p">],</span>
-        <span class="n">strides</span><span class="o">=</span><span class="p">[</span><span class="n">N</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span>
-        <span class="n">offsets</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span>
-        <span class="n">block_shape</span><span class="o">=</span><span class="p">[</span><span class="n">BLOCK_M</span><span class="p">,</span> <span class="n">BLOCK_N</span><span class="p">],</span>
-        <span class="n">order</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">kernel</span><span class="p">(</span><span class="n">ptr</span><span class="p">,</span> <span class="n">M</span><span class="p">,</span> <span class="n">N</span><span class="p">,</span> <span class="n">BLOCK_M</span><span class="p">:</span> <span class="n">tl</span><span class="o">.</span><span class="n">constexpr</span><span class="p">,</span> <span class="n">BLOCK_N</span><span class="p">:</span> <span class="n">tl</span><span class="o">.</span><span class="n">constexpr</span><span class="p">):</span>
+    <span class="n">block_ptr</span> <span class="o">=</span> <span class="n">tl</span><span class="o">.</span><span class="n">make_block_ptr</span><span class="p">(</span>
+        <span class="n">base</span><span class="o">=</span><span class="n">ptr</span><span class="p">,</span>
+        <span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="n">M</span><span class="p">,</span> <span class="n">N</span><span class="p">),</span>
+        <span class="n">strides</span><span class="o">=</span><span class="p">(</span><span class="n">N</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span>
+        <span class="n">offsets</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span>
+        <span class="n">block_shape</span><span class="o">=</span><span class="p">(</span><span class="n">BLOCK_M</span><span class="p">,</span> <span class="n">BLOCK_N</span><span class="p">),</span>
+        <span class="n">order</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
     <span class="p">)</span>
-
-    <span class="c1"># Create a block pointer for the output matrix</span>
-    <span class="n">out_block</span> <span class="o">=</span> <span class="n">tl</span><span class="o">.</span><span class="n">make_block_ptr</span><span class="p">(</span>
-        <span class="n">base</span><span class="o">=</span><span class="n">out_ptr</span><span class="p">,</span>
-        <span class="n">shape</span><span class="o">=</span><span class="p">[</span><span class="n">M</span><span class="p">,</span> <span class="n">N</span><span class="p">],</span>
-        <span class="n">strides</span><span class="o">=</span><span class="p">[</span><span class="n">N</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span>
-        <span class="n">offsets</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span>
-        <span class="n">block_shape</span><span class="o">=</span><span class="p">[</span><span class="n">BLOCK_M</span><span class="p">,</span> <span class="n">BLOCK_N</span><span class="p">],</span>
-        <span class="n">order</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span>
-    <span class="p">)</span>
-
-    <span class="c1"># Load the block</span>
-    <span class="n">data</span> <span class="o">=</span> <span class="n">tl</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">in_block</span><span class="p">)</span>
-
-    <span class="c1"># Store the block</span>
-    <span class="n">tl</span><span class="o">.</span><span class="n">store</span><span class="p">(</span><span class="n">out_block</span><span class="p">,</span> <span class="n">data</span><span class="p">)</span>
+    <span class="n">block</span> <span class="o">=</span> <span class="n">tl</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">block_ptr</span><span class="p">)</span>
+    <span class="c1"># ... process block ...</span>
 </pre></div>
 </div>
 </section>
 </dd></dl>
 
+</section>
 
 
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
         <a href="triton.language.store_tensor_descriptor.html" class="btn btn-neutral float-left" title="store_tensor_descriptor" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="triton.language.advance.html" class="btn btn-neutral float-right" title="advance" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="triton.language.advance.html" class="btn btn-neutral float-right" title="triton.language.advance" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>

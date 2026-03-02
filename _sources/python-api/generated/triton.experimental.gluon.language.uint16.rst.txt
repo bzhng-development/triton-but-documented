@@ -1,0 +1,28 @@
+uint16
+======
+
+.. py:data:: ttgl.uint16
+
+   16-bit unsigned integer data type.
+
+   Represents an unsigned 16-bit integer scalar type in Gluon. This instance is used to specify element types for tensors, shared memory, and kernel arguments within device code.
+
+   Examples
+   --------
+   Specify ``uint16`` as the element type for a pointer argument:
+
+   .. code-block:: python
+
+       import triton.experimental.gluon as gluon
+       import triton.experimental.gluon.language as ttgl
+
+       @gluon.jit
+       def kernel(ptr: ttgl.pointer[ttgl.uint16], size: int):
+           pid = ttgl.program_id(0)
+           mask = pid < size
+           val = ttgl.load(ptr + pid, mask=mask)
+           # val dtype is ttgl.uint16
+
+   Notes
+   -----
+   Corresponds to ``uint16`` in CUDA and ``uint16_t`` in C++. Valid values range from 0 to 65535. Arithmetic operations follow standard modular semantics.

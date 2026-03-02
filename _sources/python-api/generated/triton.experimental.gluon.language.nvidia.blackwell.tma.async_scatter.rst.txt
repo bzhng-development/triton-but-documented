@@ -1,0 +1,53 @@
+async_scatter
+=============
+
+.. function:: triton.experimental.gluon.language.nvidia.blackwell.tma.async_scatter(tensor_desc, x_offsets, y_offset, src, _semantic=None)
+
+   Asynchronously scatter elements from shared memory to global memory using TMA.
+
+   Initiates an asynchronous scatter operation that transfers data from shared memory
+   to global memory via the Tensor Memory Accelerator (TMA) on NVIDIA Blackwell GPUs.
+   This operation is non-blocking and returns immediately while the transfer proceeds
+   in the background.
+
+   Parameters
+   ----------
+   tensor_desc : tensor_descriptor
+       The tensor descriptor specifying the global memory destination.
+   x_offsets : tensor
+       1D tensor of X offsets specifying which columns to scatter to.
+   y_offset : int
+       Scalar Y offset specifying the row coordinate for the scatter operation.
+   src : tensor_memory_descriptor
+       The source data in shared memory. Must be in ``NVMMASharedLayout``.
+   _semantic : GluonSemantic, optional
+       Internal semantic context. Do not set manually.
+
+   Returns
+   -------
+   None
+       This operation performs an asynchronous side effect.
+
+   Notes
+   -----
+   This function is specific to NVIDIA Blackwell architecture and requires TMA
+   support. The operation is non-blocking - use appropriate barriers or waits
+   to ensure completion before accessing the scattered data.
+
+   The ``src`` tensor must be allocated with ``NVMMASharedLayout`` for TMA
+   compatibility. When ``enable_iisan`` is enabled, alignment and non-negative
+   checks are emitted for the offsets.
+
+   Examples
+   --------
+   .. code-block:: python
+
+       import triton.experimental.gluon as gluon
+       import triton.experimental.gluon.language as ttgl
+       from triton.experimental.gluon.language.nvidia.blackwell import tma
+
+       @gluon.jit
+       def kernel(tensor_desc, src, x_offsets, y_offset):
+           tma.async_scatter(tensor_desc, x_offsets, y_offset, src)
+           # Issue a barrier to ensure scatter completion before subsequent access
+           ttgl.barrier()

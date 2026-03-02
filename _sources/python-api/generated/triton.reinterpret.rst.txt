@@ -1,52 +1,47 @@
 reinterpret
-=============
-
-.. currentmodule:: triton
+===========
 
 .. function:: reinterpret(tensor, dtype)
 
-   Create a view of a tensor with a different data type without copying the underlying data.
+    Create a tensor view interpreting the underlying memory as a different data type.
 
-   This function returns a ``TensorWrapper`` that interprets the same memory buffer as the specified ``dtype``. It is useful for type-punning operations in GPU kernels where the bit pattern of data needs to be reinterpreted as a different type (e.g., viewing ``float32`` bits as ``int32``).
+    Parameters
+    ----------
+    tensor : object
+        Input tensor or :class:`TensorWrapper`. Must implement ``data_ptr()``.
+    dtype : dtype
+        Target data type for the reinterpretation.
 
-   Parameters
-   ----------
-   tensor : tensor-like
-       The input tensor to reinterpret. Must have a ``data_ptr()`` method or be an existing ``TensorWrapper``.
-   dtype : dtype
-       The target data type for the reinterpretation.
+    Returns
+    -------
+    TensorWrapper or object
+        A :class:`TensorWrapper` viewing the memory as ``dtype``, or the base tensor
+        if reverting to the original type.
 
-   Returns
-   -------
-   TensorWrapper or tensor
-       A ``TensorWrapper`` object viewing the original data as ``dtype``. If ``tensor`` is already a ``TensorWrapper`` and ``dtype`` matches its base type, the base tensor is returned directly.
+    Raises
+    ------
+    TypeError
+        If ``tensor`` does not support reinterpretation.
 
-   Raises
-   ------
-   TypeError
-       If ``tensor`` does not have a ``data_ptr()`` method and is not a ``TensorWrapper``.
+    Notes
+    -----
+    No data copying is performed. This operation is equivalent to a bitcast.
+    If ``tensor`` is already a :class:`TensorWrapper` and ``dtype`` matches the
+    base tensor's original dtype, the base tensor is returned directly.
 
-   Notes
-   -----
-   This operation does not perform any data conversion or memory movement; it only changes how the existing bits are interpreted. Ensure that the size of the original ``dtype`` and the target ``dtype`` are compatible with your intended access patterns to avoid out-of-bounds memory errors.
+    Examples
+    --------
+    .. code-block:: python
 
-   Examples
-   --------
-   .. code-block:: python
+        import triton
+        import torch
 
-      import triton
-      import triton.language as tl
+        # Create a tensor
+        tensor = torch.zeros((10,), dtype=torch.float32)
 
-      @triton.jit
-      def kernel(x_ptr, y_ptr, n):
-          # Load float32 data
-          fp_val = tl.load(x_ptr)
-          
-          # Reinterpret bits as int32
-          int_val = tl.load(tl.reinterpret(x_ptr, tl.int32))
-          
-          # Store result
-          tl.store(y_ptr, int_val)
+        # Reinterpret memory as int32
+        view = triton.reinterpret(tensor, torch.int32)
 
-      # Usage note: reinterpret is often used on pointers or tensors
-      # before passing to load/store operations in kernels.
+        # View shares memory with original tensor
+        assert view.data_ptr() == tensor.data_ptr()
+        print(view.dtype)  # torch.int32

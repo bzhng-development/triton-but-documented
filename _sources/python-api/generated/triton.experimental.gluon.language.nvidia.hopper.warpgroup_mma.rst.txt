@@ -1,0 +1,107 @@
+triton.experimental.gluon.language.nvidia.hopper.warpgroup_mma
+==============================================================
+
+.. currentmodule:: triton.experimental.gluon.language.nvidia.hopper
+
+.. function:: warpgroup_mma(a, b, acc, *, use_acc=True, precision=None, max_num_imprecise_acc=None, is_async=False)
+
+    Perform warpgroup MMA (Tensor Core) operations on NVIDIA Hopper GPUs.
+
+    Computes ``acc = a * b + (acc if use_acc else 0)`` using Tensor Core matrix
+    multiply-accumulate instructions. This operation is optimized for Hopper
+    architecture and supports both synchronous and asynchronous execution modes.
+
+    Parameters
+    ----------
+    a : tensor or shared_memory_descriptor
+        Left hand side operand of the matrix multiplication.
+    b : shared_memory_descriptor
+        Right hand side operand of the matrix multiplication. Must be in shared
+        memory.
+    acc : tensor
+        Accumulator tensor that holds the result.
+    use_acc : bool, optional
+        Whether to use the initial value of the accumulator. Defaults to ``True``.
+        If ``False``, the accumulator is initialized to zero.
+    precision : str, optional
+        Dot input precision (e.g., ``"tf32"``, ``"fp16"``, ``"fp32"``). Defaults to
+        the builder's default precision setting.
+    max_num_imprecise_acc : int, optional
+        Maximum number of imprecise accumulations. Used for fp8 -> fp32 dot
+        operations to control how many accumulations are done in limited precision
+        before upcasting. Defaults to ``None``, which means no upcasting is done
+        for non-fp8 types, and uses the builder default for fp8.
+    is_async : bool, optional
+        Whether the operation executes asynchronously. Defaults to ``False``.
+
+    Returns
+    -------
+    tensor or warpgroup_mma_accumulator
+        If ``is_async=False``, returns a tensor containing the result. If
+        ``is_async=True``, returns a :class:`warpgroup_mma_accumulator` token
+        that can be used to load the value once computation completes.
+
+    Notes
+    -----
+    This function is specific to NVIDIA Hopper architecture and requires the
+    Gluon JIT decorator (``@gluon.jit``). The operands must have compatible
+    layouts for Tensor Core operations.
+
+    For fp8 inputs, ``max_num_imprecise_acc`` controls numerical accuracy by
+    limiting the number of accumulations performed in lower precision before
+    upcasting to fp32. The value must not exceed the K dimension of the matrix
+    multiplication.
+
+    Asynchronous mode allows overlapping computation with other operations but
+    requires explicit synchronization to retrieve results.
+
+    Examples
+    --------
+    Synchronous warpgroup MMA operation:
+
+    .. code-block:: python
+
+        import triton.experimental.gluon as gluon
+        import triton.experimental.gluon.language as ttgl
+
+        @gluon.jit
+        def kernel(...):
+            # Load operands from shared memory
+            a = ttgl.load(...)
+            b = ttgl.load(...)
+            acc = ttgl.full(shape, 0.0, dtype=ttgl.float32)
+
+            # Perform synchronous MMA
+            result = ttgl.nvidia.hopper.warpgroup_mma(a, b, acc)
+
+    Asynchronous warpgroup MMA operation:
+
+    .. code-block:: python
+
+        @gluon.jit
+        def kernel(...):
+            a = ttgl.load(...)
+            b = ttgl.load(...)
+            acc = ttgl.full(shape, 0.0, dtype=ttgl.float32)
+
+            # Perform asynchronous MMA
+            mma_token = ttgl.nvidia.hopper.warpgroup_mma(a, b, acc, is_async=True)
+
+            # Wait for completion and load result
+            result = mma_token.wait()
+
+    fp8 dot with imprecise accumulation control:
+
+    .. code-block:: python
+
+        @gluon.jit
+        def kernel(...):
+            a = ttgl.load(..., dtype=ttgl.float8e4nv)
+            b = ttgl.load(..., dtype=ttgl.float8e4nv)
+            acc = ttgl.full(shape, 0.0, dtype=ttgl.float32)
+
+            # Limit imprecise accumulations to 64 before upcasting
+            result = ttgl.nvidia.hopper.warpgroup_mma(
+                a, b, acc,
+                max_num_imprecise_acc=64
+            )

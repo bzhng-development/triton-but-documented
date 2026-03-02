@@ -1,0 +1,69 @@
+triton.language.extra.cuda.libdevice.fmod
+=========================================
+
+.. currentmodule:: triton.language.extra.cuda.libdevice
+
+.. function:: fmod(arg0, arg1, _semantic=None)
+
+   Compute the floating-point modulo of two tensors element-wise.
+
+   Returns the remainder of :code:`arg0 / arg1` with the same sign as the dividend (:code:`arg0`).
+   This is equivalent to the C library function :code:`fmod`.
+
+   Parameters
+   ----------
+   arg0 : tensor
+       The dividend tensor. Must be floating-point type (fp32 or fp64).
+   arg1 : tensor
+       The divisor tensor. Must be floating-point type (fp32 or fp64) with the same
+       dtype as :code:`arg0`.
+   _semantic : optional
+       Internal parameter for Triton semantic analysis. Do not set manually.
+
+   Returns
+   -------
+   tensor
+       A tensor containing the floating-point modulo of :code:`arg0` and :code:`arg1`.
+       The output dtype matches the input dtype (fp32 or fp64).
+
+   Notes
+   -----
+   This function is an external libdevice operation that compiles to CUDA PTX
+   instructions :code:`__nv_fmodf` for fp32 and :code:`__nv_fmod` for fp64.
+
+   The result is computed as :code:`arg0 - arg1 * trunc(arg0 / arg1)`, where
+   :code:`trunc` rounds toward zero. This differs from the Python modulo
+   operator which rounds toward negative infinity.
+
+   Special cases:
+   - :code:`fmod(x, +inf)` = :code:`x`
+   - :code:`fmod(x, -inf)` = :code:`x`
+   - :code:`fmod(x, 0)` = NaN
+   - :code:`fmod(inf, y)` = NaN
+   - :code:`fmod(nan, y)` = NaN
+
+   Examples
+   --------
+   .. code-block:: python
+
+      import torch
+      import triton
+      import triton.language as tl
+
+      @triton.jit
+      def fmod_kernel(x_ptr, y_ptr, out_ptr, n_elements, BLOCK_SIZE: tl.constexpr):
+          pid = tl.program_id(axis=0)
+          offsets = pid * BLOCK_SIZE + tl.arange(0, BLOCK_SIZE)
+          mask = offsets < n_elements
+          x = tl.load(x_ptr + offsets, mask=mask)
+          y = tl.load(y_ptr + offsets, mask=mask)
+          out = tl.extra.cuda.libdevice.fmod(x, y)
+          tl.store(out_ptr + offsets, out, mask=mask)
+
+      # Example usage
+      n_elements = 1024
+      x = torch.randn(n_elements, dtype=torch.float32, device='cuda')
+      y = torch.randn(n_elements, dtype=torch.float32, device='cuda')
+      out = torch.empty_like(x)
+      grid = lambda meta: (triton.cdiv(n_elements, meta['BLOCK_SIZE']),)
+      fmod_kernel[grid](x, y, out, n_elements, BLOCK_SIZE=256)

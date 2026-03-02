@@ -1,0 +1,35 @@
+invalidate
+==========
+
+.. py:function:: invalidate(mbarrier)
+
+    Invalidate an mbarrier, resetting its state.
+
+    Parameters
+    ----------
+    mbarrier : shared_memory_descriptor
+        The barrier object to invalidate.
+
+    Returns
+    -------
+    None
+
+    Notes
+    -----
+    This operation is specific to NVIDIA Ampere architecture and later.
+    It resets the completion count and state of the memory barrier,
+    allowing it to be reused for subsequent synchronization operations.
+    This is commonly used when managing TMA (Tensor Memory Accelerator)
+    transfers or warp-group synchronization primitives.
+
+    Examples
+    --------
+    >>> import triton.experimental.gluon as gluon
+    >>> import triton.experimental.gluon.language as ttgl
+    >>> @gluon.jit
+    ... def kernel(...):
+    ...     # Allocate a mbarrier in shared memory
+    ...     mbarrier = ttgl.nvidia.ampere.mbarrier.alloc(...)
+    ...     # ... perform synchronization ...
+    ...     # Invalidate to reset state for reuse
+    ...     ttgl.nvidia.ampere.mbarrier.invalidate(mbarrier)

@@ -1,0 +1,48 @@
+triton.language.extra.cuda.libdevice.cos
+=========================================
+
+.. currentmodule:: triton.language.extra.cuda.libdevice
+
+.. function:: cos(arg0, _semantic=None)
+
+    Compute the element-wise cosine of the input tensor.
+
+    Parameters
+    ----------
+    arg0 : tl.tensor
+        Input tensor. Must be of floating-point type (``fp32`` or ``fp64``).
+    _semantic : optional
+        Internal parameter used by Triton compiler. Do not set manually.
+
+    Returns
+    -------
+    result : tl.tensor
+        Tensor of the same shape as ``arg0`` containing the cosine of each element.
+        The output dtype matches the input dtype (``fp32`` input produces ``fp32``
+        output, ``fp64`` input produces ``fp64`` output).
+
+    Notes
+    -----
+    This function dispatches to CUDA libdevice intrinsics:
+
+    - ``__nv_cosf`` for ``fp32`` inputs
+    - ``__nv_cos`` for ``fp64`` inputs
+
+    The operation is marked as pure (no side effects), enabling compiler optimizations.
+
+    Input values are expected to be in radians.
+
+    Examples
+    --------
+    .. code-block:: python
+
+        import triton
+        import triton.language as tl
+        from triton.language.extra.cuda import libdevice
+
+        @triton.jit
+        def cosine_kernel(x_ptr, y_ptr, BLOCK_SIZE: tl.constexpr):
+            offsets = tl.arange(0, BLOCK_SIZE)
+            x = tl.load(x_ptr + offsets)
+            y = libdevice.cos(x)
+            tl.store(y_ptr + offsets, y)

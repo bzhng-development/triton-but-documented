@@ -1,46 +1,42 @@
 erf
 ===
 
-.. currentmodule:: triton.language
+Computes the element-wise error function of the input tensor.
 
-.. function:: erf(x, _semantic=None)
+The error function is defined as:
 
-   Computes the element-wise error function of :code:`x`.
+.. math::
 
-   The error function is defined as:
+    \text{erf}(x) = \frac{2}{\sqrt{\pi}} \int_0^x e^{-t^2} dt
 
-   .. math::
+Parameters
+----------
+x : tensor
+    The input tensor. Must have floating-point dtype (``fp32`` or ``fp64``).
 
-      \text{erf}(x) = \frac{2}{\sqrt{\pi}} \int_0^x e^{-t^2} dt
+Returns
+-------
+tensor
+    A tensor of the same shape and dtype as ``x`` containing the error function
+    values.
 
-   Parameters
-   ----------
-   x : Block
-      The input tensor. Must be of floating-point type (:code:`fp32` or :code:`fp64`).
+Notes
+-----
+Only ``fp32`` and ``fp64`` dtypes are supported. This function can also be called
+as a member function on :py:class:`tensor`, as ``x.erf()`` instead of
+``tl.erf(x)``.
 
-   Returns
-   -------
-   Block
-      A tensor of the same shape as :code:`x` containing the error function of each element.
+Examples
+--------
+.. code-block:: python
 
-   Notes
-   -----
-   This function can also be called as a member function on :py:class:`tensor`,
-   as :code:`x.erf()` instead of :code:`erf(x)`.
+    @triton.jit
+    def kernel(x_ptr, y_ptr, BLOCK_SIZE: tl.constexpr):
+        pid = tl.program_id(0)
+        offsets = pid * BLOCK_SIZE + tl.arange(0, BLOCK_SIZE)
+        x = tl.load(x_ptr + offsets)
+        y = tl.erf(x)
+        tl.store(y_ptr + offsets, y)
 
-   Supported dtypes: :code:`fp32`, :code:`fp64`.
-
-   Examples
-   --------
-   .. code-block:: python
-
-      import triton
-      import triton.language as tl
-
-      @triton.jit
-      def erf_kernel(x_ptr, y_ptr, BLOCK_SIZE: tl.constexpr):
-          pid = tl.program_id(0)
-          offsets = pid * BLOCK_SIZE + tl.arange(0, BLOCK_SIZE)
-          x = tl.load(x_ptr + offsets)
-          y = tl.erf(x)
-          tl.store(y_ptr + offsets, y)
+    # Can also be called as a member function
+    y = x.erf()

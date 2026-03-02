@@ -1,0 +1,43 @@
+fast_exp10f
+===========
+
+.. currentmodule:: triton.language.extra.cuda.libdevice
+
+.. function:: fast_exp10f(arg0, _semantic=None)
+
+    Compute the base-10 exponential function :math:`10^x` for float32 values.
+
+    Parameters
+    ----------
+    arg0 : tl.tensor
+        Input tensor. Must be of type ``tl.float32``.
+    _semantic : optional
+        Internal parameter used by Triton compiler. Do not set manually.
+
+    Returns
+    -------
+    result : tl.tensor
+        Output tensor of type ``tl.float32`` containing :math:`10^{arg0}`.
+
+    Notes
+    -----
+    This function wraps the CUDA libdevice intrinsic ``__nv_fast_exp10f``.
+    It provides a fast approximation of the base-10 exponential operation.
+    Only ``fp32`` input and output types are supported.
+
+    This is a pure function with no side effects.
+
+    Example
+    -------
+    .. code-block:: python
+
+        import triton
+        import triton.language as tl
+        from triton.language.extra.cuda import libdevice
+
+        @triton.jit
+        def exp10_kernel(x_ptr, y_ptr, BLOCK_SIZE: tl.constexpr):
+            offsets = tl.arange(0, BLOCK_SIZE)
+            x = tl.load(x_ptr + offsets)
+            y = libdevice.fast_exp10f(x)
+            tl.store(y_ptr + offsets, y)

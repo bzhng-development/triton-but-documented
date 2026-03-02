@@ -1,0 +1,66 @@
+class triton.experimental.gluon.language.amd.AMDWMMALayout
+=============================================================
+
+.. currentmodule:: triton.experimental.gluon.language.amd
+
+.. autoclass:: AMDWMMALayout
+
+   Represents a layout for AMD WMMA (Wave Matrix Multiply-Accumulate) matrix core operations.
+
+   Parameters
+   ----------
+   version : int
+       GPU architecture version indicator. Supported values are 1-3.
+   transposed : bool
+       Whether the result tensor is transposed.
+   warp_bases : List[List[int]]
+       Warp bases for CTA (Cooperative Thread Array) layout. Each inner list represents a basis vector.
+   reg_bases : List[List[int]], optional
+       Repetition (register) bases for CTA layout. Defaults to empty list if not provided.
+   instr_shape : List[int], optional
+       Instruction shape in (M, N, K) format. Defaults to ``[16, 16, 16]`` if not provided.
+   cga_layout : List[List[int]], optional
+       Bases describing CTA tiling. Defaults to empty list.
+   rank : int, optional
+       Rank of warp and register bases. Defaults to 2 if not provided.
+
+   Notes
+   -----
+   Current supported versions:
+
+   - **1**: RDNA3 architecture (e.g., gfx1100, gfx1101)
+   - **2**: RDNA4 architecture (e.g., gfx1200, gfx1201)
+   - **3**: gfx1250 architecture
+
+   The layout defines how matrix fragments are distributed across warps and registers for WMMA operations on AMD GPUs. The ``warp_bases`` and ``reg_bases`` parameters control the distribution pattern, while ``instr_shape`` specifies the matrix tile dimensions.
+
+   Examples
+   --------
+   Create a WMMA layout for RDNA3 (version 1) with default instruction shape:
+
+   .. code-block:: python
+
+      import triton.experimental.gluon as gluon
+      import triton.experimental.gluon.language as ttgl
+      from triton.experimental.gluon.language.amd import AMDWMMALayout
+
+      # Create a 2D WMMA layout for RDNA3
+      layout = AMDWMMALayout(
+          version=1,
+          transposed=False,
+          warp_bases=[[1, 0], [0, 1]],
+          reg_bases=[[2, 0], [0, 2]],
+          instr_shape=[16, 16, 16],
+          rank=2
+      )
+
+   Create a transposed layout for RDNA4 (version 2):
+
+   .. code-block:: python
+
+      layout = AMDWMMALayout(
+          version=2,
+          transposed=True,
+          warp_bases=[[1, 0], [0, 1]],
+          rank=2
+      )
