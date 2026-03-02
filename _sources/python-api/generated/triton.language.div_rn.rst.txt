@@ -1,0 +1,41 @@
+div_rn
+======
+
+.. currentmodule:: triton.language
+
+.. autofunction:: div_rn
+
+Computes the element-wise precise division of :code:`x` and :code:`y`, rounding to nearest according to the IEEE standard.
+
+Parameters
+----------
+x : Block
+    The dividend input values. Must be floating-point (typically ``fp32``).
+y : Block
+    The divisor input values. Must be floating-point (typically ``fp32``).
+
+Returns
+-------
+Block
+    A tensor containing the result of :code:`x / y` with IEEE rounding semantics.
+
+Notes
+-----
+This operation enforces strict IEEE 754 rounding behavior (round to nearest, ties to even), unlike the default ``/`` operator in Triton which may use fast math approximations depending on compiler flags.
+The function currently supports ``fp32`` inputs; other types may be legalized or rejected depending on the backend.
+
+Examples
+--------
+.. code-block:: python
+
+    import triton
+    import triton.language as tl
+
+    @triton.jit
+    def kernel(X, Y, Z, BLOCK_SIZE: tl.constexpr):
+        offs = tl.arange(0, BLOCK_SIZE)
+        x = tl.load(X + offs)
+        y = tl.load(Y + offs)
+        # Perform precise IEEE division
+        z = tl.div_rn(x, y)
+        tl.store(Z + offs, z)

@@ -1,0 +1,61 @@
+.. py:function:: triton.language.store(pointer, value, mask=None, boundary_check=(), cache_modifier='', eviction_policy='')
+
+   Store a tensor of data into memory locations defined by ``pointer``.
+
+   The behavior depends on the type of ``pointer``:
+
+   1. If ``pointer`` is a single element pointer, a scalar is stored. In this case:
+      - ``mask`` must also be scalar.
+      - ``boundary_check`` must be empty.
+
+   2. If ``pointer`` is an N-dimensional tensor of pointers, an N-dimensional block is stored. In this case:
+      - ``mask`` is implicitly broadcast to ``pointer.shape``.
+      - ``boundary_check`` must be empty.
+
+   3. If ``pointer`` is a block pointer defined by :py:func:`triton.language.make_block_ptr`, a block of data is stored. In this case:
+      - ``mask`` must be ``None``.
+      - ``boundary_check`` can be specified to control the behavior of out-of-bound access.
+
+   ``value`` is implicitly broadcast to ``pointer.shape`` and typecast to ``pointer.dtype.element_ty``.
+
+   This function can also be called as a member function on :py:class:`triton.language.tensor`, as ``x.store(...)`` instead of ``store(x, ...)``.
+
+   Parameters
+   ----------
+   pointer : triton.PointerType or block of triton.PointerType
+       The memory location where the elements of ``value`` are stored.
+   value : Block
+       The tensor of elements to be stored.
+   mask : Block of triton.int1, optional
+       If ``mask[idx]`` is false, do not store ``value[idx]`` at ``pointer[idx]``.
+   boundary_check : tuple of ints, optional
+       Tuple of integers indicating the dimensions which should perform the boundary check. Only valid when ``pointer`` is a block pointer.
+   cache_modifier : str, optional
+       Changes cache option in NVIDIA PTX. Should be one of ``""``, ``".wb"``, ``".cg"``, ``".cs"``, or ``".wt"``.
+       - ``".wb"``: cache write-back all coherent levels.
+       - ``".cg"``: cache global.
+       - ``".cs"``: cache streaming.
+       - ``".wt"``: cache write-through.
+       See `cache operator <https://docs.nvidia.com/cuda/parallel-thread-execution/index.html#cache-operators>`_ for more details.
+   eviction_policy : str, optional
+       Changes eviction policy in NVIDIA PTX. Should be one of ``""``, ``"evict_first"``, or ``"evict_last"``.
+
+   Returns
+   -------
+   None
+
+   Examples
+   --------
+   .. code-block:: python
+
+       @triton.jit
+       def kernel(x_ptr, y_ptr, BLOCK_SIZE: tl.constexpr):
+           pid = tl.program_id(axis=0)
+           offs = pid * BLOCK_SIZE + tl.arange(0, BLOCK_SIZE)
+           mask = offs < N
+           # Load data
+           data = tl.load(x_ptr + offs, mask=mask)
+           # Perform computation
+           result = data * 2.0
+           # Store data
+           tl.store(y_ptr + offs, result, mask=mask)

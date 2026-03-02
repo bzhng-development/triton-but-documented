@@ -1,0 +1,98 @@
+.. py:function:: triton.language.dot_scaled(lhs, lhs_scale, lhs_format, rhs, rhs_scale, rhs_format, acc=None, fast_math=False, lhs_k_pack=True, rhs_k_pack=True, out_dtype=triton.language.float32, _semantic=None)
+
+   Returns the matrix product of two blocks in microscaling (MX) format.
+
+   The ``lhs`` and ``rhs`` tensors use microscaling formats as described in the
+   OCP Microscaling Formats (MX) v1.0 specification. Software emulation enables
+   targeting hardware architectures without native microscaling operation support.
+   In such cases, microscaled inputs are upcasted to ``bf16`` before computation,
+   except on AMD CDNA3 where ``fp16`` is used if one input is ``fp16``. This
+   behavior is experimental and subject to change.
+
+   Parameters
+   ----------
+   lhs : tensor
+      The first tensor to be multiplied. A 2D tensor representing ``fp4``, ``fp8``,
+      or ``bf16`` elements. ``fp4`` elements are packed into ``uint8`` inputs with
+      the first element in lower bits. ``fp8`` are stored as ``uint8`` or the
+      corresponding ``fp8`` type.
+   lhs_scale : tensor, optional
+      Scale factor for the ``lhs`` tensor. Shape should be ``[M, K//group_size]``
+      when ``lhs`` is ``[M, K]``, where ``group_size`` is 32 if scales type are
+      ``e8m0``. Represented as an ``uint8`` tensor of ``e8m0`` type, or ``None``.
+   lhs_format : str
+      Format of the ``lhs`` tensor. Available formats: ``"e2m1"``, ``"e4m3"``,
+      ``"e5m2"``, ``"bf16"``, ``"fp16"``.
+   rhs : tensor
+      The second tensor to be multiplied. A 2D tensor representing ``fp4``, ``fp8``,
+      or ``bf16`` elements. ``fp4`` elements are packed into ``uint8`` inputs with
+      the first element in lower bits. ``fp8`` are stored as ``uint8`` or the
+      corresponding ``fp8`` type.
+   rhs_scale : tensor, optional
+      Scale factor for the ``rhs`` tensor. Shape should be ``[N, K//group_size]``
+      where ``rhs`` is ``[K, N]``. **Important:** Do NOT transpose ``rhs_scale``.
+      Represented as an ``uint8`` tensor of ``e8m0`` type, or ``None``.
+   rhs_format : str
+      Format of the ``rhs`` tensor. Available formats: ``"e2m1"``, ``"e4m3"``,
+      ``"e5m2"``, ``"bf16"``, ``"fp16"``.
+   acc : tensor, optional
+      The accumulator tensor. If not ``None``, the result is added to this tensor.
+   fast_math : bool, optional
+      If ``True``, allows faster but less precise computation. Default is ``False``.
+   lhs_k_pack : bool, optional
+      If ``False``, the ``lhs`` tensor is packed into ``uint8`` along the M dimension
+      instead of the K dimension. Default is ``True``.
+   rhs_k_pack : bool, optional
+      If ``False``, the ``rhs`` tensor is packed into ``uint8`` along the N dimension
+      instead of the K dimension. Default is ``True``.
+   out_dtype : dtype, optional
+      The data type of the output tensor. Currently only ``float32`` is supported.
+      Default is ``triton.language.float32``.
+
+   Returns
+   -------
+   tensor
+      The matrix product of ``lhs`` and ``rhs`` with dtype ``out_dtype``.
+
+   Notes
+   -----
+   Currently, ``out_dtype`` must be ``float32``; other types will raise an assertion
+   error. The microscaling emulation logic may vary by backend and is subject to
+   change.
+
+   Examples
+   --------
+   .. code-block:: python
+
+      import triton
+      import triton.language as tl
+
+      @triton.jit
+      def mx_dot_kernel(
+          lhs_ptr, lhs_scale_ptr, rhs_ptr, rhs_scale_ptr, out_ptr,
+          M, N, K,
+          BLOCK_M: tl.constexpr, BLOCK_N: tl.constexpr, BLOCK_K: tl.constexpr,
+      ):
+          pid_m = tl.program_id(0)
+          pid_n = tl.program_id(1)
+
+          offs_m = pid_m * BLOCK_M + tl.arange(0, BLOCK_M)
+          offs_n = pid_n * BLOCK_N + tl.arange(0, BLOCK_N)
+          offs_k = tl.arange(0, BLOCK_K)
+
+          lhs = tl.load(lhs_ptr + offs_m[:, None] * K + offs_k[None, :], mask=offs_k[None, :] < K)
+          lhs_scale = tl.load(lhs_scale_ptr + offs_m[:, None] * (K // 32) + (offs_k[None, :] // 32),
+                              mask=(offs_k[None, :] // 32) < (K // 32))
+
+          rhs = tl.load(rhs_ptr + offs_k[:, None] * N + offs_n[None, :], mask=offs_k[:, None] < K)
+          rhs_scale = tl.load(rhs_scale_ptr + offs_n[None, :] * (K // 32) + (offs_k[:, None] // 32),
+                              mask=(offs_k[:, None] // 32) < (K // 32))
+
+          out = tl.dot_scaled(
+              lhs, lhs_scale, "e4m3",
+              rhs, rhs_scale, "e4m3",
+              out_dtype=tl.float32
+          )
+
+          out_offs = offs_m[:, None] * N + offs_n[None, :]
+          tl.store(out_ptr + out_offs, out, mask=(offs_m[:, None] < M) & (offs_n[None, :] < N))

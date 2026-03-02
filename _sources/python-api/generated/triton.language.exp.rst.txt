@@ -1,0 +1,41 @@
+exp
+===
+
+.. currentmodule:: triton.language
+
+.. function:: exp(x, _semantic=None)
+
+   Computes the element-wise exponential of :code:`x`.
+
+   Parameters
+   ----------
+   x : Block
+      The input tensor. Must be a floating-point type (:code:`fp32` or :code:`fp64`).
+
+   Returns
+   -------
+   Block
+      A tensor containing the exponential of each element in :code:`x`.
+
+   Notes
+   -----
+   This function can also be called as a member function on :py:class:`tensor`,
+   as :code:`x.exp()` instead of :code:`tl.exp(x)`.
+
+   The operation is only supported for floating-point dtypes. Passing integer
+   types will result in a compilation error.
+
+   Examples
+   --------
+   .. code-block:: python
+
+      import triton
+      import triton.language as tl
+
+      @triton.jit
+      def exp_kernel(x_ptr, out_ptr, BLOCK_SIZE: tl.constexpr):
+          pid = tl.program_id(0)
+          offs = pid * BLOCK_SIZE + tl.arange(0, BLOCK_SIZE)
+          x = tl.load(x_ptr + offs)
+          y = tl.exp(x)
+          tl.store(out_ptr + offs, y)

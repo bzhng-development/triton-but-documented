@@ -1,0 +1,36 @@
+zeros
+=====
+
+.. currentmodule:: triton.language
+
+.. function:: zeros(shape, dtype)
+
+   Returns a tensor filled with the scalar value 0 for the given ``shape`` and ``dtype``.
+
+   Parameters
+   ----------
+   shape : tuple of ints
+       Shape of the new array, e.g., ``(8, 16)`` or ``(8,)``.
+   dtype : DType
+       Data-type of the new array, e.g., ``tl.float16``.
+
+   Returns
+   -------
+   Tensor
+       A tensor of zeros with the specified shape and dtype.
+
+   Notes
+   -----
+   This function is equivalent to ``tl.full(shape, 0, dtype)``.
+
+   Examples
+   --------
+   .. code-block:: python
+
+       import triton.language as tl
+
+       # Create a 1D tensor of 8 zeros with float16 dtype
+       z1 = tl.zeros((8,), tl.float16)
+
+       # Create a 2D tensor of 4x4 zeros with int32 dtype
+       z2 = tl.zeros((4, 4), tl.int32)

@@ -1,0 +1,59 @@
+get_max_tensorcore_tflops
+=========================
+
+``get_max_tensorcore_tflops(dtype, clock_rate, device=None)``
+
+Calculate the theoretical peak performance of Tensor Cores in TFLOPS for a given CUDA device and data type.
+
+Parameters
+----------
+dtype : torch.dtype
+    The data type for the computation. Supported types depend on the GPU compute capability:
+    - Compute capability < 8.0: Only ``torch.float16``.
+    - Compute capability >= 8.0: ``torch.float32``, ``torch.int32``, ``torch.float16``,
+      ``torch.bfloat16``, ``torch.int16``, ``torch.int8``, and Triton float8 types
+      (``tl.float8e4nv``, ``tl.float8e4b15``, ``tl.float8e5``).
+clock_rate : float
+    The GPU streaming multiprocessor clock rate in MHz.
+device : int, optional
+    The CUDA device ID. If ``None``, defaults to the currently active CUDA device.
+
+Returns
+-------
+tflops : float
+    The theoretical peak performance in TFLOPS (Tera Floating Point Operations Per Second).
+
+Notes
+-----
+The calculation is based on the number of Tensor Core sub-cores per multiprocessor,
+the clock rate, and the number of operations per sub-core per clock cycle, which varies
+by data type and GPU architecture (compute capability).
+
+- For compute capability < 8.0 (Volta, Turing), only FP16 is supported with 256 ops/sub-core.
+- For compute capability >= 8.0 (Ampere, Hopper, etc.):
+  - FP32/INT32: 256 ops/sub-core
+  - FP16/BF16/INT16: 512 ops/sub-core
+  - INT8/FP8: 1024 ops/sub-core
+
+Raises
+------
+RuntimeError
+    If the provided ``dtype`` is not supported for the detected GPU compute capability.
+AssertionError
+    If ``dtype`` is not ``torch.float16`` on devices with compute capability < 8.0.
+
+Examples
+--------
+.. code-block:: python
+
+    import torch
+    import triton.testing
+
+    # Get current device properties
+    device = torch.cuda.current_device()
+    props = torch.cuda.get_device_properties(device)
+    clock_rate = props.clock_rate / 1000.0  # Convert kHz to MHz
+
+    # Calculate peak TFLOPS for FP16 on an A100 (compute capability 8.0)
+    tflops = triton.testing.get_max_tensorcore_tflops(torch.float16, clock_rate, device)
+    print(f"Peak FP16 TFLOPS: {tflops:.2f}")

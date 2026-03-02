@@ -1,0 +1,29 @@
+triton.language.TRITON_MAX_TENSOR_NUMEL
+=======================================
+
+Maximum number of elements allowed in a single Triton tensor.
+
+Notes
+-----
+This constant defines the upper bound on the total number of elements
+(tensor numel) that can be allocated or manipulated within a single
+``tl.tensor`` object during kernel execution. Exceeding this limit will
+result in a compilation error. The value is architecture-dependent and
+constrained by hardware register file size and shared memory capacity.
+
+Attempting to create tensors with a number of elements greater than this
+constant will cause the Triton compiler to raise an exception.
+
+Examples
+--------
+.. code-block:: python
+
+    import triton
+    import triton.language as tl
+
+    @triton.jit
+    def check_limit_kernel(ptr, BLOCK_SIZE: tl.constexpr):
+        # This will fail compilation if BLOCK_SIZE > TRITON_MAX_TENSOR_NUMEL
+        offset = tl.arange(0, BLOCK_SIZE)
+        mask = offset < BLOCK_SIZE
+        val = tl.load(ptr + offset, mask=mask)

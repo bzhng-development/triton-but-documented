@@ -1,0 +1,45 @@
+cumprod
+=========
+
+.. currentmodule:: triton.language
+
+.. function:: cumprod(input, axis=0, reverse=False)
+
+   Returns the cumulative product of all elements in the :code:`input` tensor along the provided :code:`axis`.
+
+   Parameters
+   ----------
+   input : tensor
+       The input tensor.
+   axis : int, optional
+       The dimension along which the scan is performed. Default is 0.
+   reverse : bool, optional
+       If True, the scan is performed in the reverse direction. Default is False.
+
+   Returns
+   -------
+   tensor
+       A tensor containing the cumulative products.
+
+   Notes
+   -----
+   This function can also be called as a member function on :py:class:`tensor`,
+   as :code:`x.cumprod(...)` instead of :code:`cumprod(x, ...)`.
+
+   BFloat16 inputs are automatically promoted to Float32 before computation.
+
+   Examples
+   --------
+   .. code-block:: python
+
+       import triton
+       import triton.language as tl
+
+       @triton.jit
+       def kernel(x_ptr, out_ptr, BLOCK_SIZE: tl.constexpr):
+           pid = tl.program_id(0)
+           offsets = tl.arange(0, BLOCK_SIZE)
+           mask = offsets < BLOCK_SIZE
+           x = tl.load(x_ptr + pid * BLOCK_SIZE + offsets, mask=mask)
+           y = tl.cumprod(x, axis=0)
+           tl.store(out_ptr + pid * BLOCK_SIZE + offsets, y, mask=mask)

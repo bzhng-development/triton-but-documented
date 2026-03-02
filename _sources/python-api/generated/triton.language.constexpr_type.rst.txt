@@ -1,0 +1,43 @@
+.. py:class:: constexpr_type(value)
+
+   Type representation for a compile-time constant value in Triton IR.
+
+   This class wraps a Python value known at compile-time, allowing it to be used
+   as a type annotation within the Triton type system. It is typically instantiated
+   implicitly when using :py:class:`constexpr` values or :py:obj:`tl.constexpr`
+   annotations in kernel definitions.
+
+   Parameters
+   ----------
+   value : Python scalar or dtype
+       The constant value to wrap (e.g., an int, float, or :py:class:`dtype`).
+
+   Returns
+   -------
+   constexpr_type
+       A type object representing the constant value.
+
+   Notes
+   -----
+   Instances of :py:class:`constexpr_type` are hashable and compare equal if
+   their underlying values are equal. The mangled name for this type is prefixed
+   with ``c`` followed by the mangled representation of the value.
+
+   This type does not emit any IR instructions during flattening, as the value
+   is embedded directly in the type structure.
+
+   Examples
+   --------
+   >>> import triton.language as tl
+   >>> t = tl.constexpr_type(42)
+   >>> print(t)
+   constexpr_type[42]
+   >>> t.mangle()
+   'c42'
+
+   .. code-block:: python
+
+      @triton.jit
+      def kernel(BLOCK_SIZE: tl.constexpr):
+          # BLOCK_SIZE has type constexpr_type[int] internally
+          pass

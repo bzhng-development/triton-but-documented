@@ -1,0 +1,49 @@
+argmax
+======
+
+.. currentmodule:: triton.language
+
+.. function:: argmax(input, axis, tie_break_left=True, keep_dims=False)
+
+   Returns the indices of the maximum values along a given axis.
+
+   Parameters
+   ----------
+   input : tensor
+       Input tensor.
+   axis : int
+       Axis along which to reduce. If ``None``, reduces all dimensions.
+   tie_break_left : bool, optional
+       If ``True``, in case of a tie (i.e., multiple elements have the same
+       maximum value), return the left-most index. If ``False``, behavior
+       is undefined. Default is ``True``.
+   keep_dims : bool, optional
+       If ``True``, the reduced axes are retained with length 1.
+       Default is ``False``.
+
+   Returns
+   -------
+   tensor
+       Tensor of indices corresponding to the maximum values.
+
+   Notes
+   -----
+   This function can also be called as a member function on :py:class:`tensor`,
+   as ``x.argmax(...)`` instead of ``argmax(x, ...)``.
+
+   The reduction operation requires the axis to be statically known and the
+   underlying combination logic to be associative.
+
+   Examples
+   --------
+   .. code-block:: python
+
+       import triton.language as tl
+
+       @triton.jit
+       def kernel(X, INDEXS, stride):
+           pid = tl.program_id(0)
+           x = tl.load(X + pid * stride + tl.arange(0, 16))
+           # Find index of max value in the row
+           idx = tl.argmax(x, axis=0)
+           tl.store(INDEXS + pid, idx)

@@ -1,0 +1,50 @@
+flip
+====
+
+.. currentmodule:: triton.language
+
+.. function:: flip(x, dim=None)
+
+   Flips a tensor along a specified dimension.
+
+   Reverses the order of elements in the tensor ``x`` along the given axis ``dim``.
+   The size of the dimension to be flipped must be a power of two.
+
+   Parameters
+   ----------
+   x : Block
+       The input tensor to flip.
+   dim : int, optional
+       The dimension along which to flip. If ``None``, the last dimension is used.
+       Negative values are supported and count from the end.
+
+   Returns
+   -------
+   Block
+       A tensor with the contents of the specified dimension reversed.
+
+   Notes
+   -----
+   This function requires the size of the dimension being flipped to be a power of two.
+   It can be called as a standalone function ``tl.flip(x, dim)`` or as a member function
+   ``x.flip(dim)``.
+
+   The implementation uses bitwise XOR operations to swap elements efficiently on GPU.
+
+   Examples
+   --------
+   .. code-block:: python
+
+       import triton.language as tl
+
+       # Create a 1D tensor of 8 elements (power of 2)
+       x = tl.arange(0, 8)
+
+       # Flip along the last (and only) dimension
+       flipped = tl.flip(x)
+       # Result: [7, 6, 5, 4, 3, 2, 1, 0]
+
+       # Flip a 2D tensor along the last dimension
+       y = tl.reshape(tl.arange(0, 16), (2, 8))
+       flipped_y = tl.flip(y, dim=1)
+       # Each row is reversed

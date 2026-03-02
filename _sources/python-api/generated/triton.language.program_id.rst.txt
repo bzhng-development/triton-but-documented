@@ -1,0 +1,47 @@
+program_id
+==========
+
+.. currentmodule:: triton.language
+
+.. function:: program_id(axis, _semantic=None)
+
+   Returns the ID of the current program instance along the given ``axis``.
+
+   Parameters
+   ----------
+   axis : int
+       The axis of the 3D launch grid. Must be 0, 1, or 2.
+
+   Returns
+   -------
+   int
+       The program ID along the specified axis.
+
+   Notes
+   -----
+   This function is typically used within JIT-compiled kernels to determine
+   the position of the current program in the grid. It enables SPMD (Single
+   Program Multiple Data) programming by allowing each program to compute
+   unique memory offsets based on its ID.
+
+   Examples
+   --------
+   .. code-block:: python
+
+       import triton
+       import triton.language as tl
+
+       @triton.jit
+       def kernel(
+           input_ptr, output_ptr,
+           BLOCK_SIZE: tl.constexpr,
+       ):
+           # Get the program ID along the x-axis (axis=0)
+           pid = tl.program_id(axis=0)
+           
+           # Compute the start offset for this program
+           offset = pid * BLOCK_SIZE
+           
+           # Load and store data using the computed offset
+           x = tl.load(input_ptr + offset + tl.arange(0, BLOCK_SIZE))
+           tl.store(output_ptr + offset + tl.arange(0, BLOCK_SIZE), x * 2)

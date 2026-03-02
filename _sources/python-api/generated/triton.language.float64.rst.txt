@@ -1,0 +1,35 @@
+triton.language.float64
+======================
+
+.. py:data:: triton.language.float64
+
+   64-bit floating point data type.
+
+   Represents double-precision floating point numbers (IEEE 754 binary64 format)
+   within Triton kernels. This type corresponds to ``float64`` in NumPy and
+   ``double`` in C/C++.
+
+   .. note::
+
+      Hardware support for ``float64`` varies by GPU architecture. On consumer
+      GPUs (e.g., NVIDIA GeForce), double-precision throughput is often
+      significantly lower than single-precision (``float32``). Use this type
+      only when numerical precision requirements necessitate it.
+
+   Example
+   -------
+
+   .. code-block:: python
+
+      import triton
+      import triton.language as tl
+
+      @triton.jit
+      def kernel(X, Y, BLOCK_SIZE: tl.constexpr):
+          pid = tl.program_id(0)
+          offs = pid * BLOCK_SIZE + tl.arange(0, BLOCK_SIZE)
+          # Load data as float64
+          x = tl.load(X + offs, dtype=tl.float64)
+          # Perform double-precision computation
+          y = x * 2.0 + 1.5
+          tl.store(Y + offs, y)

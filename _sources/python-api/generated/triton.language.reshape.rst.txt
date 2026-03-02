@@ -1,0 +1,63 @@
+reshape
+=======
+
+.. currentmodule:: triton.language
+
+.. autofunction:: reshape
+
+.. function:: reshape(input, *shape, can_reorder=False)
+
+   Returns a tensor with the same number of elements as ``input`` but with the
+   provided ``shape``.
+
+   Parameters
+   ----------
+   input : triton.language.tensor
+       The input tensor to reshape.
+   *shape : int or tuple of ints
+       The desired shape of the output tensor. Can be passed as individual
+       integers or as a single tuple/list.
+   can_reorder : bool, optional
+       If ``True``, the compiler is allowed to reorder elements in memory to
+       achieve the new shape. This should only be set to ``True`` if the order
+       of elements does not affect correctness (e.g., the result is only used
+       in reduction operations). Default is ``False``, which preserves the
+       linear index ordering of elements.
+
+   Returns
+   -------
+   tensor
+       A view of the input tensor with the specified shape.
+
+   Notes
+   -----
+   The product of the new shape dimensions must equal the number of elements
+   in the input tensor.
+
+   This function can also be called as a member function on ``tensor``:
+   ``x.reshape(...)`` instead of ``reshape(x, ...)``.
+
+   If ``can_reorder=True``, this operation is equivalent to ``view``.
+
+   Examples
+   --------
+   .. code-block:: python
+
+      import triton
+      import triton.language as tl
+
+      @triton.jit
+      def kernel(X_ptr, Y_ptr, BLOCK_SIZE: tl.constexpr):
+          # Load a 1D block
+          x = tl.load(X_ptr + tl.arange(0, BLOCK_SIZE))
+          
+          # Reshape to 2D (8, 4) assuming BLOCK_SIZE=32
+          x_2d = tl.reshape(x, (8, 4))
+          
+          # Equivalent usage with separate arguments
+          x_2d_alt = tl.reshape(x, 8, 4)
+          
+          # Reshape allowing reordering (use with caution)
+          x_shuffled = tl.reshape(x, (4, 8), can_reorder=True)
+          
+          tl.store(Y_ptr + tl.arange(0, BLOCK_SIZE), x_2d)

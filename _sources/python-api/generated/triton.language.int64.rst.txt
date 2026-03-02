@@ -1,0 +1,62 @@
+triton.language.int64
+=====================
+
+64-bit signed integer data type.
+
+This dtype instance represents 64-bit signed integers within Triton kernels.
+It is used to specify the type of tensor elements, pointer addresses, or
+scalar values requiring 64-bit precision.
+
+Parameters
+----------
+
+None
+    This is a predefined dtype instance and does not accept arguments.
+
+Returns
+-------
+
+dtype
+    An instance representing the 64-bit signed integer type.
+
+Notes
+-----
+
+*   Equivalent to ``torch.int64`` or ``np.int64`` in respective ecosystems.
+*   Use this type when handling large integer ranges or pointer arithmetic
+    on 64-bit GPU architectures.
+*   Arithmetic operations on ``int64`` tensors preserve 64-bit precision
+    unless explicitly cast.
+
+Examples
+--------
+
+.. code-block:: python
+
+    import triton
+    import triton.language as tl
+
+    @triton.jit
+    def int64_kernel(
+        X_ptr,
+        Y_ptr,
+        n_elements,
+        BLOCK_SIZE: tl.constexpr,
+    ):
+        # Define a 64-bit integer constant
+        offset: tl.int64 = 10000000000
+
+        # Create a range using int64 indices
+        pid = tl.program_id(axis=0)
+        block_start = pid * BLOCK_SIZE
+        offsets = block_start + tl.arange(0, BLOCK_SIZE).to(tl.int64)
+
+        # Load data assuming 64-bit integer storage
+        mask = offsets < n_elements
+        x = tl.load(X_ptr + offsets, mask=mask).to(tl.int64)
+
+        # Perform 64-bit arithmetic
+        y = x + offset
+
+        # Store result
+        tl.store(Y_ptr + offsets, y, mask=mask)

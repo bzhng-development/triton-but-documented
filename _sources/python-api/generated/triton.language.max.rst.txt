@@ -1,0 +1,49 @@
+Returns the maximum of all elements in the :code:`input` tensor along the provided :code:`axis`.
+
+If :code:`return_indices` is True, also returns the index corresponding to the maximum value. In case of ties, the behavior is controlled by :code:`return_indices_tie_break_left`.
+
+Parameters
+----------
+input : tensor
+    The input values.
+axis : int, optional
+    The dimension along which the reduction should be done. If None, reduce all dimensions.
+return_indices : bool, optional
+    If True, return the index corresponding to the maximum value. Default is False.
+return_indices_tie_break_left : bool, optional
+    If True and there are multiple elements with the same maximum value, return the left-most index. If False, the tie-breaking behavior is implementation-defined but faster. Default is True.
+keep_dims : bool, optional
+    If True, keep the reduced dimensions with length 1. Default is False.
+
+Returns
+-------
+max_val : tensor
+    The maximum values. If :code:`return_indices` is True, this is a tuple of (max_val, max_idx).
+max_idx : tensor, optional
+    The indices of the maximum values. Only returned if :code:`return_indices` is True.
+
+Notes
+-----
+This function can also be called as a member function on :py:class:`tensor`,
+as :code:`x.max(...)` instead of :code:`max(x, ...)`.
+
+For floating-point inputs with bitwidth less than 32, the input is promoted to float32 before reduction.
+For integer inputs with bitwidth less than 32, the input is promoted to int32 before reduction.
+
+The reduction operation is associative and commutative.
+
+Examples
+--------
+.. code-block:: python
+
+    import triton.language as tl
+
+    # Compute maximum along axis 1
+    x = tl.arange(0, 16).reshape(4, 4)
+    max_vals = tl.max(x, axis=1)
+
+    # Get both maximum values and their indices
+    max_vals, max_indices = tl.max(x, axis=1, return_indices=True)
+
+    # Keep reduced dimension
+    max_vals_keep = tl.max(x, axis=1, keep_dims=True)

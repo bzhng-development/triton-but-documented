@@ -1,0 +1,48 @@
+.. py:function:: fdiv(x, y, ieee_rounding=False)
+
+   Computes the element-wise fast division of :code:`x` and :code:`y`.
+
+   By default, this operation uses fast division semantics which may sacrifice
+   precision for performance. Setting :code:`ieee_rounding=True` enforces
+   IEEE-754 rounding semantics.
+
+   Parameters
+   ----------
+   x : tl.tensor
+       The numerator input tensor.
+   y : tl.tensor
+       The denominator input tensor.
+   ieee_rounding : bool, optional
+       If :code:`True`, perform division with IEEE-754 rounding semantics.
+       If :code:`False` (default), use fast division semantics.
+
+   Returns
+   -------
+   tl.tensor
+       A tensor containing the element-wise division result :code:`x / y`.
+
+   Notes
+   -----
+   This function can also be called as a member function on :py:class:`tensor`,
+   as :code:`x.fdiv(y, ieee_rounding=False)`.
+
+   Fast division (:code:`ieee_rounding=False`) is typically implemented using
+   reciprocal approximation followed by multiplication, which is faster but
+   less precise than standard division.
+
+   Examples
+   --------
+   .. code-block:: python
+
+       import triton
+       import triton.language as tl
+
+       @triton.jit
+       def kernel(x_ptr, y_ptr, out_ptr, BLOCK_SIZE: tl.constexpr):
+           pid = tl.program_id(0)
+           offs = pid * BLOCK_SIZE + tl.arange(0, BLOCK_SIZE)
+           x = tl.load(x_ptr + offs)
+           y = tl.load(y_ptr + offs)
+           # Fast division
+           out = tl.fdiv(x, y)
+           tl.store(out_ptr + offs, out)

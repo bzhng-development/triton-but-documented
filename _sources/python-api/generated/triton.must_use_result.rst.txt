@@ -1,0 +1,43 @@
+must_use_result
+================
+
+.. currentmodule:: triton.language
+
+.. autofunction:: must_use_result
+
+Mark a function or value such that ignoring its return result triggers a compile-time error.
+
+When applied to a string, returns a decorator that marks the decorated function. When applied to a tensor or other value, marks the value directly. This prevents accidental omission of results from operations that have no side effects (e.g., :py:func:`advance`).
+
+Parameters
+----------
+x : str or tensor
+    If a string, used as an error message for a decorator. If a tensor or value, the object to mark as must-use.
+s : bool, optional
+    Flag to enable the must-use check (default ``True``).
+
+Returns
+-------
+function or tensor
+    If ``x`` is a string, returns a decorator function. Otherwise, returns the marked ``x``.
+
+Notes
+-----
+This is commonly used to ensure programmers do not discard results of pure operations. For example, :py:func:`advance` returns a new pointer; failing to assign it leaves the original pointer unchanged.
+
+Examples
+--------
+.. code-block:: python
+
+    import triton
+    import triton.language as tl
+
+    @triton.jit
+    def kernel(ptr, BLOCK: tl.constexpr):
+        # Correct usage: assign the result
+        new_ptr = tl.advance(ptr, [BLOCK])
+        val = tl.load(new_ptr)
+        tl.store(ptr, val)
+
+    # Incorrect usage (will raise compile error if must_use_result is applied):
+    # tl.advance(ptr, [BLOCK])  # Result ignored

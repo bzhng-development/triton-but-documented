@@ -1,0 +1,49 @@
+nvsmi
+=====
+
+Query GPU metrics using the ``nvidia-smi`` command-line utility.
+
+.. code-block:: python
+
+    triton.testing.nvsmi(attrs)
+
+Parameters
+----------
+attrs : list of str
+    List of GPU attribute names to query (e.g., ``["clocks.current.sm"]``,
+    ``["memory.used"]``). These correspond to valid field names accepted by
+    ``nvidia-smi --query-gpu``.
+
+Returns
+-------
+list of int
+    List of integer values corresponding to the requested attributes for GPU
+    device 0. Unitless and headerless output is enforced.
+
+Notes
+-----
+- This function invokes ``nvidia-smi`` as a subprocess and parses its CSV output.
+- It always queries device 0 (``-i 0``).
+- Attributes are joined with commas and passed to ``--query-gpu``.
+- Output is decoded using ``sys.stdout.encoding`` and converted to integers.
+- Requires ``nvidia-smi`` to be available in the system PATH and appropriate
+  GPU drivers to be installed.
+- Raises ``subprocess.CalledProcessError`` if ``nvidia-smi`` fails.
+- Raises ``ValueError`` if any returned value cannot be converted to ``int``.
+
+Examples
+--------
+Query the current SM clock and memory clock of GPU 0:
+
+.. code-block:: python
+
+    import triton.testing as tt
+    sm_clock, mem_clock = tt.nvsmi(["clocks.current.sm", "clocks.current.memory"])
+    print(f"SM Clock: {sm_clock} MHz, Memory Clock: {mem_clock} MHz")
+
+Query memory usage:
+
+.. code-block:: python
+
+    used_mem = tt.nvsmi(["memory.used"])[0]
+    print(f"Used GPU memory: {used_mem} MB")

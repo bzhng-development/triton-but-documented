@@ -1,0 +1,54 @@
+atomic_min
+==========
+
+.. currentmodule:: triton.language
+
+.. function:: atomic_min(pointer, val, mask=None, sem=None, scope=None)
+
+   Performs an atomic minimum at the memory location specified by ``pointer``.
+
+   For each element, computes ``min(*pointer, val)`` and stores the result in
+   ``pointer``. Returns the value stored at ``pointer`` before the operation.
+
+   Parameters
+   ----------
+   pointer : tensor of pointer type
+       The memory locations to operate on. Must be a block of pointers.
+   val : tensor
+       The values with which to perform the atomic operation. Must have the
+       same shape as ``pointer`` and dtype equal to ``pointer.dtype.element_ty``.
+   mask : tensor of int1, optional
+       If ``mask[idx]`` is false, the atomic operation is skipped for
+       ``pointer[idx]``. By default, all elements are processed.
+   sem : str, optional
+       Specifies the memory semantics for the operation. Acceptable values are
+       ``"acquire"``, ``"release"``, ``"acq_rel"``, and ``"relaxed"``.
+       Defaults to ``"acq_rel"``.
+   scope : str, optional
+       Defines the scope of threads that observe the synchronizing effect of
+       the atomic operation. Acceptable values are ``"gpu"``, ``"cta"``, or
+       ``"sys"``. Defaults to ``"gpu"``.
+
+   Returns
+   -------
+   tensor
+       The data stored at ``pointer`` before the atomic operation.
+
+   Notes
+   -----
+   This function can also be called as a member function on :py:class:`tensor`,
+   as ``x.atomic_min(...)`` instead of ``atomic_min(x, ...)``.
+
+   Supported dtypes depend on the target architecture. Typically includes
+   signed and unsigned integers and floating-point types.
+
+   Examples
+   --------
+   .. code-block:: python
+
+      @triton.jit
+      def kernel(ptr, vals, BLOCK_SIZE: tl.constexpr):
+          pid = tl.program_id(0)
+          offs = pid * BLOCK_SIZE + tl.arange(0, BLOCK_SIZE)
+          # Atomically update global memory with min
+          old_vals = tl.atomic_min(ptr + offs, vals)

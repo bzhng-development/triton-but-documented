@@ -1,0 +1,45 @@
+minimum
+=======
+
+.. currentmodule:: triton.language
+
+.. function:: minimum(x, y, propagate_nan=tl.PropagateNan.NONE)
+
+   Computes the element-wise minimum of :code:`x` and :code:`y`.
+
+   Parameters
+   ----------
+   x : Block
+      The first input tensor.
+   y : Block
+      The second input tensor.
+   propagate_nan : tl.PropagateNan, optional
+      Whether to propagate NaN values. Defaults to :code:`tl.PropagateNan.NONE`.
+      If set to :code:`tl.PropagateNan.ALL`, NaN inputs will produce NaN outputs.
+
+   Returns
+   -------
+   Block
+      A tensor containing the element-wise minimum values.
+
+   Notes
+   -----
+   Inputs of type :code:`tl.bfloat16` are automatically promoted to :code:`tl.float32`
+   before the operation is performed, as hardware support for bfloat16 min/max is limited.
+
+   See Also
+   --------
+   maximum, clamp, tl.PropagateNan
+
+   Examples
+   --------
+   .. code-block:: python
+
+      @triton.jit
+      def kernel(X_ptr, Y_ptr, Z_ptr, BLOCK_SIZE: tl.constexpr):
+          pid = tl.program_id(0)
+          offsets = pid * BLOCK_SIZE + tl.arange(0, BLOCK_SIZE)
+          x = tl.load(X_ptr + offsets)
+          y = tl.load(Y_ptr + offsets)
+          z = tl.minimum(x, y)
+          tl.store(Z_ptr + offsets, z)

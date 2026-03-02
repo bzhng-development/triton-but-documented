@@ -1,0 +1,47 @@
+ceil
+====
+
+.. currentmodule:: triton.language
+
+.. function:: ceil(x, _semantic=None)
+
+   Computes the element-wise ceiling of :code:`x`.
+
+   For each element :code:`v` in :code:`x`, returns the smallest integer value greater than or equal to :code:`v`.
+
+   Parameters
+   ----------
+   x : tl.tensor
+       The input tensor. Must have a floating-point data type (e.g., :code:`tl.float32`, :code:`tl.float64`).
+
+   Returns
+   -------
+   tl.tensor
+       A tensor containing the ceiling of each element in :code:`x`. The output has the same shape and dtype as the input.
+
+   Notes
+   -----
+   This function can also be called as a member function on :py:class:`tensor`, as :code:`x.ceil()` instead of :code:`tl.ceil(x)`.
+
+   Supported dtypes: :code:`fp32`, :code:`fp64`.
+
+   Examples
+   --------
+   .. code-block:: python
+
+      import triton
+      import triton.language as tl
+      import torch
+
+      @triton.jit
+      def ceil_kernel(x_ptr, y_ptr, BLOCK_SIZE: tl.constexpr):
+          pid = tl.program_id(0)
+          offset = pid * BLOCK_SIZE + tl.arange(0, BLOCK_SIZE)
+          x = tl.load(x_ptr + offset)
+          y = tl.ceil(x)
+          tl.store(y_ptr + offset, y)
+
+      x = torch.tensor([1.2, -1.7, 3.0, -0.5], dtype=torch.float32, device='cuda')
+      y = torch.empty_like(x)
+      ceil_kernel[(1,)](x, y, BLOCK_SIZE=4)
+      # y will be [2.0, -1.0, 3.0, -0.0]

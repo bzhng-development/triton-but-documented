@@ -1,0 +1,51 @@
+atomic_add
+==========
+
+.. currentmodule:: triton.language
+
+.. function:: atomic_add(pointer, val, mask=None, sem=None, scope=None)
+
+   Performs an atomic add at the memory location specified by :code:`pointer`.
+
+   Returns the data stored at :code:`pointer` before the atomic operation.
+
+   This function can also be called as a member function on :py:class:`tensor`,
+   as :code:`x.atomic_add(...)` instead of :code:`atomic_add(x, ...)`.
+
+   Parameters
+   ----------
+   pointer : triton.PointerType, or block of dtype=triton.PointerType
+       The memory locations to operate on.
+   val : Block
+       The values with which to perform the atomic operation. Must have
+       dtype equal to :code:`pointer.dtype.element_ty`.
+   mask : Block of triton.int1, optional
+       If :code:`mask[idx]` is false, do not perform the atomic operation
+       at :code:`pointer[idx]`.
+   sem : str, optional
+       Specifies the memory semantics for the operation. Acceptable values
+       are "acquire", "release", "acq_rel" (ACQUIRE_RELEASE), and "relaxed".
+       Defaults to "acq_rel".
+   scope : str, optional
+       Defines the scope of threads that observe the synchronizing effect
+       of the atomic operation. Acceptable values are "gpu" (default),
+       "cta" (cooperative thread array), or "sys" (SYSTEM).
+
+   Returns
+   -------
+   Block
+       A tensor containing the values at :code:`pointer` before the atomic
+       operation was performed. The shape and dtype match :code:`val`.
+
+   Example
+   -------
+   .. code-block:: python
+
+       @triton.jit
+       def atomic_add_kernel(x_ptr, y_ptr, BLOCK_SIZE: tl.constexpr):
+           pid = tl.program_id(0)
+           offsets = pid * BLOCK_SIZE + tl.arange(0, BLOCK_SIZE)
+           x = tl.load(x_ptr + offsets)
+           # Atomically add x to y, returning the old value in y_old
+           y_old = tl.atomic_add(y_ptr + offsets, x)
+           tl.store(x_ptr + offsets, y_old)

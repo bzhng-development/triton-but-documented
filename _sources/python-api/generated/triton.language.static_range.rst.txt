@@ -1,0 +1,50 @@
+.. class:: triton.language.static_range(arg1, arg2=None, step=None)
+
+   Compile-time integer sequence iterator that guides the compiler to aggressively unroll the loop.
+
+   This class provides semantics similar to Python's built-in :code:`range`, but requires all arguments to be compile-time constants (:code:`constexpr`). It is designed exclusively for use within :code:`@triton.jit` decorated functions to define unrolled loop bounds.
+
+   Parameters
+   ----------
+   arg1 : constexpr
+      If :code:`arg2` is None, this represents the end value (start defaults to 0). If :code:`arg2` is provided, this represents the start value.
+   arg2 : constexpr, optional
+      The end value (exclusive). Must be a :code:`constexpr`.
+   step : constexpr, optional
+      The step value. Defaults to 1 if not provided. Must be a :code:`constexpr`.
+
+   Returns
+   -------
+   static_range
+      An iterator object intended for use in JIT-compiled device loops.
+
+   Raises
+   ------
+   RuntimeError
+      If :code:`__iter__` or :code:`__next__` is called outside of a :code:`@triton.jit` function.
+   AssertionError
+      If any provided argument is not a :code:`constexpr`.
+
+   Notes
+   -----
+   Unlike Python's dynamic :code:`range`, :code:`static_range` requires all bounds and steps to be known at compile time. This allows the Triton compiler to fully unroll the loop, eliminating loop overhead and enabling further optimizations.
+
+   Attempting to iterate over this object in standard Python code (outside a kernel) will raise a RuntimeError.
+
+   Examples
+   --------
+   .. code-block:: python
+
+      import triton
+      import triton.language as tl
+
+      @triton.jit
+      def kernel():
+          # Loop unrolls completely from 0 to 9
+          for i in tl.static_range(10):
+              # Perform operation using compile-time constant i
+              pass
+
+          # Loop unrolls from 2 to 8 with step 2 (i.e., 2, 4, 6)
+          for j in tl.static_range(2, 8, 2):
+              pass

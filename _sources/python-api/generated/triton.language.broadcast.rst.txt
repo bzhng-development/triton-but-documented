@@ -1,0 +1,44 @@
+.. py:function:: triton.language.broadcast(input, other, _semantic=None)
+
+   Tries to broadcast the two given blocks to a common compatible shape.
+
+   Parameters
+   ----------
+   input : tl.tensor
+       The first input tensor.
+   other : tl.tensor
+       The second input tensor.
+
+   Returns
+   -------
+   tl.tensor
+       A tensor representing the broadcasted result of ``input`` and ``other``.
+
+   Notes
+   -----
+   This function follows standard NumPy broadcasting rules. The inputs must be
+   broadcastable to a common shape. If the shapes are already compatible, the
+   operation may be a no-op.
+
+   This function is typically called implicitly by arithmetic operations or
+   explicitly when preparing tensors for element-wise operations.
+
+   Examples
+   --------
+   .. code-block:: python
+
+       import triton
+       import triton.language as tl
+
+       @triton.jit
+       def kernel(x_ptr, y_ptr, out_ptr, BLOCK_SIZE: tl.constexpr):
+           # Load two tensors of different shapes
+           x = tl.load(x_ptr + tl.arange(0, BLOCK_SIZE))  # shape: [BLOCK_SIZE]
+           y = tl.full([1], 2.0, dtype=tl.float32)        # shape: [1]
+
+           # Explicitly broadcast y to match x's shape
+           y_broadcasted = tl.broadcast(x, y)
+
+           # Now both tensors have shape [BLOCK_SIZE]
+           out = x + y_broadcasted
+           tl.store(out_ptr + tl.arange(0, BLOCK_SIZE), out)

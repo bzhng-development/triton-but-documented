@@ -1,0 +1,43 @@
+.. py:function:: triton.language.debug_barrier(_semantic=None)
+
+   Insert a barrier to synchronize all threads in a block.
+
+   This operation ensures that all threads within the current program block reach
+   this point before any proceed further. It is primarily used for debugging
+   purposes to enforce execution ordering or inspect intermediate states.
+
+   Parameters
+   ----------
+   _semantic : optional
+      Internal semantic context passed automatically by the Triton compiler.
+      Users should not provide this argument directly.
+
+   Returns
+   -------
+   None
+
+   Notes
+   -----
+   This function compiles to a GPU barrier instruction (e.g., ``bar.sync`` in PTX).
+   It introduces synchronization overhead and should generally be avoided in
+   performance-critical production kernels unless required for correctness or
+   debugging.
+
+   Examples
+   --------
+   .. code-block:: python
+
+      import triton
+      import triton.language as tl
+
+      @triton.jit
+      def debug_kernel(x_ptr, BLOCK_SIZE: tl.constexpr):
+          pid = tl.program_id(0)
+          offset = pid * BLOCK_SIZE + tl.arange(0, BLOCK_SIZE)
+          val = tl.load(x_ptr + offset)
+
+          # Force all threads in the block to synchronize here
+          tl.debug_barrier()
+
+          # Continue processing after synchronization
+          tl.store(x_ptr + offset, val * 2.0)

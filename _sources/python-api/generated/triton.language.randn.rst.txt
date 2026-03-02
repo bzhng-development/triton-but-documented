@@ -1,0 +1,51 @@
+randn
+=====
+
+.. currentmodule:: triton.language
+
+.. function:: randn(seed, offset, n_rounds=constexpr[10])
+
+   Generate random numbers from a standard normal distribution :math:`\mathcal{N}(0, 1)`.
+
+   Given a ``seed`` scalar and an ``offset`` block, returns a block of random
+   ``float32`` values sampled from the standard normal distribution using the
+   Box-Muller transform.
+
+   Parameters
+   ----------
+   seed : int
+       The seed for the pseudo-random number generator.
+   offset : tl.tensor
+       The offsets to generate random numbers for. Typically ``tl.program_id(0)``
+       or a range of indices.
+   n_rounds : tl.constexpr, optional
+       Number of rounds for the Philox PRNG. Default is 10.
+
+   Returns
+   -------
+   tl.tensor
+       A tensor of ``float32`` values distributed as :math:`\mathcal{N}(0, 1)`.
+
+   Notes
+   -----
+   This function uses the Philox counter-based PRNG to generate uniform random
+   integers, converts them to uniform floats in :math:`[0, 1)`, and applies
+   the Box-Muller transform to produce normally distributed values.
+
+   Examples
+   --------
+   .. code-block:: python
+
+      import triton
+      import triton.language as tl
+
+      @triton.jit
+      def kernel(
+          output_ptr,
+          seed,
+          BLOCK_SIZE: tl.constexpr,
+      ):
+          pid = tl.program_id(0)
+          offset = pid * BLOCK_SIZE + tl.arange(0, BLOCK_SIZE)
+          random_vals = tl.randn(seed, offset)
+          tl.store(output_ptr + offset, random_vals)

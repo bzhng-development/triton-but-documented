@@ -1,0 +1,39 @@
+full
+====
+
+.. currentmodule:: triton.language
+
+.. function:: full(shape, value, dtype, _semantic=None)
+
+   Returns a tensor filled with the scalar value for the given ``shape`` and ``dtype``.
+
+   Parameters
+   ----------
+   shape : tuple of ints
+       Shape of the new array, e.g., ``(8, 16)`` or ``(8,)``.
+   value : scalar
+       A scalar value to fill the array with.
+   dtype : tl.dtype
+       Data type of the new array, e.g., ``tl.float16``.
+
+   Returns
+   -------
+   tensor
+       A tensor of the specified ``shape`` and ``dtype`` where every element equals ``value``.
+
+   Examples
+   --------
+   .. code-block:: python
+
+      import triton
+      import triton.language as tl
+
+      @triton.jit
+      def kernel(ptr, BLOCK_SIZE: tl.constexpr):
+          # Create a 1D tensor of size BLOCK_SIZE filled with 1.0 (float32)
+          ones = tl.full((BLOCK_SIZE,), 1.0, tl.float32)
+          
+          # Create a 2D tensor (4x4) filled with 0 (int32)
+          zeros = tl.full((4, 4), 0, tl.int32)
+          
+          tl.store(ptr + tl.arange(0, BLOCK_SIZE), ones)

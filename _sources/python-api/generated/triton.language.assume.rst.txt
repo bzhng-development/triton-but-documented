@@ -1,0 +1,44 @@
+assume
+======
+
+.. currentmodule:: triton.language
+
+.. autofunction:: assume
+
+Allow the compiler to assume a condition is true, enabling downstream optimizations.
+
+Parameters
+----------
+cond : tensor
+    The condition to assume is true. Must be a boolean tensor.
+
+Returns
+-------
+None
+    This function returns no value; it acts as a compiler hint.
+
+Notes
+-----
+This operation inserts an LLVM ``assume`` intrinsic into the generated IR.
+It is useful for guiding the compiler's control flow analysis and dead code
+elimination when the programmer knows a specific predicate holds at a
+program point.
+
+If ``cond`` is a scalar, it is automatically converted to a tensor.
+The behavior is undefined if the assumption is violated at runtime.
+
+Examples
+--------
+.. code-block:: python
+
+    import triton
+    import triton.language as tl
+
+    @triton.jit
+    def kernel(ptr, n, BLOCK_SIZE: tl.constexpr):
+        pid = tl.program_id(0)
+        offset = pid * BLOCK_SIZE
+        # Assume offset is always less than n to enable loop hoisting
+        tl.assume(offset < n)
+        data = tl.load(ptr + offset)
+        tl.store(ptr + offset, data + 1.0)

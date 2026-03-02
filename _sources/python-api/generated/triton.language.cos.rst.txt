@@ -1,0 +1,51 @@
+cos
+===
+
+.. currentmodule:: triton.language
+
+.. function:: cos(x, _semantic=None)
+
+   Computes the element-wise cosine of :code:`x`.
+
+   Parameters
+   ----------
+   x : Block
+       The input tensor. Must be a floating-point type (:code:`fp32` or :code:`fp64`).
+
+   Returns
+   -------
+   Block
+       A tensor containing the cosine of each element in :code:`x`.
+
+   Notes
+   -----
+   This function can also be called as a member function on :py:class:`tensor`,
+   as :code:`x.cos()` instead of :code:`tl.cos(x)`.
+
+   The operation is only supported for floating-point data types. Passing integer
+   types will result in a compilation error.
+
+   Examples
+   --------
+   .. code-block:: python
+
+      import triton
+      import triton.language as tl
+      import torch
+
+      @triton.jit
+      def cosine_kernel(x_ptr, out_ptr, n_elements, BLOCK_SIZE: tl.constexpr):
+          pid = tl.program_id(axis=0)
+          block_start = pid * BLOCK_SIZE
+          offsets = block_start + tl.arange(0, BLOCK_SIZE)
+          mask = offsets < n_elements
+          x = tl.load(x_ptr + offsets, mask=mask)
+          out = tl.cos(x)
+          tl.store(out_ptr + offsets, out, mask=mask)
+
+      # Example usage
+      n_elements = 1024
+      x = torch.linspace(0, 2 * torch.pi, n_elements, device="cuda")
+      out = torch.empty_like(x)
+      grid = lambda meta: (triton.cdiv(n_elements, meta["BLOCK_SIZE"]),)
+      cosine_kernel[grid](x, out, n_elements, BLOCK_SIZE=128)

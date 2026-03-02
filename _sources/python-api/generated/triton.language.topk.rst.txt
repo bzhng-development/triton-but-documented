@@ -1,0 +1,55 @@
+topk
+====
+
+.. currentmodule:: triton.language
+
+.. function:: topk(x, k, dim=None, descending=True)
+
+   Returns the ``k`` largest (or smallest) elements of the input tensor along the specified dimension.
+
+   The elements are returned in sorted order (largest first if ``descending=True``, smallest first if ``descending=False``).
+
+   Parameters
+   ----------
+   x : tensor
+       The input tensor.
+   k : constexpr
+       The number of top elements to return. Must be a power of two.
+   dim : constexpr, optional
+       The dimension along which to find the top ``k`` elements.
+       If ``None``, uses the last dimension. Currently only the last dimension is supported.
+   descending : constexpr, optional
+       If ``True``, returns the ``k`` largest elements. If ``False``, returns the ``k`` smallest elements.
+       Defaults to ``True``.
+
+   Returns
+   -------
+   tensor
+       A tensor containing the top ``k`` elements along the specified dimension, sorted in the requested order.
+
+   Notes
+   -----
+   This operation uses a bitonic sort network. The size of the dimension being reduced must be a power of two,
+   and ``k`` must also be a power of two.
+
+   Examples
+   --------
+   Get the top 4 largest elements from a 1D tensor:
+
+   .. code-block:: python
+
+       import triton.language as tl
+
+       x = tl.arange(0, 16)
+       top4 = tl.topk(x, 4)
+       # top4 contains [15, 14, 13, 12]
+
+   Get the 2 smallest elements from a 2D tensor along the last dimension:
+
+   .. code-block:: python
+
+       import triton.language as tl
+
+       x = tl.arange(0, 8).reshape((2, 4))
+       bottom2 = tl.topk(x, 2, descending=False)
+       # bottom2 contains the two smallest values from each row

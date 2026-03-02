@@ -1,0 +1,50 @@
+Computes the element-wise softmax of the input tensor along a specified dimension.
+
+The operation is numerically stable by subtracting the maximum value along the reduction axis before exponentiation:
+:math:`\text{softmax}(x)_i = \frac{\exp(x_i - \max(x))}{\sum_j \exp(x_j - \max(x))}`.
+
+Parameters
+----------
+x : tl.tensor
+    The input tensor.
+dim : int, optional
+    The dimension along which to compute the softmax. If ``None``, defaults to 0.
+keep_dims : bool, optional
+    If ``True``, the reduced dimension is retained with size 1. Otherwise, the dimension is squeezed. Default is ``False``.
+ieee_rounding : bool, optional
+    If ``True``, uses IEEE rounding mode for the final division. Default is ``False``.
+
+Returns
+-------
+tl.tensor
+    A tensor containing the softmax values, with the same shape as ``x`` (unless ``keep_dims`` is False and the dimension is removed).
+
+Notes
+-----
+This function can also be called as a member function on :py:class:`tl.tensor`,
+as ``x.softmax(...)`` instead of ``tl.softmax(x, ...)``.
+
+The implementation performs the following steps:
+1. Computes the maximum value along ``dim``.
+2. Subtracts the maximum from the input for numerical stability.
+3. Exponentiates the result.
+4. Computes the sum of exponents along ``dim``.
+5. Divides the exponentiated values by the sum.
+
+Examples
+--------
+.. code-block:: python
+
+    import triton
+    import triton.language as tl
+
+    @triton.jit
+    def kernel(X_ptr, Y_ptr, BLOCK_SIZE: tl.constexpr):
+        pid = tl.program_id(0)
+        offs = tl.arange(0, BLOCK_SIZE)
+        x = tl.load(X_ptr + pid * BLOCK_SIZE + offs)
+        
+        # Compute softmax along the last dimension (default)
+        y = tl.softmax(x, dim=0)
+        
+        tl.store(Y_ptr + pid * BLOCK_SIZE + offs, y)

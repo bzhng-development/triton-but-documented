@@ -1,0 +1,51 @@
+atomic_xchg
+=============
+
+.. currentmodule:: triton.language
+
+.. function:: atomic_xchg(pointer, val, mask=None, sem=None, scope=None)
+
+   Performs an atomic exchange at the memory location specified by ``pointer``.
+
+   Return the data stored at ``pointer`` before the atomic operation.
+
+   Parameters
+   ----------
+   pointer : tensor of pointer type
+       The memory locations to operate on.
+   val : tensor
+       The values with which to perform the atomic operation. Must have the same
+       dtype as ``pointer.dtype.element_ty``.
+   mask : tensor of bool, optional
+       If ``mask[idx]`` is false, do not perform the atomic operation at
+       ``pointer[idx]``.
+   sem : str, optional
+       Specifies the memory semantics for the operation. Acceptable values are
+       ``"acquire"``, ``"release"``, ``"acq_rel"`` (stands for "ACQUIRE_RELEASE"),
+       and ``"relaxed"``. If not provided, the function defaults to using
+       ``"acq_rel"`` semantics.
+   scope : str, optional
+       Defines the scope of threads that observe the synchronizing effect of the
+       atomic operation. Acceptable values are ``"gpu"`` (default), ``"cta"``
+       (cooperative thread array, thread block), or ``"sys"`` (stands for
+       "SYSTEM"). The default value is ``"gpu"``.
+
+   Returns
+   -------
+   tensor
+       The data stored at ``pointer`` before the atomic operation.
+
+   Notes
+   -----
+   This function can also be called as a member function on :py:class:`tensor`,
+   as ``x.atomic_xchg(...)`` instead of ``atomic_xchg(x, ...)``.
+
+   Examples
+   --------
+   .. code-block:: python
+
+      @triton.jit
+      def kernel(ptr, new_val, BLOCK: tl.constexpr):
+          offs = tl.arange(0, BLOCK)
+          old_val = tl.atomic_xchg(ptr + offs, new_val)
+          # old_val contains the value before the exchange

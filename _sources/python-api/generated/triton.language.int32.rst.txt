@@ -1,0 +1,43 @@
+triton.language.int32
+=====================
+
+32-bit signed integer data type.
+
+This dtype instance represents a 32-bit signed integer scalar or tensor element in Triton kernels. It corresponds to the ``i32`` type in MLIR and maps to standard 32-bit integer registers on GPU hardware.
+
+Parameters
+----------
+
+None (dtype instance).
+
+Returns
+-------
+
+dtype
+    A data type object representing 32-bit signed integers.
+
+Notes
+-----
+
+*   Range: -2,147,483,648 to 2,147,483,647.
+*   Use this type for general-purpose integer arithmetic where 64-bit precision is not required.
+*   Mixing ``int32`` with ``int64`` or floating-point types in operations may trigger implicit casting depending on the operator.
+
+Examples
+--------
+
+.. code-block:: python
+
+    import triton
+    import triton.language as tl
+
+    @triton.jit
+    def add_kernel(x_ptr, y_ptr, out_ptr, n: tl.constexpr):
+        pid = tl.program_id(0)
+        # Load 32-bit integers
+        x = tl.load(x_ptr + pid).to(tl.int32)
+        y = tl.load(y_ptr + pid).to(tl.int32)
+        # Perform 32-bit integer addition
+        out = x + y
+        # Store result
+        tl.store(out_ptr + pid, out)

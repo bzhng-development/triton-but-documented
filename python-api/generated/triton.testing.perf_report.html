@@ -1,0 +1,216 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>perf_report &mdash; Triton  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=03e43079" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/custom.css" />
+
+  
+      <script src="../../_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="assert_close" href="triton.testing.assert_close.html" />
+    <link rel="prev" title="Parameters" href="triton.testing.do_bench_cudagraph.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            Triton
+              <img src="https://cdn.openai.com/triton/assets/triton-logo.png" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../getting-started/installation.html">Installation</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Python API</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../triton.html">triton</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.language.html">triton.language</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../triton.testing.html">triton.testing</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="triton.testing.Benchmark.html">class triton.testing.Benchmark</a></li>
+<li class="toctree-l2"><a class="reference internal" href="triton.testing.do_bench.html"><code class="docutils literal notranslate"><span class="pre">triton.testing.do_bench()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="triton.testing.do_bench_cudagraph.html"><code class="docutils literal notranslate"><span class="pre">triton.testing.do_bench_cudagraph()</span></code></a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">perf_report</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#triton.testing.perf_report"><code class="docutils literal notranslate"><span class="pre">perf_report()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#parameters">Parameters</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#returns">Returns</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#notes">Notes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#examples">Examples</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="triton.testing.assert_close.html">assert_close</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../triton.testing.html#utilities">Utilities</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../triton-semantics.html">Triton Semantics</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Triton MLIR Dialects</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../dialects/dialects.html">Triton MLIR Dialects and Ops</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Programming Guide</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../programming-guide/chapter-1/introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../programming-guide/chapter-2/related-work.html">Related Work</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../programming-guide/chapter-3/debugging.html">Debugging Triton</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">Triton</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../triton.testing.html">triton.testing</a></li>
+      <li class="breadcrumb-item active">perf_report</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../_sources/python-api/generated/triton.testing.perf_report.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="perf-report">
+<h1>perf_report<a class="headerlink" href="#perf-report" title="Link to this heading">¶</a></h1>
+<dl class="py function">
+<dt class="sig sig-object py" id="triton.testing.perf_report">
+<span class="sig-prename descclassname"><span class="pre">triton.testing.</span></span><span class="sig-name descname"><span class="pre">perf_report</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">benchmarks</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#triton.testing.perf_report" title="Link to this definition">¶</a></dt>
+<dd><p>Mark a function for benchmarking. The benchmark can then be executed by using the <code class="code docutils literal notranslate"><span class="pre">.run</span></code> method on the return value.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>benchmarks</strong> (List of <code class="xref py py-class docutils literal notranslate"><span class="pre">Benchmark</span></code>) – Benchmarking configurations.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<p>Decorator that marks a function for benchmarking using the provided <code class="xref py py-class docutils literal notranslate"><span class="pre">Benchmark</span></code> configurations.
+The returned object exposes a <code class="xref py py-meth docutils literal notranslate"><span class="pre">run()</span></code> method to execute the benchmarks, generate performance plots,
+and export results to CSV.</p>
+<section id="parameters">
+<h2>Parameters<a class="headerlink" href="#parameters" title="Link to this heading">¶</a></h2>
+<dl>
+<dt>benchmarks<span class="classifier"><code class="xref py py-class docutils literal notranslate"><span class="pre">Benchmark</span></code> or list of <code class="xref py py-class docutils literal notranslate"><span class="pre">Benchmark</span></code></span></dt><dd><p>Benchmarking configurations defining the parameters to sweep (x-axis),
+the line arguments (series), and plot metadata.</p>
+</dd>
+</dl>
+</section>
+<section id="returns">
+<h2>Returns<a class="headerlink" href="#returns" title="Link to this heading">¶</a></h2>
+<dl class="simple">
+<dt>callable</dt><dd><p>A decorator wrapper. When applied to a benchmark target function, it returns
+a <code class="xref py py-class docutils literal notranslate"><span class="pre">Mark</span></code> object containing the function and configurations.</p>
+</dd>
+</dl>
+</section>
+<section id="notes">
+<h2>Notes<a class="headerlink" href="#notes" title="Link to this heading">¶</a></h2>
+<p>The decorated function must accept arguments corresponding to the <code class="docutils literal notranslate"><span class="pre">x_names</span></code>
+and <code class="docutils literal notranslate"><span class="pre">line_arg</span></code> defined in the <code class="xref py py-class docutils literal notranslate"><span class="pre">Benchmark</span></code> objects. The function should
+return execution time metrics (typically mean, min, and max).</p>
+<p>Calling <code class="xref py py-meth docutils literal notranslate"><span class="pre">Mark.run()</span></code> executes the kernel for each configuration combination,
+measures latency using <a class="reference internal" href="triton.testing.do_bench.html#triton.testing.do_bench" title="triton.testing.do_bench"><code class="xref py py-func docutils literal notranslate"><span class="pre">do_bench()</span></code></a>, and optionally saves plots and data
+if <code class="docutils literal notranslate"><span class="pre">save_path</span></code> is provided.</p>
+</section>
+<section id="examples">
+<h2>Examples<a class="headerlink" href="#examples" title="Link to this heading">¶</a></h2>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">triton</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">triton.testing</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">tt</span>
+
+<span class="c1"># Define benchmark configuration</span>
+<span class="n">bench</span> <span class="o">=</span> <span class="n">tt</span><span class="o">.</span><span class="n">Benchmark</span><span class="p">(</span>
+    <span class="n">x_names</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;SIZE&#39;</span><span class="p">],</span>
+    <span class="n">x_vals</span><span class="o">=</span><span class="p">[</span><span class="mi">2</span><span class="o">**</span><span class="n">i</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">20</span><span class="p">)],</span>
+    <span class="n">line_arg</span><span class="o">=</span><span class="s1">&#39;provider&#39;</span><span class="p">,</span>
+    <span class="n">line_vals</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;triton&#39;</span><span class="p">,</span> <span class="s1">&#39;torch&#39;</span><span class="p">],</span>
+    <span class="n">line_names</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;Triton&#39;</span><span class="p">,</span> <span class="s1">&#39;PyTorch&#39;</span><span class="p">],</span>
+    <span class="n">plot_name</span><span class="o">=</span><span class="s1">&#39;vector-add&#39;</span><span class="p">,</span>
+    <span class="n">args</span><span class="o">=</span><span class="p">{},</span>
+    <span class="n">xlabel</span><span class="o">=</span><span class="s1">&#39;Vector Size&#39;</span><span class="p">,</span>
+    <span class="n">ylabel</span><span class="o">=</span><span class="s1">&#39;GB/s&#39;</span><span class="p">,</span>
+<span class="p">)</span>
+
+<span class="nd">@tt</span><span class="o">.</span><span class="n">perf_report</span><span class="p">(</span><span class="n">bench</span><span class="p">)</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">benchmark</span><span class="p">(</span><span class="n">SIZE</span><span class="p">,</span> <span class="n">provider</span><span class="p">):</span>
+    <span class="c1"># Setup tensors</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="n">SIZE</span><span class="p">,</span> <span class="n">device</span><span class="o">=</span><span class="s1">&#39;cuda&#39;</span><span class="p">)</span>
+    <span class="n">y</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="n">SIZE</span><span class="p">,</span> <span class="n">device</span><span class="o">=</span><span class="s1">&#39;cuda&#39;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">provider</span> <span class="o">==</span> <span class="s1">&#39;triton&#39;</span><span class="p">:</span>
+        <span class="c1"># Call triton kernel</span>
+        <span class="k">return</span> <span class="n">triton_kernel</span><span class="p">[</span><span class="n">x</span><span class="o">.</span><span class="n">stride</span><span class="p">(</span><span class="mi">0</span><span class="p">)](</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">SIZE</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="c1"># Call torch operator</span>
+        <span class="k">return</span> <span class="n">x</span> <span class="o">+</span> <span class="n">y</span>
+
+<span class="c1"># Execute benchmarks and save results</span>
+<span class="n">benchmark</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">save_path</span><span class="o">=</span><span class="s1">&#39;.&#39;</span><span class="p">,</span> <span class="n">show_plots</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="triton.testing.do_bench_cudagraph.html" class="btn btn-neutral float-left" title="Parameters" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="triton.testing.assert_close.html" class="btn btn-neutral float-right" title="assert_close" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2020, Philippe Tillet.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -1,0 +1,41 @@
+Assert the condition at runtime from the GPU device.
+
+.. code-block:: python
+
+    tl.device_assert(cond, msg='', mask=None)
+
+Parameters
+----------
+cond : tensor
+    The condition to assert. Must be a boolean tensor.
+msg : str, optional
+    The message to print if the assertion fails. Must be a string literal.
+    Default is an empty string.
+mask : tensor, optional
+    A boolean tensor indicating which elements to check. If provided, the
+    assertion is only evaluated where ``mask`` is true.
+
+Notes
+-----
+This function requires the environment variable ``TRITON_DEBUG`` to be set
+to a non-zero value to have any effect. If ``TRITON_DEBUG=0``, the assertion
+is ignored.
+
+Using the Python ``assert`` statement within a ``@triton.jit`` function is
+equivalent to calling this function, provided the error message is supplied
+as a string literal (e.g., ``assert pid == 0, "pid != 0"``).
+
+Examples
+--------
+.. code-block:: python
+
+    import triton
+    import triton.language as tl
+
+    @triton.jit
+    def kernel(pid):
+        # Assert that program ID is 0; prints "pid != 0" if false and TRITON_DEBUG is set
+        tl.device_assert(pid == 0, "pid != 0")
+
+        # Equivalent Python assert syntax
+        assert pid == 0, "pid != 0"

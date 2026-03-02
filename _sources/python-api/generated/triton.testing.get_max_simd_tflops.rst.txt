@@ -1,0 +1,65 @@
+get_max_simd_tflops
+===================
+
+.. currentmodule:: triton.testing
+
+.. autofunction:: get_max_simd_tflops
+
+Calculate the theoretical peak SIMD (single-issue scalar) performance in TFLOPS for a given CUDA device and data type.
+
+This function computes the maximum floating-point throughput based on the number of streaming multiprocessors (SMs), the GPU clock rate, and the number of operations per sub-core supported by the hardware architecture for the specified dtype.
+
+Parameters
+----------
+dtype : torch.dtype
+    The data type for which to calculate performance. Supported types are ``torch.float32``, ``torch.float16``, and ``torch.bfloat16``.
+clock_rate : float
+    The GPU clock frequency in MHz.
+device : int, optional
+    The CUDA device ID. If ``None``, defaults to the currently active device (``torch.cuda.current_device()``).
+
+Returns
+-------
+tflops : float
+    The theoretical peak performance in tera-floating-point operations per second (TFLOPS).
+
+Raises
+------
+RuntimeError
+    If the provided ``dtype`` is not supported for the device's compute capability.
+
+Notes
+-----
+The calculation distinguishes between GPU architectures based on compute capability:
+
+- **Compute Capability < 8.0 (Volta, Turing, Ampere consumer):**
+  - ``float32``: 32 operations per sub-core.
+  - ``float16``: 64 operations per sub-core.
+- **Compute Capability >= 8.0 (Ampere datacenter, Hopper, Blackwell):**
+  - ``float32``: 32 operations per sub-core.
+  - ``float16``, ``bfloat16``: 64 operations per sub-core.
+
+The formula used is:
+:math:`\text{TFLOPS} = \text{num\_subcores} \times \text{clock\_rate} \times \text{ops\_per\_sub\_core} \times 10^{-9}`
+
+where ``num_subcores`` is derived from ``multiprocessor_count * 4``.
+
+Examples
+--------
+.. code-block:: python
+
+    import torch
+    import triton.testing
+
+    # Get current device properties
+    device = torch.cuda.current_device()
+    props = torch.cuda.get_device_properties(device)
+    clock_rate_mhz = props.clock_rate / 1000.0  # Convert kHz to MHz
+
+    # Calculate peak FP32 performance
+    fp32_tflops = triton.testing.get_max_simd_tflops(torch.float32, clock_rate_mhz, device)
+    print(f"Peak FP32 SIMD performance: {fp32_tflops:.2f} TFLOPS")
+
+    # Calculate peak FP16 performance
+    fp16_tflops = triton.testing.get_max_simd_tflops(torch.float16, clock_rate_mhz, device)
+    print(f"Peak FP16 SIMD performance: {fp16_tflops:.2f} TFLOPS")

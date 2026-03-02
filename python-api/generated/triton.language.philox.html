@@ -1,0 +1,234 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>philox &mdash; Triton  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=03e43079" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/custom.css" />
+
+  
+      <script src="../../_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="philox_impl" href="triton.language.philox_impl.html" />
+    <link rel="prev" title="pair_uniform_to_normal" href="triton.language.pair_uniform_to_normal.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            Triton
+              <img src="https://cdn.openai.com/triton/assets/triton-logo.png" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../getting-started/installation.html">Installation</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Python API</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../triton.html">triton</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../triton.language.html">triton.language</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../triton.language.html#programming-model">Programming Model</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../triton.language.html#creation-ops">Creation Ops</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../triton.language.html#shape-manipulation-ops">Shape Manipulation Ops</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../triton.language.html#linear-algebra-ops">Linear Algebra Ops</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../triton.language.html#memory-pointer-ops">Memory/Pointer Ops</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../triton.language.html#indexing-ops">Indexing Ops</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../triton.language.html#math-ops">Math Ops</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../triton.language.html#reduction-ops">Reduction Ops</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../triton.language.html#scan-sort-ops">Scan/Sort Ops</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../triton.language.html#atomic-ops">Atomic Ops</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../triton.language.html#random-number-generation">Random Number Generation</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="triton.language.randint4x.html">randint4x</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.language.randint.html">triton.language.randint</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.language.rand.html">rand</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.language.randn.html">randn</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.language.pair_uniform_to_normal.html">pair_uniform_to_normal</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">philox</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#triton.language.philox"><code class="docutils literal notranslate"><span class="pre">philox()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="triton.language.philox_impl.html">philox_impl</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.language.rand4x.html">rand4x</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.language.randn4x.html">triton.language.randn4x</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.language.uint_to_uniform_float.html">uint_to_uniform_float</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../triton.language.html#iterators">Iterators</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../triton.language.html#inline-assembly">Inline Assembly</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../triton.language.html#compiler-hint-ops">Compiler Hint Ops</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../triton.language.html#debug-ops">Debug Ops</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../triton.language.html#data-types">Data Types</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.testing.html">triton.testing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton-semantics.html">Triton Semantics</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Triton MLIR Dialects</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../dialects/dialects.html">Triton MLIR Dialects and Ops</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Programming Guide</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../programming-guide/chapter-1/introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../programming-guide/chapter-2/related-work.html">Related Work</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../programming-guide/chapter-3/debugging.html">Debugging Triton</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">Triton</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../triton.language.html">triton.language</a></li>
+      <li class="breadcrumb-item active">philox</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../_sources/python-api/generated/triton.language.philox.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="philox">
+<h1>philox<a class="headerlink" href="#philox" title="Link to this heading">¶</a></h1>
+<dl class="py function">
+<dt class="sig sig-object py" id="triton.language.philox">
+<span class="sig-prename descclassname"><span class="pre">triton.language.</span></span><span class="sig-name descname"><span class="pre">philox</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">seed</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">c0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">c1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">c2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">c3</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_rounds</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#triton.language.philox" title="Link to this definition">¶</a></dt>
+<dd><p>Apply the Philox pseudo-random number generator to a state vector.</p>
+<p>This function performs <cite>n_rounds</cite> of the Philox encryption algorithm on the
+input state (<cite>c0</cite>, <cite>c1</cite>, <cite>c2</cite>, <cite>c3</cite>) using the provided <cite>seed</cite> as the key.
+It supports both 32-bit and 64-bit integer arithmetic, automatically casting
+inputs to the appropriate precision based on the dtype of <cite>c0</cite>.</p>
+<section id="parameters">
+<h2>Parameters<a class="headerlink" href="#parameters" title="Link to this heading">¶</a></h2>
+<dl class="simple">
+<dt>seed<span class="classifier">tl.tensor</span></dt><dd><p>The seed value used to initialize the generator key. Must be an integer
+type. If 64-bit, it is split into high and low 32-bit parts for 32-bit
+modes, or used directly as the low part for 64-bit modes.</p>
+</dd>
+<dt>c0<span class="classifier">tl.tensor</span></dt><dd><p>First element of the state vector. Determines the output precision
+(uint32 or uint64).</p>
+</dd>
+<dt>c1<span class="classifier">tl.tensor</span></dt><dd><p>Second element of the state vector.</p>
+</dd>
+<dt>c2<span class="classifier">tl.tensor</span></dt><dd><p>Third element of the state vector.</p>
+</dd>
+<dt>c3<span class="classifier">tl.tensor</span></dt><dd><p>Fourth element of the state vector.</p>
+</dd>
+<dt>n_rounds<span class="classifier">tl.constexpr, optional</span></dt><dd><p>Number of encryption rounds to perform. Default is 10.</p>
+</dd>
+</dl>
+</section>
+<section id="returns">
+<h2>Returns<a class="headerlink" href="#returns" title="Link to this heading">¶</a></h2>
+<dl class="simple">
+<dt>tl.tensor</dt><dd><p>A tuple of four tensors <cite>(c0, c1, c2, c3)</cite> representing the transformed
+state vector after applying the Philox rounds. The dtype matches the
+input dtype of <cite>c0</cite>.</p>
+</dd>
+</dl>
+</section>
+<section id="notes">
+<h2>Notes<a class="headerlink" href="#notes" title="Link to this heading">¶</a></h2>
+<p>This is a low-level primitive typically used by higher-level random number
+generation functions like <cite>randint4x</cite> or <cite>rand4x</cite>. Direct usage requires
+managing the state vector and offsets manually.</p>
+<p>The function asserts that the bitwidth of <cite>c0</cite> is either 32 or 64. Mixed
+precision or unsupported bitwidths will raise a compilation error.</p>
+</section>
+<section id="examples">
+<h2>Examples<a class="headerlink" href="#examples" title="Link to this heading">¶</a></h2>
+<p>Generate a block of random uint32 values using explicit state management:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">triton</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">triton.language</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">tl</span>
+
+<span class="nd">@triton</span><span class="o">.</span><span class="n">jit</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">my_kernel</span><span class="p">(</span><span class="n">seed_ptr</span><span class="p">,</span> <span class="n">output_ptr</span><span class="p">,</span> <span class="n">BLOCK_SIZE</span><span class="p">:</span> <span class="n">tl</span><span class="o">.</span><span class="n">constexpr</span><span class="p">):</span>
+    <span class="n">pid</span> <span class="o">=</span> <span class="n">tl</span><span class="o">.</span><span class="n">program_id</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+    <span class="n">offset</span> <span class="o">=</span> <span class="n">pid</span> <span class="o">*</span> <span class="n">BLOCK_SIZE</span> <span class="o">+</span> <span class="n">tl</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">BLOCK_SIZE</span><span class="p">)</span>
+
+    <span class="c1"># Initialize state with offsets</span>
+    <span class="n">c0</span> <span class="o">=</span> <span class="n">offset</span>
+    <span class="n">c1</span> <span class="o">=</span> <span class="n">tl</span><span class="o">.</span><span class="n">zeros</span><span class="p">([</span><span class="n">BLOCK_SIZE</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">tl</span><span class="o">.</span><span class="n">uint32</span><span class="p">)</span>
+    <span class="n">c2</span> <span class="o">=</span> <span class="n">tl</span><span class="o">.</span><span class="n">zeros</span><span class="p">([</span><span class="n">BLOCK_SIZE</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">tl</span><span class="o">.</span><span class="n">uint32</span><span class="p">)</span>
+    <span class="n">c3</span> <span class="o">=</span> <span class="n">tl</span><span class="o">.</span><span class="n">zeros</span><span class="p">([</span><span class="n">BLOCK_SIZE</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">tl</span><span class="o">.</span><span class="n">uint32</span><span class="p">)</span>
+
+    <span class="n">seed</span> <span class="o">=</span> <span class="n">tl</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">seed_ptr</span><span class="p">)</span>
+
+    <span class="c1"># Apply Philox rounds</span>
+    <span class="n">r0</span><span class="p">,</span> <span class="n">r1</span><span class="p">,</span> <span class="n">r2</span><span class="p">,</span> <span class="n">r3</span> <span class="o">=</span> <span class="n">tl</span><span class="o">.</span><span class="n">philox</span><span class="p">(</span><span class="n">seed</span><span class="p">,</span> <span class="n">c0</span><span class="p">,</span> <span class="n">c1</span><span class="p">,</span> <span class="n">c2</span><span class="p">,</span> <span class="n">c3</span><span class="p">)</span>
+
+    <span class="c1"># Use the first stream of random numbers</span>
+    <span class="n">tl</span><span class="o">.</span><span class="n">store</span><span class="p">(</span><span class="n">output_ptr</span> <span class="o">+</span> <span class="n">offset</span><span class="p">,</span> <span class="n">r0</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="triton.language.pair_uniform_to_normal.html" class="btn btn-neutral float-left" title="pair_uniform_to_normal" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="triton.language.philox_impl.html" class="btn btn-neutral float-right" title="philox_impl" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2020, Philippe Tillet.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -1,0 +1,39 @@
+MockTensor
+==========
+
+.. currentmodule:: triton
+
+.. class:: MockTensor(dtype, shape=None)
+
+   Mock tensor object used for kernel warmup without allocating real GPU memory.
+
+   This class mimics the interface of a real tensor (providing ``dtype``, ``shape``,
+   ``stride``, ``data_ptr``, etc.) to allow ``kernel.warmup`` to perform type
+   specialization and compilation without requiring actual tensor data.
+
+   Parameters
+   ----------
+   dtype : dtype
+       The data type of the mock tensor (e.g., ``torch.float32``).
+   shape : list[int], optional
+       The shape of the mock tensor. If None, defaults to ``[1]``.
+
+   Examples
+   --------
+   .. code-block:: python
+
+      import torch
+      import triton
+      import triton.language as tl
+
+      @triton.jit
+      def kernel(x_ptr, n):
+          # Kernel implementation
+          pass
+
+      # Warmup the kernel without allocating real memory
+      kernel.warmup(
+          triton.MockTensor(torch.float32, shape=[1024]),
+          1024,
+          grid=(1,)
+      )

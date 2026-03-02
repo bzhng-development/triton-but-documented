@@ -1,0 +1,85 @@
+.. py:class:: triton.language.range
+
+   Special iterator for defining loops in :code:`@triton.jit` functions with
+   compiler optimization hints.
+
+   Mimics Python's :code:`range` semantics while exposing loop scheduling
+   parameters to the Triton compiler, such as software pipelining stages,
+   unrolling factors, and warp specialization.
+
+   .. rubric:: Parameters
+
+   arg1 : int or constexpr
+      If :code:`arg2` is None, this is the end value (start defaults to 0).
+      Otherwise, this is the start value.
+   arg2 : int or constexpr, optional
+      The end value (exclusive). Defaults to None.
+   step : int or constexpr, optional
+      The step value. Defaults to 1.
+   num_stages : int, optional
+      Number of stages for software pipelining. Enables overlapping loop
+      iterations to hide memory latency. Distinct from kernel-level
+      :code:`num_stages` as this targets loads within the specific loop.
+   loop_unroll_factor : int, optional
+      Factor by which to unroll the loop. Values less than 2 disable unrolling.
+   disallow_acc_multi_buffer : bool, optional
+      If True, prevents multi-buffering of the dot accumulator in the loop.
+      Defaults to False.
+   flatten : bool, optional
+      If True, flattens nested loops starting at this loop into a single loop
+      to facilitate pipelining and avoid stage stalling. Defaults to False.
+   warp_specialize : bool, optional
+      If True, enables automatic warp specialization, partitioning memory, MMA,
+      and vector operations into separate async partitions. Increases total
+      warp count. Supported on Blackwell GPUs for simple matmul loops.
+      Defaults to False.
+   disable_licm : bool, optional
+      If True, disables Loop Invariant Code Motion (LICM). Useful to prevent
+      long live ranges within the loop. Defaults to False.
+
+   .. rubric:: Notes
+
+   This class is intended solely for use within the body of functions decorated
+   with :code:`@triton.jit`. Instantiating or iterating over this object in
+   standard Python code will raise a RuntimeError.
+
+   Warp specialization (:code:`warp_specialize=True`) is currently experimental
+   and hardware-specific (Blackwell architecture).
+
+   .. rubric:: Examples
+
+   .. code-block:: python
+
+      import triton
+      import triton.language as tl
+
+      @triton.jit
+      def vector_add_kernel(
+          X_ptr, Y_ptr, Z_ptr,
+          N: tl.constexpr,
+          BLOCK_SIZE: tl.constexpr,
+      ):
+          pid = tl.program_id(0)
+          block_start = pid * BLOCK_SIZE
+          offsets = block_start + tl.arange(0, BLOCK_SIZE)
+          mask = offsets < N
+
+          # Loop with 3-stage software pipelining
+          acc = tl.zeros([BLOCK_SIZE], dtype=tl.float32)
+          for i in tl.range(4, num_stages=3):
+              x = tl.load(X_ptr + offsets + i * BLOCK_SIZE, mask=mask, padding_option="zero")
+              y = tl.load(Y_ptr + offsets + i * BLOCK_SIZE, mask=mask, padding_option="zero")
+              acc += x + y
+
+          tl.store(Z_ptr + offsets, acc, mask=mask)
+
+      @triton.jit
+      def matmul_kernel_warp_spec(
+          A_ptr, B_ptr, C_ptr,
+          M, N, K,
+          BLOCK_M: tl.constexpr, BLOCK_N: tl.constexpr, BLOCK_K: tl.constexpr,
+      ):
+          # Enable warp specialization for the inner loop
+          for k in tl.range(0, K, BLOCK_K, warp_specialize=True):
+              # ... matrix multiplication logic ...
+              pass

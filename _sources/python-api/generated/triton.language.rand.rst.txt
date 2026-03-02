@@ -1,0 +1,49 @@
+rand
+====
+
+.. currentmodule:: triton.language
+
+.. function:: rand(seed, offset, n_rounds=10)
+
+   Generate random numbers from a uniform distribution :math:`U(0, 1)`.
+
+   Given a :code:`seed` scalar and an :code:`offset` block, returns a block of
+   random :code:`float32` values. Uses the Philox pseudo-random number generator.
+
+   Parameters
+   ----------
+   seed : int
+       The seed for generating random numbers.
+   offset : tl.tensor
+       The offsets to generate random numbers for. Typically derived from
+       program IDs to ensure uniqueness across threads.
+   n_rounds : tl.constexpr, optional
+       Number of Philox rounds to run. Default is 10.
+
+   Returns
+   -------
+   tl.tensor
+       A block of random :code:`float32` values in the range :math:`[0, 1)`.
+
+   Notes
+   -----
+   This function generates 32-bit or 64-bit integers via :func:`randint` and
+   converts them to floats using a numerically stable scaling method.
+
+   Examples
+   --------
+   .. code-block:: python
+
+      import triton
+      import triton.language as tl
+
+      @triton.jit
+      def random_kernel(
+          output_ptr,
+          seed,
+          BLOCK_SIZE: tl.constexpr,
+      ):
+          pid = tl.program_id(0)
+          offset = pid * BLOCK_SIZE + tl.arange(0, BLOCK_SIZE)
+          random_vals = tl.rand(seed, offset)
+          tl.store(output_ptr + offset, random_vals)

@@ -1,0 +1,35 @@
+.. py:function:: rsqrt(x, _semantic=None)
+
+   Computes the element-wise inverse square root of :code:`x`.
+
+   Parameters
+   ----------
+   x : tl.tensor
+      The input tensor. Must be a floating-point type (:code:`fp32` or :code:`fp64`).
+
+   Returns
+   -------
+   tl.tensor
+      A tensor containing the inverse square root of each element in :code:`x`, i.e., :math:`1 / \sqrt{x}`.
+
+   Notes
+   -----
+   This function can also be called as a member function on :py:class:`tensor`,
+   as :code:`x.rsqrt()` instead of :code:`tl.rsqrt(x)`.
+
+   The operation is only defined for positive values; behavior for negative inputs or zero is hardware-dependent.
+
+   Examples
+   --------
+   .. code-block:: python
+
+      import triton
+      import triton.language as tl
+
+      @triton.jit
+      def kernel(x_ptr, y_ptr, BLOCK_SIZE: tl.constexpr):
+          pid = tl.program_id(0)
+          offsets = pid * BLOCK_SIZE + tl.arange(0, BLOCK_SIZE)
+          x = tl.load(x_ptr + offsets)
+          y = tl.rsqrt(x)
+          tl.store(y_ptr + offsets, y)

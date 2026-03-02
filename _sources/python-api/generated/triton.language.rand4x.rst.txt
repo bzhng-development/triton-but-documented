@@ -1,0 +1,61 @@
+rand4x
+======
+
+.. currentmodule:: triton.language
+
+Generate four independent blocks of uniform random float32 values.
+
+Given a scalar ``seed`` and a block of ``offsets``, returns four blocks of
+random numbers uniformly distributed in the interval :math:`[0, 1)`. This
+function utilizes the Philox counter-based PRNG and is more efficient than
+calling :func:`rand` four times due to reduced kernel launch overhead and
+optimized state progression.
+
+Parameters
+----------
+seed : scalar
+    The seed for the pseudo-random number generator. Must be an integer type.
+offsets : block
+    A block of offsets defining the sequence indices for the random numbers.
+    Typically generated using ``tl.arange`` or pointer offsets.
+n_rounds : constexpr, optional
+    The number of mixing rounds for the Philox cipher. Default is 10.
+    Increasing this value improves statistical quality at the cost of performance.
+
+Returns
+-------
+u1, u2, u3, u4 : block
+    Four blocks of ``float32`` values sampled from :math:`U(0, 1)`.
+
+Notes
+-----
+The underlying algorithm is Philox, a cryptographically strong counter-based
+PRNG designed for parallel architectures. The conversion from integer to float
+uses a numerically stable method to ensure uniformity across the representable
+range of ``float32``.
+
+Examples
+--------
+.. code-block:: python
+
+    import triton
+    import triton.language as tl
+
+    @triton.jit
+    def kernel(
+        out_ptr1, out_ptr2, out_ptr3, out_ptr4,
+        seed,
+        BLOCK_SIZE: tl.constexpr,
+    ):
+        # Map program id to offset block
+        pid = tl.program_id(axis=0)
+        offsets = pid * BLOCK_SIZE + tl.arange(0, BLOCK_SIZE)
+        
+        # Generate 4 independent streams of random numbers
+        r1, r2, r3, r4 = tl.rand4x(seed, offsets)
+        
+        # Store results
+        tl.store(out_ptr1 + offsets, r1)
+        tl.store(out_ptr2 + offsets, r2)
+        tl.store(out_ptr3 + offsets, r3)
+        tl.store(out_ptr4 + offsets, r4)

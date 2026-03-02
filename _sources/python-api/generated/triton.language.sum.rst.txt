@@ -1,0 +1,46 @@
+.. py:function:: triton.language.sum(input, axis=None, keep_dims=False, dtype=None)
+
+   Returns the sum of all elements in the :code:`input` tensor along the provided :code:`axis`.
+
+   The reduction operation is associative and commutative. This function can also be called as a member function on :py:class:`tensor`, as :code:`x.sum(...)` instead of :code:`sum(x, ...)`.
+
+   Parameters
+   ----------
+   input : tl.tensor
+       The input values to reduce.
+   axis : int, optional
+       The dimension along which the reduction should be done. If ``None``, reduce all dimensions.
+   keep_dims : bool, optional
+       If ``True``, keep the reduced dimensions with length 1. Default is ``False``.
+   dtype : tl.dtype, optional
+       The desired data type of the returned tensor. If specified, the input tensor is casted to :code:`dtype` before the operation is performed. This is useful for preventing data overflows. If not specified, integer and bool dtypes are upcasted to :code:`tl.int32` and float dtypes are upcasted to at least :code:`tl.float32`.
+
+   Returns
+   -------
+   tl.tensor
+       A tensor containing the sum of the input elements.
+
+   Notes
+   -----
+   If :code:`dtype` is not provided, the function automatically promotes low-precision integers to :code:`tl.int32` (preserving sign) and low-precision floats to at least :code:`tl.float32` to avoid overflow during accumulation.
+
+   Examples
+   --------
+   .. code-block:: python
+
+       import triton
+       import triton.language as tl
+
+       @triton.jit
+       def kernel(X, Y, BLOCK_SIZE: tl.constexpr):
+           pid = tl.program_id(0)
+           offs = tl.arange(0, BLOCK_SIZE)
+           x = tl.load(X + pid * BLOCK_SIZE + offs)
+           
+           # Sum all elements in the block
+           total = tl.sum(x)
+           
+           # Sum along a specific axis (if x is multi-dimensional)
+           # row_sum = tl.sum(x, axis=0)
+           
+           tl.store(Y + pid, total)

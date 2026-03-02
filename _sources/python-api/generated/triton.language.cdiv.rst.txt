@@ -1,0 +1,53 @@
+cdiv
+====
+
+.. currentmodule:: triton.language
+
+.. function:: cdiv(x, div)
+
+   Computes the ceiling division of ``x`` by ``div``.
+
+   Equivalent to ``(x + div - 1) // div`` for integer arithmetic, commonly used
+   to calculate grid dimensions or loop bounds in GPU kernels.
+
+   Parameters
+   ----------
+   x : Block
+       The dividend. Can be a scalar or a tensor (Block).
+   div : Block
+       The divisor. Can be a scalar or a tensor (Block). Must be non-zero.
+
+   Returns
+   -------
+   Block
+       The result of the ceiling division. The type matches the input type.
+
+   Notes
+   -----
+   This function is decorated with ``@core._tensor_member_fn``, allowing it to
+   be called as a method on tensor objects: ``x.cdiv(div)``.
+
+   The operation is performed element-wise if inputs are tensors.
+
+   Examples
+   --------
+   >>> import triton
+   >>> import triton.language as tl
+   >>>
+   >>> @triton.jit
+   ... def kernel(x_ptr, div_ptr, out_ptr, BLOCK_SIZE: tl.constexpr):
+   ...     pid = tl.program_id(0)
+   ...     x = tl.load(x_ptr + pid)
+   ...     div = tl.load(div_ptr + pid)
+   ...     # Compute ceiling division
+   ...     result = tl.cdiv(x, div)
+   ...     tl.store(out_ptr + pid, result)
+   ...
+   >>> # Using the member function syntax
+   >>> @triton.jit
+   ... def kernel_method(x_ptr, div_ptr, out_ptr, BLOCK_SIZE: tl.constexpr):
+   ...     pid = tl.program_id(0)
+   ...     x = tl.load(x_ptr + pid)
+   ...     div = tl.load(div_ptr + pid)
+   ...     result = x.cdiv(div)  # Equivalent to tl.cdiv(x, div)
+   ...     tl.store(out_ptr + pid, result)

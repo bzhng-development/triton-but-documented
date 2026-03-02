@@ -1,0 +1,79 @@
+store_tensor_descriptor
+=======================
+
+Store a block of data to a tensor descriptor.
+
+.. function:: triton.language.store_tensor_descriptor(desc, offsets, value, _semantic=None)
+
+   Store a block of data from ``value`` into the global memory tensor described by ``desc``, starting at the element indices specified by ``offsets``.
+
+   This operation utilizes the Tensor Memory Accelerator (TMA) hardware on supported NVIDIA GPUs for efficient asynchronous memory transfers. Values written outside the tensor bounds are ignored.
+
+   Parameters
+   ----------
+   desc : tensor_descriptor_base
+       The tensor descriptor object created via :func:`triton.language.make_tensor_descriptor`.
+   offsets : Sequence[constexpr | tensor]
+       A sequence of offsets specifying the starting coordinate for the store operation in each dimension of the tensor.
+   value : tensor
+       The tensor block containing the data to be stored. The shape of ``value`` must match the ``block_shape`` defined in the descriptor.
+   _semantic : optional
+       Internal argument used by the compiler; do not set manually.
+
+   Returns
+   -------
+   tensor
+       Returns the stored ``value`` tensor.
+
+   Notes
+   -----
+   - Offsets must be multiples of 16 bytes for alignment requirements.
+   - This function is typically called within a :func:`triton.jit` decorated kernel.
+   - Requires a global memory allocation configured via :func:`triton.set_allocator`.
+
+   Examples
+   --------
+   .. code-block:: python
+
+       import triton
+       import triton.language as tl
+       import torch
+
+       @triton.jit
+       def kernel(desc, M_BLOCK: tl.constexpr, N_BLOCK: tl.constexpr):
+           pid_m = tl.program_id(0)
+           pid_n = tl.program_id(1)
+
+           # Calculate starting offsets for this block
+           offsets_m = pid_m * M_BLOCK
+           offsets_n = pid_n * N_BLOCK
+
+           # Load data from the descriptor
+           data = tl.load_tensor_descriptor(desc, [offsets_m, offsets_n])
+
+           # Perform some operation
+           result = data * 2.0
+
+           # Store the result back to the descriptor at the same location
+           tl.store_tensor_descriptor(desc, [offsets_m, offsets_n], result)
+
+       # Setup and launch
+       M, N = 1024, 1024
+       block_m, block_n = 32, 32
+       x = torch.randn((M, N), device='cuda')
+
+       # Define allocator for TMA descriptors
+       def alloc_fn(size: int, alignment: int, stream: int):
+           return torch.empty(size, device='cuda', dtype=torch.int8)
+
+       triton.set_allocator(alloc_fn)
+
+       desc = tl.make_tensor_descriptor(
+           x,
+           shape=[M, N],
+           strides=[N, 1],
+           block_shape=[block_m, block_n],
+       )
+
+       grid = (M // block_m, N // block_n)
+       kernel[grid](desc, block_m, block_n)

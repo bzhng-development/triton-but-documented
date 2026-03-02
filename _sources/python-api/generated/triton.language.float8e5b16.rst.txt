@@ -1,0 +1,41 @@
+triton.language.float8e5b16
+==========================
+
+.. currentmodule:: triton.language
+
+.. py:data:: float8e5b16
+
+   8-bit floating point type with 5 exponent bits and 16 bias (E5M16).
+
+   This data type corresponds to the ``E5M16`` format, featuring an exponent
+   width of 5 bits and a bias of 16. It is designed for high-dynamic-range
+   workloads where preserving exponent range is prioritized over mantissa
+   precision.
+
+   .. note::
+
+      This type is hardware-dependent and may only be available on specific
+      GPU architectures (e.g., NVIDIA Hopper or later). Attempting to use
+      this type on unsupported hardware will result in a compilation error.
+
+   Example
+   -------
+
+   .. code-block:: python
+
+      import triton
+      import triton.language as tl
+
+      @triton.jit
+      def kernel(X_ptr, Y_ptr, BLOCK_SIZE: tl.constexpr):
+          pid = tl.program_id(0)
+          offs = pid * BLOCK_SIZE + tl.arange(0, BLOCK_SIZE)
+
+          # Load data as float8e5b16
+          x = tl.load(X_ptr + offs).to(tl.float8e5b16)
+
+          # Perform computation
+          y = x * 2.0
+
+          # Store result
+          tl.store(Y_ptr + offs, y)

@@ -1,0 +1,57 @@
+randint4x
+=========
+
+.. currentmodule:: triton.language
+
+.. autofunction:: randint4x
+
+Given a ``seed`` scalar and an ``offset`` block, returns four blocks of random ``int32`` values.
+
+This function serves as the maximally efficient entry point to Triton's Philox pseudo-random number generator, producing four independent streams of random integers in a single invocation.
+
+Parameters
+----------
+seed : scalar
+    The seed for generating random numbers. Must be an integer type.
+offset : block
+    The offsets to generate random numbers for. Supports ``int32`` or ``int64`` types.
+    If ``int64``, the value is split into high and low 32-bit components.
+n_rounds : constexpr, optional
+    Number of rounds for the Philox cipher. Default is 10.
+
+Returns
+-------
+tuple of blocks
+    A tuple containing four ``int32`` blocks ``(r0, r1, r2, r3)`` representing
+    independent streams of random numbers derived from the seed and offset.
+
+Notes
+-----
+*   For generating multiple streams of random numbers, ``randint4x`` is significantly
+    faster than calling ``randint`` four times due to reduced kernel overhead and
+    optimized Philox state handling.
+*   The underlying algorithm uses the Philox-4x32-10 cipher.
+*   If ``offset`` is 64-bit, the upper 32 bits are used as a secondary counter to
+    ensure uniqueness across large ranges.
+
+Examples
+--------
+.. code-block:: python
+
+    import triton
+    import triton.language as tl
+
+    @triton.jit
+    def kernel(
+        output_ptr,
+        seed,
+        BLOCK_SIZE: tl.constexpr,
+    ):
+        pid = tl.program_id(axis=0)
+        offset = pid * BLOCK_SIZE + tl.arange(0, BLOCK_SIZE)
+        
+        # Generate four independent streams of random int32
+        r0, r1, r2, r3 = tl.randint4x(seed, offset)
+        
+        # Store the first stream
+        tl.store(output_ptr + offset, r0)

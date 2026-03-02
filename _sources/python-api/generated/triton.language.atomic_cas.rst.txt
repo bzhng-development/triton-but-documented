@@ -1,0 +1,40 @@
+.. py:function:: atomic_cas(pointer, cmp, val, sem=None, scope=None)
+
+   Performs an atomic compare-and-swap at the memory location specified by ``pointer``.
+
+   Atomically checks if the value at ``pointer`` equals ``cmp``. If true, stores ``val``; otherwise, leaves the memory unchanged. Returns the value stored at ``pointer`` before the operation.
+
+   Parameters
+   ----------
+   pointer : tl.pointer_type
+       The memory location(s) to operate on. Must be a pointer or block of pointers.
+   cmp : tl.tensor
+       The expected value(s) to compare against. Must have the same dtype as ``pointer.dtype.element_ty``.
+   val : tl.tensor
+       The value(s) to store if the comparison succeeds. Must have the same dtype as ``pointer.dtype.element_ty``.
+   sem : str, optional
+       Specifies the memory semantics. Acceptable values are ``"acquire"``, ``"release"``, ``"acq_rel"``, and ``"relaxed"``. Defaults to ``"acq_rel"``.
+   scope : str, optional
+       Defines the scope of threads observing the synchronization effect. Acceptable values are ``"gpu"`` (default), ``"cta"`` (thread block), or ``"sys"`` (system-wide).
+
+   Returns
+   -------
+   tl.tensor
+       The data stored at ``pointer`` before the atomic operation.
+
+   Notes
+   -----
+   This function can also be called as a member function on :py:class:`tl.tensor`, as ``x.atomic_cas(cmp, val)`` instead of ``tl.atomic_cas(x, cmp, val)``.
+
+   The operation is performed element-wise for block inputs.
+
+   Examples
+   --------
+   .. code-block:: python
+
+      @triton.jit
+      def kernel(ptr, old_val, new_val, BLOCK: tl.constexpr):
+          pid = tl.program_id(0)
+          addr = ptr + pid
+          prev = tl.atomic_cas(addr, old_val, new_val)
+          # prev holds the value before the swap

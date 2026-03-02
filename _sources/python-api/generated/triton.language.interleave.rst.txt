@@ -1,0 +1,47 @@
+interleave
+============
+
+.. currentmodule:: triton.language
+
+.. function:: interleave(a, b)
+
+   Interleaves the values of two tensors along their last dimension.
+
+   Takes two tensors of identical shape and returns a new tensor where elements
+   from ``a`` and ``b`` are alternated along the last axis. The output shape
+   matches the input shape except the last dimension is doubled.
+
+   Parameters
+   ----------
+   a : tensor
+       The first input tensor.
+   b : tensor
+       The second input tensor. Must have the same shape as ``a``.
+
+   Returns
+   -------
+   tensor
+       A tensor containing interleaved values. If inputs have shape ``[..., N]``,
+       the output has shape ``[..., 2*N]``.
+
+   Notes
+   -----
+   This operation is equivalent to ``tl.join(a, b).reshape(a.shape[:-1] + [2 * a.shape[-1]])``.
+   Both input tensors must have the same shape. For 1D inputs (scalars), the
+   function returns a 1D tensor of length 2.
+
+   Examples
+   --------
+   .. code-block:: python
+
+       import triton.language as tl
+
+       # Interleave two 1D tensors
+       a = tl.arange(0, 4)  # [0, 1, 2, 3]
+       b = tl.arange(4, 8)  # [4, 5, 6, 7]
+       c = tl.interleave(a, b)  # [0, 4, 1, 5, 2, 6, 3, 7]
+
+       # Interleave two 2D tensors
+       a = tl.reshape(tl.arange(0, 8), (2, 4))
+       b = tl.reshape(tl.arange(8, 16), (2, 4))
+       c = tl.interleave(a, b)  # Shape: (2, 8)

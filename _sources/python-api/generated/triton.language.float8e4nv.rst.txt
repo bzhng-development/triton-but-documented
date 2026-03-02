@@ -1,0 +1,61 @@
+triton.language.float8e4nv
+=========================
+
+.. currentmodule:: triton.language
+
+8-bit floating point type (E4M3) compatible with NVIDIA Hopper architecture.
+
+This dtype represents the `float8_e4m3fn` format defined in the NVIDIA Hopper
+architecture, consisting of 1 sign bit, 4 exponent bits, and 3 mantissa bits.
+It supports NaN values but does not support infinities. This type is optimized
+for deep learning workloads on H100 and later GPUs.
+
+Parameters
+----------
+None
+    This is a dtype instance and does not accept runtime parameters.
+
+Returns
+-------
+dtype
+    A scalar type object representing the 8-bit E4M3 floating point format.
+
+Notes
+-----
+*   This type is only supported on GPUs with compute capability >= 9.0 (Hopper).
+*   Attempting to use this type on unsupported hardware will result in a
+    compilation error.
+*   The range of representable values is approximately ``[0.0, 448.0]`` with
+    subnormal support.
+*   In Triton kernels, variables typed with this dtype are stored in registers
+    or shared memory as 8-bit values, enabling higher throughput for matrix
+    operations compared to ``float16`` or ``float32``.
+
+Examples
+--------
+.. code-block:: python
+
+    import triton
+    import triton.language as tl
+
+    @triton.jit
+    def fp8_kernel(
+        X_ptr, Y_ptr, N,
+        BLOCK_SIZE: tl.constexpr,
+    ):
+        pid = tl.program_id(axis=0)
+        offs = pid * BLOCK_SIZE + tl.arange(0, BLOCK_SIZE)
+        mask = offs < N
+
+        # Load data as float8e4nv
+        x = tl.load(X_ptr + offs, mask=mask, other=0.0).to(tl.float8e4nv)
+
+        # Perform computation in FP8
+        y = x * 2.0
+
+        # Store result
+        tl.store(Y_ptr + offs, y, mask=mask)
+
+    # Launch configuration requires Hopper GPU (sm_90+)
+    # grid = lambda meta: (triton.cdiv(N, meta['BLOCK_SIZE']),)
+    # fp8_kernel[grid](x_ptr, y_ptr, N, BLOCK_SIZE=128)

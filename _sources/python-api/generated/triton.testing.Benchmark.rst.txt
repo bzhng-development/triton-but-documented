@@ -1,0 +1,71 @@
+class triton.testing.Benchmark
+==============================
+
+Configuration container for generating performance line plots via :code:`perf_report`.
+
+.. code-block:: python
+
+    Benchmark(x_names, x_vals, line_arg, line_vals, line_names, plot_name, args, xlabel='', ylabel='', x_log=False, y_log=False, styles=None)
+
+Parameters
+----------
+x_names : list of str
+    Names of the arguments to vary along the x-axis.
+x_vals : list of any
+    Values to assign to :code:`x_names`. If a list of scalars is provided with multiple
+    :code:`x_names`, all arguments receive the same value. If a list of tuples/lists,
+    each element must match the length of :code:`x_names`.
+line_arg : str
+    Argument name that distinguishes different lines in the plot.
+line_vals : list of any
+    Values to assign to :code:`line_arg` for each line.
+line_names : list of str
+    Display labels for each line corresponding to :code:`line_vals`.
+plot_name : str
+    Title identifier for the plot and output files.
+args : dict
+    Fixed keyword arguments passed to the benchmarked function throughout all runs.
+xlabel : str, optional
+    Label for the x-axis. Defaults to the first entry in :code:`x_names` if empty.
+ylabel : str, optional
+    Label for the y-axis.
+x_log : bool, optional
+    If True, set the x-axis to logarithmic scale. Default is False.
+y_log : bool, optional
+    If True, set the y-axis to logarithmic scale. Default is False.
+styles : list of tuple, optional
+    List of :code:`(color, linestyle)` tuples to style each line. If None, default
+    matplotlib styles are used.
+
+Notes
+-----
+Instances of this class are typically passed to :func:`triton.testing.perf_report`
+to decorate a benchmark function. The resulting object's :code:`run()` method
+executes the benchmarks, generates plots, and optionally saves data to CSV.
+
+Examples
+--------
+.. code-block:: python
+
+    import triton
+    import triton.testing as tt
+
+    @triton.jit
+    def kernel(X, stride):
+        # kernel implementation
+        pass
+
+    def run_bench():
+        bench = tt.Benchmark(
+            x_names=['size'],
+            x_vals=[2**i for i in range(10, 20)],
+            line_arg='provider',
+            line_vals=['triton', 'torch'],
+            line_names=['Triton', 'PyTorch'],
+            plot_name='vector_add',
+            args={},
+            ylabel='GB/s',
+            x_log=True,
+        )
+        fn = tt.perf_report(bench)(lambda size, provider: ...)
+        fn.run(save_path='./results')

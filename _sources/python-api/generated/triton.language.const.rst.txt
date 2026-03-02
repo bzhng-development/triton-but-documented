@@ -1,0 +1,30 @@
+.. py:class:: triton.language.const
+
+   Type annotation for pointers to constant (read-only) data.
+
+   This class is used exclusively as a type hint to mark pointers referencing
+   constant memory. It enforces type consistency: pointers marked with
+   :code:`const` cannot be passed to :py:func:`triton.language.store`, and
+   control flow paths must maintain consistent constness (e.g., a function
+   cannot return a constant pointer in one branch and a mutable pointer in
+   another).
+
+   .. rubric:: Notes
+
+   Constness is part of the pointer type semantics in Triton. Attempting to
+   store through a :code:`const` pointer will result in a compilation error.
+
+   .. rubric:: Examples
+
+   .. code-block:: python
+
+      import triton
+      import triton.language as tl
+
+      @triton.jit
+      def load_kernel(ptr: tl.const_pointer, out_ptr, BLOCK: tl.constexpr):
+          # Legal: loading from const pointer
+          data = tl.load(ptr + tl.arange(0, BLOCK))
+          # Illegal: storing to const pointer (compile-time error)
+          # tl.store(ptr, data)  # Error
+          tl.store(out_ptr, data)

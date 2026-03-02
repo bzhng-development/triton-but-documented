@@ -1,0 +1,44 @@
+static_print
+============
+
+.. currentmodule:: triton.language
+
+.. autofunction:: static_print
+
+Print the values at compile time. The parameters match the builtin :code:`print`.
+
+.. note::
+   Calling the Python builtin :code:`print` inside a JIT function is not equivalent to :code:`static_print`. The builtin maps to :code:`device_print`, which emits runtime GPU print instructions with different argument requirements.
+
+Parameters
+----------
+*values : variadic
+    Values to print. These must be compile-time constants (e.g., :code:`constexpr` or Python literals).
+sep : str, optional
+    String inserted between values. Default is a space.
+end : str, optional
+    String appended after the last value. Default is a newline.
+file : object, optional
+    Ignored. Provided for API compatibility with builtin :code:`print`.
+flush : bool, optional
+    Ignored. Provided for API compatibility with builtin :code:`print`.
+
+Returns
+-------
+None
+
+Notes
+-----
+This function emits output during compilation (to stdout/stderr of the compiler process), not during kernel execution. It is useful for debugging metaprogramming logic or inspecting compile-time constant values.
+
+Examples
+--------
+.. code-block:: python
+
+    import triton
+    import triton.language as tl
+
+    @triton.jit
+    def kernel(BLOCK_SIZE: tl.constexpr):
+        tl.static_print(f"BLOCK_SIZE={BLOCK_SIZE}")
+        # Kernel logic here

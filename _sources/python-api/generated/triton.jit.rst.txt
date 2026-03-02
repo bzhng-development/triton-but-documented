@@ -1,0 +1,91 @@
+triton.jit
+============
+
+Decorator for JIT-compiling a Python function into a GPU kernel using the Triton compiler.
+
+When applied, the function is transformed into a ``JITFunction`` that can be launched on the GPU with a specified grid configuration. The decorated function operates in a restricted environment, having access only to Python primitives, Triton language builtins, its own arguments, and other JIT-compiled functions.
+
+.. rubric:: Notes
+
+Arguments passed to a JIT-compiled function are implicitly converted to pointers if they possess a ``.data_ptr()`` method and a ``.dtype`` attribute (e.g., PyTorch tensors).
+
+The body of a JIT-compiled function cannot access arbitrary Python global state or libraries. It is limited to:
+
+* Python primitives (e.g., ``int``, ``float``, ``range``).
+* Builtins within the ``triton.language`` package.
+* Arguments passed directly to the function.
+* Other functions decorated with ``@triton.jit``.
+
+.. rubric:: Parameters
+
+**fn** : Callable, optional
+    The function to be JIT-compiled. If provided, the decorator is applied immediately. If omitted, the decorator returns a configuration function allowing keyword arguments.
+
+**version** : any, optional
+    Version identifier for the kernel. Used to manage kernel cache invalidation.
+
+**repr** : Callable, optional
+    A custom function to generate a string representation of the kernel for debugging or logging.
+
+**launch_metadata** : Callable, optional
+    A function to attach custom metadata to the kernel launch.
+
+**do_not_specialize** : Iterable of int or str, optional
+    Indices or parameter names of arguments that should not trigger kernel specialization. By default, Triton generates specialized kernels for different argument values; this option disables that behavior for specific arguments.
+
+**do_not_specialize_on_alignment** : Iterable of int or str, optional
+    Indices or parameter names of arguments for which alignment information should not trigger specialization.
+
+**debug** : bool, optional
+    If ``True``, enables debug mode, preserving source line information and potentially disabling certain optimizations for easier debugging.
+
+**noinline** : bool, optional
+    If ``True``, prevents the compiler from inlining this function when called by other kernels.
+
+.. rubric:: Returns
+
+**KernelInterface**
+    A callable proxy representing the compiled kernel. When called with ``[grid]``, it returns a launch configuration. Direct execution via ``.run()`` requires a ``grid`` argument.
+
+.. rubric:: Examples
+
+.. code-block:: python
+
+    import triton
+    import triton.language as tl
+    import torch
+
+    @triton.jit
+    def add_kernel(
+        x_ptr,
+        y_ptr,
+        output_ptr,
+        n_elements,
+        BLOCK_SIZE: tl.constexpr,
+    ):
+        pid = tl.program_id(axis=0)
+        block_start = pid * BLOCK_SIZE
+        offsets = block_start + tl.arange(0, BLOCK_SIZE)
+        mask = offsets < n_elements
+        x = tl.load(x_ptr + offsets, mask=mask)
+        y = tl.load(y_ptr + offsets, mask=mask)
+        output = x + y
+        tl.store(output_ptr + offsets, output, mask=mask)
+
+    # Define grid size
+    n_elements = 1024
+    BLOCK_SIZE = 128
+    grid = (triton.cdiv(n_elements, BLOCK_SIZE),)
+
+    # Allocate tensors
+    x = torch.ones(n_elements, device='cuda')
+    y = torch.ones(n_elements, device='cuda')
+    output = torch.empty_like(x)
+
+    # Launch kernel
+    add_kernel[grid](x, y, output, n_elements, BLOCK_SIZE=BLOCK_SIZE)
+
+    # Using keyword arguments for configuration
+    @triton.jit(do_not_specialize=["n_elements"], debug=True)
+    def flexible_kernel(...):
+        ...

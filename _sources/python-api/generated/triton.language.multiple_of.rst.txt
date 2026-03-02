@@ -1,0 +1,37 @@
+.. py:function:: triton.language.multiple_of(input, values, _semantic=None)
+
+   Let the compiler know that the values in ``input`` are all multiples of the provided ``values``.
+
+   This function acts as a hint to the Triton compiler, enabling potential optimizations such as loop unrolling or vectorization by asserting alignment or stride properties at compile time.
+
+   Parameters
+   ----------
+   input : tl.tensor
+      The input tensor whose values are asserted to be multiples.
+   values : list[tl.constexpr] or tl.constexpr
+      A compile-time constant integer or a list of compile-time constant integers. Each element must be of type ``tl.constexpr[int]``. The compiler asserts that every element in ``input`` is a multiple of these values.
+
+   Returns
+   -------
+   tl.tensor
+      The input tensor ``input``, unchanged, but with attached compiler hints.
+
+   Raises
+   ------
+   TypeError
+      If any element in ``values`` is not a ``tl.constexpr`` or if its underlying value is not an integer.
+
+   Notes
+   -----
+   This function only affects compilation behavior and has no runtime effect. It requires ``values`` to be known at compile time. Passing runtime values will result in a compilation error.
+
+   Examples
+   --------
+   >>> import triton
+   >>> import triton.language as tl
+   >>> @triton.jit
+   ... def kernel(x_ptr, BLOCK: tl.constexpr):
+   ...     offset = tl.arange(0, BLOCK)
+   ...     # Assert that offsets are multiples of 4
+   ...     offset = tl.multiple_of(offset, [tl.constexpr(4)])
+   ...     tl.store(x_ptr + offset, tl.load(x_ptr + offset))

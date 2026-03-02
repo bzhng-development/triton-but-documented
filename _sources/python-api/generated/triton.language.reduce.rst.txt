@@ -1,0 +1,61 @@
+.. py:function:: triton.language.reduce(input, axis, combine_fn, keep_dims=False)
+
+   Applies the ``combine_fn`` to all elements in ``input`` tensors along the provided ``axis``.
+
+   Parameters
+   ----------
+   input : tl.tensor or tuple of tl.tensor
+       The input tensor(s) to reduce.
+   axis : int or None
+       The dimension along which the reduction should be done. If ``None``, reduce all dimensions.
+   combine_fn : Callable
+       A function to combine two groups of scalar tensors. Must be marked with ``@triton.jit``.
+       The function must accept scalar arguments corresponding to the element type of ``input``
+       and return a tensor (or tuple of tensors) of the same type.
+   keep_dims : bool, optional
+       If ``True``, the reduced dimensions are retained with length 1. Default is ``False``.
+
+   Returns
+   -------
+   tl.tensor or tuple of tl.tensor
+       The reduced tensor(s). If ``input`` is a tuple, returns a tuple of reduced tensors.
+       If ``keep_dims`` is ``True``, the output shape retains the reduced axis as 1.
+
+   Notes
+   -----
+   This function can also be called as a member function on :py:class:`tl.tensor`,
+   as ``x.reduce(axis, combine_fn, keep_dims)`` instead of
+   ``tl.reduce(x, axis, combine_fn, keep_dims)``.
+
+   The ``combine_fn`` must be associative and commutative for the reduction to be well-defined.
+   It is called repeatedly to combine pairs of elements until a single result remains per output index.
+
+   Examples
+   --------
+   .. code-block:: python
+
+       import triton
+       import triton.language as tl
+
+       @triton.jit
+       def add_fn(a, b):
+           return a + b
+
+       @triton.jit
+       def kernel(X_ptr, Y_ptr, BLOCK_SIZE: tl.constexpr):
+           pid = tl.program_id(0)
+           offsets = pid * BLOCK_SIZE + tl.arange(0, BLOCK_SIZE)
+           x = tl.load(X_ptr + offsets)
+           # Reduce sum along axis 0 (the only axis in this 1D tensor)
+           total = tl.reduce(x, axis=0, combine_fn=add_fn)
+           tl.store(Y_ptr + pid, total)
+
+       # Using keep_dims to preserve shape
+       @triton.jit
+       def kernel_keep_dims(X_ptr, Y_ptr, BLOCK_SIZE: tl.constexpr):
+           pid = tl.program_id(0)
+           offsets = pid * BLOCK_SIZE + tl.arange(0, BLOCK_SIZE)
+           x = tl.load(X_ptr + offsets)
+           # Output shape remains (1,) instead of scalar
+           total = tl.reduce(x, axis=0, combine_fn=add_fn, keep_dims=True)
+           tl.store(Y_ptr + pid * BLOCK_SIZE, total)

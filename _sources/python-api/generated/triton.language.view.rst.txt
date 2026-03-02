@@ -1,0 +1,32 @@
+.. py:function:: view(input, *shape, _semantic=None)
+
+   Returns a tensor with the same elements as `input` but a different shape.
+   The order of the elements may not be preserved.
+
+   .. deprecated::
+      `view` is deprecated. Please use :py:func:`reshape` with `can_reorder=True`.
+
+   Parameters
+   ----------
+   input : tl.tensor
+       The input tensor.
+   shape : int or tuple of ints
+       The desired shape. Can be passed as a tuple or as individual parameters.
+
+   Returns
+   -------
+   tl.tensor
+       A tensor with the specified shape.
+
+   Notes
+   -----
+   This function can also be called as a member function on :py:class:`tl.tensor`,
+   as ``x.view(...)`` instead of ``view(x, ...)``.
+
+   Examples
+   --------
+   .. code-block:: python
+
+      # These are equivalent
+      view(x, (32, 32))
+      view(x, 32, 32)

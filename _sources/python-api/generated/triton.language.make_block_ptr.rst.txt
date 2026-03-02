@@ -1,0 +1,74 @@
+.. py:function:: triton.language.make_block_ptr(base, shape, strides, offsets, block_shape, order)
+
+   Creates a pointer to a rectangular block within a parent tensor, enabling
+   efficient block-wise memory access (e.g., via ``tl.load`` or ``tl.store``).
+
+   This function is typically used to define block pointers for matrices or
+   higher-dimensional tensors, allowing the compiler to generate optimized
+   memory instructions (such as NVIDIA's TMA) when supported.
+
+   Parameters
+   ----------
+   base : tensor
+      The base pointer to the parent tensor in global memory.
+   shape : sequence of int or constexpr
+      The shape of the parent tensor (e.g., ``[M, N]``).
+   strides : sequence of int or constexpr
+      The strides of the parent tensor, defining the byte offset between
+      consecutive elements along each dimension.
+   offsets : sequence of int or constexpr
+      The starting coordinates (offsets) of the block within the parent tensor.
+   block_shape : sequence of int or constexpr
+      The shape of the block to be loaded or stored (e.g., ``[BLOCK_M, BLOCK_N]``).
+   order : sequence of int
+      The dimension order (layout) of the original data format, specifying how
+      dimensions map to memory strides (e.g., ``[0, 1]`` for row-major).
+
+   Returns
+   -------
+   tensor_descriptor
+      A block pointer object that can be passed to ``tl.load``, ``tl.store``,
+      or advanced with ``tl.advance``.
+
+   Notes
+   -----
+   The returned pointer is immutable. To move the pointer to a different block,
+   use ``tl.advance`` and assign the result to a new variable.
+
+   Block pointers are required for certain hardware-accelerated memory operations
+   on modern GPU architectures (e.g., Hopper TMA units).
+
+   Examples
+   --------
+   .. code-block:: python
+
+      import triton
+      import triton.language as tl
+
+      @triton.jit
+      def copy_kernel(in_ptr, out_ptr, M, N, BLOCK_M: tl.constexpr, BLOCK_N: tl.constexpr):
+          # Create a block pointer for the input matrix
+          in_block = tl.make_block_ptr(
+              base=in_ptr,
+              shape=[M, N],
+              strides=[N, 1],
+              offsets=[0, 0],
+              block_shape=[BLOCK_M, BLOCK_N],
+              order=[0, 1]
+          )
+
+          # Create a block pointer for the output matrix
+          out_block = tl.make_block_ptr(
+              base=out_ptr,
+              shape=[M, N],
+              strides=[N, 1],
+              offsets=[0, 0],
+              block_shape=[BLOCK_M, BLOCK_N],
+              order=[0, 1]
+          )
+
+          # Load the block
+          data = tl.load(in_block)
+
+          # Store the block
+          tl.store(out_block, data)

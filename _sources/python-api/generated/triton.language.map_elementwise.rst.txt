@@ -1,0 +1,61 @@
+map_elementwise
+================
+
+.. currentmodule:: triton.language
+
+.. function:: map_elementwise(scalar_fn, *args, pack=1)
+
+   Map a scalar function over a tensor.
+
+   The input tensors ``args`` are implicitly broadcasted to the same shape.
+
+   This operation enables control flow over single elements in a tensor, such as
+   multi-branch functions where one branch is computationally expensive. Unlike
+   :func:`where`, which eagerly evaluates both branches, ``map_elementwise``
+   executes only the taken branch for each element.
+
+   Parameters
+   ----------
+   scalar_fn : Callable
+      A JIT-compiled function (decorated with ``@triton.jit``) that accepts
+      scalar arguments and returns a scalar tensor or a tuple of scalar tensors.
+   *args : tensor
+      Input tensors to be mapped. These are broadcasted to a common shape before
+      the function is applied.
+   pack : int, optional
+      The number of elements processed by a single function call. Default is 1.
+      Increasing this value may improve instruction-level parallelism.
+
+   Returns
+   -------
+   tensor or tuple of tensors
+      The result of applying ``scalar_fn`` to each element of the input tensors.
+      If ``scalar_fn`` returns a single tensor, a single tensor is returned.
+      If it returns a tuple, a tuple of tensors is returned.
+
+   Notes
+   -----
+   The ``scalar_fn`` must be decorated with ``@triton.jit``. Standard Python
+   control flow (e.g., ``if``/``else``) inside ``scalar_fn`` is converted to
+   predicated GPU machine code.
+
+   Examples
+   --------
+   >>> import triton
+   >>> import triton.language as tl
+   >>>
+   >>> @triton.jit
+   ... def selu_scalar(x, alpha):
+   ...     if x > 0:
+   ...         return x
+   ...     else:
+   ...         return alpha * (tl.exp(x) - 1)
+   >>>
+   >>> @triton.jit
+   ... def selu_kernel(x_ptr, alpha_ptr, out_ptr, BLOCK_SIZE: tl.constexpr):
+   ...     pid = tl.program_id(0)
+   ...     offsets = pid * BLOCK_SIZE + tl.arange(0, BLOCK_SIZE)
+   ...     x = tl.load(x_ptr + offsets)
+   ...     alpha = tl.load(alpha_ptr)
+   ...     out = tl.map_elementwise(selu_scalar, x, alpha)
+   ...     tl.store(out_ptr + offsets, out)

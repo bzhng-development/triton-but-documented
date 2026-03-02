@@ -1,0 +1,54 @@
+add
+===
+
+.. currentmodule:: triton.language
+
+.. py:function:: add(x, y, sanitize_overflow=True)
+
+   Element-wise addition of two tensors.
+
+   Computes :code:`x + y` with optional overflow sanitization for integer types.
+   When :code:`sanitize_overflow` is True, the operation ensures defined behavior
+   on signed integer overflow by masking results according to the target architecture's
+   semantics.
+
+   Parameters
+   ----------
+   x : tensor
+       First input tensor.
+   y : tensor
+       Second input tensor. Must be broadcastable with :code:`x`.
+   sanitize_overflow : constexpr, optional
+       If True (default), sanitize signed integer overflow. Set to False only
+       when overflow behavior is intentionally relied upon.
+
+   Returns
+   -------
+   tensor
+       Element-wise sum of :code:`x` and :code:`y`.
+
+   Notes
+   -----
+   This function supports both floating-point and integer dtypes. For floating-point
+   inputs, :code:`sanitize_overflow` has no effect. For integer types, overflow
+   sanitization may incur a small performance cost but ensures portability across
+   GPU backends.
+
+   The function can also be called as a member function on :py:class:`tensor`,
+   as :code:`x.add(y)` instead of :code:`tl.add(x, y)`.
+
+   Examples
+   --------
+   .. code-block:: python
+
+       import triton
+       import triton.language as tl
+
+       @triton.jit
+       def add_kernel(x_ptr, y_ptr, out_ptr, BLOCK_SIZE: tl.constexpr):
+           pid = tl.program_id(0)
+           offs = pid * BLOCK_SIZE + tl.arange(0, BLOCK_SIZE)
+           x = tl.load(x_ptr + offs)
+           y = tl.load(y_ptr + offs)
+           z = tl.add(x, y)  # Equivalent to z = x + y
+           tl.store(out_ptr + offs, z)

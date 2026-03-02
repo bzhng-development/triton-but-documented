@@ -1,0 +1,66 @@
+triton.language.float16
+======================
+
+.. py:data:: triton.language.float16
+
+   16-bit floating point data type.
+
+   Represents the IEEE 754 binary16 format, providing a balance between
+   range, precision, and memory bandwidth efficiency. This type is natively
+   supported on modern NVIDIA GPUs (compute capability >= 5.3) and AMD GPUs
+   (ROCm). It is commonly used in deep learning workloads to reduce memory
+   footprint and increase throughput.
+
+   Attributes
+   ----------
+   name : str
+      The name of the data type ('float16').
+   bit_width : int
+      The bit width of the data type (16).
+
+   Notes
+   -----
+   - ``float16`` has approximately 3-4 decimal digits of precision.
+   - The exponent range is roughly ±65,504.
+   - Arithmetic operations on ``float16`` may accumulate error faster than
+     ``float32``; consider using ``float32`` for accumulators in reduction
+     operations if numerical stability is critical.
+   - When mixed with higher precision types in expressions, ``float16``
+     values are typically promoted to the higher precision type.
+
+   Examples
+   --------
+   Create a pointer to ``float16`` data and perform element-wise multiplication:
+
+   .. code-block:: python
+
+      import triton
+      import triton.language as tl
+
+      @triton.jit
+      def fp16_kernel(x_ptr, y_ptr, out_ptr, n):
+          pid = tl.program_id(0)
+          offset = pid + tl.arange(0, 128)
+          mask = offset < n
+
+          # Load data as float16
+          x = tl.load(x_ptr + offset, mask=mask).to(tl.float16)
+          y = tl.load(y_ptr + offset, mask=mask).to(tl.float16)
+
+          # Perform multiplication in float16
+          out = x * y
+
+          # Store result
+          tl.store(out_ptr + offset, out, mask=mask)
+
+   Explicitly cast a tensor to ``float16``:
+
+   .. code-block:: python
+
+      @triton.jit
+      def cast_kernel(input_ptr, output_ptr, n):
+          offset = tl.arange(0, 256)
+          mask = offset < n
+          x = tl.load(input_ptr + offset, mask=mask)
+          x_fp16 = x.to(tl.float16)
+          tl.store(output_ptr + offset, x_fp16, mask=mask)

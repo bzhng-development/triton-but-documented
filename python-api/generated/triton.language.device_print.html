@@ -1,0 +1,185 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Parameters &mdash; Triton  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=03e43079" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/custom.css" />
+
+  
+      <script src="../../_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Parameters" href="triton.language.device_assert.html" />
+    <link rel="prev" title="static_assert" href="triton.language.static_assert.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            Triton
+              <img src="https://cdn.openai.com/triton/assets/triton-logo.png" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../getting-started/installation.html">Installation</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Python API</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../triton.html">triton</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../triton.language.html">triton.language</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../triton.language.html#programming-model">Programming Model</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../triton.language.html#creation-ops">Creation Ops</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../triton.language.html#shape-manipulation-ops">Shape Manipulation Ops</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../triton.language.html#linear-algebra-ops">Linear Algebra Ops</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../triton.language.html#memory-pointer-ops">Memory/Pointer Ops</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../triton.language.html#indexing-ops">Indexing Ops</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../triton.language.html#math-ops">Math Ops</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../triton.language.html#reduction-ops">Reduction Ops</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../triton.language.html#scan-sort-ops">Scan/Sort Ops</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../triton.language.html#atomic-ops">Atomic Ops</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../triton.language.html#random-number-generation">Random Number Generation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../triton.language.html#iterators">Iterators</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../triton.language.html#inline-assembly">Inline Assembly</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../triton.language.html#compiler-hint-ops">Compiler Hint Ops</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../triton.language.html#debug-ops">Debug Ops</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="triton.language.static_print.html">static_print</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.language.static_assert.html">static_assert</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">Parameters</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#returns">Returns</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#notes">Notes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.language.device_assert.html">Parameters</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.language.device_assert.html#notes">Notes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.language.device_assert.html#examples">Examples</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.language.PropagateNan.html">triton.language.PropagateNan</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.language.TRITON_MAX_TENSOR_NUMEL.html">triton.language.TRITON_MAX_TENSOR_NUMEL</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../triton.language.html#data-types">Data Types</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.testing.html">triton.testing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton-semantics.html">Triton Semantics</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Triton MLIR Dialects</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../dialects/dialects.html">Triton MLIR Dialects and Ops</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Programming Guide</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../programming-guide/chapter-1/introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../programming-guide/chapter-2/related-work.html">Related Work</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../programming-guide/chapter-3/debugging.html">Debugging Triton</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">Triton</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../triton.language.html">triton.language</a></li>
+      <li class="breadcrumb-item active">Parameters</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../_sources/python-api/generated/triton.language.device_print.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <p>Print runtime values from the device.</p>
+<p>The first argument must be a string literal prefix; all following arguments must be scalars or tensors. String formatting (e.g., f-strings) is not supported for runtime values. Inside a <code class="docutils literal notranslate"><span class="pre">&#64;triton.jit</span></code> function, the Python builtin <code class="code docutils literal notranslate"><span class="pre">print</span></code> is mapped to this function.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">tl</span><span class="o">.</span><span class="n">device_print</span><span class="p">(</span><span class="s2">&quot;pid&quot;</span><span class="p">,</span> <span class="n">pid</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;pid&quot;</span><span class="p">,</span> <span class="n">pid</span><span class="p">)</span>  <span class="c1"># Equivalent inside JIT kernels</span>
+</pre></div>
+</div>
+<p>On CUDA, device prints are streamed through a fixed-size buffer (default ~6912 KiB, varying by GPU/driver). If output is dropped, increase the buffer size before kernel launch:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">triton</span><span class="o">.</span><span class="n">runtime</span><span class="o">.</span><span class="n">driver</span><span class="o">.</span><span class="n">active</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">set_printf_fifo_size</span><span class="p">(</span><span class="n">size_bytes</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Changing this value after running a kernel that uses prints may raise an error. The setting applies per device.</p>
+<section id="parameters">
+<h1>Parameters<a class="headerlink" href="#parameters" title="Link to this heading">¶</a></h1>
+<dl class="simple">
+<dt>prefix<span class="classifier">str</span></dt><dd><p>A string literal prefix printed before the values. Must be ASCII.</p>
+</dd>
+<dt><a href="#id1"><span class="problematic" id="id2">*</span></a>args<span class="classifier">tensor or scalar</span></dt><dd><p>The runtime values to print.</p>
+</dd>
+<dt>hex<span class="classifier">bool, optional</span></dt><dd><p>If True, print integer values in hexadecimal format instead of decimal.</p>
+</dd>
+</dl>
+</section>
+<section id="returns">
+<h1>Returns<a class="headerlink" href="#returns" title="Link to this heading">¶</a></h1>
+<p>None</p>
+</section>
+<section id="notes">
+<h1>Notes<a class="headerlink" href="#notes" title="Link to this heading">¶</a></h1>
+<p>This function is intended for debugging. Excessive use may impact performance.
+The <code class="docutils literal notranslate"><span class="pre">prefix</span></code> argument is compile-time constant; dynamic strings are not supported.</p>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="triton.language.static_assert.html" class="btn btn-neutral float-left" title="static_assert" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="triton.language.device_assert.html" class="btn btn-neutral float-right" title="Parameters" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2020, Philippe Tillet.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

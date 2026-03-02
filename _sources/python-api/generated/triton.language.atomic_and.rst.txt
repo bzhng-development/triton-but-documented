@@ -1,0 +1,59 @@
+atomic_and
+============
+
+Perform an atomic logical AND at the memory location specified by ``pointer``.
+
+Returns the data stored at ``pointer`` before the atomic operation.
+
+Parameters
+----------
+pointer : triton.PointerType or block of triton.PointerType
+    The memory locations to operate on.
+val : Block
+    The values with which to perform the atomic operation. Must have the same
+    dtype as ``pointer.dtype.element_ty``.
+mask : Block of triton.int1, optional
+    If ``mask[idx]`` is false, do not perform the atomic operation at
+    ``pointer[idx]``.
+sem : str, optional
+    Specifies the memory semantics for the operation. Acceptable values are
+    ``"acquire"``, ``"release"``, ``"acq_rel"`` (stands for "ACQUIRE_RELEASE"),
+    and ``"relaxed"``. If not provided, the function defaults to using
+    ``"acq_rel"`` semantics.
+scope : str, optional
+    Defines the scope of threads that observe the synchronizing effect of the
+    atomic operation. Acceptable values are ``"gpu"`` (default), ``"cta"``
+    (cooperative thread array, thread block), or ``"sys"`` (stands for
+    "SYSTEM"). The default value is ``"gpu"``.
+
+Returns
+-------
+tensor
+    A tensor containing the data stored at ``pointer`` before the atomic
+    operation. The dtype matches ``pointer.dtype.element_ty``.
+
+Notes
+-----
+This function can also be called as a member function on :py:class:`tensor`,
+as ``x.atomic_and(...)`` instead of ``atomic_and(x, ...)``.
+
+The operation performs a bitwise AND between the value at ``pointer`` and
+``val``, storing the result back to ``pointer`` atomically.
+
+Examples
+--------
+.. code-block:: python
+
+    import triton
+    import triton.language as tl
+
+    @triton.jit
+    def atomic_and_kernel(ptr, val, MASKS: tl.constexpr):
+        pid = tl.program_id(0)
+        mask = pid < MASKS
+        old_val = tl.atomic_and(ptr + pid, val, mask=mask)
+        # old_val contains the value before the AND operation
+
+    # Usage example (conceptual)
+    # Assuming `ptr` points to an array of int32 values
+    # This kernel will atomically compute: *ptr = (*ptr) & val

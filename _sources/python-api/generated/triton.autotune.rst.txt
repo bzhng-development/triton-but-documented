@@ -1,0 +1,85 @@
+.. py:function:: triton.autotune(configs, key, prune_configs_by=None, reset_to_zero=None, restore_value=None, pre_hook=None, post_hook=None, warmup=None, rep=None, use_cuda_graph=False, do_bench=None, cache_results=False)
+
+   Decorator for auto-tuning a :code:`triton.jit`'d function.
+
+   Evaluates a list of candidate configurations at runtime to select the optimal kernel launch parameters based on input tensor shapes or values. The best configuration is cached per unique combination of :code:`key` arguments.
+
+   .. code-block:: python
+
+      @triton.autotune(configs=[
+          triton.Config(kwargs={'BLOCK_SIZE': 128}, num_warps=4),
+          triton.Config(kwargs={'BLOCK_SIZE': 1024}, num_warps=8),
+        ],
+        key=['x_size']
+      )
+      @triton.jit
+      def kernel(x_ptr, x_size, BLOCK_SIZE: tl.constexpr):
+          ...
+
+   .. note::
+      When all configurations are evaluated, the kernel runs multiple times. If the kernel updates output tensors, these updates will occur repeatedly. To prevent this side effect, use the :code:`reset_to_zero` argument to reset specified tensors to zero before each benchmark run, or use :code:`restore_value` to revert them after benchmarking.
+
+   If the environment variable :code:`TRITON_PRINT_AUTOTUNING` is set to :code:`"1"`, Triton prints autotuning results (time spent and best configuration) to stdout.
+
+   Parameters
+   ----------
+   configs : list[triton.Config]
+       A list of :code:`triton.Config` objects defining candidate kernel configurations (e.g., block sizes, warps, stages).
+   key : list[str]
+       A list of argument names. Re-evaluation of all configs is triggered only when the value or dtype of these arguments changes.
+   prune_configs_by : dict, optional
+       Dictionary containing functions to reduce the search space:
+       
+       * ``perf_model``: Function predicting runtime for a given config.
+       * ``top_k``: Number of configs to benchmark (int or float ratio).
+       * ``early_config_prune``: Function with signature :code:`fn(configs, named_args, **kwargs) -> List[triton.Config]` to filter configs before benchmarking. Must return at least one config.
+   reset_to_zero : list[str], optional
+       List of argument names whose corresponding tensors will be zeroed before running each configuration benchmark.
+   restore_value : list[str], optional
+       List of argument names whose corresponding tensors will be restored to their original values after running each configuration benchmark.
+   pre_hook : callable, optional
+       Custom function called before kernel execution. Overrides default reset/restore logic. Signature: :code:`fn(kwargs, reset_only)`.
+   post_hook : callable, optional
+       Custom function called after kernel execution. Overrides default restore logic. Signature: :code:`fn(kwargs, exception)`.
+   warmup : int, optional
+       Warmup time in milliseconds for benchmarking. **Deprecated**.
+   rep : int, optional
+       Repetition time in milliseconds for benchmarking. **Deprecated**.
+   use_cuda_graph : bool, optional
+       Whether to use CUDA Graphs for benchmarking. **Deprecated**.
+   do_bench : callable, optional
+       Custom benchmarking function with signature :code:`fn(kernel_call, quantiles)`. If not provided, uses the active driver's benchmarker.
+   cache_results : bool, optional
+       If True, caches autotuning results to disk for future runs with identical inputs. Defaults to False.
+
+   Returns
+   -------
+   callable
+       A decorator that wraps the JIT function, returning an :code:`Autotuner` instance.
+
+   Examples
+   --------
+   Basic usage with block size tuning:
+
+   .. code-block:: python
+
+      import triton
+      import triton.language as tl
+
+      @triton.autotune(
+          configs=[
+              triton.Config(kwargs={'BLOCK_SIZE': 128}, num_warps=4),
+              triton.Config(kwargs={'BLOCK_SIZE': 256}, num_warps=8),
+              triton.Config(kwargs={'BLOCK_SIZE': 512}, num_warps=16),
+          ],
+          key=['N']
+      )
+      @triton.jit
+      def vector_add_kernel(x_ptr, y_ptr, out_ptr, N, BLOCK_SIZE: tl.constexpr):
+          pid = tl.program_id(0)
+          block_start = pid * BLOCK_SIZE
+          offsets = block_start + tl.arange(0, BLOCK_SIZE)
+          mask = offsets < N
+          x = tl.load(x_ptr + offsets, mask=mask)
+          y = tl.load(y_ptr + offsets, mask=mask)
+          tl.store(out_ptr + offsets, x + y, mask=mask)

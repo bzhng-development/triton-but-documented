@@ -1,0 +1,48 @@
+.. py:function:: triton.language.gather(src, index, axis)
+
+   Gather elements from a source tensor along a given dimension using indices.
+
+   Parameters
+   ----------
+   src : tl.tensor
+       The source tensor from which to gather values.
+   index : tl.tensor
+       A tensor containing the indices to gather. The shape of ``index`` determines the shape of the output, except for the gathered dimension which matches the size of the indexed dimension in ``src``.
+   axis : int
+       The dimension along which to gather elements.
+
+   Returns
+   -------
+   tl.tensor
+       A tensor containing the gathered values.
+
+   Notes
+   -----
+   This function can also be called as a member function on :py:class:`tensor`,
+   as ``x.gather(index, axis)`` instead of ``tl.gather(x, index, axis)``.
+
+   The operation is similar to NumPy's advanced indexing but operates on GPU tensors within Triton kernels.
+
+   Examples
+   --------
+   .. code-block:: python
+
+      import triton
+      import triton.language as tl
+
+      @triton.jit
+      def gather_kernel(src_ptr, index_ptr, out_ptr, N: tl.constexpr, BLOCK: tl.constexpr):
+          pid = tl.program_id(0)
+          offsets = pid * BLOCK + tl.arange(0, BLOCK)
+          mask = offsets < N
+
+          # Load source data
+          src = tl.load(src_ptr + offsets, mask=mask)
+
+          # Load indices (e.g., gathering from position 0 for all elements)
+          indices = tl.full((BLOCK,), 0, dtype=tl.int32)
+
+          # Gather along axis 0
+          result = tl.gather(src, indices, axis=0)
+
+          tl.store(out_ptr + offsets, result, mask=mask)

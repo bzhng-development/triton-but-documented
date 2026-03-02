@@ -1,0 +1,253 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Parameters &mdash; Triton  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=03e43079" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/custom.css" />
+
+  
+      <script src="../../_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Parameters" href="triton.language.load.html" />
+    <link rel="prev" title="Parameters" href="triton.language.dot.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            Triton
+              <img src="https://cdn.openai.com/triton/assets/triton-logo.png" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../getting-started/installation.html">Installation</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Python API</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../triton.html">triton</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../triton.language.html">triton.language</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../triton.language.html#programming-model">Programming Model</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../triton.language.html#creation-ops">Creation Ops</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../triton.language.html#shape-manipulation-ops">Shape Manipulation Ops</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../triton.language.html#linear-algebra-ops">Linear Algebra Ops</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="triton.language.dot.html">Parameters</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.language.dot.html#returns">Returns</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.language.dot.html#notes">Notes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.language.dot.html#examples">Examples</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#"><code class="docutils literal notranslate"><span class="pre">triton.language.dot_scaled()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../triton.language.html#memory-pointer-ops">Memory/Pointer Ops</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../triton.language.html#indexing-ops">Indexing Ops</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../triton.language.html#math-ops">Math Ops</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../triton.language.html#reduction-ops">Reduction Ops</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../triton.language.html#scan-sort-ops">Scan/Sort Ops</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../triton.language.html#atomic-ops">Atomic Ops</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../triton.language.html#random-number-generation">Random Number Generation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../triton.language.html#iterators">Iterators</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../triton.language.html#inline-assembly">Inline Assembly</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../triton.language.html#compiler-hint-ops">Compiler Hint Ops</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../triton.language.html#debug-ops">Debug Ops</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../triton.language.html#data-types">Data Types</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.testing.html">triton.testing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton-semantics.html">Triton Semantics</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Triton MLIR Dialects</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../dialects/dialects.html">Triton MLIR Dialects and Ops</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Programming Guide</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../programming-guide/chapter-1/introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../programming-guide/chapter-2/related-work.html">Related Work</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../programming-guide/chapter-3/debugging.html">Debugging Triton</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">Triton</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../triton.language.html">triton.language</a></li>
+      <li class="breadcrumb-item active">Parameters</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../_sources/python-api/generated/triton.language.dot_scaled.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <dl class="py function">
+<dt class="sig sig-object py" id="triton.language.dot_scaled">
+<span class="sig-prename descclassname"><span class="pre">triton.language.</span></span><span class="sig-name descname"><span class="pre">dot_scaled</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">lhs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lhs_scale</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lhs_format</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rhs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rhs_scale</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rhs_format</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">acc</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fast_math</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lhs_k_pack</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rhs_k_pack</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">out_dtype</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">triton.language.float32</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">_semantic</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#triton.language.dot_scaled" title="Link to this definition">¶</a></dt>
+<dd><p>Returns the matrix product of two blocks in microscaling (MX) format.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">lhs</span></code> and <code class="docutils literal notranslate"><span class="pre">rhs</span></code> tensors use microscaling formats as described in the
+OCP Microscaling Formats (MX) v1.0 specification. Software emulation enables
+targeting hardware architectures without native microscaling operation support.
+In such cases, microscaled inputs are upcasted to <code class="docutils literal notranslate"><span class="pre">bf16</span></code> before computation,
+except on AMD CDNA3 where <code class="docutils literal notranslate"><span class="pre">fp16</span></code> is used if one input is <code class="docutils literal notranslate"><span class="pre">fp16</span></code>. This
+behavior is experimental and subject to change.</p>
+<section id="parameters">
+<h1>Parameters<a class="headerlink" href="#parameters" title="Link to this heading">¶</a></h1>
+<dl class="simple">
+<dt>lhs<span class="classifier">tensor</span></dt><dd><p>The first tensor to be multiplied. A 2D tensor representing <code class="docutils literal notranslate"><span class="pre">fp4</span></code>, <code class="docutils literal notranslate"><span class="pre">fp8</span></code>,
+or <code class="docutils literal notranslate"><span class="pre">bf16</span></code> elements. <code class="docutils literal notranslate"><span class="pre">fp4</span></code> elements are packed into <code class="docutils literal notranslate"><span class="pre">uint8</span></code> inputs with
+the first element in lower bits. <code class="docutils literal notranslate"><span class="pre">fp8</span></code> are stored as <code class="docutils literal notranslate"><span class="pre">uint8</span></code> or the
+corresponding <code class="docutils literal notranslate"><span class="pre">fp8</span></code> type.</p>
+</dd>
+<dt>lhs_scale<span class="classifier">tensor, optional</span></dt><dd><p>Scale factor for the <code class="docutils literal notranslate"><span class="pre">lhs</span></code> tensor. Shape should be <code class="docutils literal notranslate"><span class="pre">[M,</span> <span class="pre">K//group_size]</span></code>
+when <code class="docutils literal notranslate"><span class="pre">lhs</span></code> is <code class="docutils literal notranslate"><span class="pre">[M,</span> <span class="pre">K]</span></code>, where <code class="docutils literal notranslate"><span class="pre">group_size</span></code> is 32 if scales type are
+<code class="docutils literal notranslate"><span class="pre">e8m0</span></code>. Represented as an <code class="docutils literal notranslate"><span class="pre">uint8</span></code> tensor of <code class="docutils literal notranslate"><span class="pre">e8m0</span></code> type, or <code class="docutils literal notranslate"><span class="pre">None</span></code>.</p>
+</dd>
+<dt>lhs_format<span class="classifier">str</span></dt><dd><p>Format of the <code class="docutils literal notranslate"><span class="pre">lhs</span></code> tensor. Available formats: <code class="docutils literal notranslate"><span class="pre">&quot;e2m1&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;e4m3&quot;</span></code>,
+<code class="docutils literal notranslate"><span class="pre">&quot;e5m2&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;bf16&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;fp16&quot;</span></code>.</p>
+</dd>
+<dt>rhs<span class="classifier">tensor</span></dt><dd><p>The second tensor to be multiplied. A 2D tensor representing <code class="docutils literal notranslate"><span class="pre">fp4</span></code>, <code class="docutils literal notranslate"><span class="pre">fp8</span></code>,
+or <code class="docutils literal notranslate"><span class="pre">bf16</span></code> elements. <code class="docutils literal notranslate"><span class="pre">fp4</span></code> elements are packed into <code class="docutils literal notranslate"><span class="pre">uint8</span></code> inputs with
+the first element in lower bits. <code class="docutils literal notranslate"><span class="pre">fp8</span></code> are stored as <code class="docutils literal notranslate"><span class="pre">uint8</span></code> or the
+corresponding <code class="docutils literal notranslate"><span class="pre">fp8</span></code> type.</p>
+</dd>
+<dt>rhs_scale<span class="classifier">tensor, optional</span></dt><dd><p>Scale factor for the <code class="docutils literal notranslate"><span class="pre">rhs</span></code> tensor. Shape should be <code class="docutils literal notranslate"><span class="pre">[N,</span> <span class="pre">K//group_size]</span></code>
+where <code class="docutils literal notranslate"><span class="pre">rhs</span></code> is <code class="docutils literal notranslate"><span class="pre">[K,</span> <span class="pre">N]</span></code>. <strong>Important:</strong> Do NOT transpose <code class="docutils literal notranslate"><span class="pre">rhs_scale</span></code>.
+Represented as an <code class="docutils literal notranslate"><span class="pre">uint8</span></code> tensor of <code class="docutils literal notranslate"><span class="pre">e8m0</span></code> type, or <code class="docutils literal notranslate"><span class="pre">None</span></code>.</p>
+</dd>
+<dt>rhs_format<span class="classifier">str</span></dt><dd><p>Format of the <code class="docutils literal notranslate"><span class="pre">rhs</span></code> tensor. Available formats: <code class="docutils literal notranslate"><span class="pre">&quot;e2m1&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;e4m3&quot;</span></code>,
+<code class="docutils literal notranslate"><span class="pre">&quot;e5m2&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;bf16&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;fp16&quot;</span></code>.</p>
+</dd>
+<dt>acc<span class="classifier">tensor, optional</span></dt><dd><p>The accumulator tensor. If not <code class="docutils literal notranslate"><span class="pre">None</span></code>, the result is added to this tensor.</p>
+</dd>
+<dt>fast_math<span class="classifier">bool, optional</span></dt><dd><p>If <code class="docutils literal notranslate"><span class="pre">True</span></code>, allows faster but less precise computation. Default is <code class="docutils literal notranslate"><span class="pre">False</span></code>.</p>
+</dd>
+<dt>lhs_k_pack<span class="classifier">bool, optional</span></dt><dd><p>If <code class="docutils literal notranslate"><span class="pre">False</span></code>, the <code class="docutils literal notranslate"><span class="pre">lhs</span></code> tensor is packed into <code class="docutils literal notranslate"><span class="pre">uint8</span></code> along the M dimension
+instead of the K dimension. Default is <code class="docutils literal notranslate"><span class="pre">True</span></code>.</p>
+</dd>
+<dt>rhs_k_pack<span class="classifier">bool, optional</span></dt><dd><p>If <code class="docutils literal notranslate"><span class="pre">False</span></code>, the <code class="docutils literal notranslate"><span class="pre">rhs</span></code> tensor is packed into <code class="docutils literal notranslate"><span class="pre">uint8</span></code> along the N dimension
+instead of the K dimension. Default is <code class="docutils literal notranslate"><span class="pre">True</span></code>.</p>
+</dd>
+<dt>out_dtype<span class="classifier">dtype, optional</span></dt><dd><p>The data type of the output tensor. Currently only <code class="docutils literal notranslate"><span class="pre">float32</span></code> is supported.
+Default is <code class="docutils literal notranslate"><span class="pre">triton.language.float32</span></code>.</p>
+</dd>
+</dl>
+</section>
+<section id="returns">
+<h1>Returns<a class="headerlink" href="#returns" title="Link to this heading">¶</a></h1>
+<dl class="simple">
+<dt>tensor</dt><dd><p>The matrix product of <code class="docutils literal notranslate"><span class="pre">lhs</span></code> and <code class="docutils literal notranslate"><span class="pre">rhs</span></code> with dtype <code class="docutils literal notranslate"><span class="pre">out_dtype</span></code>.</p>
+</dd>
+</dl>
+</section>
+<section id="notes">
+<h1>Notes<a class="headerlink" href="#notes" title="Link to this heading">¶</a></h1>
+<p>Currently, <code class="docutils literal notranslate"><span class="pre">out_dtype</span></code> must be <code class="docutils literal notranslate"><span class="pre">float32</span></code>; other types will raise an assertion
+error. The microscaling emulation logic may vary by backend and is subject to
+change.</p>
+</section>
+<section id="examples">
+<h1>Examples<a class="headerlink" href="#examples" title="Link to this heading">¶</a></h1>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">triton</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">triton.language</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">tl</span>
+
+<span class="nd">@triton</span><span class="o">.</span><span class="n">jit</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">mx_dot_kernel</span><span class="p">(</span>
+    <span class="n">lhs_ptr</span><span class="p">,</span> <span class="n">lhs_scale_ptr</span><span class="p">,</span> <span class="n">rhs_ptr</span><span class="p">,</span> <span class="n">rhs_scale_ptr</span><span class="p">,</span> <span class="n">out_ptr</span><span class="p">,</span>
+    <span class="n">M</span><span class="p">,</span> <span class="n">N</span><span class="p">,</span> <span class="n">K</span><span class="p">,</span>
+    <span class="n">BLOCK_M</span><span class="p">:</span> <span class="n">tl</span><span class="o">.</span><span class="n">constexpr</span><span class="p">,</span> <span class="n">BLOCK_N</span><span class="p">:</span> <span class="n">tl</span><span class="o">.</span><span class="n">constexpr</span><span class="p">,</span> <span class="n">BLOCK_K</span><span class="p">:</span> <span class="n">tl</span><span class="o">.</span><span class="n">constexpr</span><span class="p">,</span>
+<span class="p">):</span>
+    <span class="n">pid_m</span> <span class="o">=</span> <span class="n">tl</span><span class="o">.</span><span class="n">program_id</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+    <span class="n">pid_n</span> <span class="o">=</span> <span class="n">tl</span><span class="o">.</span><span class="n">program_id</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+
+    <span class="n">offs_m</span> <span class="o">=</span> <span class="n">pid_m</span> <span class="o">*</span> <span class="n">BLOCK_M</span> <span class="o">+</span> <span class="n">tl</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">BLOCK_M</span><span class="p">)</span>
+    <span class="n">offs_n</span> <span class="o">=</span> <span class="n">pid_n</span> <span class="o">*</span> <span class="n">BLOCK_N</span> <span class="o">+</span> <span class="n">tl</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">BLOCK_N</span><span class="p">)</span>
+    <span class="n">offs_k</span> <span class="o">=</span> <span class="n">tl</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">BLOCK_K</span><span class="p">)</span>
+
+    <span class="n">lhs</span> <span class="o">=</span> <span class="n">tl</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">lhs_ptr</span> <span class="o">+</span> <span class="n">offs_m</span><span class="p">[:,</span> <span class="kc">None</span><span class="p">]</span> <span class="o">*</span> <span class="n">K</span> <span class="o">+</span> <span class="n">offs_k</span><span class="p">[</span><span class="kc">None</span><span class="p">,</span> <span class="p">:],</span> <span class="n">mask</span><span class="o">=</span><span class="n">offs_k</span><span class="p">[</span><span class="kc">None</span><span class="p">,</span> <span class="p">:]</span> <span class="o">&lt;</span> <span class="n">K</span><span class="p">)</span>
+    <span class="n">lhs_scale</span> <span class="o">=</span> <span class="n">tl</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">lhs_scale_ptr</span> <span class="o">+</span> <span class="n">offs_m</span><span class="p">[:,</span> <span class="kc">None</span><span class="p">]</span> <span class="o">*</span> <span class="p">(</span><span class="n">K</span> <span class="o">//</span> <span class="mi">32</span><span class="p">)</span> <span class="o">+</span> <span class="p">(</span><span class="n">offs_k</span><span class="p">[</span><span class="kc">None</span><span class="p">,</span> <span class="p">:]</span> <span class="o">//</span> <span class="mi">32</span><span class="p">),</span>
+                        <span class="n">mask</span><span class="o">=</span><span class="p">(</span><span class="n">offs_k</span><span class="p">[</span><span class="kc">None</span><span class="p">,</span> <span class="p">:]</span> <span class="o">//</span> <span class="mi">32</span><span class="p">)</span> <span class="o">&lt;</span> <span class="p">(</span><span class="n">K</span> <span class="o">//</span> <span class="mi">32</span><span class="p">))</span>
+
+    <span class="n">rhs</span> <span class="o">=</span> <span class="n">tl</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">rhs_ptr</span> <span class="o">+</span> <span class="n">offs_k</span><span class="p">[:,</span> <span class="kc">None</span><span class="p">]</span> <span class="o">*</span> <span class="n">N</span> <span class="o">+</span> <span class="n">offs_n</span><span class="p">[</span><span class="kc">None</span><span class="p">,</span> <span class="p">:],</span> <span class="n">mask</span><span class="o">=</span><span class="n">offs_k</span><span class="p">[:,</span> <span class="kc">None</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">K</span><span class="p">)</span>
+    <span class="n">rhs_scale</span> <span class="o">=</span> <span class="n">tl</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">rhs_scale_ptr</span> <span class="o">+</span> <span class="n">offs_n</span><span class="p">[</span><span class="kc">None</span><span class="p">,</span> <span class="p">:]</span> <span class="o">*</span> <span class="p">(</span><span class="n">K</span> <span class="o">//</span> <span class="mi">32</span><span class="p">)</span> <span class="o">+</span> <span class="p">(</span><span class="n">offs_k</span><span class="p">[:,</span> <span class="kc">None</span><span class="p">]</span> <span class="o">//</span> <span class="mi">32</span><span class="p">),</span>
+                        <span class="n">mask</span><span class="o">=</span><span class="p">(</span><span class="n">offs_k</span><span class="p">[:,</span> <span class="kc">None</span><span class="p">]</span> <span class="o">//</span> <span class="mi">32</span><span class="p">)</span> <span class="o">&lt;</span> <span class="p">(</span><span class="n">K</span> <span class="o">//</span> <span class="mi">32</span><span class="p">))</span>
+
+    <span class="n">out</span> <span class="o">=</span> <span class="n">tl</span><span class="o">.</span><span class="n">dot_scaled</span><span class="p">(</span>
+        <span class="n">lhs</span><span class="p">,</span> <span class="n">lhs_scale</span><span class="p">,</span> <span class="s2">&quot;e4m3&quot;</span><span class="p">,</span>
+        <span class="n">rhs</span><span class="p">,</span> <span class="n">rhs_scale</span><span class="p">,</span> <span class="s2">&quot;e4m3&quot;</span><span class="p">,</span>
+        <span class="n">out_dtype</span><span class="o">=</span><span class="n">tl</span><span class="o">.</span><span class="n">float32</span>
+    <span class="p">)</span>
+
+    <span class="n">out_offs</span> <span class="o">=</span> <span class="n">offs_m</span><span class="p">[:,</span> <span class="kc">None</span><span class="p">]</span> <span class="o">*</span> <span class="n">N</span> <span class="o">+</span> <span class="n">offs_n</span><span class="p">[</span><span class="kc">None</span><span class="p">,</span> <span class="p">:]</span>
+    <span class="n">tl</span><span class="o">.</span><span class="n">store</span><span class="p">(</span><span class="n">out_ptr</span> <span class="o">+</span> <span class="n">out_offs</span><span class="p">,</span> <span class="n">out</span><span class="p">,</span> <span class="n">mask</span><span class="o">=</span><span class="p">(</span><span class="n">offs_m</span><span class="p">[:,</span> <span class="kc">None</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">M</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">offs_n</span><span class="p">[</span><span class="kc">None</span><span class="p">,</span> <span class="p">:]</span> <span class="o">&lt;</span> <span class="n">N</span><span class="p">))</span>
+</pre></div>
+</div>
+</section>
+</dd></dl>
+
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="triton.language.dot.html" class="btn btn-neutral float-left" title="Parameters" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="triton.language.load.html" class="btn btn-neutral float-right" title="Parameters" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2020, Philippe Tillet.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

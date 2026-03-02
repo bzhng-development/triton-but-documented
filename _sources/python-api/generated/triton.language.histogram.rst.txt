@@ -1,0 +1,46 @@
+Compute a histogram of the input tensor.
+
+Bins have a width of 1 and start at 0. The output tensor contains the count of elements falling into each bin.
+
+Parameters
+----------
+input : tensor
+    The input tensor containing values to be histogrammed. Values are expected to be non-negative integers.
+num_bins : int
+    The number of histogram bins.
+mask : tensor of `triton.int1`, optional
+    A boolean mask. If `mask[idx]` is false, `input[idx]` is excluded from the histogram calculation.
+
+Returns
+-------
+tensor
+    A 1D tensor of length `num_bins` containing the histogram counts. The dtype matches the accumulator type used by the backend (typically `int32`).
+
+Notes
+-----
+This function can also be called as a member function on :py:class:`tensor`,
+as :code:`x.histogram(num_bins, mask=...)` instead of
+:code:`histogram(x, num_bins, mask=...)`.
+
+Input values greater than or equal to `num_bins` result in undefined behavior or may be clamped depending on the backend implementation. Ensure input values are within the range `[0, num_bins)`.
+
+Examples
+--------
+.. code-block:: python
+
+    import triton
+    import triton.language as tl
+
+    @triton.jit
+    def histogram_kernel(input_ptr, output_ptr, N: tl.constexpr, BLOCK_SIZE: tl.constexpr, NUM_BINS: tl.constexpr):
+        pid = tl.program_id(0)
+        offsets = pid * BLOCK_SIZE + tl.arange(0, BLOCK_SIZE)
+        mask = offsets < N
+        input = tl.load(input_ptr + offsets, mask=mask, other=0)
+        
+        # Compute histogram for the block
+        hist = tl.histogram(input, NUM_BINS, mask=mask)
+        
+        # Atomically add to global output (simplified logic for single block example)
+        # In practice, you would aggregate results from multiple blocks
+        tl.store(output_ptr + tl.arange(0, NUM_BINS), hist)

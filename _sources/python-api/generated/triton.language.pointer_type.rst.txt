@@ -1,0 +1,60 @@
+.. py:class:: pointer_type(element_ty, address_space=1, const=False)
+
+   Represents a pointer to a specific data type in a given address space.
+
+   This class is used to define pointer types for memory operations in Triton kernels.
+   It encodes the element type, the GPU address space, and whether the pointer
+   targets constant (read-only) memory.
+
+   Parameters
+   ----------
+   element_ty : dtype
+       The data type of the element pointed to (e.g., ``tl.int32``, ``tl.float16``).
+   address_space : int, optional
+       The address space identifier. Default is 1 (global memory).
+   const : bool, optional
+       If True, the pointer points to constant data and cannot be used with
+       store operations. Default is False.
+
+   Attributes
+   ----------
+   element_ty : dtype
+       The scalar data type of the pointed-to value.
+   address_space : int
+       The numeric identifier for the memory address space.
+   const : bool
+       Whether the pointer is read-only.
+   name : str
+       String representation of the type (e.g., ``pointer<int32>``).
+
+   Methods
+   -------
+   to_ir(builder)
+       Converts the frontend type to the corresponding MLIR IR type.
+   is_ptr()
+       Returns True (identifies this type as a pointer).
+   is_const()
+       Returns True if the pointer is constant.
+
+   Notes
+   -----
+   Pointer types are strictly typed; a ``const_pointer`` cannot be passed to
+   functions expecting a mutable pointer, and vice versa. Address spaces are
+   hardware-specific (e.g., 1 for global, 3 for shared on NVIDIA GPUs).
+
+   Examples
+   --------
+   Create a pointer type to 32-bit integers in global memory:
+
+   .. code-block:: python
+
+      import triton.language as tl
+
+      # Define a pointer to int32 in address space 1 (global)
+      ptr_ty = tl.pointer_type(tl.int32, address_space=1)
+
+      # Define a constant pointer to float16
+      const_ptr_ty = tl.pointer_type(tl.float16, const=True)
+
+      print(ptr_ty)       # Output: pointer<int32>
+      print(const_ptr_ty) # Output: const_pointer<float16>

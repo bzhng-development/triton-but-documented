@@ -1,0 +1,63 @@
+pair_uniform_to_normal
+======================
+
+.. currentmodule:: triton.language
+
+Apply the Box-Muller transform to convert pairs of uniform random variables into standard normal random variables.
+
+.. code-block:: python
+
+    pair_uniform_to_normal(u1, u2)
+
+Parameters
+----------
+u1 : tl.tensor
+    First input tensor containing uniform random values in the range (0, 1).
+    Values are clamped to a minimum of 1e-7 to avoid logarithmic singularity.
+u2 : tl.tensor
+    Second input tensor containing uniform random values in the range [0, 1).
+
+Returns
+-------
+z0 : tl.tensor
+    First output tensor containing standard normal random values (mean=0, std=1).
+z1 : tl.tensor
+    Second output tensor containing standard normal random values (mean=0, std=1).
+
+Notes
+-----
+This function implements the Box-Muller transform, which maps two independent
+uniformly distributed random variables to two independent standard normally
+distributed random variables. The transformation is defined as:
+
+.. math::
+
+    Z_0 = \sqrt{-2 \ln U_1} \cos(2\pi U_2)
+    Z_1 = \sqrt{-2 \ln U_1} \sin(2\pi U_2)
+
+To ensure numerical stability, input ``u1`` is clamped to a minimum value of
+1e-7 before computing the logarithm. Both inputs should be generated from a
+uniform distribution over (0, 1).
+
+Examples
+--------
+.. code-block:: python
+
+    import triton
+    import triton.language as tl
+
+    @triton.jit
+    def kernel(
+        u1_ptr, u2_ptr, z0_ptr, z1_ptr,
+        BLOCK_SIZE: tl.constexpr,
+    ):
+        pid = tl.program_id(0)
+        offsets = pid * BLOCK_SIZE + tl.arange(0, BLOCK_SIZE)
+        u1 = tl.load(u1_ptr + offsets)
+        u2 = tl.load(u2_ptr + offsets)
+        
+        # Convert uniform pairs to normal distribution
+        z0, z1 = tl.pair_uniform_to_normal(u1, u2)
+        
+        tl.store(z0_ptr + offsets, z0)
+        tl.store(z1_ptr + offsets, z1)

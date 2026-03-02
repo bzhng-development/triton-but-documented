@@ -1,0 +1,49 @@
+xor_sum
+=======
+
+.. currentmodule:: triton.language
+
+.. function:: xor_sum(input, axis=None, keep_dims=False)
+
+   Returns the bitwise XOR sum of all elements in the :code:`input` tensor along the provided :code:`axis`.
+
+   The reduction operation is associative and commutative. This function is only supported for integer tensors.
+
+   Parameters
+   ----------
+   input : Tensor
+       The input tensor containing integer values.
+   axis : int, optional
+       The dimension along which the reduction is performed. If :code:`None`, all dimensions are reduced.
+   keep_dims : bool, optional
+       If :code:`True`, the reduced dimensions are retained with length 1. Default is :code:`False`.
+
+   Returns
+   -------
+   Tensor
+       A tensor containing the bitwise XOR sum of the input elements.
+
+   Notes
+   -----
+   This function can also be called as a member function on :py:class:`tensor`,
+   as :code:`x.xor_sum(...)` instead of :code:`xor_sum(x, ...)`.
+
+   Examples
+   --------
+   .. code-block:: python
+
+      import triton
+      import triton.language as tl
+
+      @triton.jit
+      def kernel(X, Y, BLOCK_SIZE: tl.constexpr):
+          pid = tl.program_id(0)
+          offs = tl.arange(0, BLOCK_SIZE)
+          mask = offs < BLOCK_SIZE
+          x = tl.load(X + pid * BLOCK_SIZE + offs, mask=mask)
+          # Compute XOR sum across the block
+          y = tl.xor_sum(x, axis=0)
+          tl.store(Y + pid, y)
+
+      # Launch kernel
+      # X contains integer data, Y will store the XOR sum per block

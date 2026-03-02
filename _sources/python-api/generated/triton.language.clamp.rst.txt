@@ -1,0 +1,41 @@
+Clamp the input tensor element-wise within the range ``[min, max]``.
+
+Parameters
+----------
+x : Block
+    The input tensor to clamp.
+min : Block
+    The lower bound for clamping.
+max : Block
+    The upper bound for clamping.
+propagate_nan : tl.PropagateNan, optional
+    Whether to propagate NaN values from ``x``. Defaults to ``tl.PropagateNan.NONE``.
+    This parameter only affects NaNs in ``x``; if ``min`` or ``max`` is NaN, the
+    result is undefined.
+
+Returns
+-------
+Block
+    A tensor with values clamped to the range ``[min, max]``.
+
+Notes
+-----
+Behavior is undefined when ``min`` > ``max``. If either ``min`` or ``max`` contains
+NaN values, the result is undefined regardless of ``propagate_nan``.
+
+bf16 inputs are automatically promoted to fp32 before the operation.
+
+See Also
+--------
+tl.minimum, tl.maximum, tl.PropagateNan
+
+Examples
+--------
+.. code-block:: python
+
+    @triton.jit
+    def kernel(x_ptr, out_ptr, BLOCK_SIZE: tl.constexpr):
+        x = tl.load(x_ptr + tl.arange(0, BLOCK_SIZE))
+        # Clamp values to [0.0, 1.0]
+        clipped = tl.clamp(x, 0.0, 1.0)
+        tl.store(out_ptr + tl.arange(0, BLOCK_SIZE), clipped)

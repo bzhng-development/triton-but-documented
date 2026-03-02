@@ -1,0 +1,39 @@
+cdiv
+====
+
+Compute the ceiling of integer division.
+
+Parameters
+----------
+x : int
+    The dividend.
+y : int
+    The divisor. Must be non-zero.
+
+Returns
+-------
+int
+    The smallest integer greater than or equal to ``x / y``.
+
+Notes
+-----
+This function is marked as a ``constexpr_function``, meaning it is evaluated
+at compile-time when used inside Triton kernels. It computes ``(x + y - 1) // y``
+to avoid floating-point arithmetic while ensuring correct rounding up for
+positive integers.
+
+Examples
+--------
+.. code-block:: python
+
+    import triton
+
+    # Compile-time evaluation
+    result = triton.cdiv(10, 3)  # Returns 4
+
+    # Usage in a kernel definition
+    @triton.jit
+    def my_kernel(ptr, BLOCK_SIZE: tl.constexpr):
+        # Calculate number of blocks needed
+        num_blocks = tl.cdiv(1024, BLOCK_SIZE)
+        ...

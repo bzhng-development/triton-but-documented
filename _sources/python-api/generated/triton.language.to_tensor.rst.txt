@@ -1,0 +1,44 @@
+to_tensor
+=========
+
+.. currentmodule:: triton.language
+
+.. autofunction:: to_tensor
+
+Converts a scalar, constexpr, or other compatible value into a :py:class:`tensor`.
+
+This function is typically called implicitly by arithmetic and comparison operators to ensure operands are tensors before performing element-wise operations. It is rarely called directly in user code.
+
+Parameters
+----------
+x : scalar, constexpr, or tensor
+    The value to convert. If ``x`` is already a :py:class:`tensor`, it is returned unchanged. If ``x`` is a Python scalar or :py:class:`constexpr`, it is broadcast to a 0-D tensor.
+_semantic : internal
+    Internal compiler state. Do not provide this argument manually.
+
+Returns
+-------
+tensor
+    A tensor containing the input value.
+
+Notes
+-----
+This is a low-level primitive used internally by the Triton compiler to normalize types during JIT compilation. Users should generally rely on automatic type promotion provided by operators (e.g., ``+``, ``<``, ``where``) rather than calling this function explicitly.
+
+Examples
+--------
+.. code-block:: python
+
+    import triton
+    import triton.language as tl
+
+    @triton.jit
+    def kernel(x_ptr, y_ptr, BLOCK: tl.constexpr):
+        # Load data from global memory (returns a tensor)
+        x = tl.load(x_ptr + tl.arange(0, BLOCK))
+        
+        # A python scalar is implicitly converted to a tensor via to_tensor
+        # when used in an operation like addition:
+        y = x + 1.0  # Equivalent to tl.add(x, tl.to_tensor(1.0))
+        
+        tl.store(y_ptr + tl.arange(0, BLOCK), y)

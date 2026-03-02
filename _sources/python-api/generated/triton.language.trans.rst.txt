@@ -1,0 +1,58 @@
+tl.trans
+========
+
+Permutes the dimensions of a tensor.
+
+If the parameter ``dims`` is not specified, the function defaults to swapping
+the last two axes, thereby performing an (optionally batched) 2D transpose.
+
+Parameters
+----------
+input : tensor
+    The input tensor.
+dims : int or tuple of ints, optional
+    The desired ordering of dimensions. For example, ``(2, 1, 0)`` reverses
+    the order of dims in a 3D tensor. If not provided, swaps the last two
+    dimensions.
+
+Returns
+-------
+tensor
+    A tensor with permuted dimensions.
+
+Notes
+-----
+``dims`` can be passed as a tuple or as individual parameters:
+
+.. code-block:: python
+
+    # These are equivalent
+    trans(x, (2, 1, 0))
+    trans(x, 2, 1, 0)
+
+:py:func:`permute` is equivalent to this function, except it doesn't have the
+special case when no permutation is specified.
+
+This function can also be called as a member function on :py:class:`tensor`,
+as ``x.trans(...)`` instead of ``trans(x, ...)``.
+
+Examples
+--------
+.. code-block:: python
+
+    import triton
+    import triton.language as tl
+
+    @triton.jit
+    def kernel(X, Y, stride_m, stride_n, BLOCK_M: tl.constexpr, BLOCK_N: tl.constexpr):
+        # Load a 2D block
+        offs_m = tl.arange(0, BLOCK_M)
+        offs_n = tl.arange(0, BLOCK_N)
+        mask = (offs_m[:, None] < BLOCK_M) & (offs_n[None, :] < BLOCK_N)
+        x = tl.load(X + offs_m[:, None] * stride_m + offs_n[None, :] * stride_n, mask=mask)
+
+        # Transpose the block (swap last two dims)
+        y = tl.trans(x)
+
+        # Store the result
+        tl.store(Y + offs_n[:, None] * stride_m + offs_m[None, :] * stride_n, y, mask=mask)

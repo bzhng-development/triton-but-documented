@@ -1,0 +1,36 @@
+.. py:function:: triton.language.log2(x, _semantic=None)
+
+   Computes the element-wise base-2 logarithm of the input tensor.
+
+   Parameters
+   ----------
+   x : tl.tensor
+       Input tensor. Must have a floating-point data type (``fp32`` or ``fp64``).
+
+   Returns
+   -------
+   tl.tensor
+       A tensor containing the base-2 logarithm of each element in ``x``.
+
+   Notes
+   -----
+   This function can also be called as a member function on :py:class:`tensor`,
+   as ``x.log2()`` instead of ``tl.log2(x)``.
+
+   The operation is only defined for positive values. Behavior for zero or negative
+   inputs follows IEEE 754 semantics (returns ``-inf`` or ``NaN`` respectively).
+
+   Examples
+   --------
+   .. code-block:: python
+
+      import triton
+      import triton.language as tl
+
+      @triton.jit
+      def log2_kernel(x_ptr, out_ptr, BLOCK_SIZE: tl.constexpr):
+          pid = tl.program_id(0)
+          offsets = pid * BLOCK_SIZE + tl.arange(0, BLOCK_SIZE)
+          x = tl.load(x_ptr + offsets)
+          out = tl.log2(x)
+          tl.store(out_ptr + offsets, out)

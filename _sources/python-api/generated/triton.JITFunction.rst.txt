@@ -1,0 +1,62 @@
+JITFunction
+===========
+
+.. class:: triton.JITFunction(fn, version=None, do_not_specialize=None, do_not_specialize_on_alignment=None, debug=None, noinline=None, repr=None, launch_metadata=None)
+
+   Represents a JIT-compiled Triton kernel function.
+
+   This class is typically instantiated via the :func:`triton.jit` decorator. It handles argument specialization, caching of compiled kernels, and launching the kernel on the GPU with a specified grid.
+
+   Parameters
+   ----------
+   fn : callable
+      The Python function to be JIT-compiled.
+   version : int, optional
+      Version number for the kernel (default: None).
+   do_not_specialize : list of int or str, optional
+      Indices or names of arguments that should not be specialized. Specialization generates distinct kernels for different argument types; disabling it forces generic handling.
+   do_not_specialize_on_alignment : list of int or str, optional
+      Indices or names of arguments for which alignment should not be specialized.
+   debug : bool, optional
+      Enable debug mode for the kernel (default: None).
+   noinline : bool, optional
+      Prevent inlining of this function when called by other kernels (default: None).
+   repr : callable, optional
+      Custom function to generate string representation of the kernel.
+   launch_metadata : callable, optional
+      Function to generate metadata passed to the GPU launcher.
+
+   Returns
+   -------
+   JITFunction
+      A callable object that compiles the function on first invocation and caches the result for subsequent calls with the same argument signatures.
+
+   Notes
+   -----
+   - Instances of ``JITFunction`` cannot be called directly (``fn(*args)``); they must be launched with a grid configuration using the syntax ``fn[grid](*args)``.
+   - Arguments are implicitly converted to pointers if they possess a ``data_ptr()`` method and a ``dtype`` attribute.
+   - The kernel has access only to Python primitives, Triton builtins, its own arguments, and other JIT-compiled functions.
+   - Global variables accessed during compilation are tracked; if their values change between compilation and launch, a ``RuntimeError`` is raised.
+
+   Examples
+   --------
+   .. code-block:: python
+
+      import triton
+      import triton.language as tl
+
+      @triton.jit
+      def add_kernel(x_ptr, y_ptr, output_ptr, n):
+          pid = tl.program_id(axis=0)
+          if pid < n:
+              x = tl.load(x_ptr + pid)
+              y = tl.load(y_ptr + pid)
+              tl.store(output_ptr + pid, x + y)
+
+      # Launch the kernel with a 1D grid
+      n = 1024
+      grid = (n,)
+      add_kernel[grid](x_ptr, y_ptr, output_ptr, n)
+
+      # Access kernel metadata
+      print(add_kernel)  # Outputs: JITFunction(__main__:add_kernel)

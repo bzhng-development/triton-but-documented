@@ -1,0 +1,33 @@
+
+Triton MLIR Dialects and Ops
+=====================
+
+.. toctree::
+   :maxdepth: 1
+   :caption: Dialects
+
+   ./TritonDialect.md
+   ./TritonGPUDialect.md
+   ./TritonNvidiaGPUDialect.md
+   ./TritonInstrumentDialect.md
+   ./GluonDialect.md
+   ./NVGPUDialect.md
+   ./NVWSDialect.md
+   ./TritonAMDGPUDialect.md
+   ./ProtonDialect.md
+   ./ProtonGPUDialect.md
+
+.. toctree::
+   :maxdepth: 1
+   :caption: Dialect Ops
+
+   ./TritonOps.md
+   ./TritonGPUOps.md
+   ./TritonNvidiaGPUOps.md
+   ./TritonInstrumentOps.md
+   ./GluonOps.md
+   ./NVWSOps.md
+   ./NVGPUOps.md
+   ./TritonAMDGPUOps.md
+   ./ProtonOps.md
+   ./ProtonGPUOps.md

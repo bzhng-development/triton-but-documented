@@ -1,0 +1,39 @@
+triton
+======
+
+.. currentmodule:: triton
+
+.. autosummary::
+    :toctree: generated
+    :nosignatures:
+
+    jit
+    autotune
+    heuristics
+    Config
+
+
+Runtime and Compiler
+--------------------
+
+.. autosummary::
+    :toctree: generated
+    :nosignatures:
+
+    AsyncCompileMode
+    CompilationError
+    InterpreterError
+    TritonError
+    OutOfResources
+    JITFunction
+    KernelInterface
+    FutureKernel
+    MockTensor
+    TensorWrapper
+    compile
+    constexpr_function
+    must_use_result
+    reinterpret
+    set_allocator
+    cdiv
+    next_power_of_2

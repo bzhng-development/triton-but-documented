@@ -1,0 +1,49 @@
+.. py:class:: triton.language.tuple(args, type=None)
+
+   Construct a tuple of values that exist in the Triton IR.
+
+   This class represents a heterogeneous collection of ``base_value`` objects
+   (e.g., ``tensor``, ``constexpr``) grouped together. Unlike Python's built-in
+   tuple, this structure exists within the compiled Triton IR graph and supports
+   typed field access if a schema is provided.
+
+   Parameters
+   ----------
+   args : Sequence
+       A sequence of Triton values (e.g., tensors, constexprs) to include in the tuple.
+   type : tuple_type, optional
+       An optional type definition describing the element types and optional field
+       names. If omitted, the type is inferred from ``args``.
+
+   Returns
+   -------
+   tuple
+       A new ``triton.language.tuple`` instance containing the provided values.
+
+   Notes
+   -----
+   - If ``type`` includes field names, elements can be accessed via attribute lookup
+     (e.g., ``t.field_name``). Otherwise, use integer indexing (e.g., ``t[0]``).
+   - Slicing a tuple returns a new ``tuple`` containing the selected subset of values.
+   - Arithmetic operations (``+``, ``*``) and comparisons (``==``) are supported
+     between tuples of compatible structures.
+   - This type is distinct from Python's built-in ``tuple``; it is intended for
+     use inside ``@triton.jit`` functions to return multiple tensors or manage
+     structured data in the kernel IR.
+
+   Examples
+   --------
+   >>> import triton
+   >>> import triton.language as tl
+   >>>
+   >>> @triton.jit
+   >>> def kernel(X, Y, BLOCK: tl.constexpr):
+   >>>     a = tl.load(X + tl.arange(0, BLOCK))
+   >>>     b = tl.load(Y + tl.arange(0, BLOCK))
+   >>>     # Create a tuple of two tensors
+   >>>     t = tl.tuple((a, b))
+   >>>     # Access via indexing
+   >>>     first = t[0]
+   >>>     second = t[1]
+   >>>     # Return multiple values (implicitly packed as a tuple)
+   >>>     return first, second

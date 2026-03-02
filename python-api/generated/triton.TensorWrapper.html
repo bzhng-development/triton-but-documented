@@ -1,0 +1,242 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>TensorWrapper &mdash; Triton  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=03e43079" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/custom.css" />
+
+  
+      <script src="../../_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Parameters" href="triton.compile.html" />
+    <link rel="prev" title="MockTensor" href="triton.MockTensor.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            Triton
+              <img src="https://cdn.openai.com/triton/assets/triton-logo.png" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../getting-started/installation.html">Installation</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Python API</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="../triton.html">triton</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="triton.jit.html">triton.jit</a></li>
+<li class="toctree-l2"><a class="reference internal" href="triton.autotune.html"><code class="docutils literal notranslate"><span class="pre">triton.autotune()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="triton.heuristics.html">Parameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="triton.heuristics.html#returns">Returns</a></li>
+<li class="toctree-l2"><a class="reference internal" href="triton.heuristics.html#notes">Notes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="triton.heuristics.html#examples">Examples</a></li>
+<li class="toctree-l2"><a class="reference internal" href="triton.Config.html">class triton.Config</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../triton.html#runtime-and-compiler">Runtime and Compiler</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="triton.AsyncCompileMode.html">AsyncCompileMode</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.CompilationError.html">CompilationError</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.InterpreterError.html">triton.InterpreterError</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.TritonError.html">triton.TritonError</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.OutOfResources.html">OutOfResources</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.JITFunction.html">JITFunction</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.KernelInterface.html">class KernelInterface</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.FutureKernel.html"><code class="docutils literal notranslate"><span class="pre">FutureKernel</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.MockTensor.html">MockTensor</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">TensorWrapper</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#triton.TensorWrapper"><code class="docutils literal notranslate"><span class="pre">TensorWrapper</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="triton.compile.html">Parameters</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.compile.html#returns">Returns</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.compile.html#notes">Notes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.compile.html#examples">Examples</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.constexpr_function.html">constexpr_function</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.must_use_result.html">must_use_result</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.reinterpret.html">reinterpret</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.set_allocator.html">set_allocator</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.cdiv.html">cdiv</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.next_power_of_2.html">next_power_of_2</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.language.html">triton.language</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.testing.html">triton.testing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton-semantics.html">Triton Semantics</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Triton MLIR Dialects</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../dialects/dialects.html">Triton MLIR Dialects and Ops</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Programming Guide</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../programming-guide/chapter-1/introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../programming-guide/chapter-2/related-work.html">Related Work</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../programming-guide/chapter-3/debugging.html">Debugging Triton</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">Triton</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../triton.html">triton</a></li>
+      <li class="breadcrumb-item active">TensorWrapper</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../_sources/python-api/generated/triton.TensorWrapper.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="tensorwrapper">
+<h1>TensorWrapper<a class="headerlink" href="#tensorwrapper" title="Link to this heading">¶</a></h1>
+<dl class="py class">
+<dt class="sig sig-object py" id="triton.TensorWrapper">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">triton.</span></span><span class="sig-name descname"><span class="pre">TensorWrapper</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">base</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dtype</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#triton.TensorWrapper" title="Link to this definition">¶</a></dt>
+<dd><p>A lightweight wrapper around a tensor that overrides its <code class="docutils literal notranslate"><span class="pre">dtype</span></code> while
+preserving the underlying data, device, and shape. This is used internally
+by Triton to reinterpret tensor data types without copying memory.</p>
+<section id="parameters">
+<h2>Parameters<a class="headerlink" href="#parameters" title="Link to this heading">¶</a></h2>
+<dl class="simple">
+<dt>base<span class="classifier">tensor</span></dt><dd><p>The underlying tensor object (e.g., PyTorch tensor) containing the data.</p>
+</dd>
+<dt>dtype<span class="classifier">dtype</span></dt><dd><p>The new data type to expose for this tensor.</p>
+</dd>
+</dl>
+</section>
+<section id="attributes">
+<h2>Attributes<a class="headerlink" href="#attributes" title="Link to this heading">¶</a></h2>
+<dl class="simple">
+<dt>dtype<span class="classifier">dtype</span></dt><dd><p>The overridden data type.</p>
+</dd>
+<dt>base<span class="classifier">tensor</span></dt><dd><p>The original wrapped tensor.</p>
+</dd>
+<dt>data<span class="classifier">tensor.data</span></dt><dd><p>Reference to the underlying data.</p>
+</dd>
+<dt>device<span class="classifier">device</span></dt><dd><p>The device where the tensor resides.</p>
+</dd>
+<dt>shape<span class="classifier">tuple</span></dt><dd><p>The shape of the tensor.</p>
+</dd>
+</dl>
+</section>
+<section id="methods">
+<h2>Methods<a class="headerlink" href="#methods" title="Link to this heading">¶</a></h2>
+<dl class="simple">
+<dt>data_ptr()</dt><dd><p>Returns the data pointer of the base tensor.</p>
+</dd>
+<dt>stride(<a href="#id1"><span class="problematic" id="id2">*</span></a>args)</dt><dd><p>Returns the stride of the base tensor for the given dimension(s).</p>
+</dd>
+<dt>element_size()</dt><dd><p>Returns the size in bytes of an element of the base tensor.</p>
+</dd>
+<dt>cpu()</dt><dd><p>Returns a new <code class="docutils literal notranslate"><span class="pre">TensorWrapper</span></code> with the base tensor moved to CPU.</p>
+</dd>
+<dt>copy_(other)</dt><dd><p>Copies data from another <code class="docutils literal notranslate"><span class="pre">TensorWrapper</span></code> into this one.</p>
+</dd>
+<dt>clone()</dt><dd><p>Returns a new <code class="docutils literal notranslate"><span class="pre">TensorWrapper</span></code> with a cloned base tensor.</p>
+</dd>
+<dt>to(device)</dt><dd><p>Returns a new <code class="docutils literal notranslate"><span class="pre">TensorWrapper</span></code> with the base tensor moved to the specified device.</p>
+</dd>
+<dt>new_empty(sizes)</dt><dd><p>Returns a new <code class="docutils literal notranslate"><span class="pre">TensorWrapper</span></code> wrapping an empty tensor of the given sizes.</p>
+</dd>
+</dl>
+</section>
+<section id="notes">
+<h2>Notes<a class="headerlink" href="#notes" title="Link to this heading">¶</a></h2>
+<p><code class="docutils literal notranslate"><span class="pre">TensorWrapper</span></code> does not allocate new memory; it simply reinterprets the
+existing tensor with a different <code class="docutils literal notranslate"><span class="pre">dtype</span></code>. Use <a class="reference internal" href="triton.reinterpret.html#triton.reinterpret" title="triton.reinterpret"><code class="xref py py-func docutils literal notranslate"><span class="pre">triton.reinterpret()</span></code></a>
+to create or modify wrappers safely.</p>
+</section>
+<section id="examples">
+<h2>Examples<a class="headerlink" href="#examples" title="Link to this heading">¶</a></h2>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">torch</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">triton</span>
+
+<span class="c1"># Create a float32 tensor</span>
+<span class="n">base_tensor</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="n">device</span><span class="o">=</span><span class="s1">&#39;cuda&#39;</span><span class="p">)</span>
+
+<span class="c1"># Wrap it as int32 without copying data</span>
+<span class="n">wrapped</span> <span class="o">=</span> <span class="n">triton</span><span class="o">.</span><span class="n">TensorWrapper</span><span class="p">(</span><span class="n">base_tensor</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="n">int32</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="n">wrapped</span><span class="o">.</span><span class="n">dtype</span><span class="p">)</span>  <span class="c1"># torch.int32</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">wrapped</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>  <span class="c1"># torch.Size([4, 4])</span>
+<span class="k">assert</span> <span class="n">wrapped</span><span class="o">.</span><span class="n">data_ptr</span><span class="p">()</span> <span class="o">==</span> <span class="n">base_tensor</span><span class="o">.</span><span class="n">data_ptr</span><span class="p">()</span>
+
+<span class="c1"># Reinterpret using helper function</span>
+<span class="n">reinterpreted</span> <span class="o">=</span> <span class="n">triton</span><span class="o">.</span><span class="n">reinterpret</span><span class="p">(</span><span class="n">base_tensor</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="n">float16</span><span class="p">)</span>
+<span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">reinterpreted</span><span class="p">,</span> <span class="n">triton</span><span class="o">.</span><span class="n">TensorWrapper</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="triton.MockTensor.html" class="btn btn-neutral float-left" title="MockTensor" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="triton.compile.html" class="btn btn-neutral float-right" title="Parameters" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2020, Philippe Tillet.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

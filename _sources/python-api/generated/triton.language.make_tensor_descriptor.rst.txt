@@ -1,0 +1,87 @@
+make_tensor_descriptor
+======================
+
+.. currentmodule:: triton.language
+
+.. function:: make_tensor_descriptor(base, shape, strides, block_shape, padding_option='zero')
+
+   Create a tensor descriptor object for efficient global memory access.
+
+   On NVIDIA GPUs with Tensor Memory Accelerator (TMA) support, this function
+   generates a TMA descriptor. Subsequent loads and stores using the returned
+   descriptor are executed via TMA hardware units, enabling asynchronous,
+   bounds-checked memory transactions.
+
+   Parameters
+   ----------
+   base : tensor
+      The base pointer of the tensor in global memory. Must be 16-byte aligned.
+   shape : list of tensor
+      A list of tensors representing the non-negative dimensions of the tensor.
+   strides : list of tensor
+      A list of tensors representing the strides for each dimension. Leading
+      dimension strides must be multiples of 16 bytes. The last dimension
+      stride must correspond to contiguous memory (typically 1 element step).
+   block_shape : list of constexpr
+      A list of compile-time constants defining the shape of the block to be
+      loaded or stored in a single transaction.
+   padding_option : str, optional
+      Specifies the padding behavior for out-of-bounds access. Default is
+      ``'zero'``.
+
+   Returns
+   -------
+   tensor_descriptor
+      An object representing the tensor descriptor. Use its ``load`` and
+      ``store`` methods to perform memory operations.
+
+   Notes
+   -----
+   *   TMA descriptors require the base pointer to be 16-byte aligned.
+   *   Strides for all dimensions except the last must be multiples of 16 bytes.
+   *   The last dimension must be contiguous in memory.
+   *   Currently, only tensors with 2 to 5 dimensions are supported.
+   *   Using TMA descriptors often requires a custom memory allocator that
+       guarantees alignment. See ``triton.set_allocator``.
+
+   Examples
+   --------
+   .. code-block:: python
+
+      import torch
+      import triton
+      import triton.language as tl
+
+      @triton.jit
+      def inplace_abs(in_out_ptr, M, N, M_BLOCK: tl.constexpr, N_BLOCK: tl.constexpr):
+          # Create the tensor descriptor
+          desc = tl.make_tensor_descriptor(
+              in_out_ptr,
+              shape=[M, N],
+              strides=[N, 1],
+              block_shape=[M_BLOCK, N_BLOCK],
+          )
+
+          # Calculate offsets based on program ID
+          moffset = tl.program_id(0) * M_BLOCK
+          noffset = tl.program_id(1) * N_BLOCK
+
+          # Load block using descriptor
+          value = desc.load([moffset, noffset])
+          
+          # Store computed result back using descriptor
+          desc.store([moffset, noffset], tl.abs(value))
+
+      # TMA descriptors require aligned global memory allocation
+      def alloc_fn(size: int, alignment: int, stream: Optional[int]):
+          return torch.empty(size, device="cuda", dtype=torch.int8)
+
+      triton.set_allocator(alloc_fn)
+
+      M, N = 256, 256
+      x = torch.randn(M, N, device="cuda")
+      M_BLOCK, N_BLOCK = 32, 32
+      
+      # Grid configuration matches block tiling
+      grid = (M // M_BLOCK, N // N_BLOCK)
+      inplace_abs[grid](x, M, N, M_BLOCK, N_BLOCK)

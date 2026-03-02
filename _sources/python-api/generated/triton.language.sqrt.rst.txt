@@ -1,0 +1,32 @@
+.. py:function:: triton.language.sqrt(x, _semantic=None)
+
+   Computes the element-wise fast square root of :code:`x`.
+
+   Parameters
+   ----------
+   x : tl.tensor
+      The input tensor. Must be a floating-point type (:code:`fp32` or :code:`fp64`).
+
+   Returns
+   -------
+   tl.tensor
+      A tensor containing the square root of each element in :code:`x`.
+
+   Notes
+   -----
+   This function can also be called as a member function on :py:class:`tensor`,
+   as :code:`x.sqrt()` instead of :code:`tl.sqrt(x)`.
+
+   The operation is only defined for floating-point inputs. Behavior for negative
+   inputs follows IEEE 754 standards (returns NaN).
+
+   Examples
+   --------
+   .. code-block:: python
+
+      @triton.jit
+      def kernel(ptr, BLOCK_SIZE: tl.constexpr):
+          offsets = tl.arange(0, BLOCK_SIZE)
+          x = tl.load(ptr + offsets)
+          y = tl.sqrt(x)
+          tl.store(ptr + offsets, y)

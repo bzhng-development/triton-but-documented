@@ -1,0 +1,52 @@
+split
+=====
+
+.. currentmodule:: triton.language
+
+.. function:: split(a, _semantic=None, _generator=None)
+
+   Split a tensor in two along its last dimension, which must have size 2.
+
+   For example, given a tensor of shape ``(4, 8, 2)``, produces two tensors of
+   shape ``(4, 8)``. Given a tensor of shape ``(2,)``, returns two scalars.
+
+   If you want to split into more than two pieces, you can use multiple calls
+   to this function (probably plus calling :func:`reshape`). This reflects the
+   constraint in Triton that tensors must have power-of-two sizes.
+
+   :func:`split` is the inverse of :func:`join`.
+
+   Parameters
+   ----------
+   a : tensor
+       The tensor to split. The last dimension must have size 2.
+
+   Returns
+   -------
+   tuple[tensor, tensor]
+       A tuple containing the two split tensors. If the input was rank-1
+       (shape ``(2,)``), returns two scalars.
+
+   Notes
+   -----
+   This function can also be called as a member function on :py:class:`tensor`,
+   as ``x.split()`` instead of ``split(x)``.
+
+   Examples
+   --------
+   .. code-block:: python
+
+      import triton
+      import triton.language as tl
+
+      @triton.jit
+      def kernel(X_ptr, Y_ptr, Z_ptr, BLOCK_SIZE: tl.constexpr):
+          # Load a tensor of shape [BLOCK_SIZE, 2]
+          x = tl.load(X_ptr + tl.arange(0, BLOCK_SIZE)[:, None] * 2)
+          
+          # Split into two tensors of shape [BLOCK_SIZE]
+          y, z = tl.split(x)
+          
+          # Store results
+          tl.store(Y_ptr + tl.arange(0, BLOCK_SIZE), y)
+          tl.store(Z_ptr + tl.arange(0, BLOCK_SIZE), z)

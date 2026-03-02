@@ -1,0 +1,51 @@
+expand_dims
+=============
+
+.. currentmodule:: triton.language
+
+.. function:: expand_dims(input, axis)
+
+   Expand the shape of a tensor by inserting new length-1 dimensions.
+
+   Axis indices are with respect to the resulting tensor, so
+   ``result.shape[axis]`` will be 1 for each specified axis.
+
+   Parameters
+   ----------
+   input : tl.tensor
+       The input tensor.
+   axis : int | Sequence[int]
+       The indices where new axes will be inserted. Can be a single integer
+       or a sequence of integers.
+
+   Returns
+   -------
+   tl.tensor
+       A tensor with expanded dimensions.
+
+   Notes
+   -----
+   This function can also be called as a member function on :py:class:`tensor`,
+   as ``x.expand_dims(...)`` instead of ``expand_dims(x, ...)``.
+
+   Duplicate axis values are not allowed and will raise a ``ValueError``.
+   Negative axis indices are supported and follow Python's standard negative
+   indexing convention relative to the output tensor's rank.
+
+   Examples
+   --------
+   .. code-block:: python
+
+      import triton.language as tl
+
+      @triton.jit
+      def kernel(x_ptr, y_ptr, BLOCK_SIZE: tl.constexpr):
+          x = tl.load(x_ptr + tl.arange(0, BLOCK_SIZE))  # Shape: [BLOCK_SIZE]
+          
+          # Add a new axis at position 0: shape becomes [1, BLOCK_SIZE]
+          y = tl.expand_dims(x, axis=0)
+          
+          # Add new axes at positions 0 and 2: shape becomes [1, BLOCK_SIZE, 1]
+          z = tl.expand_dims(x, axis=(0, 2))
+          
+          tl.store(y_ptr + tl.arange(0, BLOCK_SIZE), y)

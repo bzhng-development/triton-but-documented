@@ -1,0 +1,53 @@
+triton.language.float32
+======================
+
+32-bit floating point data type.
+
+This instance represents the IEEE 754 single-precision floating-point format
+within Triton kernels. It corresponds to ``float`` in C/CUDA and ``float32``
+in NumPy.
+
+Parameters
+----------
+
+None (data type instance).
+
+Returns
+-------
+
+None (used as a type specifier).
+
+Notes
+-----
+
+*   Precision: ~7 decimal digits.
+*   Range: approx. ``1.2e-38`` to ``3.4e+38``.
+*   Use this type when memory bandwidth is constrained and double precision
+    is not required.
+*   In kernel code, values of this type are typically created via
+    ``tl.full``, ``tl.zeros``, or type casting with ``.to(tl.float32)``.
+
+Examples
+--------
+
+.. code-block:: python
+
+    import triton
+    import triton.language as tl
+
+    @triton.jit
+    def kernel_ptr(X, Y, BLOCK_SIZE: tl.constexpr):
+        pid = tl.program_id(axis=0)
+        offs = pid * BLOCK_SIZE + tl.arange(0, BLOCK_SIZE)
+        
+        # Load data as float32 explicitly
+        x = tl.load(X + offs).to(tl.float32)
+        
+        # Create a constant tensor of float32
+        scale = tl.full((BLOCK_SIZE,), 1.5, dtype=tl.float32)
+        
+        # Perform arithmetic
+        y = x * scale
+        
+        # Store result
+        tl.store(Y + offs, y)

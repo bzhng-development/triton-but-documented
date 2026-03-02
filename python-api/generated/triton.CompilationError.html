@@ -1,0 +1,224 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CompilationError &mdash; Triton  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=03e43079" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/custom.css" />
+
+  
+      <script src="../../_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="triton.InterpreterError" href="triton.InterpreterError.html" />
+    <link rel="prev" title="AsyncCompileMode" href="triton.AsyncCompileMode.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            Triton
+              <img src="https://cdn.openai.com/triton/assets/triton-logo.png" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../getting-started/installation.html">Installation</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Python API</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="../triton.html">triton</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="triton.jit.html">triton.jit</a></li>
+<li class="toctree-l2"><a class="reference internal" href="triton.autotune.html"><code class="docutils literal notranslate"><span class="pre">triton.autotune()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="triton.heuristics.html">Parameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="triton.heuristics.html#returns">Returns</a></li>
+<li class="toctree-l2"><a class="reference internal" href="triton.heuristics.html#notes">Notes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="triton.heuristics.html#examples">Examples</a></li>
+<li class="toctree-l2"><a class="reference internal" href="triton.Config.html">class triton.Config</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../triton.html#runtime-and-compiler">Runtime and Compiler</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="triton.AsyncCompileMode.html">AsyncCompileMode</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">CompilationError</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#parameters">Parameters</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#notes">Notes</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#examples">Examples</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="triton.InterpreterError.html">triton.InterpreterError</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.TritonError.html">triton.TritonError</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.OutOfResources.html">OutOfResources</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.JITFunction.html">JITFunction</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.KernelInterface.html">class KernelInterface</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.FutureKernel.html"><code class="docutils literal notranslate"><span class="pre">FutureKernel</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.MockTensor.html">MockTensor</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.TensorWrapper.html">TensorWrapper</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.compile.html">Parameters</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.compile.html#returns">Returns</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.compile.html#notes">Notes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.compile.html#examples">Examples</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.constexpr_function.html">constexpr_function</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.must_use_result.html">must_use_result</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.reinterpret.html">reinterpret</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.set_allocator.html">set_allocator</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.cdiv.html">cdiv</a></li>
+<li class="toctree-l3"><a class="reference internal" href="triton.next_power_of_2.html">next_power_of_2</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.language.html">triton.language</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton.testing.html">triton.testing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../triton-semantics.html">Triton Semantics</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Triton MLIR Dialects</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../dialects/dialects.html">Triton MLIR Dialects and Ops</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Programming Guide</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../programming-guide/chapter-1/introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../programming-guide/chapter-2/related-work.html">Related Work</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../programming-guide/chapter-3/debugging.html">Debugging Triton</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">Triton</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../triton.html">triton</a></li>
+      <li class="breadcrumb-item active">CompilationError</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../_sources/python-api/generated/triton.CompilationError.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="compilationerror">
+<h1>CompilationError<a class="headerlink" href="#compilationerror" title="Link to this heading">¶</a></h1>
+<p>Base class for all errors raised during Triton kernel compilation.</p>
+<p>This exception provides detailed diagnostic information, including the source code
+excerpt surrounding the error location and a pointer to the specific column where
+the issue occurred. It is designed to facilitate debugging of JIT-compiled GPU kernels.</p>
+<section id="parameters">
+<h2>Parameters<a class="headerlink" href="#parameters" title="Link to this heading">¶</a></h2>
+<dl class="simple">
+<dt>src<span class="classifier">str, optional</span></dt><dd><p>The source code string of the kernel being compiled. If <code class="docutils literal notranslate"><span class="pre">None</span></code>, the error
+message will indicate that the source is unavailable.</p>
+</dd>
+<dt>node<span class="classifier">ast.AST</span></dt><dd><p>The Python Abstract Syntax Tree (AST) node where the compilation error occurred.
+This node must contain <code class="docutils literal notranslate"><span class="pre">lineno</span></code> and <code class="docutils literal notranslate"><span class="pre">col_offset</span></code> attributes for precise
+location reporting.</p>
+</dd>
+<dt>error_message<span class="classifier">str, optional</span></dt><dd><p>A specific description of the compilation failure. If provided, this message
+is appended to the source excerpt in the final error output.</p>
+</dd>
+</dl>
+</section>
+<section id="notes">
+<h2>Notes<a class="headerlink" href="#notes" title="Link to this heading">¶</a></h2>
+<p>The error message generated by this class includes up to 12 lines of source code
+preceding the error location, followed by a caret (<code class="docutils literal notranslate"><span class="pre">^</span></code>) marking the exact column
+offset. This formatting aids in quickly identifying syntax or semantic issues in
+kernel definitions.</p>
+<p>The class implements <code class="docutils literal notranslate"><span class="pre">__reduce__</span></code> to ensure instances are picklable, allowing
+them to be serialized when using multiprocessing or distributed compilation strategies.</p>
+</section>
+<section id="examples">
+<h2>Examples<a class="headerlink" href="#examples" title="Link to this heading">¶</a></h2>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">ast</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">triton</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">triton.compiler.errors</span><span class="w"> </span><span class="kn">import</span> <span class="n">CompilationError</span>
+
+<span class="c1"># Simulate a kernel source with an error</span>
+<span class="n">src</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">@triton.jit</span>
+<span class="s2">def kernel_fn(ptr):</span>
+<span class="s2">    # Invalid operation</span>
+<span class="s2">    let x = 1</span>
+<span class="s2">&quot;&quot;&quot;</span>
+
+<span class="c1"># Parse the source to get an AST node (typically done internally by the compiler)</span>
+<span class="n">tree</span> <span class="o">=</span> <span class="n">ast</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="n">src</span><span class="p">)</span>
+<span class="n">error_node</span> <span class="o">=</span> <span class="n">tree</span><span class="o">.</span><span class="n">body</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">body</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>  <span class="c1"># Point to the line with the error</span>
+
+<span class="c1"># Raise a compilation error with context</span>
+<span class="k">try</span><span class="p">:</span>
+    <span class="k">raise</span> <span class="n">CompilationError</span><span class="p">(</span><span class="n">src</span><span class="o">=</span><span class="n">src</span><span class="p">,</span> <span class="n">node</span><span class="o">=</span><span class="n">error_node</span><span class="p">,</span> <span class="n">error_message</span><span class="o">=</span><span class="s2">&quot;Invalid Python syntax in kernel&quot;</span><span class="p">)</span>
+<span class="k">except</span> <span class="n">CompilationError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>
+    <span class="c1"># Output includes the source snippet and caret pointer:</span>
+    <span class="c1"># at 4:8:</span>
+    <span class="c1">#     # Invalid operation</span>
+    <span class="c1">#     let x = 1</span>
+    <span class="c1">#         ^</span>
+    <span class="c1"># Invalid Python syntax in kernel</span>
+</pre></div>
+</div>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="triton.AsyncCompileMode.html" class="btn btn-neutral float-left" title="AsyncCompileMode" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="triton.InterpreterError.html" class="btn btn-neutral float-right" title="triton.InterpreterError" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2020, Philippe Tillet.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

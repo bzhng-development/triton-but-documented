@@ -1,0 +1,49 @@
+sub
+===
+
+.. currentmodule:: triton.language
+
+.. function:: sub(x, y, sanitize_overflow=True)
+
+   Element-wise subtraction of two tensors or scalars.
+
+   Parameters
+   ----------
+   x : tensor or scalar
+       The minuend.
+   y : tensor or scalar
+       The subtrahend.
+   sanitize_overflow : constexpr, optional
+       If ``True`` (default), enables overflow sanitization for integer types.
+       Set to ``False`` to skip checks and potentially improve performance when
+       overflow is impossible.
+
+   Returns
+   -------
+   tensor or scalar
+       The result of ``x - y``.
+
+   Notes
+   -----
+   This function supports broadcasting. If ``x`` and ``y`` have different shapes,
+   they must be broadcastable to a common shape.
+
+   For integer types, overflow behavior depends on the ``sanitize_overflow``
+   flag. For floating-point types, this flag has no effect.
+
+   This function can also be called as a member function on :py:class:`tensor`,
+   as ``x.sub(y)`` instead of ``tl.sub(x, y)``.
+
+   Examples
+   --------
+   .. code-block:: python
+
+       import triton
+       import triton.language as tl
+
+       @triton.jit
+       def kernel(X, Y, Z, BLOCK: tl.constexpr):
+           x = tl.load(X + tl.arange(0, BLOCK))
+           y = tl.load(Y + tl.arange(0, BLOCK))
+           z = tl.sub(x, y)  # Equivalent to x - y
+           tl.store(Z + tl.arange(0, BLOCK), z)

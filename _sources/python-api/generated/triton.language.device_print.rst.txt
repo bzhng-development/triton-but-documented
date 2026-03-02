@@ -1,0 +1,34 @@
+Print runtime values from the device.
+
+The first argument must be a string literal prefix; all following arguments must be scalars or tensors. String formatting (e.g., f-strings) is not supported for runtime values. Inside a ``@triton.jit`` function, the Python builtin :code:`print` is mapped to this function.
+
+.. code-block:: python
+
+    tl.device_print("pid", pid)
+    print("pid", pid)  # Equivalent inside JIT kernels
+
+On CUDA, device prints are streamed through a fixed-size buffer (default ~6912 KiB, varying by GPU/driver). If output is dropped, increase the buffer size before kernel launch:
+
+.. code-block:: python
+
+    triton.runtime.driver.active.utils.set_printf_fifo_size(size_bytes)
+
+Changing this value after running a kernel that uses prints may raise an error. The setting applies per device.
+
+Parameters
+----------
+prefix : str
+    A string literal prefix printed before the values. Must be ASCII.
+*args : tensor or scalar
+    The runtime values to print.
+hex : bool, optional
+    If True, print integer values in hexadecimal format instead of decimal.
+
+Returns
+-------
+None
+
+Notes
+-----
+This function is intended for debugging. Excessive use may impact performance.
+The ``prefix`` argument is compile-time constant; dynamic strings are not supported.

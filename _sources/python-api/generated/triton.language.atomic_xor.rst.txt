@@ -1,0 +1,46 @@
+.. py:function:: triton.language.atomic_xor(pointer, val, mask=None, sem=None, scope=None)
+
+   Performs an atomic logical xor at the memory location specified by ``pointer``.
+
+   Return the data stored at ``pointer`` before the atomic operation.
+
+   Parameters
+   ----------
+   pointer : triton.PointerType
+       The memory locations to operate on.
+   val : triton.tensor
+       The values with which to perform the atomic operation. Must have the same
+       dtype as ``pointer.dtype.element_ty``.
+   mask : triton.tensor, optional
+       If ``mask[idx]`` is false, do not perform the atomic operation at ``pointer[idx]``.
+   sem : str, optional
+       Specifies the memory semantics for the operation. Acceptable values are
+       ``"acquire"``, ``"release"``, ``"acq_rel"``, and ``"relaxed"``. Defaults to
+       ``"acq_rel"``.
+   scope : str, optional
+       Defines the scope of threads that observe the synchronizing effect of the
+       atomic operation. Acceptable values are ``"gpu"``, ``"cta"``, or ``"sys"``.
+       Defaults to ``"gpu"``.
+
+   Returns
+   -------
+   triton.tensor
+       The data stored at ``pointer`` before the atomic operation.
+
+   Notes
+   -----
+   This function can also be called as a member function on :py:class:`triton.language.tensor`,
+   as ``x.atomic_xor(...)`` instead of ``atomic_xor(x, ...)``.
+
+   Examples
+   --------
+   .. code-block:: python
+
+      @triton.jit
+      def kernel(x_ptr, y_ptr, BLOCK_SIZE: tl.constexpr):
+          pid = tl.program_id(axis=0)
+          offset = pid * BLOCK_SIZE + tl.arange(0, BLOCK_SIZE)
+          mask = offset < N
+          x = tl.load(x_ptr + offset, mask=mask)
+          y = tl.load(y_ptr + offset, mask=mask)
+          old_val = tl.atomic_xor(x_ptr + offset, y, mask=mask)

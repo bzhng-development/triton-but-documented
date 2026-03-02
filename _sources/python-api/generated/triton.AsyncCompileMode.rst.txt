@@ -1,0 +1,77 @@
+AsyncCompileMode
+================
+
+Context manager for enabling asynchronous kernel compilation in Triton.
+
+This class manages a pool of compilation tasks submitted to a concurrent
+executor, allowing kernels to be compiled in the background while the
+main program continues execution. It ensures that all pending compilations
+are finalized upon exiting the context.
+
+Parameters
+----------
+executor : concurrent.futures.Executor
+    The executor instance (e.g., ``ThreadPoolExecutor`` or
+    ``ProcessPoolExecutor``) used to submit compilation tasks.
+ignore_errors : bool, optional
+    If ``True``, exceptions raised during compilation are suppressed
+    and ``None`` is returned for failed kernels. If ``False`` (default),
+    exceptions are re-raised. Default is ``False``.
+
+Attributes
+----------
+executor : concurrent.futures.Executor
+    The underlying executor managing worker threads/processes.
+ignore_errors : bool
+    Flag indicating whether compilation errors should be ignored.
+raw_futures : list
+    Internal list of raw ``Future`` objects submitted to the executor.
+future_kernels : dict
+    Mapping from compilation keys to ``FutureKernel`` wrapper objects.
+
+Methods
+-------
+submit(key, compile_fn, finalize_fn)
+    Submit a compilation task if not already pending for the given key.
+    Returns a ``FutureKernel`` proxy that behaves like the compiled kernel.
+
+Notes
+-----
+Only one ``AsyncCompileMode`` can be active per context at a time.
+Attempting to enter a nested context while one is already active raises
+a ``RuntimeError``.
+
+The ``FutureKernel`` objects returned by ``submit`` transparently delegate
+attribute access to the underlying compiled kernel, allowing users to
+interact with them as if they were already compiled.
+
+Examples
+--------
+.. code-block:: python
+
+    from concurrent.futures import ThreadPoolExecutor
+    import triton
+    from triton.runtime import AsyncCompileMode
+
+    def my_compile_fn():
+        # Simulate expensive compilation
+        return "compiled_kernel_object"
+
+    def my_finalize_fn(kernel):
+        # Post-processing step
+        pass
+
+    with ThreadPoolExecutor(max_workers=4) as executor:
+        with AsyncCompileMode(executor) as mode:
+            # Submit compilation asynchronously
+            kernel_proxy = mode.submit(
+                key="my_kernel",
+                compile_fn=my_compile_fn,
+                finalize_fn=my_finalize_fn
+            )
+
+            # Use proxy immediately; blocks only if result is needed
+            # and compilation is not yet complete
+            print(kernel_proxy)  # Triggers wait if necessary
+
+    # All pending compilations are finalized automatically on exit

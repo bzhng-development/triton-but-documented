@@ -1,0 +1,56 @@
+constexpr_function
+==================
+
+.. currentmodule:: triton
+
+.. function:: constexpr_function(fn)
+
+   Wraps a Python function to enable compile-time evaluation on ``constexpr``
+   arguments within Triton kernels, returning a ``constexpr`` result.
+
+   This decorator allows arbitrary Python logic to be executed during kernel
+   compilation rather than at runtime, provided all inputs are compile-time
+   constants.
+
+   Parameters
+   ----------
+   fn : callable
+       The Python function to wrap. The function must be compatible with
+       compile-time evaluation (i.e., it cannot rely on runtime GPU state
+       or non-constexpr inputs).
+
+   Returns
+   -------
+   ConstexprFunction
+       A wrapped callable that can be invoked inside a ``@triton.jit`` kernel
+       with ``constexpr`` arguments. The return value is automatically converted
+       to a ``tl.constexpr`` object.
+
+   Notes
+   -----
+   - The wrapped function is executed by the Python interpreter during the
+     kernel compilation phase.
+   - If called outside a kernel context (e.g., in host code), the function
+     executes normally and returns the raw Python result without constexpr
+     wrapping.
+   - All arguments passed to the wrapped function inside a kernel must be
+     ``tl.constexpr`` instances; otherwise, compilation will fail.
+   - This utility is essential for metaprogramming patterns such as conditional
+     kernel generation or compile-time shape inference.
+
+   Examples
+   --------
+   >>> import triton
+   >>> import triton.language as tl
+   >>>
+   >>> @triton.constexpr_function
+   >>> def compute_tile_size(n: int) -> int:
+   ...     return 1 << (n.bit_length() - 1)
+   >>>
+   >>> @triton.jit
+   >>> def kernel(x_ptr, BLOCK_SIZE: tl.constexpr):
+   ...     # Compute a power-of-two block size at compile time
+   ...     tile = compute_tile_size(BLOCK_SIZE)
+   ...     # 'tile' is now a tl.constexpr usable in range(), if statements, etc.
+   ...     for i in tl.range(tile):
+   ...         pass

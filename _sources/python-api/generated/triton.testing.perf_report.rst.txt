@@ -1,0 +1,67 @@
+perf_report
+===========
+
+.. currentmodule:: triton.testing
+
+.. autofunction:: perf_report
+
+Decorator that marks a function for benchmarking using the provided :class:`Benchmark` configurations.
+The returned object exposes a :meth:`run` method to execute the benchmarks, generate performance plots,
+and export results to CSV.
+
+Parameters
+----------
+benchmarks : :class:`Benchmark` or list of :class:`Benchmark`
+    Benchmarking configurations defining the parameters to sweep (x-axis),
+    the line arguments (series), and plot metadata.
+
+Returns
+-------
+callable
+    A decorator wrapper. When applied to a benchmark target function, it returns
+    a :class:`Mark` object containing the function and configurations.
+
+Notes
+-----
+The decorated function must accept arguments corresponding to the ``x_names``
+and ``line_arg`` defined in the :class:`Benchmark` objects. The function should
+return execution time metrics (typically mean, min, and max).
+
+Calling :meth:`Mark.run` executes the kernel for each configuration combination,
+measures latency using :func:`do_bench`, and optionally saves plots and data
+if ``save_path`` is provided.
+
+Examples
+--------
+.. code-block:: python
+
+    import triton
+    import triton.testing as tt
+
+    # Define benchmark configuration
+    bench = tt.Benchmark(
+        x_names=['SIZE'],
+        x_vals=[2**i for i in range(10, 20)],
+        line_arg='provider',
+        line_vals=['triton', 'torch'],
+        line_names=['Triton', 'PyTorch'],
+        plot_name='vector-add',
+        args={},
+        xlabel='Vector Size',
+        ylabel='GB/s',
+    )
+
+    @tt.perf_report(bench)
+    def benchmark(SIZE, provider):
+        # Setup tensors
+        x = torch.randn(SIZE, device='cuda')
+        y = torch.randn(SIZE, device='cuda')
+        if provider == 'triton':
+            # Call triton kernel
+            return triton_kernel[x.stride(0)](x, y, SIZE)
+        else:
+            # Call torch operator
+            return x + y
+
+    # Execute benchmarks and save results
+    benchmark.run(save_path='.', show_plots=True)

@@ -1,0 +1,53 @@
+sort
+====
+
+Sorts a tensor along its last dimension using a bitonic sorting network.
+
+.. function:: triton.language.sort(x, dim=None, descending=False)
+
+   Sorts the input tensor ``x`` in ascending or descending order. Currently, only sorting
+   along the last (minor) dimension is supported. The size of the dimension to be sorted
+   must be a power of two.
+
+   Parameters
+   ----------
+   x : tl.tensor
+       The input tensor to sort.
+   dim : constexpr, optional
+       The dimension along which to sort. If ``None``, defaults to the last dimension.
+       Only the last dimension is currently supported.
+   descending : constexpr, optional
+       If ``True``, sorts in descending order. If ``False`` (default), sorts in ascending
+       order.
+
+   Returns
+   -------
+   tl.tensor
+       A tensor containing the sorted elements.
+
+   Notes
+   -----
+   This operation uses a bitonic sort algorithm, which requires the dimension size to be
+   a power of two. The operation is fully differentiable and runs entirely on the GPU.
+
+   Examples
+   --------
+   .. code-block:: python
+
+       import triton
+       import triton.language as tl
+
+       @triton.jit
+       def kernel(X_ptr, stride, BLOCK_SIZE: tl.constexpr):
+           pid = tl.program_id(0)
+           offs = tl.arange(0, BLOCK_SIZE)
+           mask = offs < stride
+           x = tl.load(X_ptr + pid * stride + offs, mask=mask)
+
+           # Sort in ascending order
+           x_sorted = tl.sort(x)
+
+           # Sort in descending order
+           x_rev = tl.sort(x, descending=True)
+
+           tl.store(X_ptr + pid * stride + offs, x_sorted, mask=mask)

@@ -1,0 +1,58 @@
+Set GPU clock frequencies for benchmarking.
+
+This context manager locks the GPU SM and memory clocks to specified values
+using ``nvidia-smi``, validates the settings, and yields theoretical
+compute (TFLOPS) and memory bandwidth (GBPS) estimates based on the
+locked frequencies. Upon exit, it restores the GPU to default clock
+settings.
+
+Requires ``nvidia-smi`` in PATH and appropriate permissions to modify
+GPU clocks. Targets GPU 0 by default.
+
+Parameters
+----------
+ref_sm_clock : int, optional
+    Reference SM clock frequency in MHz. Default is 1350.
+ref_mem_clock : int, optional
+    Reference memory clock frequency in MHz. Default is 1215.
+
+Yields
+------
+tflops : float
+    Theoretical peak compute performance in TFLOPS, calculated based on
+    the locked SM clock and assumed hardware parameters (e.g., 108 SMs,
+    256 CUDA cores per SM, 4 operations per cycle).
+gbps : float
+    Theoretical peak memory bandwidth in GBPS, calculated based on the
+    locked memory clock and assumed bus width (e.g., 640-bit interface).
+
+Raises
+------
+AssertionError
+    If the actual GPU clocks do not match the requested frequencies
+    within a 10 MHz tolerance.
+subprocess.CalledProcessError
+    If ``nvidia-smi`` commands fail.
+
+Notes
+-----
+The performance estimates assume specific hardware configurations
+(Ampere-like: 108 SMs, 256 cores/SM, 640-bit memory bus). Adjust
+calculations if targeting different GPU architectures.
+
+Clock locking persists only within the ``with`` block. Automatic reset
+occurs on context exit, even if an exception is raised.
+
+Examples
+--------
+.. code-block:: python
+
+    import triton.testing as tt
+
+    # Lock clocks and retrieve theoretical performance metrics
+    with tt.set_gpu_clock(ref_sm_clock=1400, ref_mem_clock=1200) as (tflops, gbps):
+        print(f"Peak TFLOPS: {tflops:.2f}")
+        print(f"Peak GBPS: {gbps:.2f}")
+        # Run benchmarks here with deterministic clock speeds
+
+    # Clocks are automatically reset to default after the block

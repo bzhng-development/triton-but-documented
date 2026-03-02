@@ -1,0 +1,57 @@
+slice
+=====
+
+.. currentmodule:: triton.language
+
+.. class:: slice(start, stop, step)
+
+   Represents a slice object for indexing tensors.
+
+   This class mirrors Python's built-in :py:class:`slice` and is used within
+   Triton kernels to define regions of tensors to access. It is typically
+   constructed using the standard syntax ``start:stop:step`` or explicitly
+   via ``tl.slice(start, stop, step)``.
+
+   Parameters
+   ----------
+   start : int or constexpr
+       The starting index of the slice (inclusive).
+   stop : int or constexpr
+       The ending index of the slice (exclusive).
+   step : int or constexpr
+       The step size between indices.
+
+   Attributes
+   ----------
+   start
+       The start value.
+   stop
+       The stop value.
+   step
+       The step value.
+   type
+       The Triton IR type associated with the slice (``slice_type``).
+
+   Notes
+   -----
+   In Triton, slice objects are primarily used in tensor indexing operations
+   (e.g., ``tensor[slice]``). They allow for compile-time definition of
+   sub-regions of tensors.
+
+   Examples
+   --------
+   .. code-block:: python
+
+      import triton
+      import triton.language as tl
+
+      @triton.jit
+      def kernel(ptr, ROW_SIZE: tl.constexpr):
+          # Create a slice object explicitly
+          s = tl.slice(0, ROW_SIZE, 1)
+          
+          # Use slice in indexing (conceptual example)
+          # val = tl.load(ptr + s) 
+          
+          # Standard Python slice syntax is also supported in indexing
+          # val = tl.load(ptr + tl.arange(0, ROW_SIZE)[0:ROW_SIZE:1])

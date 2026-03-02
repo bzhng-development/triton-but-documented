@@ -1,0 +1,43 @@
+Generate contiguous values within a half-open interval.
+.. code-block:: text
+
+    arange(start, end, _semantic=None)
+
+Returns a 1-D tensor containing contiguous values within the half-open interval
+:code:`[start, end)`. The size of the resulting tensor (:code:`end - start`) must
+be less than or equal to :code:`TRITON_MAX_TENSOR_NUMEL` (1048576). Both
+:code:`start` and :code:`end` must be powers of two.
+
+Parameters
+----------
+start : int32
+    Start of the interval. Must be a power of two.
+end : int32
+    End of the interval. Must be a power of two greater than :code:`start`.
+
+Returns
+-------
+tensor
+    A 1-D tensor of type :code:`int32` containing values from :code:`start`
+    to :code:`end - 1`.
+
+Notes
+-----
+This function is typically used to generate index tensors for memory access
+patterns within Triton kernels. The constraints on powers of two and maximum
+numel are imposed by the underlying GPU hardware and compiler infrastructure.
+
+Examples
+--------
+.. code-block:: python
+
+    import triton
+    import triton.language as tl
+
+    @triton.jit
+    def kernel(ptr, BLOCK_SIZE: tl.constexpr):
+        # Generate indices [0, 1, ..., BLOCK_SIZE-1]
+        offsets = tl.arange(0, BLOCK_SIZE)
+        # Load data using generated indices
+        data = tl.load(ptr + offsets)
+        # ...

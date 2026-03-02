@@ -1,0 +1,46 @@
+triton.language.randint
+=======================
+
+.. currentmodule:: triton.language
+
+.. autofunction:: randint
+
+.. function:: randint(seed, offset, n_rounds=10)
+
+   Given a ``seed`` scalar and an ``offset`` block, returns a single block of random ``int32`` values using the Philox pseudo-random number generator.
+
+   If you need multiple independent streams of random numbers, using :func:`randint4x` is likely to be faster than calling :func:`randint` four times.
+
+   Parameters
+   ----------
+   seed : tl.tensor
+       The seed for generating random numbers. Must be a scalar tensor.
+   offset : tl.tensor
+       The offsets to generate random numbers for. Defines the program counter state for each thread in the block.
+   n_rounds : tl.constexpr, optional
+       Number of rounds for the Philox cipher. Default is 10.
+
+   Returns
+   -------
+   tl.tensor
+       A block of random ``int32`` values.
+
+   Notes
+   -----
+   This function implements the Philox counter-based PRNG. The ``offset`` input typically corresponds to the global program index (e.g., ``tl.program_id(0)`` or a range of indices) to ensure statistical independence between threads.
+
+   Examples
+   --------
+   Generate a block of random integers based on the program ID:
+
+   .. code-block:: python
+
+      import triton
+      import triton.language as tl
+
+      @triton.jit
+      def kernel(X, seed):
+          pid = tl.program_id(0)
+          offset = pid * 128 + tl.arange(0, 128)
+          random_vals = tl.randint(seed, offset)
+          # Store or use random_vals...

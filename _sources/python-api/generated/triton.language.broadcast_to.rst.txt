@@ -1,0 +1,48 @@
+Broadcasts a tensor to a specified shape.
+
+.. py:function:: triton.language.broadcast_to(input, *shape, _semantic=None)
+
+   Tries to broadcast the given tensor to a new ``shape``.
+
+   Parameters
+   ----------
+   input : tl.tensor
+       The input tensor to broadcast.
+   *shape : int or tuple of ints
+       The desired shape. Can be passed as a tuple or as individual integer arguments.
+
+   Returns
+   -------
+   tl.tensor
+       A tensor broadcasted to the new shape.
+
+   Notes
+   -----
+   This function can also be called as a member function on :py:class:`tl.tensor`,
+   as ``x.broadcast_to(...)`` instead of ``broadcast_to(x, ...)``.
+
+   The ``shape`` argument supports flexible passing styles:
+
+   .. code-block:: python
+
+      # These are equivalent
+      broadcast_to(x, (32, 32))
+      broadcast_to(x, 32, 32)
+
+   Examples
+   --------
+   .. code-block:: python
+
+      import triton
+      import triton.language as tl
+
+      @triton.jit
+      def kernel(X, Y, BLOCK_SIZE: tl.constexpr):
+          # Load a 1D tensor of shape [BLOCK_SIZE]
+          x = tl.load(X + tl.arange(0, BLOCK_SIZE))
+          
+          # Broadcast to 2D shape [BLOCK_SIZE, BLOCK_SIZE]
+          x_broadcasted = tl.broadcast_to(x, BLOCK_SIZE, BLOCK_SIZE)
+          
+          # Store result
+          tl.store(Y + tl.arange(0, BLOCK_SIZE * BLOCK_SIZE), x_broadcasted)

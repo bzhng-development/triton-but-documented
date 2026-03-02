@@ -1,0 +1,52 @@
+log
+===
+
+.. currentmodule:: triton.language
+
+.. function:: log(x, _semantic=None)
+
+   Computes the element-wise natural logarithm of :code:`x`.
+
+   Parameters
+   ----------
+   x : tl.tensor
+       The input tensor. Must be a floating-point type (:code:`fp32` or :code:`fp64`).
+
+   Returns
+   -------
+   tl.tensor
+       A tensor containing the natural logarithm of each element in :code:`x`.
+
+   Notes
+   -----
+   This function can also be called as a member function on :py:class:`tensor`,
+   as :code:`x.log()` instead of :code:`tl.log(x)`.
+
+   The operation is only defined for positive values. Behavior for non-positive
+   inputs (zero or negative) follows IEEE 754 semantics (returning :code:`-inf`
+   or :code:`nan`).
+
+   Examples
+   --------
+   .. code-block:: python
+
+      import triton
+      import triton.language as tl
+      import torch
+
+      @triton.jit
+      def log_kernel(x_ptr, out_ptr, n_elements, BLOCK_SIZE: tl.constexpr):
+          pid = tl.program_id(axis=0)
+          block_start = pid * BLOCK_SIZE
+          offsets = block_start + tl.arange(0, BLOCK_SIZE)
+          mask = offsets < n_elements
+          x = tl.load(x_ptr + offsets, mask=mask)
+          out = tl.log(x)
+          tl.store(out_ptr + offsets, out, mask=mask)
+
+      # Example usage
+      n_elements = 1024
+      x = torch.exp(torch.randn(n_elements, device='cuda'))  # Positive values
+      out = torch.empty_like(x)
+      grid = lambda meta: (triton.cdiv(n_elements, meta['BLOCK_SIZE']),)
+      log_kernel[grid](x, out, n_elements, BLOCK_SIZE=128)

@@ -1,0 +1,43 @@
+.. py:function:: triton.language.atomic_max(pointer, val, mask=None, sem=None, scope=None)
+
+   Performs an atomic maximum operation at the memory location specified by ``pointer``.
+
+   Returns the data stored at ``pointer`` before the atomic operation.
+
+   Parameters
+   ----------
+   pointer : triton.PointerType or block of pointer
+       The memory locations to operate on.
+   val : block of scalar
+       The values with which to perform the atomic operation. Must have the same
+       dtype as ``pointer.dtype.element_ty``.
+   mask : block of bool, optional
+       If ``mask[idx]`` is false, do not perform the atomic operation at
+       ``pointer[idx]``.
+   sem : str, optional
+       Specifies the memory semantics for the operation. Acceptable values are
+       ``"acquire"``, ``"release"``, ``"acq_rel"``, and ``"relaxed"``. If not
+       provided, defaults to ``"acq_rel"``.
+   scope : str, optional
+       Defines the scope of threads that observe the synchronizing effect of the
+       atomic operation. Acceptable values are ``"gpu"`` (default), ``"cta"``,
+       or ``"sys"``.
+
+   Returns
+   -------
+   block of scalar
+       The data stored at ``pointer`` before the atomic operation.
+
+   Notes
+   -----
+   This function can also be called as a member function on :py:class:`tensor`,
+   as ``x.atomic_max(...)`` instead of ``atomic_max(x, ...)``.
+
+   Examples
+   --------
+   .. code-block:: python
+
+      @triton.jit
+      def kernel(ptr, val, BLOCK: tl.constexpr):
+          offs = tl.arange(0, BLOCK)
+          old_val = tl.atomic_max(ptr + offs, val)

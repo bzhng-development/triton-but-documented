@@ -1,0 +1,47 @@
+assert_close
+=============
+
+Assert that two inputs are element-wise equal within a given tolerance.
+
+.. function:: triton.testing.assert_close(x, y, atol=None, rtol=None, err_msg='')
+
+   Raises an `AssertionError` if two inputs are not close within a specified absolute and/or relative tolerance. This function handles scalars, lists, NumPy arrays, and PyTorch tensors, automatically converting them to NumPy arrays for comparison. BFloat16 tensors are upcasted to Float32 before comparison.
+
+   Parameters
+   ----------
+   x : scalar, list, numpy.ndarray, or torch.Tensor
+       The first input tensor or value.
+   y : scalar, list, numpy.ndarray, or torch.Tensor
+       The second input tensor or value.
+   atol : float, optional
+       Absolute tolerance. Default is ``1e-2``.
+   rtol : float, optional
+       Relative tolerance. Default is ``0.``.
+   err_msg : str, optional
+       Error message to display if the assertion fails.
+
+   Raises
+   ------
+   AssertionError
+       If the values are not close within the given tolerances.
+
+   Notes
+   -----
+   - If ``atol`` or ``rtol`` are provided as callables, they are invoked with ``x.dtype`` to determine the tolerance value.
+   - PyTorch tensors are moved to CPU and detached before conversion to NumPy to avoid memory issues.
+   - NaN values are considered equal (``equal_nan=True``).
+   - For single-element inputs, a custom error message including the actual values is raised.
+
+   Examples
+   --------
+   >>> import torch
+   >>> import triton.testing as tt
+   >>> a = torch.tensor([1.0, 2.0, 3.0])
+   >>> b = torch.tensor([1.0, 2.0, 3.0])
+   >>> tt.assert_close(a, b)
+
+   >>> c = torch.tensor([1.0, 2.0, 3.0])
+   >>> d = torch.tensor([1.0, 2.0, 3.01])
+   >>> tt.assert_close(c, d, atol=1e-2)  # Passes
+
+   >>> tt.assert_close(c, d, atol=1e-3)  # Raises AssertionError

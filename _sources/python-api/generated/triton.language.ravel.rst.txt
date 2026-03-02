@@ -1,0 +1,46 @@
+ravel
+=====
+
+.. currentmodule:: triton.language
+
+.. function:: ravel(x, can_reorder=False)
+
+   Returns a contiguous flattened view of :code:`x`.
+
+   Parameters
+   ----------
+   x : Block
+       The input tensor to flatten.
+   can_reorder : bool, optional
+       If True, allows the compiler to reorder memory accesses for performance.
+       Default is False.
+
+   Returns
+   -------
+   Block
+       A 1D tensor containing all elements of :code:`x` in row-major order.
+
+   Notes
+   -----
+   This function can also be called as a member function on :py:class:`tensor`,
+   as :code:`x.ravel(...)` instead of :code:`ravel(x, ...)`.
+
+   The operation is equivalent to :code:`reshape(x, [x.numel])`.
+
+   Examples
+   --------
+   .. code-block:: python
+
+      import triton
+      import triton.language as tl
+
+      @triton.jit
+      def kernel(ptr, N, BLOCK_SIZE: tl.constexpr):
+          pid = tl.program_id(0)
+          offs = pid * BLOCK_SIZE + tl.arange(0, BLOCK_SIZE)
+          mask = offs < N
+          x = tl.load(ptr + offs, mask=mask)
+          # Reshape a 2D block (4x4) into a 1D view (16,)
+          y = tl.reshape(x, (4, 4))
+          flat = tl.ravel(y)
+          tl.store(ptr + offs, flat, mask=mask)

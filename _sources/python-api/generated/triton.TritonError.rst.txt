@@ -1,0 +1,24 @@
+triton.TritonError
+==================
+
+.. class:: triton.TritonError
+
+   Base class for all exceptions raised by the Triton compiler and runtime.
+
+   This class serves as the common parent for all non-exit exceptions specific
+   to Triton, allowing users to catch Triton-specific errors distinctly from
+   standard Python exceptions.
+
+   Parameters
+   ----------
+   message : str, optional
+      Optional error message describing the exception.
+
+   Examples
+   --------
+   >>> import triton
+   >>> try:
+   ...     raise triton.TritonError("Compilation failed")
+   ... except triton.TritonError as e:
+   ...     print(f"Caught Triton error: {e}")
+   Caught Triton error: Compilation failed

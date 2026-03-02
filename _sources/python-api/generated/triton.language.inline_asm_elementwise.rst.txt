@@ -1,0 +1,101 @@
+inline_asm_elementwise
+======================
+
+.. currentmodule:: triton.language
+
+Execute inline assembly over a tensor. Essentially, this is a :code:`map`
+operation where the function is inline assembly.
+
+.. function:: inline_asm_elementwise(asm, constraints, args, dtype, is_pure, pack)
+
+   Execute inline assembly over a tensor.
+
+   The input tensors in :code:`args` are implicitly broadcasted to the same shape.
+   Each invocation of the inline assembly processes :code:`pack` elements at a time.
+   Input elements smaller than 4 bytes are packed into 4-byte registers.
+
+   :code:`dtype` can be a sequence of types, in which case the output is a
+   tuple of tensors. This operation does not support empty :code:`dtype`; the
+   assembly must return at least one tensor.
+
+   Parameters
+   ----------
+   asm : str
+       Assembly code to run. Must match the target's assembly format (e.g., PTX).
+   constraints : str
+       Inline assembly constraints in LLVM format. Specifies input/output
+       register mappings and operand restrictions.
+   args : Sequence[tensor]
+       Input tensors whose values are passed to the assembly block.
+   dtype : dtype or Sequence[dtype]
+       The element type(s) of the returned tensor(s). If a sequence is provided,
+       a tuple of tensors is returned.
+   is_pure : bool
+       If True, the compiler assumes the assembly block has no side-effects,
+       enabling additional optimizations.
+   pack : int
+       The number of elements processed by a single instance of the inline
+       assembly.
+
+   Returns
+   -------
+   tensor or tuple of tensors
+       One tensor if :code:`dtype` is a single type, or a tuple of tensors
+       if :code:`dtype` is a sequence.
+
+   Notes
+   -----
+   Exactly which set of inputs a block receives is unspecified. Small input
+   elements (< 4 bytes) are automatically packed into 4-byte registers.
+   If the assembly logic does not produce a needed output tensor, a dummy
+   tensor of arbitrary type can be returned to satisfy the non-empty dtype
+   requirement without incurring runtime cost.
+
+   Examples
+   --------
+   The following example uses PTX assembly to convert uint8 values to int32,
+   then to float32, and computes the maximum against another float32 tensor,
+   processing 4 elements at a time:
+
+   .. code-block:: python
+
+      import triton
+      import triton.language as tl
+
+      @triton.jit
+      def kernel(A, B, C, D, BLOCK: tl.constexpr):
+          a = tl.load(A + tl.arange(0, BLOCK))  # uint8 tensor
+          b = tl.load(B + tl.arange(0, BLOCK))  # float32 tensor
+
+          # Perform: ai = int32(a), m = max(float32(ai), b)
+          # Returns both ai and m
+          (c, d) = tl.inline_asm_elementwise(
+              asm="""
+              {
+                  .reg .b8 tmp<4>;
+                  mov.b32 {tmp0, tmp1, tmp2, tmp3}, $8;
+                  cvt.u32.u8 $0, tmp0;
+                  cvt.u32.u8 $1, tmp1;
+                  cvt.u32.u8 $2, tmp2;
+                  cvt.u32.u8 $3, tmp3;
+              }
+              cvt.rn.f32.s32 $4, $0;
+              cvt.rn.f32.s32 $5, $1;
+              cvt.rn.f32.s32 $6, $2;
+              cvt.rn.f32.s32 $7, $3;
+              max.f32 $4, $4, $9;
+              max.f32 $5, $5, $10;
+              max.f32 $6, $6, $11;
+              max.f32 $7, $7, $12;
+              """,
+              constraints=(
+                  "=r,=r,=r,=r,=r,=r,=r,=r,"  # 8 outputs
+                  "r,r,r,r,r"                 # 5 inputs
+              ),
+              args=[a, b],
+              dtype=(tl.int32, tl.float32),
+              is_pure=True,
+              pack=4,
+          )
+          tl.store(C + tl.arange(0, BLOCK), c)
+          tl.store(D + tl.arange(0, BLOCK), d)

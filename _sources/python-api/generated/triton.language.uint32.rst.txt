@@ -1,0 +1,47 @@
+triton.language.uint32
+======================
+
+32-bit unsigned integer data type.
+
+This dtype instance represents unsigned 32-bit integers in Triton kernels. It
+corresponds to ``uint32`` in NumPy and maps to 32-bit integer registers on
+the GPU.
+
+Parameters
+----------
+
+None (dtype instance, not a callable).
+
+Returns
+-------
+
+dtype
+    The ``uint32`` data type object used in type annotations and tensor
+    creation.
+
+Notes
+-----
+
+*   Values range from 0 to 2^32 - 1.
+*   Arithmetic operations wrap modulo 2^32 on overflow.
+*   Use this dtype when interfacing with APIs expecting 32-bit unsigned
+    integers or when memory bandwidth optimization requires smaller integer
+    widths than ``int64``.
+
+Examples
+--------
+
+.. code-block:: python
+
+    import triton
+    import triton.language as tl
+
+    @triton.jit
+    def kernel(x_ptr, y_ptr, SIZE: tl.constexpr):
+        pid = tl.program_id(0)
+        offset = pid * SIZE + tl.arange(0, SIZE)
+        # Load data as uint32
+        x = tl.load(x_ptr + offset).to(tl.uint32)
+        # Perform unsigned arithmetic
+        y = x * 2u
+        tl.store(y_ptr + offset, y)

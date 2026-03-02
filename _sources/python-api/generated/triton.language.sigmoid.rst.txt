@@ -1,0 +1,33 @@
+Computes the element-wise sigmoid of the input.
+
+The sigmoid function is defined as :math:`\frac{1}{1 + e^{-x}}`. This operation is fused and compiled directly to GPU machine code.
+
+Parameters
+----------
+x : Block
+    The input tensor or scalar values.
+
+Returns
+-------
+Block
+    A tensor containing the sigmoid of each element in ``x``, with the same shape and dtype as the input.
+
+Notes
+-----
+This function can also be called as a member function on a :py:class:`tensor` object using the syntax ``x.sigmoid()``.
+
+Examples
+--------
+.. code-block:: python
+
+    import triton
+    import triton.language as tl
+
+    @triton.jit
+    def kernel(X_ptr, Y_ptr, BLOCK_SIZE: tl.constexpr):
+        pid = tl.program_id(axis=0)
+        offsets = pid * BLOCK_SIZE + tl.arange(0, BLOCK_SIZE)
+        x = tl.load(X_ptr + offsets)
+        # Compute sigmoid element-wise
+        y = tl.sigmoid(x)
+        tl.store(Y_ptr + offsets, y)

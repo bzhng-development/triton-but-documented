@@ -1,0 +1,44 @@
+.. py:function:: triton.language.fma(x, y, z, _semantic=None)
+
+   Computes the element-wise fused multiply-add of :code:`x`, :code:`y`, and :code:`z`.
+
+   The operation calculates :code:`x * y + z` with a single rounding step, providing
+   higher precision than separate multiplication and addition operations.
+
+   Parameters
+   ----------
+   x : tl.tensor
+      The first input tensor (multiplicand).
+   y : tl.tensor
+      The second input tensor (multiplicand).
+   z : tl.tensor
+      The third input tensor (addend).
+
+   Returns
+   -------
+   tl.tensor
+      A tensor containing the result of :code:`x * y + z`.
+
+   Notes
+   -----
+   This function requires all inputs to have compatible shapes and types.
+   Type legalization is performed automatically to ensure operands match.
+   FMA operations are typically mapped to hardware instructions (e.g., FFMA on NVIDIA GPUs)
+   when supported by the target architecture.
+
+   Examples
+   --------
+   .. code-block:: python
+
+      import triton
+      import triton.language as tl
+
+      @triton.jit
+      def kernel(x_ptr, y_ptr, z_ptr, out_ptr, BLOCK_SIZE: tl.constexpr):
+          pid = tl.program_id(0)
+          offs = pid * BLOCK_SIZE + tl.arange(0, BLOCK_SIZE)
+          x = tl.load(x_ptr + offs)
+          y = tl.load(y_ptr + offs)
+          z = tl.load(z_ptr + offs)
+          result = tl.fma(x, y, z)
+          tl.store(out_ptr + offs, result)

@@ -1,0 +1,31 @@
+Computes the element-wise absolute value of :code:`x`.
+
+Parameters
+----------
+x : Block
+    The input tensor.
+
+Returns
+-------
+Block
+    A tensor containing the absolute values of :code:`x`. The output dtype
+    matches the input dtype.
+
+Notes
+-----
+This function supports floating-point, signed integer, and unsigned integer
+types. For unsigned integers, this operation is a no-op. For :code:`fp8e4b15`
+types, the absolute value is computed via a bitwise AND with a mask.
+
+This function can also be called as a member function on :py:class:`tensor`,
+as :code:`x.abs()` instead of :code:`abs(x)`.
+
+Examples
+--------
+.. code-block:: python
+
+    @triton.jit
+    def kernel(in_ptr, out_ptr, BLOCK_SIZE: tl.constexpr):
+        x = tl.load(in_ptr + tl.arange(0, BLOCK_SIZE))
+        y = tl.abs(x)
+        tl.store(out_ptr + tl.arange(0, BLOCK_SIZE), y)

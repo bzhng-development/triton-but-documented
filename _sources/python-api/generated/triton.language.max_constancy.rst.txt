@@ -1,0 +1,54 @@
+.. py:function:: triton.language.max_constancy(input, values, _semantic=None)
+
+   Let the compiler know that groups of values in :code:`input` are constant.
+
+   This hint informs the compiler that the input tensor consists of repeated
+   constant values within contiguous blocks of a specified size. This can
+   enable specific compiler optimizations for memory access patterns or
+   redundant computations.
+
+   Parameters
+   ----------
+   input : tensor
+       The input tensor containing the data.
+   values : list[constexpr]
+       A list of compile-time constants defining the block sizes. Each element
+       specifies that the corresponding dimension of :code:`input` contains
+       repeated values in groups of that size. For example, if :code:`values`
+       is ``[4]``, the compiler assumes every group of 4 elements in
+       :code:`input` holds the same value (e.g., ``[0, 0, 0, 0, 1, 1, 1, 1]``).
+   _semantic :
+       Internal argument used by the compiler; do not set manually.
+
+   Returns
+   -------
+   tensor
+       The same tensor as :code:`input`, annotated with constancy metadata for
+       the compiler.
+
+   Notes
+   -----
+   Elements in :code:`values` must be of type :code:`constexpr[int]`. Passing
+   runtime values or non-integer constants will raise a :code:`TypeError`.
+
+   This function is a no-op at runtime; it only affects compile-time
+   optimization passes.
+
+   Examples
+   --------
+   .. code-block:: python
+
+      import triton
+      import triton.language as tl
+
+      @triton.jit
+      def kernel(ptr, BLOCK_SIZE: tl.constexpr):
+          offsets = tl.arange(0, BLOCK_SIZE)
+          data = tl.load(ptr + offsets)
+
+          # Inform the compiler that data consists of groups of 4 identical values
+          data = tl.max_constancy(data, [4])
+
+          # Subsequent operations may be optimized based on this assumption
+          result = data * 2.0
+          tl.store(ptr + offsets, result)

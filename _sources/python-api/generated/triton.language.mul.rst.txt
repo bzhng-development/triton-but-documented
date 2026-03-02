@@ -1,0 +1,35 @@
+Element-wise multiplication of two tensors.
+
+.. rubric:: Parameters
+
+x : tl.tensor
+    The first input tensor.
+y : tl.tensor
+    The second input tensor.
+sanitize_overflow : tl.constexpr, optional
+    If true, the compiler inserts checks to detect integer overflow. Default is true.
+
+.. rubric:: Returns
+
+tl.tensor
+    The element-wise product of :code:`x` and :code:`y`.
+
+.. rubric:: Notes
+
+This function can also be called as a member function on :py:class:`tensor`,
+as :code:`x.mul(y)` instead of :code:`tl.mul(x, y)`.
+
+For floating-point inputs, this operation follows IEEE 754 semantics.
+For integer inputs, overflow behavior is defined by the underlying hardware
+unless :code:`sanitize_overflow` is enabled.
+
+.. rubric:: Examples
+
+.. code-block:: python
+
+    @triton.jit
+    def kernel(X, Y, Z, BLOCK: tl.constexpr):
+        x = tl.load(X + tl.arange(0, BLOCK))
+        y = tl.load(Y + tl.arange(0, BLOCK))
+        z = tl.mul(x, y)
+        tl.store(Z + tl.arange(0, BLOCK), z)

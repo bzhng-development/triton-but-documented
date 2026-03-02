@@ -1,0 +1,44 @@
+.. py:function:: triton.language.max_contiguous(input, values, _semantic=None)
+
+   Let the compiler know that the first `value` elements in :code:`input` are contiguous in memory.
+
+   This is a compiler hint that can enable additional optimizations for memory access patterns. It asserts that a prefix of the input tensor consists of sequentially adjacent memory addresses.
+
+   Parameters
+   ----------
+   input : tl.tensor
+       The input tensor for which to assert contiguity.
+   values : list of tl.constexpr[int]
+       A list of compile-time constants indicating the number of leading elements assumed to be contiguous. Each element must be a `tl.constexpr` wrapping an integer.
+   _semantic : optional
+       Internal semantic context; do not set manually.
+
+   Returns
+   -------
+   tl.tensor
+       The same input tensor, annotated with the contiguity property.
+
+   Raises
+   ------
+   TypeError
+       If any element in `values` is not a `tl.constexpr` or does not wrap an integer value.
+
+   Notes
+   -----
+   This function is typically used to inform the compiler about memory layout guarantees that are known at compile time but not inferable from the IR alone. Passing non-constexpr values to `values` will result in a compilation error.
+
+   Examples
+   --------
+   .. code-block:: python
+
+      import triton
+      import triton.language as tl
+
+      @triton.jit
+      def kernel(ptr, BLOCK_SIZE: tl.constexpr):
+          offsets = tl.arange(0, BLOCK_SIZE)
+          mask = offsets < 128
+          # Assert that the first 128 elements are contiguous
+          offsets = tl.max_contiguous(offsets, [tl.constexpr(128)])
+          vals = tl.load(ptr + offsets, mask=mask)
+          tl.store(ptr + offsets, vals * 2.0, mask=mask)

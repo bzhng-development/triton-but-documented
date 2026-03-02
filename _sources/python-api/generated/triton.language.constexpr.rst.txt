@@ -1,0 +1,63 @@
+class constexpr
+===============
+
+.. currentmodule:: triton.language
+
+.. autoclass:: constexpr
+
+   Represents a value known at compile-time in Triton kernels.
+
+   Instances of this class wrap Python scalars (ints, floats, etc.) and enable
+   their use in compile-time control flow, shape specifications, and constant
+   expressions within ``@triton.jit`` functions. Operations on ``constexpr``
+   objects are evaluated at compile-time and return new ``constexpr`` objects.
+
+   Parameters
+   ----------
+   value : scalar
+       The compile-time constant value (e.g., int, float). If a ``constexpr``
+       is passed, it is unwrapped to its underlying value.
+
+   Returns
+   -------
+   constexpr
+       A new constexpr object wrapping the provided value.
+
+   Notes
+   -----
+   ``constexpr`` is essential for defining block shapes, loop ranges, and
+   conditional compilation flags in Triton. It supports standard arithmetic,
+   bitwise, and comparison operators, which are resolved during kernel
+   compilation rather than at runtime.
+
+   In interpreter mode (when running Python code without compilation), values
+   may not be wrapped in ``constexpr``, so internal utilities handle unwrapping
+   transparently.
+
+   Examples
+   --------
+   .. code-block:: python
+
+       import triton
+       import triton.language as tl
+
+       @triton.jit
+       def kernel(
+           X,
+           BLOCK_SIZE: tl.constexpr,
+       ):
+           # BLOCK_SIZE is a constexpr, usable for shape definition
+           pid = tl.program_id(0)
+           offset = pid * BLOCK_SIZE
+           mask = tl.arange(0, BLOCK_SIZE) < X.shape[0]
+           x = tl.load(X + offset, mask=mask)
+           # Arithmetic on constexprs happens at compile-time
+           HALF_BLOCK: tl.constexpr = BLOCK_SIZE // 2
+           if HALF_BLOCK > 16:
+               # Compile-time branch
+               x = x * 2.0
+           tl.store(X + offset, x)
+
+       # Usage
+       BLOCK_SIZE = 128  # This will be wrapped as constexpr(128) in the kernel
+       # triton.compile or triton.run would handle the constexpr wrapping

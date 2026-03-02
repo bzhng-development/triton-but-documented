@@ -1,0 +1,40 @@
+num_programs
+============
+
+.. currentmodule:: triton.language
+
+.. autofunction:: num_programs
+
+Returns the number of program instances launched along the given axis.
+
+Parameters
+----------
+axis : int
+    The axis of the 3D launch grid. Must be 0, 1, or 2.
+
+Returns
+-------
+int
+    The number of programs along the specified axis.
+
+Notes
+-----
+This function is typically used to compute grid dimensions or bounds within a kernel.
+It corresponds to the grid size specified in the kernel launch configuration.
+
+Examples
+--------
+.. code-block:: python
+
+    import triton
+    import triton.language as tl
+
+    @triton.jit
+    def kernel(X, stride):
+        # Get the total number of programs in the z-dimension
+        n_z = tl.num_programs(2)
+        pid_z = tl.program_id(2)
+        
+        # Use num_programs to calculate bounds or offsets
+        offset = pid_z * stride
+        # ...
